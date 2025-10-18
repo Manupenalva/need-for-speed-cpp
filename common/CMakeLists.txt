@@ -1,6 +1,22 @@
 target_sources(taller_common
     PRIVATE
-    # .cpp files
+        protocol.cpp
+        resolver.cpp
+        resolvererror.cpp
+        serializer.cpp
+        socket.cpp
+        liberror.cpp
     PUBLIC
-    # .h files
+        carstate.h
+        constants.h
+        lobbyinfo.h
+        messageDTOs.h
+        msgType.h
+        protocol.h
+        resolver.h
+        resolvererror.h
+        serializer.h
+        socket.h
+        state.h
+        liberror.h
     )

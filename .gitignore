@@ -1,2 +1,8 @@
 build/
 tags.*
+CMake*
+cmake*
+.vscode
+_deps
+libtaller*
+Makefile
