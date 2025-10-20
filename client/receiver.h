@@ -4,17 +4,20 @@
 #include "../common/thread.h"
 #include "../common/queue.h"
 #include "../common/protocol.h"
-#include "command.h"
+#include "../common/messageDTOs.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2/SDL.h>
 
 class Receiver: public Thread {
     private:
         Protocol& protocol;
-        Queue<Command> command_queue;
+        Queue<ServerMessageDTO>& server_queue;
+
+        Receiver(const Receiver&) = delete;
+        Receiver& operator=(const Receiver&) = delete;
 
     public:
-        Receiver(Protocol& protocol);
+        Receiver(Protocol& protocol, Queue<ServerMessageDTO>& server_queue);
         ~Receiver();
 
         void run() override;
