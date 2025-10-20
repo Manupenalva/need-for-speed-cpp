@@ -4,7 +4,7 @@
 #include <cmath>
 #include <thread>
 
-Gameloop::Gameloop(Queue<ClientHandlerMessage>& user_commands_queue, std::list<ClientHandler*>& players):
+Gameloop::Gameloop(Queue<ClientHandlerMessage>& user_commands_queue, std::list<std::unique_ptr<ClientHandler>>& players):
         user_commands_queue(user_commands_queue), players(players), frames(0) {
             for (const auto& clientHandler: players){
                 uint16_t player_id = 0; //para que no se queje
@@ -107,5 +107,5 @@ void Gameloop::run() {
         frames++;
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
-    client_list.clear();
+    players.clear();
 }

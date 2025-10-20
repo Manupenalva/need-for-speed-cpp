@@ -9,13 +9,13 @@
 class Gameloop: public Thread {
 private:
     Queue<ActionMessage>& user_commands_queue;
-    std::list<ClientHandler*>& players;
+    std::list<std::unique_ptr<ClientHandler>>& players;
     std::unordered_map<uint16_t, CarInputState> players_cars;
     uint32_t frames;
 
 
 public:
-    Gameloop(Queue<ClientHandlerMessage>& user_commands_queue, std::list<ClientHandler*>& players);
+    Gameloop(Queue<ClientHandlerMessage>& user_commands_queue, std::list<std::unique_ptr<ClientHandler>>& players);
     void run() override;
 
 private:
