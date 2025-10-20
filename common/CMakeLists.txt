@@ -21,4 +21,6 @@ target_sources(taller_common
         socket.h
         state.h
         liberror.h
+        thread.h
+        queue.h
     )
