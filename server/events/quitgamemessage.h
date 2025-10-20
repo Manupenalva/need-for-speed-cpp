@@ -5,7 +5,7 @@
 
 class QuitGameMessage : public ClientHandlerMessage {
 public:
-    QuitGameMessage(int client_id) : ClientHandlerMessage(client_id) {}
+    explicit QuitGameMessage(int client_id) : ClientHandlerMessage(client_id) {}
     virtual ~QuitGameMessage() = default;
 };
 

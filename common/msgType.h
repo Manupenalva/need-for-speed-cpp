@@ -3,6 +3,7 @@
 
 #include <cstdint>
 enum class MsgType : uint8_t {
+    END_CONNECTION = 0,
     // Cliente → Servidor
     DRIVING_EVENT = 1,
     JOIN_RACE,

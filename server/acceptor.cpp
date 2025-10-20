@@ -3,7 +3,8 @@
 #include <memory>
 #include <utility>
 
-Acceptor::Acceptor(Socket& acceptor, Queue<ClientHandlerMessage>& queue, MonitorClients& clients):
+Acceptor::Acceptor(Socket& acceptor, Queue<std::shared_ptr<ClientHandlerMessage>>& queue,
+                   MonitorClients& clients):
         acceptor(acceptor), queue(queue), id(0), clients(clients) {}
 
 void Acceptor::run() {

@@ -1,6 +1,8 @@
 #ifndef ACCEPTOR
 #define ACCEPTOR
 
+#include <memory>
+
 #include "../common/queue.h"
 #include "../common/socket.h"
 #include "../common/thread.h"
@@ -15,7 +17,7 @@ class Acceptor: public Thread {
 
 private:
     Socket& acceptor;
-    Queue<ClientHandlerMessage>& queue;
+    Queue<std::shared_ptr<ClientHandlerMessage>>& queue;
     int id;
     MonitorClients& clients;
 
@@ -23,7 +25,8 @@ private:
     void clear();
 
 public:
-    Acceptor(Socket& acceptor, Queue<ClientHandlerMessage>& queue, MonitorClients& clients);
+    Acceptor(Socket& acceptor, Queue<std::shared_ptr<ClientHandlerMessage>>& queue,
+             MonitorClients& clients);
     Acceptor(const Acceptor&) = delete;
     Acceptor& operator=(const Acceptor&) = delete;
     ~Acceptor() override;

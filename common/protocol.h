@@ -16,7 +16,8 @@
 
 class Protocol {
 public:
-    explicit Protocol(Socket& socket);
+    explicit Protocol(Socket socket);
+    Protocol(const char* port, const char* ip_address);
     ~Protocol() = default;
 
     Protocol(const Protocol&) = delete;
@@ -28,27 +29,13 @@ public:
     ClientMessageDTO recv_client_message();
     ServerMessageDTO recv_server_message();
 
-    void send_driving_events(const std::vector<uint8_t>& events);
-    void send_join_race();
-    void send_create_race();
-
-    void send_game_start();
-    void send_game_end();
-    void send_state_update(const State& state_data);
-
-    State recv_state_update(const std::vector<uint8_t>& msg);
+    bool socket_alive();
+    void shutdown_receive();
 
 private:
-    Socket& socket;
+    Socket socket;
     MessageSender sender;
     MessageReceiver receiver;
-
-    void send_message(const std::vector<uint8_t>& msg);
-    std::vector<uint8_t> recv_message(MsgType& type);
-    void send_code(MsgType type);
-
-    void send_join_result(bool result);
-    void send_lobbies(const std::vector<LobbyInfo>& lobbies);
 };
 
 #endif

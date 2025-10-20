@@ -1,7 +1,17 @@
+file(GLOB EVENTS_SRC "events/*.h")
+
 target_sources(taller_server
     PRIVATE
-    # .cpp files
-    main.cpp
+        main.cpp
+        client_handler.cpp
+        acceptor.cpp
+        receiver.cpp
+        sender.cpp
     PUBLIC
-    # .h files
+        sender.h
+        receiver.h
+        monitorclients.h
+        client_handler.h
+        acceptor.h
+        ${EVENTS_SRC}
     )
