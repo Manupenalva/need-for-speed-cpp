@@ -7,8 +7,9 @@ Client::Client(const char* hostname, const char* servname)
       server_queue(),
       sender(protocol, events_queue),
       receiver(protocol, server_queue),
+      texture_manager(window.get_renderer(), "assets/"),
       window(TITTLE_CLIENT, 800, 600),
-      drawer(window.get_renderer()),
+      drawer(window.get_renderer(), texture_manager),
       kb_reader(events_queue),
       last_state(),
       has_last_state(false) {}
@@ -56,6 +57,10 @@ void Client::stop() {
     socket.close();
     _keep_running = false;
     _is_alive = false;
+}
+
+void Client::init_resources() {
+    texture_manager.load_resources();
 }
 
 void Client::read_from_keyboard() {

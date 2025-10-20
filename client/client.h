@@ -11,6 +11,7 @@
 #include "keyboard/keyboard_reader.h"
 #include "window/windowSdl.h"
 #include "drawer/drawerSDL.h"
+#include "graphics/texture_manager.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2/SDL.h>
 
@@ -27,6 +28,7 @@ class Client: public Thread {
         Queue<ServerMessageDTO> server_queue;
         Sender sender;
         Receiver receiver;
+        TextureManager texture_manager;
         WindowSDL window;
         DrawerSDL drawer; 
         KeyboardReader kb_reader;

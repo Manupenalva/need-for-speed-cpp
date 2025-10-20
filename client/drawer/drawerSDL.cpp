@@ -2,11 +2,12 @@
 #include <SDL2/SDL.h>
 #include <utility>
 
-DrawerSDL::DrawerSDL(SDL2pp::Renderer& renderer)
+DrawerSDL::DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager)
     : renderer(renderer),
-      car_drawer(renderer),
-      people_drawer(renderer),
-      map_drawer(renderer) {}
+      texture_manager(texture_manager),
+      car_drawer(renderer, texture_manager),
+      people_drawer(renderer, texture_manager),
+      map_drawer(renderer, texture_manager) {}
 
 DrawerSDL::~DrawerSDL() = default;
 
@@ -30,6 +31,6 @@ void DrawerSDL::update_state(const ServerMessageDTO& msg, int iterations_ahead) 
 
         car_drawer.draw(predicted_car);
     }
-    // Faltaria agregar logica de dibujo de gente
+    // TODO: Falta agregar logica de dibujo de gente
 }
 
