@@ -9,6 +9,8 @@ struct State {
     uint32_t frame;
     uint16_t num_cars;
     std::vector<CarState> cars;
+
+    State(): frame(0), num_cars(0), cars() {}
 };
 
 #endif

@@ -17,5 +17,8 @@ enum class MsgType : uint8_t {
     SEND_LOBBIES_INFO,
     JOIN_RESULT,
 
+
+    INVALID = 255
+
 };
 #endif

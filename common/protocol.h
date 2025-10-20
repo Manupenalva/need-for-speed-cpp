@@ -8,10 +8,12 @@
 
 #include "constants.h"
 #include "messageDTOs.h"
+#include "messagereceiver.h"
+#include "messagesender.h"
 #include "msgType.h"
-#include "serializer.h"
 #include "socket.h"
 #include "state.h"
+
 class Protocol {
 public:
     explicit Protocol(Socket& socket);
@@ -38,7 +40,8 @@ public:
 
 private:
     Socket& socket;
-    Serializer serializer;
+    MessageSender sender;
+    MessageReceiver receiver;
 
     void send_message(const std::vector<uint8_t>& msg);
     std::vector<uint8_t> recv_message(MsgType& type);

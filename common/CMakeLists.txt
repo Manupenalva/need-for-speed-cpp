@@ -3,7 +3,8 @@ target_sources(taller_common
         protocol.cpp
         resolver.cpp
         resolvererror.cpp
-        serializer.cpp
+        messagereceiver.cpp
+        messagesender.cpp
         socket.cpp
         liberror.cpp
     PUBLIC
@@ -15,7 +16,8 @@ target_sources(taller_common
         protocol.h
         resolver.h
         resolvererror.h
-        serializer.h
+        messagesender.h
+        messagereceiver.h
         socket.h
         state.h
         liberror.h
