@@ -23,6 +23,8 @@ public:
 
     bool is_dead();
 
+    int get_id() const { return id; }
+
 private:
     const int id;
     Protocol protocol;

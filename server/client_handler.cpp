@@ -13,3 +13,5 @@ ClientHandler::ClientHandler(const int id, Socket s,
 void ClientHandler::send_msg(const ServerMessageDTO msg) { sender.push_queue(msg); }
 
 bool ClientHandler::is_dead() { return !receiver.is_alive() && !sender.is_alive(); }
+
+int ClientHandler::get_id() const { return id; }
