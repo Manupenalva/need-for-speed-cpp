@@ -17,7 +17,7 @@ class Acceptor: public Thread {
 
 private:
     Socket& acceptor;
-    Queue<std::shared_ptr<ClientHandlerMessage>>& queue;
+    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue;
     int id;
     MonitorClients& clients;
 
@@ -25,7 +25,7 @@ private:
     void clear();
 
 public:
-    Acceptor(Socket& acceptor, Queue<std::shared_ptr<ClientHandlerMessage>>& queue,
+    Acceptor(Socket& acceptor, std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue,
              MonitorClients& clients);
     Acceptor(const Acceptor&) = delete;
     Acceptor& operator=(const Acceptor&) = delete;

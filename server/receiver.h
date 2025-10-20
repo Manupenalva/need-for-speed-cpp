@@ -14,13 +14,16 @@
 class Receiver: public Thread {
 private:
     Protocol& protocol;
-    Queue<std::shared_ptr<ClientHandlerMessage>>& queue;
+    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue;
+    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> lobby_queue;
     int id;
     void kill();
 
 public:
-    Receiver(Protocol& protocol, Queue<std::shared_ptr<ClientHandlerMessage>>& queue, int id);
+    Receiver(Protocol& protocol,
+             std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue, int id);
     void run() override;
     ~Receiver() override;
+    void set_queue(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> new_queue);
 };
 #endif

@@ -7,7 +7,8 @@
 #include "events/joinlobbymessage.h"
 #include "events/quitgamemessage.h"
 
-Receiver::Receiver(Protocol& protocol, Queue<std::shared_ptr<ClientHandlerMessage>>& queue, int id):
+Receiver::Receiver(Protocol& protocol,
+                   std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue, int id):
         protocol(protocol), queue(queue), id(id) {
     this->start();
 }
@@ -40,12 +41,19 @@ void Receiver::run() {
                     continue;
             }
 
-            queue.push(std::move(game_message));
+            queue->push(game_message);
+        } catch (const ClosedQueue& e) {
+            queue = lobby_queue;
+            continue;
         } catch (const std::exception& e) {
             stop();
             return;
         }
     }
+}
+
+void Receiver::set_queue(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> new_queue) {
+    queue = new_queue;
 }
 
 void Receiver::kill() {

@@ -3,9 +3,10 @@
 #include <memory>
 #include <utility>
 
-Acceptor::Acceptor(Socket& acceptor, Queue<std::shared_ptr<ClientHandlerMessage>>& queue,
+Acceptor::Acceptor(Socket& acceptor,
+                   std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue,
                    MonitorClients& clients):
-        acceptor(acceptor), queue(queue), id(0), clients(clients) {}
+        acceptor(acceptor), queue(std::move(queue)), id(0), clients(clients) {}
 
 void Acceptor::run() {
     while (!acceptor.is_stream_recv_closed()) {
