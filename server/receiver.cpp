@@ -9,7 +9,7 @@
 
 Receiver::Receiver(Protocol& protocol,
                    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue, int id):
-        protocol(protocol), queue(queue), id(id) {
+        protocol(protocol), queue(queue), lobby_queue(queue), id(id) {
     this->start();
 }
 
