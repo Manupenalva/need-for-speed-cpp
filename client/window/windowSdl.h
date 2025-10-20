@@ -5,6 +5,8 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2/SDL.h>
 
+#define DRIVER_RENDERER -1
+
 class WindowSDL : public Window {
     private:
         SDL2pp::Window window;

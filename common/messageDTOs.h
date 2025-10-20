@@ -11,7 +11,7 @@
 // Mensaje que manda el cliente al servidor
 struct ClientMessageDTO {
     MsgType type;
-    std::vector<uint8_t>& events;
+    std::vector<uint8_t> events;
     std::string lobby_name;
 };
 
@@ -20,7 +20,7 @@ struct ServerMessageDTO {
     MsgType type;
     State state;
     std::string message;
-    std::vector<LobbyInfo>& lobbies;
+    std::vector<LobbyInfo> lobbies;
     bool joined = false;
 };
 #endif

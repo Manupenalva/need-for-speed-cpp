@@ -4,13 +4,20 @@
 #include "../common/thread.h"
 #include "../common/queue.h"
 #include "../common/protocol.h"
-#include "window/windowSdl.h"
+#include "../common/socket.h"
+#include "../common/messageDTOs.h"
 #include "sender.h"
 #include "receiver.h"
-#include "../common/socket.h"
+#include "keyboard/keyboard_reader.h"
+#include "window/windowSdl.h"
 #include "drawer/drawerSDL.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2/SDL.h>
+
+#define TARGET_FPS 60
+#define FRAME_MS (1000 / TARGET_FPS) // ~16 ms
+
+#define TITTLE_CLIENT "Need For Speed Race"
 
 class Client: public Thread {
     private:    
@@ -22,13 +29,18 @@ class Client: public Thread {
         Receiver receiver;
         WindowSDL window;
         DrawerSDL drawer; 
+        KeyboardReader kb_reader;
+        
+        // Último estado recibido del servidor para dibujar
+        ServerMessageDTO last_state;
+        bool has_last_state;
 
         void init_resources();
+        void read_from_keyboard();
         void update_state_from_server();
         void clear_display();
-        void update_animation_frames();
-        void render_frame();
-        void sleep_and_calc_next_it();
+        void update_animation_frames(int iterations_ahead);
+        int sleep_and_calc_next_it(uint32_t render_time_ms);
 
     public:
         Client(const char* hostname, const char* servname);
