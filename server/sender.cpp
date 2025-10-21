@@ -1,10 +1,12 @@
 #include "sender.h"
 
-Sender::Sender(Protocol& protocol, int id): protocol(protocol), id(id) {}
+Sender::Sender(Protocol& protocol, int id): protocol(protocol), id(id) {
+    this->start();
+}
 
 void Sender::run() {
     send_client_id();
-    while (should_keep_running() && protocol.socket_alive()) {
+    while (should_keep_running()) {
 
         try {
             protocol.send_server_message(queue.pop());

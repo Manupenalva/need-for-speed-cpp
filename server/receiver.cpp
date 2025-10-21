@@ -14,7 +14,7 @@ Receiver::Receiver(Protocol& protocol,
 }
 
 void Receiver::run() {
-    while (should_keep_running() && protocol.socket_alive()) {
+    while (should_keep_running()) {
         try {
             ClientMessageDTO msg = protocol.recv_client_message();
             if (msg.type == MsgType::END_CONNECTION) {

@@ -23,7 +23,7 @@ ClientMessageDTO Protocol::recv_client_message() { return receiver.recv_client_m
 ServerMessageDTO Protocol::recv_server_message() { return receiver.recv_server_message(); }
 
 bool Protocol::socket_alive() {
-    return (socket.is_stream_send_closed() && socket.is_stream_recv_closed());
+    return (!socket.is_stream_send_closed() && !socket.is_stream_recv_closed());
 }
 
 void Protocol::shutdown_receive() { socket.shutdown(SHUT_RD); }
