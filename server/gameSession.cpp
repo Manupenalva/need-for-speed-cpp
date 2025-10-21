@@ -1,5 +1,7 @@
 #include "gameSession.h"
 
+#include <iostream>
+
 GameSession::GameSession(const int& id, MonitorGames& games_monitor):
         games_monitor(games_monitor),
         game_id(id),
@@ -8,7 +10,7 @@ GameSession::GameSession(const int& id, MonitorGames& games_monitor):
     games_monitor.set_game_queue(id, user_commands_queue);
 }
 
-void GameSession::start() { gameloop.run(); }
+void GameSession::start() { gameloop.start(); }
 
 void GameSession::stop() {
     gameloop.stop();

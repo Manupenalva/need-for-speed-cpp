@@ -43,8 +43,7 @@ void Server::start() {
 }
 
 void Server::shutdown() {
-    acceptor.stop();
-    acceptor.join();
+    acceptor.shutdown();
 
     for (auto& game: games) {
         game->stop();
