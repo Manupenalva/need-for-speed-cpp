@@ -2,11 +2,11 @@ target_sources(taller_client
     PRIVATE
     # .cpp files
     main.cpp
-    #client.cpp
-    #receiver.cpp
-    #sender.cpp
+    client.cpp
+    receiver.cpp
+    sender.cpp
     window/windowSDL.cpp
-    #keyboard/keyboard_reader.cpp
+    keyboard/keyboard_reader.cpp
     graphics/car_sheet.cpp
     graphics/map_sheet.cpp
     graphics/texture_manager.cpp
@@ -14,12 +14,12 @@ target_sources(taller_client
     lobby/lobby.cpp
     PUBLIC
     # .h files
-    #client.h
-    #receiver.h
-    #sender.h
+    client.h
+    receiver.h
+    sender.h
     window/windowSDL.h
     window/window.h
-    #keyboard/keyboard_reader.h
+    keyboard/keyboard_reader.h
     graphics/car_sheet.h
     graphics/map_sheet.h
     graphics/texture_manager.h

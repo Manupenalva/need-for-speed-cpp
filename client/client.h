@@ -25,7 +25,6 @@
 class Client: public Thread {
 private:
     int id;
-    Socket socket;
     Protocol protocol;
     Queue<ClientMessageDTO> events_queue;
     Queue<ServerMessageDTO> server_queue;

@@ -2,8 +2,7 @@
 
 Client::Client(const char* hostname, const char* servname, const int id):
         id(id),
-        socket(hostname, servname),
-        protocol(socket),
+        protocol(hostname, servname),
         events_queue(),
         server_queue(),
         sender(protocol, events_queue),
@@ -54,8 +53,7 @@ void Client::stop() {
     receiver.stop();
     sender.join();
     receiver.join();
-    socket.shutdown(SHUT_RDWR);
-    socket.close();
+    protocol.shutdown_receive();
     _keep_running = false;
     _is_alive = false;
 }

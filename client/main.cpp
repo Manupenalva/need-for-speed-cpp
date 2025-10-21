@@ -5,13 +5,42 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "drawer/drawerSDL.h"
-#include "graphics/texture_manager.h"
 #include "lobby/lobby.h"
-#include "window/windowSDL.h"
+
+#include "client.h"
 
 
 int main(int argc, char* argv[]) {
+    try {
+        if (argc != 3) {
+            std::cerr << "Usage: " << argv[0] << " <server_ip> <server_port>\n";
+            return 1;
+        }
+
+        const char* hostname = argv[1];
+        const char* servname = argv[2];
+
+        QApplication app(argc, argv);
+        // Crear y mostrar la ventana de Lobby (Qt)
+        Lobby lobby;
+        lobby.show();
+
+        app.exec();
+
+        // Inicializar cliente SDL
+        Client client(hostname, servname, 0);  // ID de cliente 0 para esta demo
+        client.run();
+        client.stop();
+        client.join();
+
+    } catch (std::exception& e) {
+        // If case of error, print it and exit with error
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+
+
+    /*
     try {
         QApplication app(argc, argv);
         // Crear y mostrar la ventana de Lobby (Qt)
@@ -65,4 +94,5 @@ int main(int argc, char* argv[]) {
         std::cerr << e.what() << std::endl;
         return 1;
     }
+    */
 }
