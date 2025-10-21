@@ -38,18 +38,27 @@ void CarSheet::load_sprites(SDL2pp::Renderer& renderer) {
 }
 
 
-sprite CarSheet::get_car_sprite(CarType car_type, int rotation) {
-    rotation = rotation % ROTATIONS;
-    if (rotation < 0) {
-        rotation += ROTATIONS;
-    }
+sprite CarSheet::get_car_sprite(CarType car_type, float rotation) {
+    int rotation_index = get_rotation_index(rotation);
 
     auto it = car_sprites.find(car_type);
     if (it != car_sprites.end()) {
         const std::vector<sprite>& sprites = it->second;
-        if (rotation < sprites.size()) {
-            return sprites[rotation];
+        if (rotation_index < sprites.size()) {
+            return sprites[rotation_index];
         }
     }
     throw std::runtime_error("Car type or rotation not found in sprites.");
+}
+
+int CarSheet::get_rotation_index(float rotation) {
+    // Convertir radianes a grados
+    float degrees = rotation * (180.0f / M_PI);
+    // Asegurarse de que el ángulo esté en el rango [0, 360)
+    if (degrees < 0) {
+        degrees += 360.0f;
+    }
+    // Calcular el índice de rotación basado en 16 rotaciones
+    int index = static_cast<int>((degrees / 360.0f) * ROTATIONS + 0.5f) % ROTATIONS;
+    return index;
 }

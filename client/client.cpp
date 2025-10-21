@@ -1,7 +1,8 @@
 #include "client.h"
 
-Client::Client(const char* hostname, const char* servname)
-    : socket(hostname, servname),
+Client::Client(const char* hostname, const char* servname, const int id)
+    : id(id),
+      socket(hostname, servname),
       protocol(socket),
       events_queue(),
       server_queue(),
@@ -9,7 +10,7 @@ Client::Client(const char* hostname, const char* servname)
       receiver(protocol, server_queue),
       texture_manager(window.get_renderer(), "assets/"),
       window(TITTLE_CLIENT, 800, 600),
-      drawer(window.get_renderer(), texture_manager),
+      drawer(window.get_renderer(), texture_manager, id),
       kb_reader(events_queue),
       last_state(),
       has_last_state(false) {}

@@ -22,6 +22,7 @@
 
 class Client: public Thread {
     private:    
+        int id;
         Socket socket;
         Protocol protocol;
         Queue<ClientMessageDTO> events_queue;
@@ -45,7 +46,7 @@ class Client: public Thread {
         int sleep_and_calc_next_it(uint32_t render_time_ms);
 
     public:
-        Client(const char* hostname, const char* servname);
+        Client(const char* hostname, const char* servname, const int id);
 
         void run() override;
         void stop() override;

@@ -2,8 +2,9 @@
 #include <SDL2/SDL.h>
 #include <utility>
 
-DrawerSDL::DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager)
-    : renderer(renderer),
+DrawerSDL::DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager, int client_id)
+    : client_id(client_id),
+      renderer(renderer),
       texture_manager(texture_manager),
       car_drawer(renderer, texture_manager),
       people_drawer(renderer, texture_manager),
@@ -16,9 +17,10 @@ void DrawerSDL::update_state(const ServerMessageDTO& msg, int iterations_ahead) 
         return;
     }
 
-    map_drawer.draw();
-
     const State& state = msg.state;
+
+    std::vector<CarState> predicted_cars;
+    CarState client_car;
 
     for (const auto& car : state.cars) {
         CarState predicted_car = car;
@@ -29,8 +31,20 @@ void DrawerSDL::update_state(const ServerMessageDTO& msg, int iterations_ahead) 
         predicted_car.x += dx;
         predicted_car.y += dy;
 
-        car_drawer.draw(predicted_car);
+        predicted_cars.push_back(predicted_car);
+        if (predicted_car.id == client_id) {
+            // Centrar la vista en el auto del cliente (dibujar el mapa acorde a la posición del auto)
+            map_drawer.draw(1, static_cast<int>(predicted_car.x), static_cast<int>(predicted_car.y));   
+            // Uso el primer mapa, se debe agregar lógica para elegir el mapa correcto
+            client_car = predicted_car;
+        }
+
+    for (const auto& car : predicted_cars) {
+        float screen_x = car.x - client_car.x + 400; // Centrar en pantalla (asumiendo 800x600)
+        float screen_y = car.y - client_car.y + 300; // Centrar en pantalla (asumiendo 800x600)
+        car_drawer.draw(car, car.id == client_id, screen_x, screen_y);
     }
+
     // TODO: Falta agregar logica de dibujo de gente
 }
 

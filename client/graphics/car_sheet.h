@@ -18,18 +18,21 @@ enum CarType {
     CAR_TYPE_6 = 6,
     CAR_TYPE_7 = 7
 };
+ 
 
 class CarSheet {
 private:
     SDL2pp::Texture texture;
     std::unordered_map<CarType, std::vector<sprite>> car_sprites;
 
+    int get_rotation_index(float rotation);
+
 public:
     CarSheet(SDL2pp::Renderer& renderer, const std::string& car_path);
 
     void load_sprites(SDL2pp::Renderer& renderer);
 
-    sprite get_car_sprite(CarType car_type, int rotation);
+    sprite get_car_sprite(CarType car_type, float rotation);
 };
 
 #endif
