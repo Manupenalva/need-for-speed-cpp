@@ -11,12 +11,12 @@
 #define ANGLE_ROTATION 0.06
 
 Gameloop::Gameloop(
-        std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>>& user_commands_queue,
-        MonitorGames& games_monitor, int game_id):
-        user_commands_queue(user_commands_queue),
-        games_monitor(games_monitor),
-        game_id(game_id),
-        frames(0) {
+    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
+    MonitorGames& games_monitor, int game_id):
+    user_commands_queue(user_commands_queue),
+    games_monitor(games_monitor),
+    game_id(game_id),
+    frames(0) {
     std::vector<int> players_id = games_monitor.get_players_id(game_id);
 
     for (const auto& id: players_id) {

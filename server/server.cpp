@@ -6,6 +6,7 @@
 #include <utility>
 
 Server::Server(const std::string& servname):
+        lobby_queue(std::make_shared<Queue<std::shared_ptr<ClientHandlerMessage>>>()),
         acceptor(servname, lobby_queue, clients_monitor, games_monitor) {}
 
 

@@ -13,15 +13,15 @@
 
 class Gameloop: public Thread {
 private:
-    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>>& user_commands_queue;
+    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue;
     MonitorGames& games_monitor;
-    int& game_id;
+    int game_id;
     std::unordered_map<uint16_t, CarInputState> players_cars;
     uint32_t frames;
 
 
 public:
-    Gameloop(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>>& user_commands_queue,
+    Gameloop(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
              MonitorGames& games_monitor, int game_id);
     void run() override;
 
