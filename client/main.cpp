@@ -11,7 +11,7 @@
 #include "window/windowSDL.h"
 
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     try {
         QApplication app(argc, argv);
         // Crear y mostrar la ventana de Lobby (Qt)
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
         SDL2pp::Renderer& renderer = window.get_renderer();
 
         // Crear gestor de texturas y cargar recursos
-        TextureManager texture_manager(renderer, "client/assets/");
+        TextureManager texture_manager(renderer, "../client/assets/");
         texture_manager.load_resources();
 
         // Crear drawer
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
         car.id = 0;
         car.x = 400.0f;
         car.y = 300.0f;
-        car.angle = 0.0270;  // orientación
+        car.angle = 270.0f;  // orientación
         car.speed = 0.0f;
         msg.state.cars.push_back(car);
 
