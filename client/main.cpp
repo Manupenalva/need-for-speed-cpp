@@ -6,53 +6,59 @@
 
 #include "drawer/drawerSDL.h"
 #include "graphics/texture_manager.h"
+#include "lobby/lobby.h"
 #include "window/windowSDL.h"
 
 
-int main() try {
-    // Inicializar SDL
-    SDL2pp::SDL sdl(SDL_INIT_VIDEO);
+int main() {
+    try {
+        // Crear y mostrar la ventana de Lobby (Qt)
+        Lobby lobby;
+        lobby.show();
 
-    // Crear ventana y renderer
-    WindowSDL window("Need for Speed - Demo", 800, 600);
-    SDL2pp::Renderer& renderer = window.get_renderer();
-
-    // Crear gestor de texturas y cargar recursos
-    TextureManager texture_manager(renderer, "../client/assets/");
-    texture_manager.load_resources();
-
-    // Crear drawer
-    int client_id = 0;
-    DrawerSDL drawer(renderer, texture_manager, client_id);
-
-    // Preparar un estado de prueba con un auto
-    ServerMessageDTO msg;
-    msg.type = MsgType::STATE_UPDATE;
-    CarState car;
-    car.id = 0;
-    car.x = 400.0f;
-    car.y = 300.0f;
-    car.angle = 270.0f;  // orientación
-    car.speed = 0.0f;
-    car.lap = 0;
-    msg.state.cars.push_back(car);
+        // Inicializar SDL
+        SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
 
-    // Actualizar drawer con el estado y dibujar
-    drawer.update_state(msg, 0);
+        // Crear ventana y renderer
+        WindowSDL window("Need for Speed - Demo", 800, 600);
+        SDL2pp::Renderer& renderer = window.get_renderer();
 
-    // Dibujar una vez y mantener la ventana abierta 5s
-    window.clear();
-    // El drawer en su update_state ya dibuja mapa y autos, pero llamamos explícito
-    // para asegurar que se pinte en esta demo
-    drawer.update_state(msg, 0);
-    window.present();
+        // Crear gestor de texturas y cargar recursos
+        TextureManager texture_manager(renderer, "client/assets/");
+        texture_manager.load_resources();
 
-    SDL_Delay(5000);
+        // Crear drawer
+        int client_id = 0;
+        DrawerSDL drawer(renderer, texture_manager, client_id);
 
-    return 0;
-} catch (std::exception& e) {
-    // If case of error, print it and exit with error
-    std::cerr << e.what() << std::endl;
-    return 1;
+        // Preparar un estado de prueba con un auto
+        ServerMessageDTO msg;
+        msg.type = MsgType::STATE_UPDATE;
+        CarState car;
+        car.id = 0;
+        car.x = 400.0f;
+        car.y = 300.0f;
+        car.angle = 0.0270;  // orientación
+        car.speed = 0.0f;
+        msg.state.cars.push_back(car);
+
+
+        // Actualizar drawer con el estado y dibujar
+        drawer.update_state(msg, 0);
+
+        // Dibujar una vez y mantener la ventana abierta 5s
+        window.clear();
+        // El drawer en su update_state ya dibuja mapa y autos, pero llamamos explícito
+        // para asegurar que se pinte en esta demo
+        drawer.update_state(msg, 0);
+        window.present();
+
+        SDL_Delay(5000);
+
+    } catch (std::exception& e) {
+        // If case of error, print it and exit with error
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
 }

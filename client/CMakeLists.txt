@@ -11,6 +11,7 @@ target_sources(taller_client
     graphics/map_sheet.cpp
     graphics/texture_manager.cpp
     drawer/drawerSDL.cpp
+    lobby/lobby.cpp
     PUBLIC
     # .h files
     #client.h
@@ -28,4 +29,5 @@ target_sources(taller_client
     drawer/car_drawer.h
     drawer/map_drawer.h
     drawer/drawerSDL.h
+    lobby/lobby.h
     )

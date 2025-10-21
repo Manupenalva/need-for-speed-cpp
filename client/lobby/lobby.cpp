@@ -1,19 +1,20 @@
 #include "lobby.h"
-#include <QVBoxLayout>
+
 #include <QLabel>
 #include <QMessageBox>
+#include <QVBoxLayout>
 
-Lobby::Lobby(QWidget *parent) : QMainWindow(parent){
+Lobby::Lobby(QWidget* parent): QMainWindow(parent) {
 
     stack = new QStackedWidget(this);
 
     menu = new QWidget(this);
-    auto *layoutMenu = new QVBoxLayout(menu);
+    auto* layoutMenu = new QVBoxLayout(menu);
 
-    QLabel *title = new QLabel("Need for Speed - 2D");
+    QLabel* title = new QLabel("Need for Speed - 2D");
     title->setAlignment(Qt::AlignCenter);
     title->setStyleSheet("font-size: 24px; font-weight: bold;");
-    
+
     createGameButton = new QPushButton("New Game");
     joinGameButton = new QPushButton("Join Game");
 
@@ -24,11 +25,11 @@ Lobby::Lobby(QWidget *parent) : QMainWindow(parent){
     menu->setLayout(layoutMenu);
 
     connectScreen = new QWidget(this);
-    auto *layoutConnection = new QVBoxLayout(connectScreen);
+    auto* layoutConnection = new QVBoxLayout(connectScreen);
 
-    QLabel *servnameLabel = new QLabel("Host / IP:");
+    QLabel* servnameLabel = new QLabel("Host / IP:");
     servname = new QLineEdit();
-    QLabel *portLabel = new QLabel("Port:");
+    QLabel* portLabel = new QLabel("Port:");
     port = new QLineEdit();
 
     connectButton = new QPushButton("Connect");
@@ -56,27 +57,29 @@ Lobby::Lobby(QWidget *parent) : QMainWindow(parent){
     stack->setCurrentIndex(0);
 }
 
-void Lobby::menuScreen() {
-    stack->setCurrentIndex(0);
+void Lobby::menuScreen() { stack->setCurrentIndex(0); }
+
+void Lobby::showConnectScreen() { stack->setCurrentIndex(1); }
+
+void Lobby::createGame() {
+    QMessageBox::information(this, "New Game",
+                             "Nuevo juego");  // Aca deberia mandarle al servidor que quiere crear
+                                              // partida y mandar a pantalla de SDL
 }
 
-void Lobby::showConnectScreen(){
-    stack->setCurrentIndex(1);
-}
-
-void Lobby::createGame(){
-    QMessageBox::information(this, "New Game", "Nuevo juego"); //Aca deberia mandarle al servidor que quiere crear partida y mandar a pantalla de SDL
-}
-
-void Lobby::connectServer(){
+void Lobby::connectServer() {
     QString host = servname->text();
     QString p = port->text();
 
-    if(host.isEmpty() || p.isEmpty()){
+    if (host.isEmpty() || p.isEmpty()) {
         QMessageBox::warning(this, "Error", "You must insert text (host and port)");
         return;
     }
-    QMessageBox::information(this, "Connecting", QString("Connectin to.. %1:%2").arg(host, p)); //Aca deberia mandarle al servidor mensaje de unirse y a quien; y mandar a pantalla de SDL
+    QMessageBox::information(
+            this, "Connecting",
+            QString("Connectin to.. %1:%2")
+                    .arg(host, p));  // Aca deberia mandarle al servidor mensaje de unirse y a
+                                     // quien; y mandar a pantalla de SDL
 }
 
 /*
