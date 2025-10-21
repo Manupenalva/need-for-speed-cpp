@@ -6,11 +6,15 @@ KeyboardReader::KeyboardReader(Queue<ClientMessageDTO>& queue): message_queue(qu
     handlers.push_back(std::make_unique<KeyUpHandler>(message_queue));
 }
 
-void KeyboardReader::listen_to_keyboard() {
+void KeyboardReader::listen_to_keyboard(std::atomic<bool>& running) {
     SDL_Event event;
     ClientMessageDTO msg;
     msg.type = MsgType::DRIVING_EVENT;
     while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            running = false;
+            return;
+        }
         for (auto& handler: handlers) {
             handler->handle_event(event, msg);
         }

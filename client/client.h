@@ -21,6 +21,7 @@
 #define FRAME_MS (1000 / TARGET_FPS)  // ~16 ms
 
 #define TITTLE_CLIENT "Need For Speed Race"
+#define PATH "../client/assets/"
 
 class Client: public Thread {
 private:
@@ -30,8 +31,8 @@ private:
     Queue<ServerMessageDTO> server_queue;
     Sender sender;
     Receiver receiver;
-    TextureManager texture_manager;
     WindowSDL window;
+    TextureManager texture_manager;
     DrawerSDL drawer;
     KeyboardReader kb_reader;
 
@@ -40,7 +41,6 @@ private:
     bool has_last_state;
 
     void init_resources();
-    void read_from_keyboard();
     void update_state_from_server();
     void clear_display();
     void update_animation_frames(int iterations_ahead);

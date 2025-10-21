@@ -28,6 +28,8 @@ int main(int argc, char* argv[]) {
         app.exec();
 
         // Inicializar cliente SDL
+        SDL2pp::SDL sdl(SDL_INIT_VIDEO);
+
         Client client(hostname, servname, 0);  // ID de cliente 0 para esta demo
         client.run();
         client.stop();

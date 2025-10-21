@@ -22,6 +22,7 @@
 #define ACT_RIGHT_RELEASE 0x08
 #define ACT_NITRO_PRESS 0x09
 #define ACT_NITRO_RELEASE 0x0A
+#define ACT_EXIT 0x0B
 
 #define START_GAME 0x0B
 #define END_GAME 0x0C

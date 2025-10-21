@@ -1,6 +1,7 @@
 #ifndef KEYBOARD_READER_H
 #define KEYBOARD_READER_H
 
+#include <atomic>
 #include <memory>
 #include <vector>
 
@@ -22,7 +23,7 @@ private:
 public:
     explicit KeyboardReader(Queue<ClientMessageDTO>& queue);
 
-    void listen_to_keyboard();
+    void listen_to_keyboard(std::atomic<bool>& running);
 };
 
 #endif
