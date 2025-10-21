@@ -104,7 +104,7 @@ LobbyInfo MessageReceiver::recv_lobby_info() {
     LobbyInfo lobby;
     uint16_t name_size = obtain_uint16();
     lobby.name = obtain_string(name_size);
-    lobby.player_amount = obtain_uint16();
+    lobby.player_amount = obtain_byte();
     return lobby;
 }
 
