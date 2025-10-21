@@ -1,6 +1,8 @@
 #ifndef CARSTATE_H
 #define CARSTATE_H
 
+#include <cstdint>
+
 struct CarState {
     uint16_t id;
     float x;
@@ -12,10 +14,10 @@ struct CarState {
 
 struct CarInputState{
     bool accelerating;
-    bool breaking;
+    bool braking;
     bool turning_right;
     bool turning_left;
     CarState state;
-}
+};
 
 #endif

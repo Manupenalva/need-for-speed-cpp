@@ -3,10 +3,14 @@
 
 #include <vector>
 #include <cstdint>
+#include <memory>
+#include <unordered_map>
+
 #include "../common/carState.h"
+#include "monitorGames.h"
 
 
-class Gameloop: public Thread {
+class Gameloop : public Thread {
 private:
     std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>>& user_commands_queue;
     MonitorGames& games_monitor;
@@ -16,7 +20,7 @@ private:
 
 
 public:
-    Gameloop(const std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>>& user_commands_queue, MonitorGames& games_monitor, const int& id);
+    Gameloop(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>>& user_commands_queue, MonitorGames& games_monitor, int id);
     void run() override;
 
 private:

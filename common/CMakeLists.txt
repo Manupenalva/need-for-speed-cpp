@@ -8,7 +8,7 @@ target_sources(taller_common
         socket.cpp
         liberror.cpp
     PUBLIC
-        carstate.h
+        carState.h
         constants.h
         lobbyinfo.h
         messageDTOs.h

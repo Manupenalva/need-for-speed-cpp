@@ -6,7 +6,7 @@
 Acceptor::Acceptor(const std::string& servname,
                    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue,
                    MonitorClients& clients):
-        acceptor(servname), queue(std::move(queue)), id(0), clients(clients) {}
+        acceptor(servname.c_str()), queue(std::move(queue)), id(0), clients(clients) {}
 
 void Acceptor::run() {
     while (!acceptor.is_stream_recv_closed()) {

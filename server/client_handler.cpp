@@ -13,9 +13,7 @@ ClientHandler::ClientHandler(const int id, Socket s,
 void ClientHandler::send_msg(const ServerMessageDTO msg) { sender.push_queue(msg); }
 
 void ClientHandler::set_game_queue(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> new_queue){
-    receiver.set_game_queue(new_queue);
+    receiver.set_queue(new_queue);
 }
 
 bool ClientHandler::is_dead() { return !receiver.is_alive() && !sender.is_alive(); }
-
-int ClientHandler::get_id() const { return id; }
