@@ -24,21 +24,23 @@ void DrawerSDL::update_state(const ServerMessageDTO& msg, int iterations_ahead) 
 
     map_drawer.draw(1, client_car.x, client_car.y);
 
+    float offsetx = 400 - client_car.x;  // Centrar en pantalla (asumiendo 800x600)
+    float offsety = 300 - client_car.y;  // Centrar en pantalla (asumiendo 800x600)
+
     for (const auto& car: state.cars) {
         CarState predicted_car = car;
+
         // Calcular posición futura basada en la velocidad y las iteraciones adelantadas
-        float dx = car.speed * iterations_ahead * cos(car.angle);
-        float dy = car.speed * iterations_ahead * sin(car.angle);
+        float rad = car.angle * M_PI / 180.0f;
+        float dx = car.speed * iterations_ahead * cos(rad);
+        float dy = car.speed * iterations_ahead * sin(rad);
 
         predicted_car.x += dx;
         predicted_car.y += dy;
 
-        float screen_x =
-                predicted_car.x - client_car.x + 400;  // Centrar en pantalla (asumiendo 800x600)
-        float screen_y =
-                predicted_car.y - client_car.y + 300;  // Centrar en pantalla (asumiendo 800x600)
+        float screen_x = predicted_car.x + offsetx;  // Centrar en pantalla (asumiendo 800x600)
+        float screen_y = predicted_car.y + offsety;  // Centrar en pantalla (asumiendo 800x600)
         car_drawer.draw(predicted_car, screen_x, screen_y);
     }
-
     // TODO: Falta agregar logica de dibujo de gente
 }

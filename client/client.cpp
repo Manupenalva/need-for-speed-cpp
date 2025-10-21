@@ -55,25 +55,7 @@ void Client::stop() {
     _is_alive = false;
 }
 
-void Client::init_resources() {
-    texture_manager.load_resources();
-
-    // Dibuja un estado inicial con un auto en el centro
-    ServerMessageDTO msg;
-    msg.type = MsgType::STATE_UPDATE;
-    CarState car;
-    car.id = 0;
-    car.x = 400.0f;
-    car.y = 300.0f;
-    car.angle = 270.0f;  // orientación
-    car.speed = 0.0f;
-    car.lap = 0;
-    msg.state.cars.push_back(car);
-
-    // Actualizar drawer con el estado y dibujar
-    drawer.update_state(msg, 0);
-    window.present();
-}
+void Client::init_resources() { texture_manager.load_resources(); }
 
 void Client::clear_display() { window.clear(); }
 

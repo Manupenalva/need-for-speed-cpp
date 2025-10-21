@@ -41,6 +41,7 @@ private:
     bool has_last_state;
 
     void init_resources();
+    void draw_initial_state();
     void update_state_from_server();
     void clear_display();
     void update_animation_frames(int iterations_ahead);
