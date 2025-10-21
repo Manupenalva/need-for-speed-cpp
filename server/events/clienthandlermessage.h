@@ -5,7 +5,7 @@
 class ClientHandlerMessage {
 public:
     explicit ClientHandlerMessage(int client_id): client_id(client_id) {}
-    int get_client_id() const { return client_id }
+    int get_client_id() const { return client_id; }
     virtual ~ClientHandlerMessage() = default;
 
 private:

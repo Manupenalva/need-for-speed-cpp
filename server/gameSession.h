@@ -1,6 +1,9 @@
 #ifndef GAMESESSION_H
 #define GAMESESSION_H
 
+#include <memory>
+#include "monitorGames.h"
+#include "gameloop.h"
 
 class GameSession{
 private:
@@ -10,7 +13,7 @@ private:
     Gameloop gameloop;
 
 public:
-    GameSession(const MonitorGames& games_monitor, const int& id);
+    GameSession(const int& id, MonitorGames& games_monitor);
     void start();
     void stop();
 

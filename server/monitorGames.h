@@ -4,6 +4,7 @@
 #include <memory>
 #include <mutex>
 #include <unordered_map>
+#include <list>
 
 #include "../common/messageDTOs.h"
 

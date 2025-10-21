@@ -1,21 +1,23 @@
 #include "gameloop.h"
+#include "events/actionmessage.h"
 
 #include <chrono>
 #include <cmath>
 #include <thread>
 
-Gameloop::Gameloop(const std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>>& user_commands_queue, MonitorGames& games_monitor, const int& id):
+#define MAX_SPEED 20.0
+#define ACCELERATION 5.0
+#define ANGLE_ROTATION 0.06
+
+Gameloop::Gameloop(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>>& user_commands_queue, MonitorGames& games_monitor, int id):
         user_commands_queue(user_commands_queue), games_monitor(games_monitor), game_id(id), frames(0) {
             std::vector<int> players_id = games_monitor.get_players_id(game_id);
 
-            for (const auto& player_id: players_id){
+            for (const auto& id: players_id){
+                uint16_t player_id = id;
                 players_cars[player_id] = {
-                    .accelerating = false, .breaking = false,
-                    .turning_right = false, .turning_left = false,
-                    .state = {
-                        .id = player_id, .x = 0, .y = 0,
-                        .speed = 0, .angle = 0, .lap = 0
-                    }
+                    false, false, false, false,
+                    {player_id, 0, 0, 0, 0, 0}
                 };
             }
         }
@@ -27,7 +29,7 @@ void Gameloop::update_car_state(const uint16_t& player_id){
             players_cars[player_id].state.speed += ACCELERATION;
         }
     }
-    if (players_cars[player_id].breaking){
+    if (players_cars[player_id].braking){
         if (players_cars[player_id].state.speed - ACCELERATION >= 0){
             players_cars[player_id].state.speed -= ACCELERATION;
         }
@@ -59,11 +61,11 @@ void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action
     else if (action == ACT_ACCEL_RELEASE){
         players_cars[player_id].accelerating = false;
     }
-    else if (action == ACT_BREAK_PRESS){
-        players_cars[player_id].breaking = true;
+    else if (action == ACT_BRAKE_PRESS){
+        players_cars[player_id].braking = true;
     }
-    else if (action == ACT_BREAK_RELEASE){
-        players_cars[player_id].breaking = false;
+    else if (action == ACT_BRAKE_RELEASE){
+        players_cars[player_id].braking = false;
     }
     else if (action == ACT_LEFT_PRESS){
         players_cars[player_id].turning_left = true;
@@ -107,7 +109,7 @@ void Gameloop::run() {
             //Estamos haciendo casteo estatico por tener distintos mensajes que heredan de ClientHandlerMessage
             //y tenemos que usar ptr por lo mismo, habría que ver si es realmente necesario
             for (const auto& action: msg->get_actions()){
-                update_car_input(msg->get_id(), action);
+                update_car_input(msg->get_client_id(), action);
             }
         }
         update_positions();

@@ -17,5 +17,3 @@ void ClientHandler::set_game_queue(std::shared_ptr<Queue<std::shared_ptr<ClientH
 }
 
 bool ClientHandler::is_dead() { return !receiver.is_alive() && !sender.is_alive(); }
-
-int ClientHandler::get_id() const { return id; }

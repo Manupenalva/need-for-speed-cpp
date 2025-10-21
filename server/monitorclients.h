@@ -10,16 +10,15 @@
 #include "../common/messageDTOs.h"
 
 #include "client_handler.h"
-#include "racemonitor.h"
+#include "monitorGames.h"
 
 class Client;
 
 class MonitorClients {
 private:
     std::unordered_map<int, std::shared_ptr<ClientHandler>> clients;
-    std::unordered_map<int, std::shared_ptr<Race>> races;
+    //std::unordered_map<int, std::shared_ptr<gameSession>> races;
     std::mutex mtx;
-    int race_id = 0;
 
 public:
     void insert(int id, std::shared_ptr<ClientHandler> client) {
@@ -52,6 +51,14 @@ public:
         return it->second;
     }
 
+    void clear() {
+        std::lock_guard<std::mutex> lock(mtx);
+        clients.clear();
+        //races.clear();
+    }
+
+    /* Lo comento para que compile y hacer la primer entrega, despues vemos si
+    queda este o el otro
     void broadcast_state(const ServerMessageDTO& msg, int race_id) {
 
         std::shared_ptr<Race> race;
@@ -74,11 +81,6 @@ public:
     }
 
 
-    void clear() {
-        std::lock_guard<std::mutex> lock(mtx);
-        clients.clear();
-        races.clear();
-    }
 
     void create_race() {
         std::lock_guard<std::mutex> lock(mtx);
@@ -148,5 +150,6 @@ public:
 
         races.erase(race_it);
     }
+    */
 };
 #endif
