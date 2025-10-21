@@ -46,11 +46,14 @@ void Client::run() {
 }
 
 void Client::stop() {
+    protocol.shutdown_receive();
+
+    events_queue.close();
+    server_queue.close();
     sender.stop();
     receiver.stop();
     sender.join();
     receiver.join();
-    protocol.shutdown_receive();
     _keep_running = false;
     _is_alive = false;
 }

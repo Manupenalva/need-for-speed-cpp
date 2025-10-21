@@ -33,7 +33,6 @@ int main(int argc, char* argv[]) {
 
         Client client(hostname, servname, id);  // ID de cliente 0 para esta demo
         client.run();
-        client.join();
 
         return 0;
 
