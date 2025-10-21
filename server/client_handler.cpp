@@ -5,8 +5,6 @@
 ClientHandler::ClientHandler(const int id, Socket s,
                              std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue):
         id(id), protocol(std::move(s)), sender(protocol, id), receiver(protocol, queue, id) {
-    receiver.start();
-    sender.start();
 }
 
 // cppcheck-suppress passedByValue
