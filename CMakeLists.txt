@@ -107,8 +107,17 @@ endif()
 # Program section
 # ---------------
 if(TALLER_CLIENT)
+    find_package(Qt6 REQUIRED COMPONENTS Widgets)
+
     # HEY!! TODO XXX: Change the name of the executable to the one you like!
     add_executable(taller_client)
+
+    # Activar procesamiento automático de moc/uic/rcc
+    set_target_properties(taller_client PROPERTIES
+        AUTOMOC ON
+        AUTOUIC ON
+        AUTORCC ON
+    )
 
     # Make them depend on taller_common lib
     add_dependencies(taller_client taller_common SDL2pp::SDL2pp)
@@ -123,7 +132,7 @@ if(TALLER_CLIENT)
     target_include_directories(taller_client PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(taller_client taller_common SDL2pp::SDL2pp)
+    target_link_libraries(taller_client taller_common SDL2pp::SDL2pp Qt6::Widgets)
 endif()
 
 if(TALLER_SERVER)
