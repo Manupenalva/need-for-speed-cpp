@@ -4,12 +4,13 @@
 
 class GameSession{
 private:
-    std::list<std::unique_ptr<ClientHandler>> players;
-    Queue<ActionMessage> user_commands_queue;
+    MonitorGames& games_monitor;
+    int game_id;
+    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue;
     Gameloop gameloop;
 
 public:
-    GameSession(std::list<std::unique_ptr<ClientHandler>>&& players);
+    GameSession(const MonitorGames& games_monitor, const int& id);
     void start();
     void stop();
 

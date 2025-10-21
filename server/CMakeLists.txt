@@ -9,6 +9,8 @@ target_sources(taller_server
         sender.cpp
         gameloop.cpp
         gameSession.cpp
+        monitorclients.cpp
+        monitorGames.cpp
     PUBLIC
         sender.h
         receiver.h
@@ -17,5 +19,6 @@ target_sources(taller_server
         acceptor.h
         gameloop.h
         gameSession.h
+        monitorGames.h
         ${EVENTS_SRC}
     )

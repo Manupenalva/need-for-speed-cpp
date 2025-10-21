@@ -21,6 +21,8 @@ public:
 
     void send_msg(ServerMessageDTO msg);
 
+    void set_game_queue(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> new_queue);
+
     bool is_dead();
 
     int get_id() const { return id; }

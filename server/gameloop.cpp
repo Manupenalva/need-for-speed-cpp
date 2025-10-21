@@ -4,11 +4,11 @@
 #include <cmath>
 #include <thread>
 
-Gameloop::Gameloop(Queue<ClientHandlerMessage>& user_commands_queue, std::list<std::unique_ptr<ClientHandler>>& players):
-        user_commands_queue(user_commands_queue), players(players), frames(0) {
-            for (const auto& clientHandler: players){
-                uint16_t player_id = 0; //para que no se queje
-                //uint16_t player_id = clientHandler.get_id();
+Gameloop::Gameloop(const std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>>& user_commands_queue, MonitorGames& games_monitor, const int& id):
+        user_commands_queue(user_commands_queue), games_monitor(games_monitor), game_id(id), frames(0) {
+            std::vector<int> players_id = games_monitor.get_players_id(game_id);
+
+            for (const auto& player_id: players_id){
                 players_cars[player_id] = {
                     .accelerating = false, .breaking = false,
                     .turning_right = false, .turning_left = false,
@@ -80,6 +80,8 @@ void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action
 }
 
 void Gameloop::broadcast_players() {
+    ServerMessageDTO msg;
+
     State game_state;
     uint16_t num_cars = 0;
     std::vector<CarState> cars;
@@ -91,21 +93,26 @@ void Gameloop::broadcast_players() {
     game_state.num_cars = num_cars;
     game_state.cars = cars;
 
-    for (const auto& clientHandler: players){
-        //enviar datos al cliente desde clientHandler;
-    }
+    msg.type = MsgType::STATE_UPDATE;
+    msg.state = game_state;
+
+    games_monitor.broadcast_race_state(game_id, msg);
 }
 
 void Gameloop::run() {
     while (should_keep_running()) {
-        ActionMessage msg;
-        while (user_commands_queue.try_pop(msg)) {
-            //actualizar posicion con el mensaje que haya en la queue y la funcion
-            //update_car_stats(mensaje.id, mensaje.accion)
+        std::shared_ptr<ClientHandlerMessage> base_msg;
+        while (user_commands_queue->try_pop(base_msg)) {
+            std::shared_ptr<ActionMessage> msg = std::static_pointer_cast<ActionMessage>(base_msg);
+            //Estamos haciendo casteo estatico por tener distintos mensajes que heredan de ClientHandlerMessage
+            //y tenemos que usar ptr por lo mismo, habría que ver si es realmente necesario
+            for (const auto& action: msg->get_actions()){
+                update_car_input(msg->get_id(), action);
+            }
         }
         update_positions();
         frames++;
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
-    players.clear();
+    games_monitor.remove_race(game_id);
 }

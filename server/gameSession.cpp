@@ -1,10 +1,8 @@
 #include "gameSession.h"
 
-GameSession::GameSession(std::list<std::unique_ptr<ClientHandler>>&& players):
-        players(std::move(players)), user_commands_queue(), gameloop(user_commands_queue, players) {
-            for(auto& clientHandler: this->players){
-                clientHandler->set_queue(&user_commands_queue);
-            }
+GameSession::GameSession(const int& id, const MonitorGames& players):
+        games_monitor(games_monitor), user_commands_queue(), gameloop(user_commands_queue, players) {
+            games_monitor.set_game_queue(user_commands_queue);
         }
 
 void GameSession::start(){

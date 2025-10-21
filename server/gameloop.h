@@ -8,14 +8,15 @@
 
 class Gameloop: public Thread {
 private:
-    Queue<ActionMessage>& user_commands_queue;
-    std::list<std::unique_ptr<ClientHandler>>& players;
+    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>>& user_commands_queue;
+    MonitorGames& games_monitor;
+    int& game_id;
     std::unordered_map<uint16_t, CarInputState> players_cars;
     uint32_t frames;
 
 
 public:
-    Gameloop(Queue<ClientHandlerMessage>& user_commands_queue, std::list<std::unique_ptr<ClientHandler>>& players);
+    Gameloop(const std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>>& user_commands_queue, MonitorGames& games_monitor, const int& id);
     void run() override;
 
 private:
