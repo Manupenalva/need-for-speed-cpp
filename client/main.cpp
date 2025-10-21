@@ -1,37 +1,68 @@
+#include <QApplication>
 #include <exception>
 #include <iostream>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-using SDL2pp::Renderer;
-using SDL2pp::SDL;
-using SDL2pp::Window;
+#include "drawer/drawerSDL.h"
+#include "graphics/texture_manager.h"
+#include "lobby/lobby.h"
+#include "window/windowSDL.h"
 
-int main() try {
-    // Initialize SDL library
-    SDL sdl(SDL_INIT_VIDEO);
 
-    // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-    Window window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480,
-                  SDL_WINDOW_RESIZABLE);
+int main(int argc, char* argv[]) {
+    try {
+        QApplication app(argc, argv);
+        // Crear y mostrar la ventana de Lobby (Qt)
+        Lobby lobby;
+        lobby.show();
 
-    // Create accelerated video renderer with default driver
-    Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
+        app.exec();
 
-    // Clear screen
-    renderer.Clear();
+        // Inicializar SDL
+        SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
-    // Show rendered frame
-    renderer.Present();
 
-    // 5 second delay
-    SDL_Delay(5000);
+        // Crear ventana y renderer
+        WindowSDL window("Need for Speed - Demo", 800, 600);
+        SDL2pp::Renderer& renderer = window.get_renderer();
 
-    // Here all resources are automatically released and library deinitialized
-    return 0;
-} catch (std::exception& e) {
-    // If case of error, print it and exit with error
-    std::cerr << e.what() << std::endl;
-    return 1;
+        // Crear gestor de texturas y cargar recursos
+        TextureManager texture_manager(renderer, "../client/assets/");
+        texture_manager.load_resources();
+
+        // Crear drawer
+        int client_id = 0;
+        DrawerSDL drawer(renderer, texture_manager, client_id);
+
+        // Preparar un estado de prueba con un auto
+        ServerMessageDTO msg;
+        msg.type = MsgType::STATE_UPDATE;
+        CarState car;
+        car.id = 0;
+        car.x = 400.0f;
+        car.y = 300.0f;
+        car.angle = 270.0f;  // orientación
+        car.speed = 0.0f;
+        msg.state.cars.push_back(car);
+
+
+        // Actualizar drawer con el estado y dibujar
+        drawer.update_state(msg, 0);
+
+        // Dibujar una vez y mantener la ventana abierta 5s
+        window.clear();
+        // El drawer en su update_state ya dibuja mapa y autos, pero llamamos explícito
+        // para asegurar que se pinte en esta demo
+        drawer.update_state(msg, 0);
+        window.present();
+
+        SDL_Delay(5000);
+
+    } catch (std::exception& e) {
+        // If case of error, print it and exit with error
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
 }
