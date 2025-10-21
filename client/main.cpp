@@ -1,3 +1,4 @@
+#include <QApplication>
 #include <exception>
 #include <iostream>
 
@@ -10,11 +11,14 @@
 #include "window/windowSDL.h"
 
 
-int main() {
+int main(int argc, char *argv[]) {
     try {
+        QApplication app(argc, argv);
         // Crear y mostrar la ventana de Lobby (Qt)
         Lobby lobby;
         lobby.show();
+
+        app.exec();
 
         // Inicializar SDL
         SDL2pp::SDL sdl(SDL_INIT_VIDEO);

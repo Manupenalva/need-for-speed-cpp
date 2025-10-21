@@ -65,6 +65,7 @@ void Lobby::createGame() {
     QMessageBox::information(this, "New Game",
                              "Nuevo juego");  // Aca deberia mandarle al servidor que quiere crear
                                               // partida y mandar a pantalla de SDL
+    this->close();
 }
 
 void Lobby::connectServer() {
