@@ -1,11 +1,15 @@
 #ifndef MAP_SHEET_H
 #define MAP_SHEET_H
 
-#include <SDL2pp/SDL2pp.hh>
-#include <SDL2/SDL.h>
-#include "sprite.h"
+#include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
+
+#include <SDL2/SDL.h>
+#include <SDL2pp/SDL2pp.hh>
+
+#include "sprite.h"
 
 #define HALF(x) ((x) / 2)
 #define MAP_MIN_X 0
@@ -18,8 +22,9 @@ enum MapType {
 };
 
 class MapSheet {
-    private:
-    // Cargara los mapas completos y get_map_sprite se encargara de devolver la sección correcta que nos interesa en base a la posicion del auto.
+private:
+    // Cargara los mapas completos y get_map_sprite se encargara de devolver la sección correcta que
+    // nos interesa en base a la posicion del auto.
     std::unordered_map<MapType, SDL2pp::Texture> map_sprites;
 
     SDL2pp::Rect get_map_section_rect(SDL2pp::Texture& texture, int section_x, int section_y);

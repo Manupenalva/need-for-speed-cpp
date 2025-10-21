@@ -1,7 +1,7 @@
 #include "sender.h"
 
-Sender::Sender(Protocol& protocol, Queue<ClientMessageDTO>& events_queue)
-    : protocol(protocol), events_queue(events_queue) {}
+Sender::Sender(Protocol& protocol, Queue<ClientMessageDTO>& events_queue):
+        protocol(protocol), events_queue(events_queue) {}
 
 void Sender::run() {
     try {

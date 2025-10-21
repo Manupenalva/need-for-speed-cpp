@@ -1,7 +1,7 @@
 #include "receiver.h"
 
-Receiver::Receiver(Protocol& protocol, Queue<ServerMessageDTO>& server_queue)
-    : protocol(protocol), server_queue(server_queue) {}
+Receiver::Receiver(Protocol& protocol, Queue<ServerMessageDTO>& server_queue):
+        protocol(protocol), server_queue(server_queue) {}
 
 void Receiver::run() {
     try {
