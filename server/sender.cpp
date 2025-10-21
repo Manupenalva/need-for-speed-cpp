@@ -1,8 +1,9 @@
 #include "sender.h"
 
-Sender::Sender(Protocol& protocol): protocol(protocol) {}
+Sender::Sender(Protocol& protocol, int id): protocol(protocol), id(id) {}
 
 void Sender::run() {
+    send_client_id();
     while (should_keep_running() && protocol.socket_alive()) {
 
         try {
@@ -30,4 +31,11 @@ void Sender::push_queue(const ServerMessageDTO msg) { queue.try_push(msg); }
 Sender::~Sender() {
     kill();
     join();
+}
+
+void Sender::send_client_id() {
+    ServerMessageDTO msg;
+    msg.type = MsgType::SEND_CLIENT_ID;
+    msg.id = id;
+    protocol.send_server_message(msg);
 }

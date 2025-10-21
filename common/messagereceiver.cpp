@@ -44,6 +44,9 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
         case MsgType::JOIN_RESULT:
             server_msg.joined = recv_join_result();
             break;
+        case MsgType::SEND_CLIENT_ID:
+            server_msg.id = static_cast<int>(obtain_uint32());
+            break;
         default:
             break;
     }

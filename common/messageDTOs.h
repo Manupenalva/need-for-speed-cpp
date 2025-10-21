@@ -25,7 +25,8 @@ struct ServerMessageDTO {
     std::string message;
     std::vector<LobbyInfo> lobbies;
     bool joined = false;
+    int id;
 
-    ServerMessageDTO(): type(MsgType::INVALID), state(), message(""), lobbies(), joined(false) {}
+    ServerMessageDTO(): type(MsgType::INVALID), state(), message(""), lobbies(), joined(false), id(0) {}
 };
 #endif

@@ -19,6 +19,9 @@ void MessageSender::send_message(const ServerMessageDTO& msg) {
         case MsgType::JOIN_RESULT:
             serialize_join_result(msg.joined);
             break;
+        case MsgType::SEND_CLIENT_ID:
+            serialize_client_id(msg.id);
+            break;
         default:
             buffer.resize(CODE_BYTES);
             offset = 0;
@@ -99,6 +102,14 @@ void MessageSender::serialize_join_result(bool joined) {
     append_bytes(&type, CODE_BYTES);
     uint8_t joined_byte = joined ? 0x01 : 0x00;
     append_bytes(&joined_byte, 1);
+}
+
+void MessageSender::serialize_client_id(int id) {
+    buffer.resize(CODE_BYTES + AMOUNT_BYTES);
+    offset = 0;
+    MsgType type = MsgType::SEND_CLIENT_ID;
+    append_bytes(&type, CODE_BYTES);
+    append_uint32(static_cast<uint32_t>(id));
 }
 
 void MessageSender::append_car_state(const CarState& car) {

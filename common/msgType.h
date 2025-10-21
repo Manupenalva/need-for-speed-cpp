@@ -17,6 +17,7 @@ enum class MsgType : uint8_t {
     STATE_UPDATE,
     SEND_LOBBIES_INFO,
     JOIN_RESULT,
+    SEND_CLIENT_ID,
 
 
     INVALID = 255
