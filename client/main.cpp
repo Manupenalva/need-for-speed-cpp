@@ -32,7 +32,7 @@ int main() try {
     car.id = 0;
     car.x = 400.0f;
     car.y = 300.0f;
-    car.angle = 90.0f;  // orientación
+    car.angle = 0.0f;  // orientación
     car.speed = 0.0f;
     car.lap = 0;
     msg.state.cars.push_back(car);

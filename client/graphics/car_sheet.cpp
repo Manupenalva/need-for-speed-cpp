@@ -27,16 +27,25 @@ void CarSheet::load_sprites() {
             {CAR_TYPE_4, {40, 40}}, {CAR_TYPE_5, {40, 40}}, {CAR_TYPE_6, {40, 40}},
             {CAR_TYPE_7, {48, 48}}};
 
+    int last_sprite_h = 0;
+
     for (int car_type = CAR_TYPE_1; car_type <= CAR_TYPE_7; ++car_type) {
         std::vector<sprite> sprites_for_type;
+
+        int sprite_w = car_dimensions.at(static_cast<CarType>(car_type)).first;
+        int sprite_h = car_dimensions.at(static_cast<CarType>(car_type)).second;
+
         for (int rotation = 0; rotation < ROTATIONS; ++rotation) {
-            SDL2pp::Rect src_rect(
-                    rotation * car_dimensions.at(static_cast<CarType>(car_type)).first,
-                    (car_type - 1) * car_dimensions.at(static_cast<CarType>(car_type)).second,
-                    car_dimensions.at(static_cast<CarType>(car_type)).first,
-                    car_dimensions.at(static_cast<CarType>(car_type)).second);
+            int col = rotation % 8;  // columna (0–7)
+            int row = rotation / 8;  // fila dentro del auto (0 o 1)
+
+            SDL2pp::Rect src_rect(col * sprite_w, last_sprite_h + row * sprite_h, sprite_w,
+                                  sprite_h);
+
             sprites_for_type.emplace_back(sprite{texture, src_rect});
         }
+        last_sprite_h += sprite_h * 2;
+
         car_sprites.emplace(static_cast<CarType>(car_type), std::move(sprites_for_type));
     }
 }
