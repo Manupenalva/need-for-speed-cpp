@@ -4,28 +4,52 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "drawer/drawerSDL.h"
+#include "graphics/texture_manager.h"
+#include "window/windowSDL.h"
+
 
 int main() try {
-    // Initialize SDL library
+    // Inicializar SDL
     SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
-    // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-    SDL2pp::Window window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480,
-                          SDL_WINDOW_RESIZABLE);
+    // Crear ventana y renderer
+    WindowSDL window("Need for Speed - Demo", 800, 600);
+    SDL2pp::Renderer& renderer = window.get_renderer();
 
-    // Create accelerated video renderer with default driver
-    SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
+    // Crear gestor de texturas y cargar recursos
+    TextureManager texture_manager(renderer, "../client/assets/");
+    texture_manager.load_resources();
 
-    // Clear screen
-    renderer.Clear();
+    // Crear drawer
+    int client_id = 0;
+    DrawerSDL drawer(renderer, texture_manager, client_id);
 
-    // Show rendered frame
-    renderer.Present();
+    // Preparar un estado de prueba con un auto
+    ServerMessageDTO msg;
+    msg.type = MsgType::STATE_UPDATE;
+    CarState car;
+    car.id = 0;
+    car.x = 400.0f;
+    car.y = 300.0f;
+    car.angle = 90.0f;  // orientación
+    car.speed = 0.0f;
+    car.lap = 0;
+    msg.state.cars.push_back(car);
 
-    // 5 second delay
+
+    // Actualizar drawer con el estado y dibujar
+    drawer.update_state(msg, 0);
+
+    // Dibujar una vez y mantener la ventana abierta 5s
+    window.clear();
+    // El drawer en su update_state ya dibuja mapa y autos, pero llamamos explícito
+    // para asegurar que se pinte en esta demo
+    drawer.update_state(msg, 0);
+    window.present();
+
     SDL_Delay(5000);
 
-    // Here all resources are automatically released and library deinitialized
     return 0;
 } catch (std::exception& e) {
     // If case of error, print it and exit with error

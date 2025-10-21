@@ -13,17 +13,16 @@ DrawerSDL::DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager
         people_drawer(renderer, texture_manager),
         map_drawer(renderer, texture_manager) {}
 
-DrawerSDL::~DrawerSDL() = default;
-
 void DrawerSDL::update_state(const ServerMessageDTO& msg, int iterations_ahead) {
     if (msg.type != MsgType::STATE_UPDATE) {
         return;
     }
 
     const State& state = msg.state;
+    std::vector<CarState> cars = state.cars;
+    CarState client_car = cars[client_id];
 
-    std::vector<CarState> predicted_cars;
-    CarState client_car;
+    map_drawer.draw(1, client_car.x, client_car.y);
 
     for (const auto& car: state.cars) {
         CarState predicted_car = car;
@@ -34,20 +33,11 @@ void DrawerSDL::update_state(const ServerMessageDTO& msg, int iterations_ahead) 
         predicted_car.x += dx;
         predicted_car.y += dy;
 
-        predicted_cars.push_back(predicted_car);
-        if (predicted_car.id == client_id) {
-            // Centrar la vista en el auto del cliente (dibujar el mapa acorde a la posición del
-            // auto)
-            map_drawer.draw(1, static_cast<int>(predicted_car.x),
-                            static_cast<int>(predicted_car.y));
-            // Uso el primer mapa, se debe agregar lógica para elegir el mapa correcto
-            client_car = predicted_car;
-        }
-    }
-    for (const auto& car: predicted_cars) {
-        float screen_x = car.x - client_car.x + 400;  // Centrar en pantalla (asumiendo 800x600)
-        float screen_y = car.y - client_car.y + 300;  // Centrar en pantalla (asumiendo 800x600)
-        car_drawer.draw(car, car.id == client_id, screen_x, screen_y);
+        float screen_x =
+                predicted_car.x - client_car.x + 400;  // Centrar en pantalla (asumiendo 800x600)
+        float screen_y =
+                predicted_car.y - client_car.y + 300;  // Centrar en pantalla (asumiendo 800x600)
+        car_drawer.draw(predicted_car, screen_x, screen_y);
     }
 
     // TODO: Falta agregar logica de dibujo de gente

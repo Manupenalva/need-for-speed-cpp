@@ -3,7 +3,7 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
-#include "../common/messageDTOs.h"
+#include "../../common/messageDTOs.h"
 #include "../graphics/texture_manager.h"
 
 #include "car_drawer.h"

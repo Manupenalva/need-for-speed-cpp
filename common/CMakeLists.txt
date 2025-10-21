@@ -19,4 +19,6 @@ target_sources(taller_common
         socket.h
         state.h
         liberror.h
+        queue.h
+        thread.h
     )

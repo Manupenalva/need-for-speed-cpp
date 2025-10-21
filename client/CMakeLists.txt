@@ -2,6 +2,30 @@ target_sources(taller_client
     PRIVATE
     # .cpp files
     main.cpp
+    #client.cpp
+    #receiver.cpp
+    #sender.cpp
+    window/windowSDL.cpp
+    #keyboard/keyboard_reader.cpp
+    graphics/car_sheet.cpp
+    graphics/map_sheet.cpp
+    graphics/texture_manager.cpp
+    drawer/drawerSDL.cpp
     PUBLIC
     # .h files
+    #client.h
+    #receiver.h
+    #sender.h
+    window/windowSDL.h
+    window/window.h
+    #keyboard/keyboard_reader.h
+    graphics/car_sheet.h
+    graphics/map_sheet.h
+    graphics/texture_manager.h
+    events/event_handler.h
+    events/keyDown_handler.h
+    events/keyUp_handler.h
+    drawer/car_drawer.h
+    drawer/map_drawer.h
+    drawer/drawerSDL.h
     )

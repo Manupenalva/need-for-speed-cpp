@@ -11,9 +11,9 @@
 #include "people_sheet.h"
 #include "sprite.h"
 
-#define CAR_PATH "cars/Mobile - Grand Theft Auto 4 - Miscellaneous - Cars.png"
+#define CAR_PATH "cars/Cars.png"
 #define PEOPLE_PATH "people/Mobile - Grand Theft Auto 4 - Miscellaneous - People.png"
-#define MAP_PATH "map/"
+#define MAP_PATH "cities/"
 
 class TextureManager {
 private:

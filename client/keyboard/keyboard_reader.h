@@ -7,8 +7,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "../common/messageDTOs.h"
-#include "../common/queue.h"
+#include "../../common/messageDTOs.h"
+#include "../../common/queue.h"
 #include "../events/event_handler.h"
 #include "../events/keyDown_handler.h"
 #include "../events/keyUp_handler.h"

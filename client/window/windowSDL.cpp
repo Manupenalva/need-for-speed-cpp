@@ -1,4 +1,4 @@
-#include "windowSdl.h"
+#include "windowSDL.h"
 
 WindowSDL::WindowSDL(const char* title, int width, int height):
         window(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height,

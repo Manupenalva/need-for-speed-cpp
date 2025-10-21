@@ -1,22 +1,20 @@
 #include "map_sheet.h"
 
-#include <SDL2pp/SDL_image.h>
+MapSheet::MapSheet(const std::string& map_path): map_sprites(), map_path(map_path) {}
 
-MapSheet::MapSheet(SDL2pp::Renderer& renderer, const std::string& map_path): map_sprites() {}
-
-void MapSheet::load_sprites(const std::string& map_path, SDL2pp::Renderer& renderer) {
+void MapSheet::load_sprites(SDL2pp::Renderer& renderer) {
     // Cargar texturas de mapas
     std::vector<std::pair<MapType, std::string>> map_files = {
             {LIBERTY_CITY, map_path + "Backgrounds - Liberty City.png"},
             {SAN_ANDREAS, map_path + "Backgrounds - San Andreas.png"},
             {VICE_CITY, map_path + "Backgrounds - Vice City.png"}};
     for (const auto& [map_type, file_path]: map_files) {
-        SDL2pp::Texture texture(renderer, SDL2pp::Surface(IMG_Load(file_path.c_str())));
-        if (texture.Get() == nullptr) {
+        auto texture = std::make_unique<SDL2pp::Texture>(renderer, SDL2pp::Surface(file_path));
+        if (texture->Get() == nullptr) {
             throw std::runtime_error("Error al cargar textura de mapa: " + file_path);
         }
 
-        map_sprites.emplace(map_type, texture);
+        map_sprites.emplace(map_type, std::move(texture));
     }
 }
 
@@ -26,7 +24,7 @@ sprite MapSheet::get_map_sprite(MapType map_type, int section_x, int section_y) 
         throw std::runtime_error("Map type not found in sprites.");
     }
 
-    SDL2pp::Texture& texture = it->second;
+    SDL2pp::Texture& texture = *(it->second);
     SDL2pp::Rect src_rect = get_map_section_rect(texture, section_x, section_y);
 
     return sprite{texture, src_rect};

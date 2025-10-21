@@ -34,7 +34,7 @@ private:
 public:
     CarSheet(SDL2pp::Renderer& renderer, const std::string& car_path);
 
-    void load_sprites(SDL2pp::Renderer& renderer);
+    void load_sprites();
 
     sprite get_car_sprite(CarType car_type, float rotation);
 };

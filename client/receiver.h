@@ -19,7 +19,6 @@ private:
 
 public:
     Receiver(Protocol& protocol, Queue<ServerMessageDTO>& server_queue);
-    ~Receiver();
 
     void run() override;
     void stop() override;

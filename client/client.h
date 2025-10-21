@@ -12,7 +12,7 @@
 #include "drawer/drawerSDL.h"
 #include "graphics/texture_manager.h"
 #include "keyboard/keyboard_reader.h"
-#include "window/windowSdl.h"
+#include "window/windowSDL.h"
 
 #include "receiver.h"
 #include "sender.h"
