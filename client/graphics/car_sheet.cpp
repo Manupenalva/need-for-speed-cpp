@@ -63,14 +63,12 @@ sprite CarSheet::get_car_sprite(CarType car_type, float rotation) {
 }
 
 int CarSheet::get_rotation_index(float rotation) {
-    // Convertir radianes a grados
-    float degrees = rotation * (180.0f / M_PI);
-    // Asegurarse de que el ángulo esté en el rango [0, 360)
+    // Normalizar el ángulo a [0, 360)
+    rotation = fmod(rotation, 360.0f);
+    if (rotation < 0)
+        rotation += 360.0f;
 
-    if (degrees < 0) {
-        degrees += 360.0f;
-    }
-    // Calcular el índice de rotación basado en 16 rotaciones
-    int index = static_cast<int>((degrees / 360.0f) * ROTATIONS) % ROTATIONS;
+    // Calcular el índice del sprite más cercano
+    int index = static_cast<int>(round(rotation / (360.0f / ROTATIONS))) % ROTATIONS;
     return index;
 }
