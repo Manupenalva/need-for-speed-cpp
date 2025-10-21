@@ -5,13 +5,15 @@
 
 #include "acceptor.h"
 #include "gameSession.h"
-#include "protectedClientList.h"
 
 
 class Server {
 private:
+    MonitorClients clients_monitor;
+    MonitorGames games_monitor;
+    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> lobby_queue; //esto va a pasar a lobby
     Acceptor acceptor; //Hay que cambiar por la clase Lobby
-    GameSession gameSession;
+    std::list<std::unique_ptr<GameSession>> games;//hay que poner una lista protegida de GameSession cuando tengamos varias, quizas las tiene lobby
 
 public:
     explicit Server(const std::string& servname);
@@ -20,7 +22,7 @@ public:
 
 private:
     void communicate_to_client();
-
+    void start_race();
     Server(const Server& other) = delete;
     Server& operator=(const Server& other) = delete;
 };

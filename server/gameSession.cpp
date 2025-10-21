@@ -11,4 +11,5 @@ void GameSession::start(){
 
 void GameSession::stop(){
     gameloop.stop();
+    gameloop.join();
 }
