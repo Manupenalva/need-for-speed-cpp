@@ -9,8 +9,6 @@ target_sources(taller_server
         sender.cpp
         gameloop.cpp
         gameSession.cpp
-        monitorclients.cpp
-        monitorGames.cpp
     PUBLIC
         sender.h
         receiver.h
