@@ -17,7 +17,7 @@ class Client;
 class MonitorClients {
 private:
     std::unordered_map<int, std::shared_ptr<ClientHandler>> clients;
-    //std::unordered_map<int, std::shared_ptr<gameSession>> races;
+    // std::unordered_map<int, std::shared_ptr<gameSession>> races;
     std::mutex mtx;
 
 public:
@@ -54,7 +54,7 @@ public:
     void clear() {
         std::lock_guard<std::mutex> lock(mtx);
         clients.clear();
-        //races.clear();
+        // races.clear();
     }
 
     /* Lo comento para que compile y hacer la primer entrega, despues vemos si

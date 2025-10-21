@@ -2,6 +2,7 @@
 #define ACCEPTOR
 
 #include <memory>
+#include <string>
 
 #include "../common/queue.h"
 #include "../common/socket.h"
@@ -9,8 +10,8 @@
 #include "events/clienthandlermessage.h"
 
 #include "client_handler.h"
-#include "monitorclients.h"
 #include "monitorGames.h"
+#include "monitorclients.h"
 #include "receiver.h"
 
 class Acceptor: public Thread {
@@ -27,7 +28,8 @@ private:
     void clear();
 
 public:
-    Acceptor(const std::string& servname, std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue,
+    Acceptor(const std::string& servname,
+             std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue,
              MonitorClients& clients, MonitorGames& games_monitor);
     Acceptor(const Acceptor&) = delete;
     Acceptor& operator=(const Acceptor&) = delete;

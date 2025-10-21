@@ -12,7 +12,8 @@ ClientHandler::ClientHandler(const int id, Socket s,
 // cppcheck-suppress passedByValue
 void ClientHandler::send_msg(const ServerMessageDTO msg) { sender.push_queue(msg); }
 
-void ClientHandler::set_game_queue(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> new_queue){
+void ClientHandler::set_game_queue(
+        std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> new_queue) {
     receiver.set_queue(new_queue);
 }
 

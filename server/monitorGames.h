@@ -1,10 +1,11 @@
 #ifndef MONITORGAMES_H
 #define MONITORGAMES_H
 
+#include <list>
 #include <memory>
 #include <mutex>
 #include <unordered_map>
-#include <list>
+#include <vector>
 
 #include "../common/messageDTOs.h"
 
@@ -21,25 +22,27 @@ public:
         games[game_id].push_back(client);
     }
 
-    std::vector<int> get_players_id(const int& game_id){
+    std::vector<int> get_players_id(const int& game_id) {
         std::lock_guard<std::mutex> lock(mtx);
         std::vector<int> players_id;
 
-        if (!games.contains(game_id)){
+        if (!games.contains(game_id)) {
             return players_id;
         }
 
-        for (auto& player: games[game_id]) {
-            players_id.push_back(player->get_id());
+        for (const auto& player: games[game_id]) {
+            uint16_t id = player->get_id();
+            players_id.push_back(id);
         }
 
         return players_id;
     }
 
-    void set_game_queue(const int& game_id, std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> game_queue){
+    void set_game_queue(const int& game_id,
+                        std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> game_queue) {
         std::lock_guard<std::mutex> lock(mtx);
 
-        if (!games.contains(game_id)){
+        if (!games.contains(game_id)) {
             return;
         }
 
@@ -56,7 +59,7 @@ public:
     void broadcast_race_state(const int& game_id, const ServerMessageDTO& msg) {
         std::lock_guard<std::mutex> lock(mtx);
 
-        if (!games.contains(game_id)){
+        if (!games.contains(game_id)) {
             return;
         }
 

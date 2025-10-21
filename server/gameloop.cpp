@@ -1,50 +1,53 @@
 #include "gameloop.h"
-#include "events/actionmessage.h"
 
 #include <chrono>
 #include <cmath>
 #include <thread>
 
+#include "events/actionmessage.h"
+
 #define MAX_SPEED 20.0
 #define ACCELERATION 5.0
 #define ANGLE_ROTATION 0.06
 
-Gameloop::Gameloop(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>>& user_commands_queue, MonitorGames& games_monitor, int id):
-        user_commands_queue(user_commands_queue), games_monitor(games_monitor), game_id(id), frames(0) {
-            std::vector<int> players_id = games_monitor.get_players_id(game_id);
+Gameloop::Gameloop(
+        std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>>& user_commands_queue,
+        MonitorGames& games_monitor, int game_id):
+        user_commands_queue(user_commands_queue),
+        games_monitor(games_monitor),
+        game_id(game_id),
+        frames(0) {
+    std::vector<int> players_id = games_monitor.get_players_id(game_id);
 
-            for (const auto& id: players_id){
-                uint16_t player_id = id;
-                players_cars[player_id] = {
-                    false, false, false, false,
-                    {player_id, 0, 0, 0, 0, 0}
-                };
-            }
-        }
+    for (const auto& id: players_id) {
+        uint16_t player_id = id;
+        players_cars[player_id] = {false, false, false, false, {player_id, 0, 0, 0, 0, 0}};
+    }
+}
 
 
-void Gameloop::update_car_state(const uint16_t& player_id){
-    if (players_cars[player_id].accelerating){
-        if (players_cars[player_id].state.speed + ACCELERATION <= MAX_SPEED){
+void Gameloop::update_car_state(const uint16_t& player_id) {
+    if (players_cars[player_id].accelerating) {
+        if (players_cars[player_id].state.speed + ACCELERATION <= MAX_SPEED) {
             players_cars[player_id].state.speed += ACCELERATION;
         }
     }
-    if (players_cars[player_id].braking){
-        if (players_cars[player_id].state.speed - ACCELERATION >= 0){
+    if (players_cars[player_id].braking) {
+        if (players_cars[player_id].state.speed - ACCELERATION >= 0) {
             players_cars[player_id].state.speed -= ACCELERATION;
         }
     }
-    if (players_cars[player_id].turning_left){
+    if (players_cars[player_id].turning_left) {
         players_cars[player_id].state.angle -= ANGLE_ROTATION;
     }
-    if (players_cars[player_id].turning_right){
+    if (players_cars[player_id].turning_right) {
         players_cars[player_id].state.angle += ANGLE_ROTATION;
     }
 }
 
 
-void Gameloop::update_positions(){
-    for (auto& [player_id, car] : players_cars) {
+void Gameloop::update_positions() {
+    for (auto& [player_id, car]: players_cars) {
 
         update_car_state(player_id);
 
@@ -53,30 +56,23 @@ void Gameloop::update_positions(){
     }
 }
 
-//todo lo que sea constantes falla, hay que ponerlos en el .yaml
+// todo lo que sea constantes falla, hay que ponerlos en el .yaml
 void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action) {
-    if (action == ACT_ACCEL_PRESS){
+    if (action == ACT_ACCEL_PRESS) {
         players_cars[player_id].accelerating = true;
-    }
-    else if (action == ACT_ACCEL_RELEASE){
+    } else if (action == ACT_ACCEL_RELEASE) {
         players_cars[player_id].accelerating = false;
-    }
-    else if (action == ACT_BRAKE_PRESS){
+    } else if (action == ACT_BRAKE_PRESS) {
         players_cars[player_id].braking = true;
-    }
-    else if (action == ACT_BRAKE_RELEASE){
+    } else if (action == ACT_BRAKE_RELEASE) {
         players_cars[player_id].braking = false;
-    }
-    else if (action == ACT_LEFT_PRESS){
+    } else if (action == ACT_LEFT_PRESS) {
         players_cars[player_id].turning_left = true;
-    }
-    else if (action == ACT_LEFT_RELEASE){
+    } else if (action == ACT_LEFT_RELEASE) {
         players_cars[player_id].turning_left = false;
-    }
-    else if (action == ACT_RIGHT_PRESS){
+    } else if (action == ACT_RIGHT_PRESS) {
         players_cars[player_id].turning_right = true;
-    }
-    else if (action == ACT_RIGHT_RELEASE){
+    } else if (action == ACT_RIGHT_RELEASE) {
         players_cars[player_id].turning_right = false;
     }
 }
@@ -106,13 +102,15 @@ void Gameloop::run() {
         std::shared_ptr<ClientHandlerMessage> base_msg;
         while (user_commands_queue->try_pop(base_msg)) {
             std::shared_ptr<ActionMessage> msg = std::static_pointer_cast<ActionMessage>(base_msg);
-            //Estamos haciendo casteo estatico por tener distintos mensajes que heredan de ClientHandlerMessage
-            //y tenemos que usar ptr por lo mismo, habría que ver si es realmente necesario
-            for (const auto& action: msg->get_actions()){
+            // Estamos haciendo casteo estatico por tener distintos mensajes que heredan de
+            // ClientHandlerMessage y tenemos que usar ptr por lo mismo, habría que ver si es
+            // realmente necesario
+            for (const auto& action: msg->get_actions()) {
                 update_car_input(msg->get_client_id(), action);
             }
         }
         update_positions();
+        broadcast_players();
         frames++;
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }

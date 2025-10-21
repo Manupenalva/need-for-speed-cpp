@@ -12,7 +12,7 @@ struct CarState {
     uint16_t lap;
 };
 
-struct CarInputState{
+struct CarInputState {
     bool accelerating;
     bool braking;
     bool turning_right;

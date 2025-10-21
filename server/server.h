@@ -1,6 +1,8 @@
 #ifndef SERVER_H
 #define SERVER_H
 
+#include <list>
+#include <memory>
 #include <string>
 
 #include "acceptor.h"
@@ -11,9 +13,12 @@ class Server {
 private:
     MonitorClients clients_monitor;
     MonitorGames games_monitor;
-    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> lobby_queue; //esto va a pasar a lobby
-    Acceptor acceptor; //Hay que cambiar por la clase Lobby
-    std::list<std::unique_ptr<GameSession>> games;//hay que poner una lista protegida de GameSession cuando tengamos varias, quizas las tiene lobby
+    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>>
+            lobby_queue;  // esto va a pasar a lobby
+    Acceptor acceptor;    // Hay que cambiar por la clase Lobby
+    std::list<std::unique_ptr<GameSession>>
+            games;  // hay que poner una lista protegida de GameSession cuando tengamos varias,
+                    // quizas las tiene lobby
 
 public:
     explicit Server(const std::string& servname);

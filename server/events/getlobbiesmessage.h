@@ -3,9 +3,9 @@
 
 #include "clienthandlermessage.h"
 
-class GetLobbiesMessage : public ClientHandlerMessage {
+class GetLobbiesMessage: public ClientHandlerMessage {
 public:
-    explicit GetLobbiesMessage(int client_id) : ClientHandlerMessage(client_id) {}
+    explicit GetLobbiesMessage(int client_id): ClientHandlerMessage(client_id) {}
     virtual ~GetLobbiesMessage() = default;
 };
 

@@ -3,9 +3,9 @@
 
 #include "clienthandlermessage.h"
 
-class QuitGameMessage : public ClientHandlerMessage {
+class QuitGameMessage: public ClientHandlerMessage {
 public:
-    explicit QuitGameMessage(int client_id) : ClientHandlerMessage(client_id) {}
+    explicit QuitGameMessage(int client_id): ClientHandlerMessage(client_id) {}
     virtual ~QuitGameMessage() = default;
 };
 

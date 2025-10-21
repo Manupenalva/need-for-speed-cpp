@@ -1,13 +1,14 @@
 #ifndef CREATE_LOBBY_MESSAGE_H
 #define CREATE_LOBBY_MESSAGE_H
 
-#include "clienthandlermessage.h"
 #include <string>
 
-class CreateLobbyMessage : public ClientHandlerMessage {
+#include "clienthandlermessage.h"
+
+class CreateLobbyMessage: public ClientHandlerMessage {
 public:
-    CreateLobbyMessage(int client_id, const std::string& lobby_name)
-        : ClientHandlerMessage(client_id), lobby_name(lobby_name) {}
+    CreateLobbyMessage(int client_id, const std::string& lobby_name):
+            ClientHandlerMessage(client_id), lobby_name(lobby_name) {}
     virtual ~CreateLobbyMessage() = default;
 
     std::string get_lobby_name() const { return lobby_name; }

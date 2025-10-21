@@ -1,14 +1,15 @@
 #ifndef ACTION_MESSAGE_H
 #define ACTION_MESSAGE_H
 
-#include <vector>
-#include "clienthandlermessage.h"
 #include <cstdint>
+#include <vector>
 
-class ActionMessage : public ClientHandlerMessage {
+#include "clienthandlermessage.h"
+
+class ActionMessage: public ClientHandlerMessage {
 public:
-    ActionMessage(int client_id, const std::vector<uint8_t>& actions)
-        : ClientHandlerMessage(client_id), actions(actions) {}
+    ActionMessage(int client_id, const std::vector<uint8_t>& actions):
+            ClientHandlerMessage(client_id), actions(actions) {}
     virtual ~ActionMessage() = default;
 
     std::vector<uint8_t> get_actions() const { return actions; }

@@ -2,10 +2,11 @@
 #define GAMESESSION_H
 
 #include <memory>
-#include "monitorGames.h"
-#include "gameloop.h"
 
-class GameSession{
+#include "gameloop.h"
+#include "monitorGames.h"
+
+class GameSession {
 private:
     MonitorGames& games_monitor;
     int game_id;
