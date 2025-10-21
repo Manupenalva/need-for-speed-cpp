@@ -3,7 +3,7 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
-#include "../../common/carstate.h"
+#include "../../common/carState.h"
 #include "../graphics/sprite.h"
 #include "../graphics/texture_manager.h"
 
