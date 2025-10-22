@@ -2,14 +2,13 @@
 
 #include <chrono>
 #include <cmath>
-#include <iostream>
 #include <thread>
 
 #include "events/actionmessage.h"
 
 #define MAX_SPEED 20.0
 #define ACCELERATION 5.0
-#define ANGLE_ROTATION 0.06
+#define ANGLE_ROTATION 4
 
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
@@ -44,6 +43,12 @@ void Gameloop::update_car_state(const uint16_t& player_id) {
     if (players_cars[player_id].turning_right) {
         players_cars[player_id].state.angle += ANGLE_ROTATION;
     }
+
+    if (players_cars[player_id].state.angle < 0.0f) {
+        players_cars[player_id].state.angle += 360.0f;
+    } else if (players_cars[player_id].state.angle >= 360.f) {
+        players_cars[player_id].state.angle -= 360.0f;
+    }
 }
 
 
@@ -52,8 +57,9 @@ void Gameloop::update_positions() {
 
         update_car_state(player_id);
 
-        car.state.x += cosf(car.state.angle) * car.state.speed;
-        car.state.y += sinf(car.state.angle) * car.state.speed;
+        float rad = car.state.angle * M_PI / 180.0f;
+        car.state.x += cosf(rad) * car.state.speed;
+        car.state.y += sinf(rad) * car.state.speed;
     }
 }
 
