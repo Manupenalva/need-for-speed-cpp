@@ -6,9 +6,7 @@
 
 #include "events/actionmessage.h"
 
-#define MAX_SPEED 20.0
-#define ACCELERATION 5.0
-#define ANGLE_ROTATION 4
+#include "carPhysics.h"
 
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
@@ -16,50 +14,55 @@ Gameloop::Gameloop(
         user_commands_queue(user_commands_queue),
         games_monitor(games_monitor),
         game_id(game_id),
-        frames(0) {
+        frames(0),
+        world(b2Vec2(0.0f, 0.0f)) {
     std::vector<int> players_id = games_monitor.get_players_id(game_id);
 
     for (const auto& id: players_id) {
         uint16_t player_id = id;
-        players_cars[player_id] = {false, false, false, false, {player_id, 0, 0, 0, 0, 0}};
+        CarPhysics physics(world, 0, 0);
+        players_cars[player_id] = {false, false, false, false, {player_id, 0, 0, 0, 0, 0}, physics};
     }
 }
 
 
-void Gameloop::update_car_state(const uint16_t& player_id) {
-    if (players_cars[player_id].accelerating) {
-        if (players_cars[player_id].state.speed + ACCELERATION <= MAX_SPEED) {
-            players_cars[player_id].state.speed += ACCELERATION;
-        }
-    }
-    if (players_cars[player_id].braking) {
-        if (players_cars[player_id].state.speed - ACCELERATION >= 0) {
-            players_cars[player_id].state.speed -= ACCELERATION;
-        }
-    }
-    if (players_cars[player_id].turning_left) {
-        players_cars[player_id].state.angle -= ANGLE_ROTATION;
-    }
-    if (players_cars[player_id].turning_right) {
-        players_cars[player_id].state.angle += ANGLE_ROTATION;
-    }
+void Gameloop::update_car_physics(const uint16_t& player_id) {
+    CarInputState& car = players_cars[player_id];
 
-    if (players_cars[player_id].state.angle < 0.0f) {
-        players_cars[player_id].state.angle += 360.0f;
-    } else if (players_cars[player_id].state.angle >= 360.f) {
-        players_cars[player_id].state.angle -= 360.0f;
+    if (car.accelerating) {
+        car.physics.accelerate();
+    }
+    if (car.braking) {
+        car.physics.brake();
+    }
+    if (car.turning_left) {
+        car.physics.turn_left();
+    }
+    if (car.turning_right) {
+        car.physics.turn_right();
     }
 }
 
 
 void Gameloop::update_positions() {
     for (auto& [player_id, car]: players_cars) {
+        update_car_physics(player_id);
+    }
 
-        update_car_state(player_id);
+    float timeStep = 1.0f / 60.0f;
+    world.Step(timeStep, 8, 3);
 
-        float rad = car.state.angle * M_PI / 180.0f;
-        car.state.x += cosf(rad) * car.state.speed;
-        car.state.y += sinf(rad) * car.state.speed;
+    for (auto& [player_id, car]: players_cars) {
+        car.state.x = car.physics.get_x_position();
+        car.state.y = car.physics.get_y_position();
+        car.state.speed = car.physics.get_speed();
+        car.state.angle = car.physics.get_angle();
+
+        if (car.state.angle < 0.0f) {
+            car.state.angle += 360.0f;
+        } else if (car.state.angle >= 360.f) {
+            car.state.angle -= 360.0f;
+        }
     }
 }
 
@@ -109,9 +112,6 @@ void Gameloop::run() {
         std::shared_ptr<ClientHandlerMessage> base_msg;
         while (user_commands_queue->try_pop(base_msg)) {
             std::shared_ptr<ActionMessage> msg = std::static_pointer_cast<ActionMessage>(base_msg);
-            // Estamos haciendo casteo estatico por tener distintos mensajes que heredan de
-            // ClientHandlerMessage y tenemos que usar ptr por lo mismo, habría que ver si es
-            // realmente necesario
             for (const auto& action: msg->get_actions()) {
                 update_car_input(msg->get_client_id(), action);
             }

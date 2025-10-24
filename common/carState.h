@@ -18,6 +18,7 @@ struct CarInputState {
     bool turning_right;
     bool turning_left;
     CarState state;
+    CarPhysics physics;
 };
 
 #endif

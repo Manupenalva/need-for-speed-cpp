@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include <box2d/box2d.h>
+
 #include "../common/carState.h"
 
 #include "monitorGames.h"
@@ -18,6 +20,7 @@ private:
     int game_id;
     std::unordered_map<uint16_t, CarInputState> players_cars;
     uint32_t frames;
+    b2World world;
 
 
 public:
@@ -27,7 +30,7 @@ public:
 
 private:
     void broadcast_players();
-    void update_car_state(const uint16_t& player_id);
+    void update_car_physics(const uint16_t& player_id);
     void update_positions();
     void update_car_input(const uint16_t& player_id, const uint8_t& action);
 
