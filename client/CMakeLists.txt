@@ -12,6 +12,11 @@ target_sources(taller_client
     graphics/texture_manager.cpp
     drawer/drawerSDL.cpp
     lobby/lobby.cpp
+    events/keyDown_handler.cpp
+    events/keyUp_handler.cpp
+    drawer/car_drawer.cpp
+    drawer/map_drawer.cpp
+    drawer/people_drawer.cpp
     PUBLIC
     # .h files
     client.h
@@ -28,6 +33,7 @@ target_sources(taller_client
     events/keyUp_handler.h
     drawer/car_drawer.h
     drawer/map_drawer.h
+    drawer/people_drawer.h
     drawer/drawerSDL.h
     lobby/lobby.h
     )

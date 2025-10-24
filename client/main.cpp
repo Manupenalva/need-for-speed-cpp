@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
         // Inicializar SDL
         SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
-        Client client(hostname, servname, id);  // ID de cliente 0 para esta demo
+        Client client(hostname, servname, id);
         client.run();
 
         return 0;
