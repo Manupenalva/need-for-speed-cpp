@@ -2,6 +2,8 @@
 
 #include <chrono>
 #include <cmath>
+#include <iostream>
+#include <ostream>
 #include <thread>
 
 #include "../libs/box2d/include/box2d/box2d.h"
@@ -24,12 +26,14 @@ Gameloop::Gameloop(
 
     for (const auto& id: players_id) {
         uint16_t player_id = id;
-        players_cars[player_id] = {false,
-                                   false,
-                                   false,
-                                   false,
-                                   {player_id, 0, 0, 0, 0, 0},
-                                   std::make_unique<CarPhysics>(world, 0, 0)};
+        players_cars[player_id].state = {player_id, 0.0f, 0.0f, 0.0f, 0.0f, 0};
+        players_cars[player_id] = {
+                false,
+                false,
+                false,
+                false,
+                players_cars[player_id].state,
+                std::make_unique<CarPhysics>(world, players_cars[player_id].state, 0, 0)};
     }
 }
 
@@ -55,23 +59,11 @@ void Gameloop::update_car_physics(const uint16_t& player_id) {
 void Gameloop::update_positions() {
     for (auto& [player_id, car]: players_cars) {
         update_car_physics(player_id);
+        car.physics->update_position();
     }
 
-    float timeStep = 1.0f / 60.0f;
-    b2World_Step(world, timeStep, 3);
-
-    for (auto& [player_id, car]: players_cars) {
-        car.state.x = car.physics->get_x_position();
-        car.state.y = car.physics->get_y_position();
-        car.state.speed = car.physics->get_speed();
-        car.state.angle = car.physics->get_angle();
-
-        if (car.state.angle < 0.0f) {
-            car.state.angle += 360.0f;
-        } else if (car.state.angle >= 360.f) {
-            car.state.angle -= 360.0f;
-        }
-    }
+    // float timeStep = 1.0f / 60.0f;
+    // b2World_Step(world, timeStep, 3);
 }
 
 // todo lo que sea constantes falla, hay que ponerlos en el .yaml

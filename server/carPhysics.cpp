@@ -1,81 +1,73 @@
 #include "carPhysics.h"
 
 #include <cmath>
+#include <iostream>
+
+#include "../common/carState.h"
 
 #define MAX_SPEED 20.0f
-#define ACCELERATION 5.0f
+#define ACCELERATION 1.0f
 #define ANGLE_ROTATION 4
 
-CarPhysics::CarPhysics(b2WorldId world, float x, float y): world(world), is_colliding(false) {
+CarPhysics::CarPhysics(b2WorldId world, CarState& car_state, float x, float y):
+        world(world), is_colliding(false), car_state(car_state) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
-    bodyDef.type = b2_dynamicBody;
+    bodyDef.type = b2_kinematicBody;
     bodyDef.position = {x, y};
     body = b2CreateBody(world, &bodyDef);
 
     b2ShapeDef shapeDef = b2DefaultShapeDef();
-    b2Polygon box = b2MakeBox(0.5f, 1.0f);
+    shapeDef.isSensor = true;
+    b2Polygon box = b2MakeBox(0.1f, 0.2f);
     b2CreatePolygonShape(body, &shapeDef, &box);
 }
 
 void CarPhysics::accelerate() {
-    b2Transform transform = b2Body_GetTransform(body);
-    float angle = b2Rot_GetAngle(transform.q);
+    car_state.speed += ACCELERATION;
 
-    b2Vec2 direction = {cosf(angle), sinf(angle)};
-    b2Vec2 force = {direction.x * ACCELERATION, direction.y * ACCELERATION};
-
-    b2Body_ApplyForceToCenter(body, force, true);
-
-    b2Vec2 velocity = b2Body_GetLinearVelocity(body);
-    float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
-    if (speed > MAX_SPEED) {
-        b2Vec2 normalized_direction = {velocity.x / speed, velocity.y / speed};
-        b2Vec2 max_velocity = {normalized_direction.x * MAX_SPEED,
-                               normalized_direction.y * MAX_SPEED};
-        b2Body_SetLinearVelocity(body, max_velocity);
+    if (car_state.speed > MAX_SPEED) {
+        car_state.speed = MAX_SPEED;
     }
 }
 
 void CarPhysics::brake() {
-    // tmb se puede frenar usando la velocidad lineal * 0.9
-    b2Transform transform = b2Body_GetTransform(body);
-    float angle = b2Rot_GetAngle(transform.q);
-    b2Vec2 direction = {cosf(angle), sinf(angle)};
-    b2Body_ApplyForceToCenter(body, (-ACCELERATION) * direction, true);
+    car_state.speed -= ACCELERATION;
+
+    if (car_state.speed < 0) {
+        car_state.speed = 0;
+    }
 }
 
 void CarPhysics::turn_left() {
-    b2Transform transform = b2Body_GetTransform(body);
-    float angle = b2Rot_GetAngle(transform.q);
-    float rad_rotation = ANGLE_ROTATION * (M_PI / 180.0f);
+    car_state.angle -= ANGLE_ROTATION;
 
-    b2Vec2 position = b2Body_GetPosition(body);
-    b2Rot new_rotation = b2MakeRot(angle - rad_rotation);
-    b2Body_SetTransform(body, position, new_rotation);
+    if (car_state.angle < 0.0f) {
+        car_state.angle += 360.0f;
+    }
 }
 
 void CarPhysics::turn_right() {
-    b2Transform transform = b2Body_GetTransform(body);
-    float angle = b2Rot_GetAngle(transform.q);
-    float rad_rotation = ANGLE_ROTATION * (M_PI / 180.0f);
+    car_state.angle += ANGLE_ROTATION;
 
-    b2Vec2 position = b2Body_GetPosition(body);
-    b2Rot new_rotation = b2MakeRot(angle - rad_rotation);
-    b2Body_SetTransform(body, position, new_rotation);
+    if (car_state.angle >= 360.f) {
+        car_state.angle -= 360.0f;
+    }
 }
 
-float CarPhysics::get_x_position() { return b2Body_GetPosition(body).x; }
+void CarPhysics::update_position() {
+    float rad = car_state.angle * M_PI / 180.0f;
 
-float CarPhysics::get_y_position() { return b2Body_GetPosition(body).y; }
+    car_state.x += cosf(rad) * car_state.speed;
+    car_state.y += sinf(rad) * car_state.speed;
 
-float CarPhysics::get_angle() {
-    b2Transform transform = b2Body_GetTransform(body);
-    float rad_angle = b2Rot_GetAngle(transform.q);
-    return (rad_angle * (180.0f / M_PI));
-}
+    if (car_state.x <= 0) {
+        car_state.x = 0;
+    }
+    if (car_state.y <= 0) {
+        car_state.y = 0;
+    }
 
-float CarPhysics::get_speed() {
-    b2Vec2 velocity = b2Body_GetLinearVelocity(body);
-    float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
-    return speed;
+    b2Rot rotation = b2MakeRot(rad);
+
+    b2Body_SetTransform(body, {car_state.x, car_state.y}, rotation);
 }
