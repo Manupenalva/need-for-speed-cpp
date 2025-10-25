@@ -136,6 +136,8 @@ if(TALLER_CLIENT)
 endif()
 
 if(TALLER_SERVER)
+    add_subdirectory(libs/box2d)
+
     # HEY!! TODO XXX: Change the name of the executable to the one you like!
     add_executable(taller_server)
 
@@ -148,8 +150,10 @@ if(TALLER_SERVER)
 
     set_project_warnings(taller_server ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
+    target_include_directories(taller_server)
+
     # Link the taller_common lib target
-    target_link_libraries(taller_server taller_common)
+    target_link_libraries(taller_server PRIVATE taller_common)
 endif()
 
 if(TALLER_EDITOR)

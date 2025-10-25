@@ -14,14 +14,20 @@ Gameloop::Gameloop(
         user_commands_queue(user_commands_queue),
         games_monitor(games_monitor),
         game_id(game_id),
-        frames(0),
-        world(b2Vec2(0.0f, 0.0f)) {
+        frames(0) {
+    b2WorldDef worldDef = b2DefaultWorldDef();
+    world = b2CreateWorld(&worldDef);
+
     std::vector<int> players_id = games_monitor.get_players_id(game_id);
 
     for (const auto& id: players_id) {
         uint16_t player_id = id;
-        CarPhysics physics(world, 0, 0);
-        players_cars[player_id] = {false, false, false, false, {player_id, 0, 0, 0, 0, 0}, physics};
+        players_cars[player_id] = {false,
+                                   false,
+                                   false,
+                                   false,
+                                   {player_id, 0, 0, 0, 0, 0},
+                                   std::make_unique<CarPhysics>(world, 0, 0)};
     }
 }
 
@@ -30,16 +36,16 @@ void Gameloop::update_car_physics(const uint16_t& player_id) {
     CarInputState& car = players_cars[player_id];
 
     if (car.accelerating) {
-        car.physics.accelerate();
+        car.physics->accelerate();
     }
     if (car.braking) {
-        car.physics.brake();
+        car.physics->brake();
     }
     if (car.turning_left) {
-        car.physics.turn_left();
+        car.physics->turn_left();
     }
     if (car.turning_right) {
-        car.physics.turn_right();
+        car.physics->turn_right();
     }
 }
 
@@ -50,13 +56,13 @@ void Gameloop::update_positions() {
     }
 
     float timeStep = 1.0f / 60.0f;
-    world.Step(timeStep, 8, 3);
+    b2World_Step(world, timeStep, 3);
 
     for (auto& [player_id, car]: players_cars) {
-        car.state.x = car.physics.get_x_position();
-        car.state.y = car.physics.get_y_position();
-        car.state.speed = car.physics.get_speed();
-        car.state.angle = car.physics.get_angle();
+        car.state.x = car.physics->get_x_position();
+        car.state.y = car.physics->get_y_position();
+        car.state.speed = car.physics->get_speed();
+        car.state.angle = car.physics->get_angle();
 
         if (car.state.angle < 0.0f) {
             car.state.angle += 360.0f;

@@ -20,7 +20,7 @@ private:
     int game_id;
     std::unordered_map<uint16_t, CarInputState> players_cars;
     uint32_t frames;
-    b2World world;
+    b2WorldId world;
 
 
 public:

@@ -10,6 +10,7 @@ target_sources(taller_server
         gameloop.cpp
         gameSession.cpp
         server.cpp
+        carPhysics.cpp
     PUBLIC
         sender.h
         receiver.h
@@ -20,5 +21,6 @@ target_sources(taller_server
         gameSession.h
         monitorGames.h
         server.h
+        carPhysics.h
         ${EVENTS_SRC}
     )

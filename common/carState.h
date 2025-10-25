@@ -2,6 +2,9 @@
 #define CARSTATE_H
 
 #include <cstdint>
+#include <memory>
+
+#include "../server/carPhysics.h"
 
 struct CarState {
     uint16_t id;
@@ -18,7 +21,7 @@ struct CarInputState {
     bool turning_right;
     bool turning_left;
     CarState state;
-    CarPhysics physics;
+    std::unique_ptr<CarPhysics> physics;
 };
 
 #endif
