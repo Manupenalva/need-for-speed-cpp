@@ -27,10 +27,14 @@ public:
 
     int get_id() const { return id; }
 
+    void set_race_id(int race_id);
+    int get_race_id() const;
+
 private:
     const int id;
     Protocol protocol;
     Sender sender;
     Receiver receiver;
+    int race_id;
 };
 #endif

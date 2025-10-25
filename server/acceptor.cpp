@@ -23,9 +23,10 @@ void Acceptor::run() {
         } catch (const std::exception& e) {
             break;  // Aceptador sale de bucle y limpia todos los client handlers
         }
-        clients.insert(id, client);
-        games_monitor.insert_client_to_race(
-                0, client);  // OJO!, esto solo para primera entrega, creo una sola carrera de id 0.
+        clients.add_client(id, client);
+        // games_monitor.insert_client_to_race(
+        //         0, client);  // OJO!, esto solo para primera entrega, creo una sola carrera de id
+        //         0.
         id++;
     }
     clear();

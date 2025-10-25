@@ -1,0 +1,34 @@
+#ifndef LOBBY_H
+#define LOBBY_H
+
+#include <memory>
+#include <vector>
+
+#include "../common/queue.h"
+#include "../common/thread.h"
+#include "events/clienthandlermessage.h"
+
+#include "gameSession.h"
+#include "monitorclients.h"
+
+class Lobby: public Thread {
+
+public:
+    Lobby(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> lobbyQueue,
+          MonitorClients& clientsMonitor);
+
+    void start_lobby();
+
+private:
+    std::vector<std::shared_ptr<GameSession>> active_games;
+    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> lobby_queue;
+    MonitorClients& clients_monitor;
+    int create_race();
+    void add_player_to_race(int playerId, int raceId);
+    void remove_player_from_race(int playerId);
+    void start_race(int raceId);
+    void manage_msg(std::shared_ptr<ClientHandlerMessage> msg);
+    void clean_games();
+};
+
+#endif

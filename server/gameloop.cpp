@@ -12,7 +12,7 @@
 
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
-        MonitorGames& games_monitor, int game_id):
+        MonitorClients& games_monitor, int game_id):
         user_commands_queue(user_commands_queue),
         games_monitor(games_monitor),
         game_id(game_id),
@@ -101,7 +101,7 @@ void Gameloop::broadcast_players() {
     msg.type = MsgType::STATE_UPDATE;
     msg.state = game_state;
 
-    games_monitor.broadcast_race_state(game_id, msg);
+    games_monitor.broadcast_race_state(msg, game_id);
 }
 
 void Gameloop::run() {
@@ -121,5 +121,4 @@ void Gameloop::run() {
         frames++;
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
-    games_monitor.remove_race(game_id);
 }

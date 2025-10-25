@@ -8,7 +8,7 @@
 class CreateLobbyMessage: public ClientHandlerMessage {
 public:
     CreateLobbyMessage(int client_id, const std::string& lobby_name):
-            ClientHandlerMessage(client_id), lobby_name(lobby_name) {}
+            ClientHandlerMessage(client_id, MsgType::CREATE_RACE), lobby_name(lobby_name) {}
     virtual ~CreateLobbyMessage() = default;
 
     std::string get_lobby_name() const { return lobby_name; }

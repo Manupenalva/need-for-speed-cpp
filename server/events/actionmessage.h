@@ -9,7 +9,7 @@
 class ActionMessage: public ClientHandlerMessage {
 public:
     ActionMessage(int client_id, const std::vector<uint8_t>& actions):
-            ClientHandlerMessage(client_id), actions(actions) {}
+            ClientHandlerMessage(client_id, MsgType::DRIVING_EVENT), actions(actions) {}
     virtual ~ActionMessage() = default;
 
     std::vector<uint8_t> get_actions() const { return actions; }
