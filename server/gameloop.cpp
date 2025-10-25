@@ -4,6 +4,8 @@
 #include <cmath>
 #include <thread>
 
+#include "../libs/box2d/include/box2d/box2d.h"
+#include "../libs/box2d/include/box2d/id.h"
 #include "events/actionmessage.h"
 
 #include "carPhysics.h"

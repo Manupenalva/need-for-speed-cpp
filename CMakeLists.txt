@@ -150,10 +150,10 @@ if(TALLER_SERVER)
 
     set_project_warnings(taller_server ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
-    target_include_directories(taller_server)
+    target_include_directories(taller_server PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/libs/box2d/include)
 
     # Link the taller_common lib target
-    target_link_libraries(taller_server PRIVATE taller_common)
+    target_link_libraries(taller_server PRIVATE box2d::box2d taller_common)
 endif()
 
 if(TALLER_EDITOR)
