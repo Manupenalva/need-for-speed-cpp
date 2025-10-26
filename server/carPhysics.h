@@ -7,6 +7,7 @@ struct CarState;
 class CarPhysics {
 private:
     b2BodyId body;
+    b2ShapeId shape;
     b2WorldId world;
     bool is_colliding;
     CarState& car_state;
@@ -18,6 +19,10 @@ public:
     void turn_left();
     void turn_right();
     void update_position();
+
+private:
+    void handle_hit_event(const b2ContactHitEvent& event);
+    void handle_crash(const b2Vec2& normal);
 };
 
 #endif

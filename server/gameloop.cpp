@@ -20,20 +20,23 @@ Gameloop::Gameloop(
         game_id(game_id),
         frames(0) {
     b2WorldDef worldDef = b2DefaultWorldDef();
+    worldDef.gravity = {0.0f, 0.0f};
     world = b2CreateWorld(&worldDef);
 
     std::vector<int> players_id = games_monitor.get_players_id(game_id);
 
     for (const auto& id: players_id) {
         uint16_t player_id = id;
-        players_cars[player_id].state = {player_id, 0.0f, 0.0f, 0.0f, 0.0f, 0};
+        players_cars[player_id].state = {
+                player_id, 0.0f + player_id * 100, 0.0f + player_id * 100, 0.0f, 0.0f, 0};
         players_cars[player_id] = {
                 false,
                 false,
                 false,
                 false,
                 players_cars[player_id].state,
-                std::make_unique<CarPhysics>(world, players_cars[player_id].state, 0, 0)};
+                std::make_unique<CarPhysics>(world, players_cars[player_id].state,
+                                             0.0f + player_id * 100, 0.0f + player_id * 100)};
     }
 }
 
@@ -59,11 +62,14 @@ void Gameloop::update_car_physics(const uint16_t& player_id) {
 void Gameloop::update_positions() {
     for (auto& [player_id, car]: players_cars) {
         update_car_physics(player_id);
-        car.physics->update_position();
     }
 
-    // float timeStep = 1.0f / 60.0f;
-    // b2World_Step(world, timeStep, 3);
+    float timeStep = 1.0f / 60.0f;
+    b2World_Step(world, timeStep, 3);
+
+    for (auto& [player_id, car]: players_cars) {
+        car.physics->update_position();
+    }
 }
 
 // todo lo que sea constantes falla, hay que ponerlos en el .yaml
