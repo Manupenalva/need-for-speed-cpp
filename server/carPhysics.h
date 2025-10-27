@@ -9,7 +9,7 @@ private:
     b2BodyId body;
     b2ShapeId shape;
     b2WorldId world;
-    bool is_colliding;
+    float life;
     CarState& car_state;
 
 public:

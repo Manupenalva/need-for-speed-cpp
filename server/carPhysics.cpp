@@ -11,10 +11,10 @@
 #define ANGLE_ROTATION 4
 
 CarPhysics::CarPhysics(b2WorldId world, CarState& car_state, float x, float y):
-        world(world), is_colliding(false), car_state(car_state) {
+        world(world), life(100.0f), car_state(car_state) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;
-    bodyDef.angularDamping = 0.0f;
+    bodyDef.linearDamping = 2.0f;
     bodyDef.angularDamping = 5.0f;
     bodyDef.position = {x, y};
     body = b2CreateBody(world, &bodyDef);
@@ -22,7 +22,7 @@ CarPhysics::CarPhysics(b2WorldId world, CarState& car_state, float x, float y):
     b2Body_EnableHitEvents(body, true);
 
     b2ShapeDef shapeDef = b2DefaultShapeDef();
-    b2Polygon box = b2MakeBox(10.5f, 20.5f);
+    b2Polygon box = b2MakeBox(20.5f, 10.5f);
     shape = b2CreatePolygonShape(body, &shapeDef, &box);
     b2Shape_EnableContactEvents(shape, true);
     b2Shape_EnableHitEvents(shape, true);
@@ -122,12 +122,14 @@ void CarPhysics::handle_crash(const b2Vec2& normal) {
     b2Vec2 forward = {cosf(rad), sinf(rad)};
 
     float crash_direction = (forward.x * normal.x) + (forward.y * normal.y);
-    if (crash_direction > 1) {
-        std::cout << "Soy el cliente: " << car_state.id << " Me pega el" << std::endl;
-    }
-    if (crash_direction < 1) {
-        std::cout << "Soy el cliente: " << car_state.id << " Le di de frente" << std::endl;
-    } else {
-        std::cout << "Soy el cliente: " << car_state.id << " Chocamos de costado" << std::endl;
+    if (crash_direction > 0.7f) {  // le doy de frente, disminuye la velocidad y resta vida
+        brake();
+        brake();
+        life -= 30;
+    } else if (crash_direction < -0.7f) {  // me pega el, solo resta vida
+        life -= 20;
+    } else {  // me dan en el costado, pierdo menos vida y velocidad que de frente
+        brake();
+        life -= 10;
     }
 }
