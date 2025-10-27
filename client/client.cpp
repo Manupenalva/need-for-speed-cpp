@@ -1,13 +1,12 @@
 #include "client.h"
 
 Client::Client(const char* hostname, const char* servname, const int id):
-        id(id),
         protocol(servname, hostname),
         events_queue(),
         server_queue(),
         sender(protocol, events_queue),
         receiver(protocol, server_queue),
-        window(TITTLE_CLIENT, 800, 600),
+        window(TITTLE_CLIENT),
         texture_manager(window.get_renderer(), PATH),
         drawer(window.get_renderer(), texture_manager, id),
         kb_reader(events_queue),
@@ -19,9 +18,10 @@ void Client::run() {
     init_resources();
     sender.start();
     receiver.start();
+    GameLoopTimer timer(TARGET_FPS);
     try {
         // Variables de iteración
-        int iterations_ahead = 0;
+        uint32_t iterations_ahead = 0;
 
         while (_keep_running) {
             kb_reader.listen_to_keyboard(_keep_running);
@@ -30,14 +30,10 @@ void Client::run() {
             update_state_from_server();
 
             // Dibujar el frame actual (si hay estado)
-            uint32_t render_start = SDL_GetTicks();
             update_animation_frames(iterations_ahead);
 
-            uint32_t render_end = SDL_GetTicks();
-            uint32_t render_time = render_end - render_start;
-
             // Decidir cuántas iteraciones lógicas hay que adelantar según retraso
-            iterations_ahead = sleep_and_calc_next_it(render_time);
+            timer.sleep_and_calc_next_it(iterations_ahead);
         }
         stop();
     } catch (const std::exception& e) {
@@ -84,27 +80,4 @@ void Client::update_animation_frames(int iterations_ahead) {
         window.present();
         has_last_state = false;  // Ya se dibujó este estado
     }
-}
-
-int Client::sleep_and_calc_next_it(uint32_t render_time_ms) {
-    // Objetivo: 60 FPS -> frame_ms por iteración
-    const uint32_t frame_ms = FRAME_MS;
-    int ahead = 1;
-
-    if (render_time_ms < frame_ms) {
-        // No esta atradaso, puede dormir hasta completar el frame.
-        std::this_thread::sleep_for(std::chrono::milliseconds(frame_ms - render_time_ms));
-    } else {
-        // Está atrasado, calcular cuántas iteraciones lógicas hay que
-        // adelantar para ponerse al día.
-        ahead = render_time_ms / frame_ms;
-
-        // duerme hasta completar la iteracion actual
-        uint32_t extra_time = render_time_ms % frame_ms;
-        if (extra_time > 0) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(frame_ms - extra_time));
-        }
-    }
-
-    return ahead;
 }

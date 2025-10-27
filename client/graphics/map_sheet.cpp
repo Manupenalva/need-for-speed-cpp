@@ -32,8 +32,10 @@ sprite MapSheet::get_map_sprite(MapType map_type, int section_x, int section_y) 
 
 SDL2pp::Rect MapSheet::get_map_section_rect(SDL2pp::Texture& texture, int section_x,
                                             int section_y) {
-    const int view_width = 800;   // Ancho de la vista del juego
-    const int view_height = 600;  // Alto de la vista del juego
+
+    ConfigReader& config = ConfigReader::get_instance();
+    const int view_width = config.get_window_width();    // Ancho de la vista del juego
+    const int view_height = config.get_window_height();  // Alto de la vista del juego
     const int map_width = texture.GetWidth();
     const int map_height = texture.GetHeight();
 

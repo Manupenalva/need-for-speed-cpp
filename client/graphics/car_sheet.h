@@ -9,9 +9,21 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "../config/constants.h"
+
 #include "sprite.h"
 
 #define ROTATIONS 16
+
+#define ROTATIONS_PER_ROW 8
+#define ROWS_PER_CAR 2
+
+#define CAR_DIMENSION_1 \
+    { 32, 32 }
+#define CAR_DIMENSION_2 \
+    { 40, 40 }
+#define CAR_DIMENSION_3 \
+    { 48, 48 }
 
 enum CarType {
     CAR_TYPE_1 = 1,

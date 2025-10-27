@@ -7,6 +7,7 @@ target_sources(taller_common
         messagesender.cpp
         socket.cpp
         liberror.cpp
+        gameLoop_timer.cpp
     PUBLIC
         carState.h
         constants.h
@@ -23,4 +24,5 @@ target_sources(taller_common
         liberror.h
         thread.h
         queue.h
+        gameLoop_timer.h
     )

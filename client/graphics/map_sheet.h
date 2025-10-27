@@ -10,11 +10,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "sprite.h"
+#include "../config/config_reader.h"
+#include "../config/constants.h"
 
-#define HALF(x) ((x) / 2)
-#define MAP_MIN_X 0
-#define MAP_MIN_Y 0
+#include "sprite.h"
 
 enum MapType {
     LIBERTY_CITY = 1,

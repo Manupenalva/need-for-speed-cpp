@@ -4,11 +4,13 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "../common/gameLoop_timer.h"
 #include "../common/messageDTOs.h"
 #include "../common/protocol.h"
 #include "../common/queue.h"
 #include "../common/socket.h"
 #include "../common/thread.h"
+#include "config/constants.h"
 #include "drawer/drawerSDL.h"
 #include "graphics/texture_manager.h"
 #include "keyboard/keyboard_reader.h"
@@ -17,15 +19,8 @@
 #include "receiver.h"
 #include "sender.h"
 
-#define TARGET_FPS 60
-#define FRAME_MS (1000 / TARGET_FPS)  // ~16 ms
-
-#define TITTLE_CLIENT "Need For Speed Race"
-#define PATH "../client/assets/"
-
 class Client: public Thread {
 private:
-    int id;
     Protocol protocol;
     Queue<ClientMessageDTO> events_queue;
     Queue<ServerMessageDTO> server_queue;
@@ -41,11 +36,9 @@ private:
     bool has_last_state;
 
     void init_resources();
-    void draw_initial_state();
     void update_state_from_server();
     void clear_display();
     void update_animation_frames(int iterations_ahead);
-    int sleep_and_calc_next_it(uint32_t render_time_ms);
 
 public:
     Client(const char* hostname, const char* servname, const int id);

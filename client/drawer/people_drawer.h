@@ -11,12 +11,9 @@ private:
     TextureManager& texture_manager;
 
 public:
-    explicit PeopleDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager):
-            renderer(renderer), texture_manager(texture_manager) {}
+    explicit PeopleDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager);
 
-    void draw() {
-        // Lógica para dibujar a las personas
-    }
+    void draw();
 };
 
 #endif

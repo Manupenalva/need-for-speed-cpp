@@ -4,6 +4,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../../common/messageDTOs.h"
+#include "../config/constants.h"
 #include "../graphics/texture_manager.h"
 
 #include "car_drawer.h"
@@ -18,6 +19,9 @@ private:
     CarDrawer car_drawer;
     PeopleDrawer people_drawer;
     MapDrawer map_drawer;
+
+    SDL2pp::Rect draw_map(const CarState& client_car);
+    void draw_cars(const State& state, const SDL2pp::Rect& map_rect, int iterations_ahead);
 
 public:
     explicit DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager, int client_id);

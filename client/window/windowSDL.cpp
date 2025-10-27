@@ -1,8 +1,9 @@
 #include "windowSDL.h"
 
-WindowSDL::WindowSDL(const char* title, int width, int height):
-        window(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height,
-               SDL_WINDOW_SHOWN),
+WindowSDL::WindowSDL(const char* title):
+        window(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+               ConfigReader::get_instance().get_window_width(),
+               ConfigReader::get_instance().get_window_height(), SDL_WINDOW_SHOWN),
         renderer(window, DRIVER_RENDERER, SDL_RENDERER_ACCELERATED) {
     // Constructor mínimo: crea la ventana y el renderer acelerado.
 }
