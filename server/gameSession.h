@@ -4,19 +4,22 @@
 #include <memory>
 
 #include "gameloop.h"
-#include "monitorGames.h"
+#include "monitorclients.h"
 
 class GameSession {
 private:
-    MonitorGames& games_monitor;
+    MonitorClients& clients_monitor;
     int game_id;
     std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue;
     Gameloop gameloop;
 
 public:
-    GameSession(const int& id, MonitorGames& games_monitor);
-    void start();
+    GameSession(const int& id, MonitorClients& clients_monitor);
+    // void start();
     void stop();
+    ~GameSession();
+
+    bool is_running() const;
 
 private:
     GameSession(const GameSession& other) = delete;

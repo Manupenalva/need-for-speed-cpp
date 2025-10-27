@@ -22,7 +22,6 @@ private:
     std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue;
     int id;
     MonitorClients& clients;
-    MonitorGames& games_monitor;
 
     void reap();
     void clear();
@@ -30,7 +29,7 @@ private:
 public:
     Acceptor(const std::string& servname,
              std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue,
-             MonitorClients& clients, MonitorGames& games_monitor);
+             MonitorClients& clients);
     Acceptor(const Acceptor&) = delete;
     Acceptor& operator=(const Acceptor&) = delete;
     ~Acceptor() override;

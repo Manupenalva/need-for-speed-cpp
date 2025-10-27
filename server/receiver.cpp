@@ -6,6 +6,7 @@
 #include "events/getlobbiesmessage.h"
 #include "events/joinlobbymessage.h"
 #include "events/quitgamemessage.h"
+#include "events/startracemessage.h"
 
 Receiver::Receiver(Protocol& protocol,
                    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue, int id):
@@ -26,16 +27,19 @@ void Receiver::run() {
                     game_message = std::make_shared<ActionMessage>(id, msg.events);
                     break;
                 case MsgType::JOIN_RACE:
-                    game_message = std::make_shared<JoinLobbyMessage>(id, msg.lobby_name);
+                    game_message = std::make_shared<JoinLobbyMessage>(id, msg.lobby_id);
                     break;
                 case MsgType::EXIT_RACE:
                     game_message = std::make_shared<QuitGameMessage>(id);
                     break;
                 case MsgType::CREATE_RACE:
-                    game_message = std::make_shared<CreateLobbyMessage>(id, msg.lobby_name);
+                    game_message = std::make_shared<CreateLobbyMessage>(id);
                     break;
                 case MsgType::GET_LOBBIES:
                     game_message = std::make_shared<GetLobbiesMessage>(id);
+                    break;
+                case MsgType::START_RACE:
+                    game_message = std::make_shared<StartRaceMessage>(id);
                     break;
                 default:
                     continue;

@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
 
         QApplication app(argc, argv);
         // Crear y mostrar la ventana de Lobby (Qt)
-        Lobby lobby;
+        Lobby lobby(hostname, servname);
         lobby.show();
 
         app.exec();

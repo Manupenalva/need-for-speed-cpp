@@ -30,7 +30,7 @@ private:
     std::string obtain_string(uint16_t size);
     float uint32_to_float(uint32_t n);
     float obtain_float();
-    std::string obtain_lobby_name();
+    // std::string obtain_lobby_name();
 
     CarState recv_car_state();
     LobbyInfo recv_lobby_info();

@@ -6,12 +6,8 @@
 
 Acceptor::Acceptor(const std::string& servname,
                    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue,
-                   MonitorClients& clients, MonitorGames& games_monitor):
-        acceptor(servname.c_str()),
-        queue(std::move(queue)),
-        id(0),
-        clients(clients),
-        games_monitor(games_monitor) {}
+                   MonitorClients& clients):
+        acceptor(servname.c_str()), queue(std::move(queue)), id(0), clients(clients) {}
 
 void Acceptor::run() {
     while (!acceptor.is_stream_recv_closed()) {
@@ -23,9 +19,10 @@ void Acceptor::run() {
         } catch (const std::exception& e) {
             break;  // Aceptador sale de bucle y limpia todos los client handlers
         }
-        clients.insert(id, client);
-        games_monitor.insert_client_to_race(
-                0, client);  // OJO!, esto solo para primera entrega, creo una sola carrera de id 0.
+        clients.add_client(id, client);
+        // games_monitor.insert_client_to_race(
+        //         0, client);  // OJO!, esto solo para primera entrega, creo una sola carrera de id
+        //         0.
         id++;
     }
     clear();
@@ -37,7 +34,7 @@ void Acceptor::reap() { clients.remove_if_dead(); }
 void Acceptor::clear() { clients.clear(); }
 
 void Acceptor::shutdown() {
-    acceptor.shutdown(2);
+    acceptor.shutdown(SHUT_RDWR);
     acceptor.close();
 }
 

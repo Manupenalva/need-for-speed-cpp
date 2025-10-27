@@ -13,6 +13,13 @@ int main(int argc, char const* argv[]) {
     Server server(servname);
 
     server.start();
+    while (true) {
+        char c;
+        c = getchar();
+        if (c == 'q') {
+            break;
+        }
+    }
     server.shutdown();
 
     return 0;

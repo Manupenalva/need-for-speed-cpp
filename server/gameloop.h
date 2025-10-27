@@ -9,14 +9,17 @@
 #include <box2d/box2d.h>
 
 #include "../common/carState.h"
+#include "../common/queue.h"
+#include "../common/thread.h"
+#include "events/clienthandlermessage.h"
 
-#include "monitorGames.h"
+#include "monitorclients.h"
 
 
 class Gameloop: public Thread {
 private:
     std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue;
-    MonitorGames& games_monitor;
+    MonitorClients& games_monitor;
     int game_id;
     std::unordered_map<uint16_t, CarInputState> players_cars;
     uint32_t frames;
@@ -25,7 +28,7 @@ private:
 
 public:
     Gameloop(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
-             MonitorGames& games_monitor, int game_id);
+             MonitorClients& games_monitor, int game_id);
     void run() override;
 
 private:

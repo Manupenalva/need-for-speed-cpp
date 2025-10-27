@@ -11,6 +11,7 @@ target_sources(taller_server
         gameSession.cpp
         server.cpp
         carPhysics.cpp
+        lobby.cpp
     PUBLIC
         sender.h
         receiver.h
@@ -22,5 +23,7 @@ target_sources(taller_server
         monitorGames.h
         server.h
         carPhysics.h
+        lobby.h
+        racemonitor.h
         ${EVENTS_SRC}
     )

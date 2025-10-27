@@ -7,6 +7,7 @@
 
 #include "acceptor.h"
 #include "gameSession.h"
+#include "lobby.h"
 
 
 class Server {
@@ -19,6 +20,7 @@ private:
     std::list<std::unique_ptr<GameSession>>
             games;  // hay que poner una lista protegida de GameSession cuando tengamos varias,
                     // quizas las tiene lobby
+    Lobby lobby;
 
 public:
     explicit Server(const std::string& servname);

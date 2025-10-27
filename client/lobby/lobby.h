@@ -5,12 +5,15 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QStackedWidget>
+#include <string>
+#include "../../common/protocol.h"
 
 class Lobby: public QMainWindow {
     Q_OBJECT
+    Protocol protocol;
 
 public:
-    explicit Lobby(QWidget* parent = nullptr);
+    explicit Lobby(const char* hostname, const char* servname, QWidget* parent = nullptr);
 
     // cppcheck-suppress unknownMacro
 private slots:
@@ -27,7 +30,6 @@ private:
 
     QWidget* connectScreen;
     QLineEdit* servname;
-    QLineEdit* port;
     QPushButton* connectButton;
     QPushButton* backButton;
 };

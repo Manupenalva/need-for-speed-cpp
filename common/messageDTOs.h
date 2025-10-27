@@ -12,9 +12,9 @@
 struct ClientMessageDTO {
     MsgType type;
     std::vector<uint8_t> events;
-    std::string lobby_name;
+    uint16_t lobby_id;
 
-    ClientMessageDTO(): type(MsgType::INVALID), events(), lobby_name("") {}
+    ClientMessageDTO(): type(MsgType::INVALID), events(), lobby_id(-1) {}
 };
 
 

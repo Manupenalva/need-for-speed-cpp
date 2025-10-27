@@ -10,6 +10,7 @@ enum class MsgType : uint8_t {
     CREATE_RACE,
     EXIT_RACE,
     GET_LOBBIES,
+    START_RACE,
 
     // Servidor → Cliente
     GAME_START,

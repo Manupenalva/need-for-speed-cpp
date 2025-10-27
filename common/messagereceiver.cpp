@@ -18,8 +18,7 @@ ClientMessageDTO MessageReceiver::recv_client_message() {
             client_msg.events = recv_driving_events();
             break;
         case MsgType::JOIN_RACE:
-        case MsgType::CREATE_RACE:
-            client_msg.lobby_name = obtain_lobby_name();
+            client_msg.lobby_id = obtain_uint16();
             break;
         default:
             break;
@@ -140,7 +139,7 @@ float MessageReceiver::obtain_float() {
     return uint32_to_float(n);
 }
 
-std::string MessageReceiver::obtain_lobby_name() {
-    uint16_t name_size = obtain_uint16();
-    return obtain_string(name_size);
-}
+// std::string MessageReceiver::obtain_lobby_name() {
+//     uint16_t name_size = obtain_uint16();
+//     return obtain_string(name_size);
+// }
