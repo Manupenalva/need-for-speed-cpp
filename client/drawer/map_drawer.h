@@ -5,6 +5,7 @@
 
 #include "../config/config_reader.h"
 #include "../config/constants.h"
+#include "../graphics/sprite.h"
 #include "../graphics/texture_manager.h"
 
 class MapDrawer {
@@ -15,7 +16,9 @@ private:
 public:
     explicit MapDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager);
 
-    void draw(int map_id, int section_x, int section_y);
+    sprite get_sprite(int map_id, float focus_x, float focus_y);
+
+    void draw(sprite& map_sprite);
 };
 
 #endif

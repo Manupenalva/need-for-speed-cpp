@@ -23,13 +23,19 @@ void DrawerSDL::update_state(const ServerMessageDTO& msg, int iterations_ahead) 
 
     CarState client_car = cars[client_id];
 
-    ConfigReader& config = ConfigReader::get_instance();
+    SDL2pp::Rect map_rect = draw_map(client_car);
+    draw_cars(state, map_rect, iterations_ahead);
+    // TODO: Falta agregar logica de dibujo de gente
+}
 
-    map_drawer.draw(config.get_map_id(), client_car.x, client_car.y);
+SDL2pp::Rect DrawerSDL::draw_map(const CarState& client_car) {
+    sprite map_sprite = map_drawer.get_sprite(ConfigReader::get_instance().get_map_id(),
+                                              client_car.x, client_car.y);
+    map_drawer.draw(map_sprite);
+    return map_sprite.src_rect;
+}
 
-    float offsetx = HALF(config.get_window_width()) - client_car.x;
-    float offsety = HALF(config.get_window_height()) - client_car.y;
-
+void DrawerSDL::draw_cars(const State& state, const SDL2pp::Rect& map_rect, int iterations_ahead) {
     for (const auto& car: state.cars) {
         CarState predicted_car = car;
 
@@ -41,9 +47,8 @@ void DrawerSDL::update_state(const ServerMessageDTO& msg, int iterations_ahead) 
         predicted_car.x += dx;
         predicted_car.y += dy;
 
-        float screen_x = predicted_car.x + offsetx;
-        float screen_y = predicted_car.y + offsety;
+        float screen_x = predicted_car.x - map_rect.x;
+        float screen_y = predicted_car.y - map_rect.y;
         car_drawer.draw(predicted_car, screen_x, screen_y);
     }
-    // TODO: Falta agregar logica de dibujo de gente
 }
