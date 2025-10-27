@@ -1,5 +1,6 @@
 #include "lobby.h"
 
+#include <string>
 #include <utility>
 
 #include "events/joinlobbymessage.h"
@@ -56,7 +57,7 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
             break;
         }
         case MsgType::JOIN_RACE: {
-            auto* joinMsg = dynamic_cast<JoinLobbyMessage*>(msg.get());
+            const auto* joinMsg = dynamic_cast<JoinLobbyMessage*>(msg.get());
             if (!joinMsg) {
                 break;
             }
@@ -70,8 +71,8 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
                 response.joined = success;
                 client->send_msg(response);
             }
-            //recibe la race id asi no esta hardcodeado
-            //add_player_to_race(client_id, race_id);  // hardcodeado
+            // recibe la race id asi no esta hardcodeado
+            // add_player_to_race(client_id, race_id);  // hardcodeado
             break;
         }
         case MsgType::EXIT_RACE: {
