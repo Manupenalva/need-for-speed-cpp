@@ -4,6 +4,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../../common/messageDTOs.h"
+#include "../config/constants.h"
 #include "../graphics/texture_manager.h"
 
 #include "car_drawer.h"

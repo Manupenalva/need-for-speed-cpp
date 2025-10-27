@@ -3,6 +3,8 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
+#include "../config/config_reader.h"
+#include "../config/constants.h"
 #include "../graphics/texture_manager.h"
 
 class MapDrawer {

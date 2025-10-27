@@ -4,6 +4,8 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../../common/carState.h"
+#include "../config/config_reader.h"
+#include "../config/constants.h"
 #include "../graphics/sprite.h"
 #include "../graphics/texture_manager.h"
 

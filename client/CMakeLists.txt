@@ -17,6 +17,7 @@ target_sources(taller_client
     drawer/car_drawer.cpp
     drawer/map_drawer.cpp
     drawer/people_drawer.cpp
+    config/config_reader.cpp
     PUBLIC
     # .h files
     client.h
@@ -36,4 +37,6 @@ target_sources(taller_client
     drawer/people_drawer.h
     drawer/drawerSDL.h
     lobby/lobby.h
+    config/config_reader.h
+    config/constants.h
     )

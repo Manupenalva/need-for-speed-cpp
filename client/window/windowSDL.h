@@ -4,6 +4,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "../config/config_reader.h"
+
 #include "window.h"
 
 #define DRIVER_RENDERER -1
@@ -14,7 +16,7 @@ private:
     SDL2pp::Renderer renderer;
 
 public:
-    WindowSDL(const char* title, int width, int height);
+    explicit WindowSDL(const char* title);
     ~WindowSDL() override;
 
     void clear() override;

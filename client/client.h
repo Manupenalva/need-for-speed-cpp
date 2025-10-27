@@ -10,6 +10,7 @@
 #include "../common/queue.h"
 #include "../common/socket.h"
 #include "../common/thread.h"
+#include "config/constants.h"
 #include "drawer/drawerSDL.h"
 #include "graphics/texture_manager.h"
 #include "keyboard/keyboard_reader.h"
@@ -18,14 +19,8 @@
 #include "receiver.h"
 #include "sender.h"
 
-#define TARGET_FPS 60
-
-#define TITTLE_CLIENT "Need For Speed Race"
-#define PATH "../client/assets/"
-
 class Client: public Thread {
 private:
-    int id;
     Protocol protocol;
     Queue<ClientMessageDTO> events_queue;
     Queue<ServerMessageDTO> server_queue;

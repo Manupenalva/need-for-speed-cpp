@@ -1,13 +1,12 @@
 #include "client.h"
 
 Client::Client(const char* hostname, const char* servname, const int id):
-        id(id),
         protocol(servname, hostname),
         events_queue(),
         server_queue(),
         sender(protocol, events_queue),
         receiver(protocol, server_queue),
-        window(TITTLE_CLIENT, 800, 600),
+        window(TITTLE_CLIENT),
         texture_manager(window.get_renderer(), PATH),
         drawer(window.get_renderer(), texture_manager, id),
         kb_reader(events_queue),
