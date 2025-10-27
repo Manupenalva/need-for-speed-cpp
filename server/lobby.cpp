@@ -1,6 +1,9 @@
 #include "lobby.h"
 
+#include <string>
 #include <utility>
+
+#include "events/joinlobbymessage.h"
 
 Lobby::Lobby(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> lobbyQueue,
              MonitorClients& clientsMonitor):
@@ -48,10 +51,32 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
             clean_games();  // Limpio juegos terminados antes de crear uno nuevo
             int race_id = create_race();
             add_player_to_race(client_id, race_id);
+            auto client = clients_monitor.get_client(client_id);
+            // Envio codigo de partida al cliente
+            if (client) {
+                ServerMessageDTO response;
+                response.type = MsgType::SEND_CLIENT_ID;
+                response.id = race_id;
+                client->send_msg(response);
+            }
             break;
         }
         case MsgType::JOIN_RACE: {
-            add_player_to_race(client_id, msg->get_race_id());
+            const auto* joinMsg = dynamic_cast<JoinLobbyMessage*>(msg.get());
+            if (!joinMsg) {
+                break;
+            }
+            int lobby_code = joinMsg->get_race_id();
+            bool success = clients_monitor.add_client_to_race(client_id, lobby_code);
+            auto client = clients_monitor.get_client(client_id);
+            if (client) {
+                ServerMessageDTO response;
+                response.type = MsgType::JOIN_RESULT;
+                response.joined = success;
+                client->send_msg(response);
+            }
+            // recibe la race id asi no esta hardcodeado
+            // add_player_to_race(client_id, race_id);  // hardcodeado
             break;
         }
         case MsgType::EXIT_RACE: {

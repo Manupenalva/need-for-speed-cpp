@@ -4,7 +4,9 @@
 #include <QMessageBox>
 #include <QVBoxLayout>
 
-Lobby::Lobby(QWidget* parent): QMainWindow(parent) {
+Lobby::Lobby(const char* hostname, const char* port, QWidget* parent): 
+    QMainWindow(parent),
+    protocol(hostname, port) {
 
     stack = new QStackedWidget(this);
 
@@ -27,18 +29,14 @@ Lobby::Lobby(QWidget* parent): QMainWindow(parent) {
     connectScreen = new QWidget(this);
     auto* layoutConnection = new QVBoxLayout(connectScreen);
 
-    QLabel* servnameLabel = new QLabel("Host / IP:");
+    QLabel* servnameLabel = new QLabel("Race code:");
     servname = new QLineEdit();
-    QLabel* portLabel = new QLabel("Port:");
-    port = new QLineEdit();
 
     connectButton = new QPushButton("Connect");
     backButton = new QPushButton("Back");
 
     layoutConnection->addWidget(servnameLabel);
     layoutConnection->addWidget(servname);
-    layoutConnection->addWidget(portLabel);
-    layoutConnection->addWidget(port);
     layoutConnection->addWidget(connectButton);
     layoutConnection->addWidget(backButton);
     connectScreen->setLayout(layoutConnection);
@@ -53,7 +51,6 @@ Lobby::Lobby(QWidget* parent): QMainWindow(parent) {
     connect(backButton, &QPushButton::clicked, this, &Lobby::menuScreen);
 
     setWindowTitle("Need for Speed 2D - Lobby");
-    resize(400, 300);
     stack->setCurrentIndex(0);
 }
 
@@ -62,32 +59,47 @@ void Lobby::menuScreen() { stack->setCurrentIndex(0); }
 void Lobby::showConnectScreen() { stack->setCurrentIndex(1); }
 
 void Lobby::createGame() {
+    ClientMessageDTO msg;
+    msg.type = MsgType::CREATE_RACE;
+    protocol.send_client_message(msg);
+
+    ServerMessageDTO response = protocol.recv_server_message();
+    if (response.type != MsgType::SEND_CLIENT_ID) {
+        QMessageBox::warning(this, "Error", "Failed to create a new game.");
+        return;
+    }
     QMessageBox::information(this, "New Game",
-                             "Nuevo juego");  // Aca deberia mandarle al servidor que quiere crear
-                                              // partida y mandar a pantalla de SDL
+                            QString("Race code: %1").arg(response.id));
     this->close();
 }
 
 void Lobby::connectServer() {
-    QString host = servname->text();
-    QString p = port->text();
+    QString raceCode = servname->text();
 
-    if (host.isEmpty() || p.isEmpty()) {
-        QMessageBox::warning(this, "Error", "You must insert text (host and port)");
+    if (raceCode.isEmpty()) {
+        QMessageBox::warning(this, "Error", "You must insert text a race code");
         return;
     }
+
+    ClientMessageDTO msg;
+    msg.type = MsgType::JOIN_RACE;
+    msg.lobby_name = raceCode.toStdString();
+    protocol.send_client_message(msg);
+    ServerMessageDTO response = protocol.recv_server_message();
+
+    if (response.type != MsgType::JOIN_RESULT) {
+        QMessageBox::warning(this, "Error", "Failed to join the game.");
+        return;
+    }
+
+    if (!response.joined) {
+        QMessageBox::warning(this, "Error", "Could not join the game. It may be full or nonexistent.");
+        return;
+    }
+
     QMessageBox::information(
             this, "Connecting",
-            QString("Connectin to.. %1:%2")
-                    .arg(host, p));  // Aca deberia mandarle al servidor mensaje de unirse y a
-                                     // quien; y mandar a pantalla de SDL
+            QString("Connectin to.. %1")
+                    .arg(raceCode));
+    this->close(); 
 }
-
-/*
-En client deberia aparacer
-QApplication app(argc, argv)
-Lobby lobby
-
-lobby.show()
-app.exec()
-*/
