@@ -10,7 +10,7 @@ public:
     JoinLobbyMessage(int client_id, int race_id):
             ClientHandlerMessage(client_id, MsgType::JOIN_RACE), race_id(race_id) {}
     virtual ~JoinLobbyMessage() = default;
-    int get_race_id() override { return race_id; }
+    int get_race_id() const override { return race_id; }
 
 private:
     int race_id;

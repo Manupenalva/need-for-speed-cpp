@@ -10,7 +10,7 @@ public:
     int get_client_id() const { return client_id; }
     MsgType get_msg_type() const { return msg_type; }
     virtual ~ClientHandlerMessage() = default;
-    virtual int get_race_id() { return -1; }
+    virtual int get_race_id() const { return -1; }
 
 private:
     int client_id;
