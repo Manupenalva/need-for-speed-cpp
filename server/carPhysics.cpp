@@ -5,36 +5,52 @@
 
 #include "../common/carState.h"
 
-#define MAX_SPEED 5.0f
-#define ACCELERATION 0.05f
+#define MAX_SPEED 5000.0f
+#define MIN_SPEED 100.0f
+#define ACCELERATION 400.0f
 #define ANGLE_ROTATION 4
 
 CarPhysics::CarPhysics(b2WorldId world, CarState& car_state, float x, float y):
         world(world), is_colliding(false), car_state(car_state) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;
+    bodyDef.angularDamping = 0.0f;
+    bodyDef.angularDamping = 5.0f;
     bodyDef.position = {x, y};
     body = b2CreateBody(world, &bodyDef);
+    b2Body_EnableContactEvents(body, true);
+    b2Body_EnableHitEvents(body, true);
 
     b2ShapeDef shapeDef = b2DefaultShapeDef();
-    b2Polygon box = b2MakeBox(2.0f, 4.0f);
+    b2Polygon box = b2MakeBox(10.5f, 20.5f);
     shape = b2CreatePolygonShape(body, &shapeDef, &box);
+    b2Shape_EnableContactEvents(shape, true);
+    b2Shape_EnableHitEvents(shape, true);
 }
 
 void CarPhysics::accelerate() {
-    car_state.speed += ACCELERATION;
+    float rad = car_state.angle * M_PI / 180.0f;
+    b2Vec2 direction = {cosf(rad), sinf(rad)};
 
-    if (car_state.speed > MAX_SPEED) {
-        car_state.speed = MAX_SPEED;
+    b2Vec2 velocity = b2Body_GetLinearVelocity(body);
+    float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+
+    if (speed < MIN_SPEED) {
+        speed = MIN_SPEED;
+        b2Vec2 initial_velocity = {direction.x * MIN_SPEED, direction.y * MIN_SPEED};
+        b2Body_SetLinearVelocity(body, initial_velocity);
+    }
+
+    if (speed < MAX_SPEED) {
+        b2Body_ApplyForceToCenter(body, {direction.x * ACCELERATION, direction.y * ACCELERATION},
+                                  true);
     }
 }
 
 void CarPhysics::brake() {
-    car_state.speed -= ACCELERATION;
+    b2Vec2 velocity = b2Body_GetLinearVelocity(body);
 
-    if (car_state.speed < 0) {
-        car_state.speed = 0;
-    }
+    b2Body_SetLinearVelocity(body, {velocity.x * 0.9f, velocity.y * 0.9f});
 }
 
 void CarPhysics::turn_left() {
@@ -43,6 +59,15 @@ void CarPhysics::turn_left() {
     if (car_state.angle < 0.0f) {
         car_state.angle += 360.0f;
     }
+
+    float rad = car_state.angle * M_PI / 180.0f;
+    b2Vec2 direction = {cosf(rad), sinf(rad)};
+
+    b2Vec2 velocity = b2Body_GetLinearVelocity(body);
+    float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+
+    b2Vec2 new_velocity = {direction.x * speed, direction.y * speed};
+    b2Body_SetLinearVelocity(body, new_velocity);
 }
 
 void CarPhysics::turn_right() {
@@ -51,29 +76,27 @@ void CarPhysics::turn_right() {
     if (car_state.angle >= 360.f) {
         car_state.angle -= 360.0f;
     }
+
+    float rad = car_state.angle * M_PI / 180.0f;
+    b2Vec2 direction = {cosf(rad), sinf(rad)};
+
+    b2Vec2 velocity = b2Body_GetLinearVelocity(body);
+    float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+
+    b2Vec2 new_velocity = {direction.x * speed, direction.y * speed};
+    b2Body_SetLinearVelocity(body, new_velocity);
 }
 
 void CarPhysics::update_position() {
-    float rad = car_state.angle * M_PI / 180.0f;
+    b2Vec2 pos = b2Body_GetPosition(body);
+    car_state.x = pos.x;
+    car_state.y = pos.y;
+}
 
-    car_state.x += cosf(rad) * car_state.speed;
-    car_state.y += sinf(rad) * car_state.speed;
-
-    if (car_state.x <= 0) {
-        car_state.x = 0;
-    }
-    if (car_state.y <= 0) {
-        car_state.y = 0;
-    }
-
-    b2Rot rotation = b2MakeRot(rad);
-
-    b2Body_SetTransform(body, {car_state.x, car_state.y}, rotation);
-    b2Body_SetLinearVelocity(body, {car_state.x, car_state.y});
-
+void CarPhysics::handle_hits() {
     b2ContactEvents events = b2World_GetContactEvents(world);
     for (int i = 0; i < events.beginCount; i++) {
-        std::cout << "Hubo un choque" << std::endl;
+        std::cout << "Chocaron dos cajas" << std::endl;
         if ((events.hitEvents[i].shapeIdA.index1 == shape.index1) ||
             (events.beginEvents[i].shapeIdB.index1 == shape.index1)) {
             handle_hit_event(events.hitEvents[i]);
@@ -100,24 +123,11 @@ void CarPhysics::handle_crash(const b2Vec2& normal) {
 
     float crash_direction = (forward.x * normal.x) + (forward.y * normal.y);
     if (crash_direction > 1) {
-        accelerate();
+        std::cout << "Soy el cliente: " << car_state.id << " Me pega el" << std::endl;
     }
     if (crash_direction < 1) {
-        car_state.speed = 0;
+        std::cout << "Soy el cliente: " << car_state.id << " Le di de frente" << std::endl;
     } else {
-        std::cout << "Chocamos de costado" << std::endl;
+        std::cout << "Soy el cliente: " << car_state.id << " Chocamos de costado" << std::endl;
     }
-
-    car_state.x += cosf(rad) * car_state.speed;
-    car_state.y += sinf(rad) * car_state.speed;
-    if (car_state.x <= 0) {
-        car_state.x = 0;
-    }
-    if (car_state.y <= 0) {
-        car_state.y = 0;
-    }
-
-    b2Rot rotation = b2MakeRot(rad);
-    b2Body_SetTransform(body, {car_state.x, car_state.y}, rotation);
-    b2Body_SetLinearVelocity(body, {car_state.x, car_state.y});
 }

@@ -70,6 +70,9 @@ void Gameloop::update_positions() {
     for (auto& [player_id, car]: players_cars) {
         car.physics->update_position();
     }
+    for (auto& [player_id, car]: players_cars) {
+        car.physics->handle_hits();
+    }
 }
 
 // todo lo que sea constantes falla, hay que ponerlos en el .yaml
