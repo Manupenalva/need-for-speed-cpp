@@ -38,7 +38,7 @@ void MessageSender::send_message(const ClientMessageDTO& msg) {
             break;
         case MsgType::CREATE_RACE:
         case MsgType::JOIN_RACE:
-            serialize_lobby(msg.lobby_name, msg.type);
+            serialize_lobby(msg.lobby_id, msg.type);
             break;
         default:
             buffer.resize(CODE_BYTES);
@@ -48,12 +48,11 @@ void MessageSender::send_message(const ClientMessageDTO& msg) {
     socket.sendall(buffer.data(), buffer.size());
 }
 
-void MessageSender::serialize_lobby(const std::string& lobby_name, MsgType type) {
-    buffer.resize(CODE_BYTES + LENGTH_BYTES + lobby_name.size());
+void MessageSender::serialize_lobby(const int lobby_id, MsgType type) {
+    buffer.resize(CODE_BYTES + LENGTH_BYTES);
     offset = 0;
     append_bytes(&type, CODE_BYTES);
-    append_uint16(lobby_name.size());
-    append_bytes(lobby_name.data(), lobby_name.size());
+    append_uint16(lobby_id);
 }
 
 void MessageSender::serialize_state(const State& state) {

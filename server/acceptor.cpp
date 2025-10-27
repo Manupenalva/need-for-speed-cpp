@@ -6,12 +6,8 @@
 
 Acceptor::Acceptor(const std::string& servname,
                    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue,
-                   MonitorClients& clients, MonitorGames& games_monitor):
-        acceptor(servname.c_str()),
-        queue(std::move(queue)),
-        id(0),
-        clients(clients),
-        games_monitor(games_monitor) {}
+                   MonitorClients& clients):
+        acceptor(servname.c_str()), queue(std::move(queue)), id(0), clients(clients) {}
 
 void Acceptor::run() {
     while (!acceptor.is_stream_recv_closed()) {
@@ -38,7 +34,7 @@ void Acceptor::reap() { clients.remove_if_dead(); }
 void Acceptor::clear() { clients.clear(); }
 
 void Acceptor::shutdown() {
-    acceptor.shutdown(2);
+    acceptor.shutdown(SHUT_RDWR);
     acceptor.close();
 }
 

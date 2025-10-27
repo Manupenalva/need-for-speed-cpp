@@ -31,7 +31,7 @@ private:
     void serialize_lobbies(const std::vector<LobbyInfo>& lobbies);
     void serialize_events(const std::vector<uint8_t>& events);
     void serialize_join_result(bool joined);
-    void serialize_lobby(const std::string& lobby_name, MsgType type);
+    void serialize_lobby(const int lobby_id, MsgType type);
     void serialize_client_id(int id);
 
     void append_car_state(const CarState& car);

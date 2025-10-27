@@ -16,8 +16,10 @@ class Lobby: public Thread {
 public:
     Lobby(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> lobbyQueue,
           MonitorClients& clientsMonitor);
+    ~Lobby();
 
-    void start_lobby();
+    void run() override;
+    void shutdown();
 
 private:
     std::vector<std::shared_ptr<GameSession>> active_games;

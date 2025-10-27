@@ -6,14 +6,17 @@ Lobby::Lobby(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> lobby
              MonitorClients& clientsMonitor):
         lobby_queue(std::move(lobbyQueue)), clients_monitor(clientsMonitor) {}
 
-void Lobby::start_lobby() {
+void Lobby::run() {
     std::shared_ptr<ClientHandlerMessage> msg;
-    try {
-        msg = lobby_queue->pop();
-    } catch (const ClosedQueue& e) {
-        return;
+
+    while (should_keep_running()) {
+        try {
+            msg = lobby_queue->pop();
+        } catch (const ClosedQueue& e) {
+            return;
+        }
+        manage_msg(msg);
     }
-    manage_msg(msg);
 }
 
 int Lobby::create_race() { return clients_monitor.create_race(); }
@@ -26,9 +29,13 @@ void Lobby::remove_player_from_race(int playerId) {
     clients_monitor.remove_client_from_race(playerId);
 }
 
-void Lobby::start_race(int raceId) {
+void Lobby::start_race(int playerId) {
+    int race_id = clients_monitor.get_player_race(playerId);
+    if (race_id == -1) {
+        return;
+    }
     auto session = std::make_shared<GameSession>(
-            raceId, clients_monitor);  // Evito que se llame al destructor
+            race_id, clients_monitor);  // Evito que se llame al destructor
     active_games.push_back(session);
 }
 
@@ -36,8 +43,6 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
     MsgType type = msg->get_msg_type();
     int client_id = msg->get_client_id();
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wswitch"
     switch (type) {
         case MsgType::CREATE_RACE: {
             clean_games();  // Limpio juegos terminados antes de crear uno nuevo
@@ -46,7 +51,7 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
             break;
         }
         case MsgType::JOIN_RACE: {
-            add_player_to_race(client_id, 0);  // hardcodeado
+            add_player_to_race(client_id, msg->get_race_id());
             break;
         }
         case MsgType::EXIT_RACE: {
@@ -62,10 +67,8 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
             break;
         }
         default: {
-            break;
         }
     }
-#pragma GCC diagnostic pop
 }
 
 void Lobby::clean_games() {
@@ -74,4 +77,18 @@ void Lobby::clean_games() {
                                           return !game->is_running();
                                       }),
                        active_games.end());
+}
+
+void Lobby::shutdown() {
+    stop();
+    try {
+        lobby_queue->close();
+    } catch (const std::runtime_error& e) {
+        return;
+    }
+}
+
+Lobby::~Lobby() {
+    shutdown();
+    this->join();
 }

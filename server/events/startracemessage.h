@@ -7,16 +7,10 @@
 
 class StartRaceMessage: public ClientHandlerMessage {
 public:
-    StartRaceMessage(int client_id, int race_id):
-            ClientHandlerMessage(client_id, MsgType::START_RACE), race_id(race_id) {}
+    explicit StartRaceMessage(int client_id):
+            ClientHandlerMessage(client_id, MsgType::START_RACE) {}
     virtual ~StartRaceMessage() = default;
-    
-    int get_race_id() const override {
-        return race_id;
-    }
 
-private:
-    int race_id;
 };
 
 #endif
