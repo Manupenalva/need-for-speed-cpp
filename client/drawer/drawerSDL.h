@@ -2,8 +2,11 @@
 #define DRAWERSDL_H
 
 #include <memory>
+#include <stdexcept>
+#include <utility>
 #include <vector>
 
+#include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../../common/messageDTOs.h"
@@ -17,12 +20,13 @@
 
 class DrawerSDL {
 private:
+    int client_id;
     SDL2pp::Renderer& renderer;
     TextureManager& texture_manager;
     std::vector<std::unique_ptr<Drawer>> drawers;
 
 public:
-    explicit DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager);
+    explicit DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager, int client_id);
 
     // Actualiza la vista según el estado recibido
     void update_state(const ServerMessageDTO& msg, int iterations_ahead);
