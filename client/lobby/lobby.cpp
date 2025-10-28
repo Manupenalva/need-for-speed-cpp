@@ -6,7 +6,7 @@
 
 Lobby::Lobby(const char* hostname, const char* port, QWidget* parent): 
     QMainWindow(parent),
-    protocol(hostname, port) {
+    protocol(port, hostname) {
 
     stack = new QStackedWidget(this);
 
