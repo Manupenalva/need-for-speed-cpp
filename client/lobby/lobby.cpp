@@ -83,7 +83,7 @@ void Lobby::connectServer() {
 
     ClientMessageDTO msg;
     msg.type = MsgType::JOIN_RACE;
-    msg.lobby_id = raceCode.toUshort();
+    msg.lobby_id = raceCode.toUShort();
     protocol.send_client_message(msg);
     ServerMessageDTO response = protocol.recv_server_message();
 
