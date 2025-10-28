@@ -4,9 +4,9 @@
 #include <QMessageBox>
 #include <QVBoxLayout>
 
-Lobby::Lobby(const char* hostname, const char* port, QWidget* parent): 
+Lobby::Lobby(Protocol& protocol, QWidget* parent): 
     QMainWindow(parent),
-    protocol(port, hostname) {
+    protocol(protocol) {
 
     stack = new QStackedWidget(this);
 
@@ -51,6 +51,7 @@ Lobby::Lobby(const char* hostname, const char* port, QWidget* parent):
     connect(backButton, &QPushButton::clicked, this, &Lobby::menuScreen);
 
     setWindowTitle("Need for Speed 2D - Lobby");
+    resize(400, 300);
     stack->setCurrentIndex(0);
 }
 

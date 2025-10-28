@@ -21,7 +21,7 @@
 
 class Client: public Thread {
 private:
-    Protocol protocol;
+    Protocol& protocol;
     Queue<ClientMessageDTO> events_queue;
     Queue<ServerMessageDTO> server_queue;
     Sender sender;
@@ -41,7 +41,7 @@ private:
     void update_animation_frames(int iterations_ahead);
 
 public:
-    Client(const char* hostname, const char* servname, const int id);
+    Client(Protocol& protocol, const int id);
 
     void run() override;
     void stop() override;

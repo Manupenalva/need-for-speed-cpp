@@ -1,7 +1,7 @@
 #include "client.h"
 
-Client::Client(const char* hostname, const char* servname, const int id):
-        protocol(servname, hostname),
+Client::Client(Protocol& protocol, const int id):
+        protocol(protocol),
         events_queue(),
         server_queue(),
         sender(protocol, events_queue),

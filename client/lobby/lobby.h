@@ -10,10 +10,10 @@
 
 class Lobby: public QMainWindow {
     Q_OBJECT
-    Protocol protocol;
+    Protocol& protocol;
 
 public:
-    explicit Lobby(const char* hostname, const char* servname, QWidget* parent = nullptr);
+    explicit Lobby(Protocol& protocol, QWidget* parent = nullptr);
 
     // cppcheck-suppress unknownMacro
 private slots:
