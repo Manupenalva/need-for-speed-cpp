@@ -96,7 +96,6 @@ void CarPhysics::update_position() {
 void CarPhysics::handle_hits() {
     b2ContactEvents events = b2World_GetContactEvents(world);
     for (int i = 0; i < events.beginCount; i++) {
-        std::cout << "Chocaron dos cajas" << std::endl;
         if ((events.hitEvents[i].shapeIdA.index1 == shape.index1) ||
             (events.beginEvents[i].shapeIdB.index1 == shape.index1)) {
             handle_hit_event(events.hitEvents[i]);
@@ -116,7 +115,6 @@ void CarPhysics::handle_hit_event(const b2ContactHitEvent& event) {
 }
 
 void CarPhysics::handle_crash(const b2Vec2& normal) {
-    std::cout << "Acabo de chocar con alguien" << std::endl;
     float rad = car_state.angle * M_PI / 180.0f;
 
     b2Vec2 forward = {cosf(rad), sinf(rad)};
