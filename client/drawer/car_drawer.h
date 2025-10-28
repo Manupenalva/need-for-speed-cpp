@@ -3,21 +3,19 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
-#include "../../common/carState.h"
-#include "../config/config_reader.h"
 #include "../config/constants.h"
-#include "../graphics/sprite.h"
-#include "../graphics/texture_manager.h"
 
-class CarDrawer {
+#include "drawer.h"
+
+class CarDrawer: public Drawer {
 private:
-    SDL2pp::Renderer& renderer;
-    TextureManager& texture_manager;
+    CarState calculate_position(const CarState& car, int iterations_ahead);
+    void draw_car(const CarState& car, float screen_x, float screen_y);
 
 public:
     explicit CarDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager);
 
-    void draw(const CarState& car, float screen_x, float screen_y);
+    void draw(const RenderedState& rendered_state) override;
 };
 
 #endif

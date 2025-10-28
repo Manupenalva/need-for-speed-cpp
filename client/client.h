@@ -41,7 +41,7 @@ private:
     void update_animation_frames(int iterations_ahead);
 
 public:
-    Client(Protocol& protocol, const int id);
+    explicit Client(Protocol& protocol);
 
     void run() override;
     void stop() override;

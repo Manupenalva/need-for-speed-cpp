@@ -1,6 +1,6 @@
 #include "client.h"
 
-Client::Client(Protocol& protocol, const int id):
+Client::Client(Protocol& protocol):
         protocol(protocol),
         events_queue(),
         server_queue(),
@@ -8,7 +8,7 @@ Client::Client(Protocol& protocol, const int id):
         receiver(protocol, server_queue),
         window(TITTLE_CLIENT),
         texture_manager(window.get_renderer(), PATH),
-        drawer(window.get_renderer(), texture_manager, id),
+        drawer(window.get_renderer(), texture_manager),
         kb_reader(events_queue),
         last_state(),
         has_last_state(false) {}

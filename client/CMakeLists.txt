@@ -16,7 +16,6 @@ target_sources(taller_client
     events/keyUp_handler.cpp
     drawer/car_drawer.cpp
     drawer/map_drawer.cpp
-    drawer/people_drawer.cpp
     config/config_reader.cpp
     game_launcher.cpp
     PUBLIC
@@ -35,10 +34,11 @@ target_sources(taller_client
     events/keyUp_handler.h
     drawer/car_drawer.h
     drawer/map_drawer.h
-    drawer/people_drawer.h
     drawer/drawerSDL.h
     lobby/lobby.h
     config/config_reader.h
     config/constants.h
     game_launcher.h
+    drawer/drawer.h
+    drawer/renderedState.h
     )

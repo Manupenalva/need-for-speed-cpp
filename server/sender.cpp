@@ -3,7 +3,7 @@
 Sender::Sender(Protocol& protocol, int id): protocol(protocol), id(id) { this->start(); }
 
 void Sender::run() {
-    send_client_id();
+    // send_client_id();
     while (should_keep_running()) {
 
         try {
@@ -33,9 +33,11 @@ Sender::~Sender() {
     join();
 }
 
+/*
 void Sender::send_client_id() {
     ServerMessageDTO msg;
     msg.type = MsgType::SEND_CLIENT_ID;
     msg.id = id;
     protocol.send_server_message(msg);
 }
+    */

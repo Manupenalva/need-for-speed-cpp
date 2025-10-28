@@ -3,13 +3,11 @@
 TextureManager::TextureManager(SDL2pp::Renderer& renderer, const std::string& assets_path):
         renderer(renderer),
         car_sheet(renderer, assets_path + CAR_PATH),
-        // people_sheet(renderer, assets_path + PEOPLE_PATH),
         map_sheet(assets_path + MAP_PATH) {}
 
 
 void TextureManager::load_resources() {
     car_sheet.load_sprites();
-    // people_sheet.load_sprites(renderer);
     map_sheet.load_sprites(renderer);
 }
 

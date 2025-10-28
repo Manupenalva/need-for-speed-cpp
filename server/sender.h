@@ -16,7 +16,7 @@ private:
     void kill();
     int id;
 
-    void send_client_id();
+    // void send_client_id();
 
 public:
     explicit Sender(Protocol& protocol, int id);
