@@ -7,8 +7,8 @@
 #define TARGET_FPS 60
 
 #define TITTLE_CLIENT "Need For Speed Race"
-#define PATH "/home/facu/Escritorio/tps/tp_grupal/tp-taller-g4/client/assets/"
-#define CONFIG_PATH "/home/facu/Escritorio/tps/tp_grupal/tp-taller-g4/client/config/game_config.yaml"
+#define PATH "../client/assets/"
+#define CONFIG_PATH "../client/config/game_config.yaml"
 
 // Map constants
 #define MAP_MIN_X 0

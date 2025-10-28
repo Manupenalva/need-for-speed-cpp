@@ -75,8 +75,6 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
                 response.joined = success;
                 client->send_msg(response);
             }
-            // recibe la race id asi no esta hardcodeado
-            // add_player_to_race(client_id, race_id);  // hardcodeado
             break;
         }
         case MsgType::EXIT_RACE: {
@@ -84,7 +82,7 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
             break;
         }
         case MsgType::START_RACE: {
-            start_race(msg->get_race_id());
+            start_race(client_id);
             break;
         }
         case MsgType::GET_LOBBIES: {
