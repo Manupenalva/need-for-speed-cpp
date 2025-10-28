@@ -25,7 +25,33 @@ void Lobby::run() {
 int Lobby::create_race() { return clients_monitor.create_race(); }
 
 void Lobby::add_player_to_race(int playerId, int raceId) {
-    clients_monitor.add_client_to_race(playerId, raceId);
+    AddClientResult result = clients_monitor.add_client_to_race(playerId, raceId);
+    auto client = clients_monitor.get_client(playerId);
+    ServerMessageDTO response;
+    response.type = MsgType::JOIN_RESULT;
+    switch (result) {
+        case AddClientResult::RaceNotFound:
+        case AddClientResult::ClientNotFound:
+        case AddClientResult::RaceFull: {
+            response.joined = false;
+            client->send_msg(response);
+            break;
+        }
+        case AddClientResult::Added: {
+            response.joined = true;
+            client->send_msg(response);
+            break;
+        }
+        case AddClientResult::AddedToFullRace: {
+            response.joined = true;
+            client->send_msg(response);
+            start_race(playerId);
+            break;
+        }
+        default: {
+            break;
+        }
+    }
 }
 
 void Lobby::remove_player_from_race(int playerId) {
@@ -50,7 +76,7 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
         case MsgType::CREATE_RACE: {
             clean_games();  // Limpio juegos terminados antes de crear uno nuevo
             int race_id = create_race();
-            add_player_to_race(client_id, race_id);
+            clients_monitor.add_client_to_race(client_id, race_id);
             auto client = clients_monitor.get_client(client_id);
             // Envio codigo de partida al cliente
             if (client) {
@@ -67,14 +93,7 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
                 break;
             }
             int lobby_code = joinMsg->get_race_id();
-            bool success = clients_monitor.add_client_to_race(client_id, lobby_code);
-            auto client = clients_monitor.get_client(client_id);
-            if (client) {
-                ServerMessageDTO response;
-                response.type = MsgType::JOIN_RESULT;
-                response.joined = success;
-                client->send_msg(response);
-            }
+            add_player_to_race(client_id, lobby_code);
             break;
         }
         case MsgType::EXIT_RACE: {

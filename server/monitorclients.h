@@ -12,6 +12,7 @@
 #include "client_handler.h"
 #include "monitorGames.h"
 #include "racemonitor.h"
+#include "addclientresult.h"
 
 class Client;
 
@@ -90,18 +91,18 @@ public:
         return assigned_id;
     }
 
-    bool add_client_to_race(int client_id, int race_id) {
+    AddClientResult add_client_to_race(int client_id, int race_id) {
         std::shared_ptr<Race> race;
         std::shared_ptr<ClientHandler> client;
 
         std::lock_guard<std::mutex> lock(mtx);
         auto client_it = clients.find(client_id);
         if (client_it == clients.end()) {
-            return false;
+            return AddClientResult::ClientNotFound;
         }
         auto race_it = races.find(race_id);
         if (race_it == races.end()) {
-            return false;
+            return AddClientResult::RaceNotFound;
         }
         race = race_it->second;
         client = client_it->second;
@@ -114,12 +115,12 @@ public:
 
         std::lock_guard<std::mutex> lock_race(race->mtx);
         if (race->clients.size() >= MAX_PLAYERS_RACE) {
-            return false;
+            return AddClientResult::RaceFull;
         }
         race->clients.push_back(client);
         client_to_race[client_it->first] = race_it->first;
         client->set_race_id(race_id);
-        return true;
+        return race->clients.size() == MAX_PLAYERS_RACE ? AddClientResult::AddedToFullRace : AddClientResult::Added;
     }
 
     void remove_client_from_race(int client_id) {
