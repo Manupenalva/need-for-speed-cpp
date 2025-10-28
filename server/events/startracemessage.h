@@ -10,7 +10,6 @@ public:
     explicit StartRaceMessage(int client_id):
             ClientHandlerMessage(client_id, MsgType::START_RACE) {}
     virtual ~StartRaceMessage() = default;
-
 };
 
 #endif

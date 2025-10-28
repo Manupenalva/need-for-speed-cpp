@@ -4,9 +4,7 @@
 #include <QMessageBox>
 #include <QVBoxLayout>
 
-Lobby::Lobby(Protocol& protocol, QWidget* parent): 
-    QMainWindow(parent),
-    protocol(protocol) {
+Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), protocol(protocol) {
 
     stack = new QStackedWidget(this);
 
@@ -69,8 +67,7 @@ void Lobby::createGame() {
         QMessageBox::warning(this, "Error", "Failed to create a new game.");
         return;
     }
-    QMessageBox::information(this, "New Game",
-                            QString("Race code: %1").arg(response.id));
+    QMessageBox::information(this, "New Game", QString("Race code: %1").arg(response.id));
     this->close();
 }
 
@@ -94,13 +91,11 @@ void Lobby::connectServer() {
     }
 
     if (!response.joined) {
-        QMessageBox::warning(this, "Error", "Could not join the game. It may be full or nonexistent.");
+        QMessageBox::warning(this, "Error",
+                             "Could not join the game. It may be full or nonexistent.");
         return;
     }
 
-    QMessageBox::information(
-            this, "Connecting",
-            QString("Connectin to.. %1")
-                    .arg(raceCode));
-    this->close(); 
+    QMessageBox::information(this, "Connecting", QString("Connectin to.. %1").arg(raceCode));
+    this->close();
 }

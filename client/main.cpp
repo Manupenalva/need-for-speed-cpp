@@ -1,45 +1,28 @@
-#include <QApplication>
 #include <exception>
 #include <iostream>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "lobby/lobby.h"
-#include "../common/protocol.h"
-
-#include "client.h"
+#include "game_launcher.h"
 
 
 int main(int argc, char* argv[]) {
     try {
-        if (argc != 4) {
+        if (argc != 3) {
             std::cerr << "Usage: " << argv[0] << " <server_ip> <server_port>\n";
             return 1;
         }
 
         const char* hostname = argv[1];
         const char* servname = argv[2];
-        const int id = std::stoi(argv[3]);
-        Protocol protocol(servname, hostname);
 
-        QApplication app(argc, argv);
-        // Crear y mostrar la ventana de Lobby (Qt)
-        Lobby lobby(protocol);
-        lobby.show();
-
-        app.exec();
-
-        // Inicializar SDL
-        SDL2pp::SDL sdl(SDL_INIT_VIDEO);
-
-        Client client(protocol, id);
-        client.run();
+        GameLauncher launcher(hostname, servname);
+        launcher.launchGame(argc, argv);
 
         return 0;
 
     } catch (std::exception& e) {
-        // If case of error, print it and exit with error
         std::cerr << e.what() << std::endl;
         return 1;
     }

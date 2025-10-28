@@ -1,7 +1,1 @@
-enum class AddClientResult {
-    Added,
-    RaceFull,
-    ClientNotFound,
-    RaceNotFound,
-    AddedToFullRace
-};
+enum class AddClientResult { Added, RaceFull, ClientNotFound, RaceNotFound, AddedToFullRace };

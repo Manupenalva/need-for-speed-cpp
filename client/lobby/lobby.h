@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QStackedWidget>
 #include <string>
+
 #include "../../common/protocol.h"
 
 class Lobby: public QMainWindow {

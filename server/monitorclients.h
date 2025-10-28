@@ -9,10 +9,10 @@
 
 #include "../common/messageDTOs.h"
 
+#include "addclientresult.h"
 #include "client_handler.h"
 #include "monitorGames.h"
 #include "racemonitor.h"
-#include "addclientresult.h"
 
 class Client;
 
@@ -120,7 +120,8 @@ public:
         race->clients.push_back(client);
         client_to_race[client_it->first] = race_it->first;
         client->set_race_id(race_id);
-        return race->clients.size() == MAX_PLAYERS_RACE ? AddClientResult::AddedToFullRace : AddClientResult::Added;
+        return race->clients.size() == MAX_PLAYERS_RACE ? AddClientResult::AddedToFullRace :
+                                                          AddClientResult::Added;
     }
 
     void remove_client_from_race(int client_id) {

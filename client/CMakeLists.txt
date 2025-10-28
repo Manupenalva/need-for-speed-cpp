@@ -18,6 +18,7 @@ target_sources(taller_client
     drawer/map_drawer.cpp
     drawer/people_drawer.cpp
     config/config_reader.cpp
+    game_launcher.cpp
     PUBLIC
     # .h files
     client.h
@@ -39,4 +40,5 @@ target_sources(taller_client
     lobby/lobby.h
     config/config_reader.h
     config/constants.h
+    game_launcher.h
     )

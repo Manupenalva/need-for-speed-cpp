@@ -24,8 +24,9 @@ void Client::run() {
         uint32_t iterations_ahead = 0;
 
         while (_keep_running) {
-            kb_reader.listen_to_keyboard(_keep_running);
             // Procesar todos los mensajes entrantes y actualizar el estado interno
+            kb_reader.listen_to_keyboard(_keep_running);
+
             // Ejecutar una iteración lógica (actualizaciones locales / físicas)
             update_state_from_server();
 
