@@ -26,7 +26,7 @@ Gameloop::Gameloop(
     worldDef.gravity = {0.0f, 0.0f};
     world = b2CreateWorld(&worldDef);
     MapCollisionBuilder::initialize_map_buildings(
-            "../server/assets/maps_buildings/LibertyCityCollisions.yaml", world);
+            "../server/assets/maps_buildings/SanAndreasCollitions.yaml", world);
 
     std::vector<int> players_id = games_monitor.get_players_id(game_id);
 
