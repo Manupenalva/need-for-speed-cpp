@@ -160,7 +160,7 @@ if(TALLER_SERVER)
     target_include_directories(taller_server PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/libs/box2d/include)
 
     # Link the taller_common lib target
-    target_link_libraries(taller_server PRIVATE box2d::box2d taller_common)
+    target_link_libraries(taller_server PRIVATE box2d::box2d taller_common yaml-cpp::yaml-cpp)
 endif()
 
 if(TALLER_EDITOR)

@@ -12,6 +12,7 @@
 #include "events/actionmessage.h"
 
 #include "carPhysics.h"
+#include "mapCollisionBuilder.h"
 #define TARGET_FPS 60  // esto va a ir con las demas ctes a un .YAML
 
 Gameloop::Gameloop(
@@ -24,6 +25,8 @@ Gameloop::Gameloop(
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity = {0.0f, 0.0f};
     world = b2CreateWorld(&worldDef);
+    MapCollisionBuilder::initialize_map_buildings(
+            "../server/assets/maps_buildings/LibertyCityCollisions.yaml", world);
 
     std::vector<int> players_id = games_monitor.get_players_id(game_id);
 
