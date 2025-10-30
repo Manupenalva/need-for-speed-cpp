@@ -11,7 +11,7 @@
 
 #include "client_handler.h"
 #include "monitorGames.h"
-#include "monitorclients.h"
+#include "monitorClients.h"
 #include "receiver.h"
 
 class Acceptor: public Thread {

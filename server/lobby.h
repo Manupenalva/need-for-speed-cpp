@@ -9,7 +9,7 @@
 #include "events/clienthandlermessage.h"
 
 #include "gameSession.h"
-#include "monitorclients.h"
+#include "monitorClients.h"
 
 class Lobby: public Thread {
 

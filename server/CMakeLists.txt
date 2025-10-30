@@ -12,10 +12,11 @@ target_sources(taller_server
         server.cpp
         carPhysics.cpp
         lobby.cpp
+        monitorClients.cpp
     PUBLIC
         sender.h
         receiver.h
-        monitorclients.h
+        monitorClients.h
         client_handler.h
         acceptor.h
         gameloop.h

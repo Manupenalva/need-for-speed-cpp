@@ -13,7 +13,7 @@
 #include "../common/thread.h"
 #include "events/clienthandlermessage.h"
 
-#include "monitorclients.h"
+#include "monitorClients.h"
 
 
 class Gameloop: public Thread {
