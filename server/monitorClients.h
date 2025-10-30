@@ -6,11 +6,8 @@
 #include <mutex>
 #include <unordered_map>
 
-#include "../common/messageDTOs.h"
 
 #include "client_handler.h"
-
-class Client;
 
 class MonitorClients {
 private:
