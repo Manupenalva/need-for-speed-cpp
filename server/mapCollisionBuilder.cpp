@@ -25,45 +25,21 @@ void MapCollisionBuilder::initialize_map_buildings(const std::string& path, b2Wo
                 for (const auto& object: layer["objects"]) {
                     float x = object["x"].as<float>() - 25.0f;
                     float y = object["y"].as<float>() - 25.0f;
+                    float width = object["width"].as<float>();
+                    float height = object["height"].as<float>();
 
-                    if (object["polyline"]) {
-                        const YAML::Node& points = object["polyline"];
-                        std::vector<b2Vec2> vertices;
-                        for (const auto& point: points) {
-                            float point_x = point["x"].as<float>() + x;
-                            float point_y = point["y"].as<float>() + y;
-                            b2Vec2 point_coordinates = {point_x, point_y};
-                            vertices.push_back(point_coordinates);
-                        }
+                    b2BodyDef bodyDef = b2DefaultBodyDef();
+                    bodyDef.type = b2_staticBody;
+                    bodyDef.position = {x + (width / 2.0f), y + (height / 2.0f)};
+                    b2BodyId body = b2CreateBody(world, &bodyDef);
+                    b2Body_EnableContactEvents(body, true);
+                    b2Body_EnableHitEvents(body, true);
 
-                        b2BodyDef bodyDef = b2DefaultBodyDef();
-                        bodyDef.type = b2_staticBody;
-                        b2BodyId body = b2CreateBody(world, &bodyDef);
-                        b2Body_EnableContactEvents(body, true);
-                        b2Body_EnableHitEvents(body, true);
-
-                        b2ChainDef chainDef = b2DefaultChainDef();
-                        chainDef.count = vertices.size();
-                        chainDef.points = vertices.data();
-                        b2CreateChain(body, &chainDef);
-
-                    } else if (object["width"] && object["height"]) {
-                        float width = object["width"].as<float>();
-                        float height = object["height"].as<float>();
-
-                        b2BodyDef bodyDef = b2DefaultBodyDef();
-                        bodyDef.type = b2_staticBody;
-                        bodyDef.position = {x + (width / 2.0f), y + (height / 2.0f)};
-                        b2BodyId body = b2CreateBody(world, &bodyDef);
-                        b2Body_EnableContactEvents(body, true);
-                        b2Body_EnableHitEvents(body, true);
-
-                        b2ShapeDef shapeDef = b2DefaultShapeDef();
-                        b2Polygon box = b2MakeBox((width / 2.0f), (height / 2.0f));
-                        b2ShapeId shape = b2CreatePolygonShape(body, &shapeDef, &box);
-                        b2Shape_EnableContactEvents(shape, true);
-                        b2Shape_EnableHitEvents(shape, true);
-                    }
+                    b2ShapeDef shapeDef = b2DefaultShapeDef();
+                    b2Polygon box = b2MakeBox((width / 2.0f), (height / 2.0f));
+                    b2ShapeId shape = b2CreatePolygonShape(body, &shapeDef, &box);
+                    b2Shape_EnableContactEvents(shape, true);
+                    b2Shape_EnableHitEvents(shape, true);
                 }
             }
         }

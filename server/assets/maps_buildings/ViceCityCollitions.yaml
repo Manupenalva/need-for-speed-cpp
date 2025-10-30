@@ -1,0 +1,3977 @@
+compressionlevel: -1
+height: 146
+infinite: false
+layers:
+- height: 146
+  id: 1
+  name: Capa de patrones 1
+  opacity: 1
+  type: tilelayer
+  visible: true
+  width: 145
+  x: 0
+  y: 0
+- id: 2
+  image: assets/need-for-speed/cities/Game Boy _ GBC - Grand Theft Auto - Backgrounds
+    - Vice City.png
+  imageheight: 4672
+  imagewidth: 4640
+  name: Capa de Imagen 1
+  opacity: 1
+  type: imagelayer
+  visible: true
+  x: 0
+  y: 0
+- draworder: topdown
+  id: 3
+  name: Colisiones
+  objects:
+  - height: 124
+    id: 1
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 144
+    x: 262.667
+    y: 286.667
+  - height: 122.667
+    id: 2
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 273.333
+    x: 485.333
+    y: 288.667
+  - height: 133.334
+    id: 3
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 197.333
+    x: 638
+    y: 484
+  - height: 133.334
+    id: 4
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 297.333
+    x: 264.667
+    y: 486.666
+  - height: 72.0007
+    id: 5
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 150.666
+    x: 839.333
+    y: 286.666
+  - height: 42.6674
+    id: 6
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 57.3327
+    x: 840.667
+    y: 362.666
+  - height: 234.667
+    id: 7
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 143.999
+    x: 911.334
+    y: 378.666
+  - height: 54.667
+    id: 8
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 151.999
+    x: 1008
+    y: 304
+  - height: 86.667
+    id: 9
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 197.332
+    x: 1168
+    y: 290
+  - height: 68.0003
+    id: 10
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 209.332
+    x: 1170.67
+    y: 488.666
+  - height: 32.0003
+    id: 11
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 71.9987
+    x: 1262
+    y: 636.667
+  - height: 22.667
+    id: 12
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 1365.33
+    y: 636
+  - height: 22.667
+    id: 14
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 1411.33
+    y: 508.666
+  - height: 70.667
+    id: 15
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 49.332
+    x: 1169.33
+    y: 654.667
+  - height: 34.667
+    id: 16
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 159.332
+    x: 1223.33
+    y: 690.667
+  - height: 250
+    id: 17
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 87.332
+    x: 1463.33
+    y: 490
+  - height: 80
+    id: 18
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 169.332
+    x: 1568.33
+    y: 483
+  - height: 180
+    id: 19
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 346.332
+    x: 1718.33
+    y: 198
+  - height: 36.667
+    id: 20
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 103.332
+    x: 1630.33
+    y: 638.667
+  - height: 66.0003
+    id: 21
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 40.6653
+    x: 1631
+    y: 677
+  - height: 26.0003
+    id: 22
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 74.6653
+    x: 1643
+    y: 771.667
+  - height: 22.667
+    id: 23
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 996.667
+    y: 748.667
+  - height: 22.667
+    id: 24
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 941.334
+    y: 781.333
+  - height: 22.667
+    id: 25
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 908.667
+    y: 748.667
+  - height: 50.6673
+    id: 26
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 173.333
+    x: 698.667
+    y: 746.666
+  - height: 114.667
+    id: 27
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 173.333
+    x: 416
+    y: 898.666
+  - height: 22.667
+    id: 28
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 436.667
+    y: 1068.67
+  - height: 72.0003
+    id: 29
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 182.666
+    x: 672
+    y: 894.666
+  - height: 178.667
+    id: 30
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 51.9993
+    x: 674
+    y: 970.667
+  - height: 45.3337
+    id: 31
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 126.666
+    x: 674.667
+    y: 1152.67
+  - height: 210.667
+    id: 32
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 237.333
+    x: 1165.33
+    y: 826.666
+  - height: 60.667
+    id: 33
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 363.333
+    x: 1165.33
+    y: 1042.67
+  - height: 56.667
+    id: 34
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 155.333
+    x: 1476.33
+    y: 903.667
+  - height: 52.667
+    id: 35
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 70.6663
+    x: 1663
+    y: 903.667
+  - height: 46.0003
+    id: 36
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 66.6663
+    x: 1478
+    y: 825.667
+  - height: 46.0003
+    id: 37
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 157.333
+    x: 1576
+    y: 823.667
+  - height: 274.667
+    id: 39
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 171.999
+    x: 871.334
+    y: 909.333
+  - height: 150.667
+    id: 40
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 39.999
+    x: 827.334
+    y: 993.333
+  - height: 304.667
+    id: 41
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 135.333
+    x: 1605.33
+    y: 1038.67
+  - height: 264.667
+    id: 42
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 103.333
+    x: 1162.33
+    y: 1211.67
+  - height: 94.667
+    id: 43
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 33.333
+    x: 1270.33
+    y: 1211.67
+  - height: 94.667
+    id: 44
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 33.333
+    x: 838.333
+    y: 1268.67
+  - height: 43.667
+    id: 45
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 139.333
+    x: 888.333
+    y: 1270.67
+  - height: 224.667
+    id: 46
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 111.333
+    x: 1384.33
+    y: 1214.33
+  - height: 102
+    id: 47
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 35.333
+    x: 1333.67
+    y: 1381
+  - height: 26
+    id: 48
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 27.333
+    x: 1402.33
+    y: 1458.33
+  - height: 62
+    id: 49
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 47.333
+    x: 1447.67
+    y: 1455
+  - height: 27.3333
+    id: 50
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 95.333
+    x: 1337.67
+    y: 1495.67
+  - height: 54.667
+    id: 51
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 222.666
+    x: 575.334
+    y: 1273.33
+  - height: 61.3337
+    id: 52
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 322.666
+    x: 174
+    y: 1244
+  - height: 61.3337
+    id: 53
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 282.666
+    x: 214.667
+    y: 1181.33
+  - height: 93.3337
+    id: 54
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 39.9993
+    x: 574.667
+    y: 1457.33
+  - height: 37.3337
+    id: 55
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 69.3326
+    x: 618.667
+    y: 1457.33
+  - height: 45.3337
+    id: 56
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 102.666
+    x: 841.334
+    y: 1377.33
+  - height: 45.3337
+    id: 57
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 93.3327
+    x: 962
+    y: 1377.33
+  - height: 45.3337
+    id: 58
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 30.666
+    x: 1025.33
+    y: 1329.33
+  - height: 44.0004
+    id: 59
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 133.333
+    x: 763.334
+    y: 1453.33
+  - height: 37.3337
+    id: 60
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 112
+    x: 944
+    y: 1455.33
+  - height: 44.0004
+    id: 61
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 32
+    x: 1024
+    y: 1497.33
+  - height: 124
+    id: 62
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 44
+    x: 765.333
+    y: 1510.67
+  - height: 36.0004
+    id: 63
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 105.333
+    x: 822.667
+    y: 1596.67
+  - height: 49.3337
+    id: 64
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 38.6663
+    x: 887.333
+    y: 1543.33
+  - height: 88
+    id: 65
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 38.6667
+    x: 962
+    y: 1542
+  - height: 28
+    id: 66
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 52
+    x: 1004.67
+    y: 1600
+  - height: 89.3337
+    id: 67
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 41.3326
+    x: 576
+    y: 1566.67
+  - height: 116
+    id: 68
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 31.9993
+    x: 655.334
+    y: 1510
+  - height: 106.667
+    id: 69
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 193.333
+    x: 302.667
+    y: 1380.67
+  - height: 106.667
+    id: 70
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 122.333
+    x: 167.334
+    y: 1382.67
+  - height: 106.667
+    id: 71
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 43.333
+    x: 109.834
+    y: 1381.67
+  - height: 163.667
+    id: 72
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 123.333
+    x: 173.334
+    y: 1566.67
+  - height: 163.667
+    id: 73
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 123.333
+    x: 374.334
+    y: 1565.17
+  - height: 97.3337
+    id: 74
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 41.3326
+    x: 575.334
+    y: 1742.33
+  - height: 97.3337
+    id: 75
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 41.3326
+    x: 647.334
+    y: 1669.33
+  - height: 43
+    id: 76
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 68.9993
+    x: 575
+    y: 1670
+  - height: 88.3337
+    id: 77
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 42.3326
+    x: 646.334
+    y: 1782.33
+  - height: 39
+    id: 78
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 113.999
+    x: 575.5
+    y: 1885.5
+  - height: 213.667
+    id: 79
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 181.333
+    x: 86.3335
+    y: 1804.17
+  - height: 121.667
+    id: 80
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 161.333
+    x: 337.334
+    y: 1803.17
+  - height: 379.667
+    id: 81
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 127.333
+    x: 763.333
+    y: 1709.17
+  - height: 97.667
+    id: 82
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 219.333
+    x: 471.334
+    y: 1995.17
+  - height: 88.167
+    id: 83
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 120.333
+    x: 272.334
+    y: 1999.17
+  - height: 43.167
+    id: 84
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 129.333
+    x: 86.8335
+    y: 2045.92
+  - height: 144.167
+    id: 85
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 92.333
+    x: 101.167
+    y: 2166.58
+  - height: 152.167
+    id: 86
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 125.666
+    x: 268.5
+    y: 2163.92
+  - height: 149.5
+    id: 87
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 218.999
+    x: 470.5
+    y: 2165.25
+  - height: 60.1667
+    id: 88
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 88.3323
+    x: 766.5
+    y: 2163.92
+  - height: 57.5
+    id: 89
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 82.999
+    x: 766.501
+    y: 2256.58
+  - height: 57.5
+    id: 90
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 89.6657
+    x: 998.5
+    y: 2253.92
+  - height: 49.5
+    id: 91
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 89.6657
+    x: 1000.5
+    y: 2164.58
+  - height: 34.8333
+    id: 92
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 110.999
+    x: 872.5
+    y: 2164.58
+  - height: 34.8333
+    id: 93
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 104.332
+    x: 872.5
+    y: 2273.25
+  - height: 97.5003
+    id: 94
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 167
+    x: 21.8335
+    y: 2390.58
+  - height: 96.167
+    id: 95
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 53.6667
+    x: 268.5
+    y: 2389.92
+  - height: 96.167
+    id: 96
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 33.6667
+    x: 358.5
+    y: 2391.92
+  - height: 98.8337
+    id: 97
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 216.333
+    x: 472.5
+    y: 2387.92
+  - height: 98.8337
+    id: 98
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 323
+    x: 763.833
+    y: 2393.25
+  - height: 197.5
+    id: 99
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 331
+    x: 190.5
+    y: 2565.25
+  - height: 261.5
+    id: 100
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 93.6667
+    x: 21.1667
+    y: 2525.25
+  - height: 60.1667
+    id: 101
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 188.333
+    x: 22.5
+    y: 2837.25
+  - height: 60.1667
+    id: 102
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 141.666
+    x: 20.5002
+    y: 2911.25
+  - height: 52.1667
+    id: 103
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 146.999
+    x: 175.834
+    y: 2964.58
+  - height: 49.5
+    id: 104
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 130.999
+    x: 23.8337
+    y: 3055.25
+  - height: 49.5
+    id: 105
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 130.999
+    x: 27.8338
+    y: 2984.58
+  - height: 225.5
+    id: 106
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 593.666
+    x: 23.8338
+    y: 3403.25
+  - height: 85.5
+    id: 107
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 122.999
+    x: 27.167
+    y: 3312.58
+  - height: 126.833
+    id: 108
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 42.999
+    x: 105.167
+    y: 3182.58
+  - height: 45.5
+    id: 109
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 386.999
+    x: 153.167
+    y: 3354.58
+  - height: 50.8333
+    id: 110
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 49.6657
+    x: 333.167
+    y: 3117.25
+  - height: 73.5
+    id: 111
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 58.999
+    x: 407.167
+    y: 3093.25
+  - height: 62.8333
+    id: 112
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 81.6657
+    x: 39.8338
+    y: 3677.92
+  - height: 110.833
+    id: 113
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 38.999
+    x: 40.5005
+    y: 3743.25
+  - height: 52.1663
+    id: 114
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 77.6657
+    x: 41.8338
+    y: 3856.58
+  - height: 52.1663
+    id: 115
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 77.6657
+    x: 39.8338
+    y: 4017.92
+  - height: 98.833
+    id: 116
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 37.6657
+    x: 41.1671
+    y: 3913.92
+  - height: 168.166
+    id: 117
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 42.999
+    x: 21.1671
+    y: 4086.58
+  - height: 84.1663
+    id: 118
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 49.6657
+    x: 87.8338
+    y: 4089.25
+  - height: 161.499
+    id: 119
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 42.999
+    x: 22.5005
+    y: 4269.25
+  - height: 114.832
+    id: 120
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 42.999
+    x: 22.5005
+    y: 4469.92
+  - height: 310.833
+    id: 121
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 182.999
+    x: 245.834
+    y: 3741.92
+  - height: 202.833
+    id: 122
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 182.999
+    x: 245.834
+    y: 4069.92
+  - height: 189.5
+    id: 123
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 241.666
+    x: 187.167
+    y: 4285.25
+  - height: 112.167
+    id: 124
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 145.666
+    x: 431.167
+    y: 4361.25
+  - height: 138.834
+    id: 125
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 144.333
+    x: 543.167
+    y: 4109.25
+  - height: 121.501
+    id: 126
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 144.333
+    x: 545.167
+    y: 3910.58
+  - height: 89.501
+    id: 127
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 144.333
+    x: 541.167
+    y: 3743.25
+  - height: 164.168
+    id: 128
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 108.333
+    x: 765.167
+    y: 3741.92
+  - height: 48.168
+    id: 129
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 263
+    x: 768.5
+    y: 3983.25
+  - height: 90.8347
+    id: 130
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 67
+    x: 964.5
+    y: 4045.25
+  - height: 64.1680333333334
+    id: 131
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 120.333333333333
+    x: 767.833
+    y: 4110.58
+  - height: 36.168
+    id: 132
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 236.333
+    x: 797.167
+    y: 4213.25
+  - height: 26.8347
+    id: 133
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 111
+    x: 936.5
+    y: 4363.25
+  - height: 32.168
+    id: 134
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 149.667
+    x: 684.5
+    y: 4358.58
+  - height: 132.167666666666
+    id: 135
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 73.667
+    x: 687.833
+    y: 4423.92
+  - height: 18.8347
+    id: 136
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 280.334
+    x: 829.167
+    y: 4469.25
+  - height: 132.168
+    id: 137
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 124.333
+    x: 981.833
+    y: 3740.58
+  - height: 140.168
+    id: 138
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 180.333
+    x: 693.834
+    y: 3493.92
+  - height: 66.8347
+    id: 139
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 177.666
+    x: 695.167
+    y: 3348.58
+  - height: 86.8347
+    id: 140
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 33.666
+    x: 839.167
+    y: 3251.92
+  - height: 178.833
+    id: 141
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 94.999
+    x: 539.834
+    y: 3092.58
+  - height: 60.1663
+    id: 142
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 124.332
+    x: 636.5
+    y: 3213.25
+  - height: 106.833
+    id: 143
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 85.6653
+    x: 709.834
+    y: 3036.58
+  - height: 50.833
+    id: 144
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 137.665
+    x: 285.167
+    y: 2839.92
+  - height: 36.1663
+    id: 145
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 124.332
+    x: 517.834
+    y: 2837.25
+  - height: 42.833
+    id: 146
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 116.332
+    x: 517.834
+    y: 2973.92
+  - height: 76.1663
+    id: 147
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 120.332
+    x: 517.834
+    y: 2885.25
+  - height: 122.833
+    id: 148
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 50.9987
+    x: 655.834
+    y: 2837.92
+  - height: 49.4997
+    id: 149
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 109.665
+    x: 397.167
+    y: 2969.25
+  - height: 122.833
+    id: 150
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 65.6654
+    x: 782.501
+    y: 2837.25
+  - height: 73.4997
+    id: 151
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 53.6654
+    x: 927.167
+    y: 2781.25
+  - height: 73.4997
+    id: 152
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 53.6654
+    x: 927.834
+    y: 2872.58
+  - height: 49.4997
+    id: 153
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 109.665
+    x: 871.834
+    y: 2943.25
+  - height: 22.667
+    id: 154
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 982.001
+    y: 2974
+  - height: 22.667
+    id: 155
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 1084.67
+    y: 3030
+  - height: 22.667
+    id: 156
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 1083.33
+    y: 2812.67
+  - height: 72.1663
+    id: 157
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 302.999
+    x: 600.501
+    y: 2693.25
+  - height: 54.833
+    id: 158
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 302.999
+    x: 597.834
+    y: 2565.25
+  - height: 37.5014
+    id: 159
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 115
+    x: 1141.83
+    y: 4357.25
+  - height: 53.5014
+    id: 160
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 180.333
+    x: 1109.17
+    y: 4197.25
+  - height: 89.5014
+    id: 161
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 124.333
+    x: 1365.83
+    y: 4194.58
+  - height: 74.8347
+    id: 162
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 509.666
+    x: 1569.83
+    y: 4200.58
+  - height: 144.168
+    id: 163
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 173.666
+    x: 1366.5
+    y: 4359.92
+  - height: 150.835
+    id: 164
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 90.9993
+    x: 1622.5
+    y: 4357.25
+  - height: 146.835
+    id: 165
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 217.666
+    x: 1790.5
+    y: 4356.58
+  - height: 309.502
+    id: 166
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 117.666
+    x: 2148.5
+    y: 4194.58
+  - height: 156.169
+    id: 167
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 60.3327
+    x: 2083.83
+    y: 4347.92
+  - height: 100.168
+    id: 168
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 66.9997
+    x: 1849.83
+    y: 3984.58
+  - height: 144.168
+    id: 169
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 145.333
+    x: 1144.50016666667
+    y: 3951.24933333333
+  - height: 177.168
+    id: 170
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 105.333
+    x: 1183.3335
+    y: 3742.916
+  - height: 25.1680000000001
+    id: 171
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 53.3330000000001
+    x: 1232.3335
+    y: 3923.416
+  - height: 142.167666666667
+    id: 172
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 72.3336666666667
+    x: 1182.99983333333
+    y: 4415.08283333333
+  - height: 108.167666666667
+    id: 174
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 564.333666666667
+    x: 691.1665
+    y: 4561.91616666667
+  - height: 88.1679999999997
+    id: 175
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 605.667333333333
+    x: 80.4996666666666
+    y: 4582.58266666667
+  - height: 56.168
+    id: 176
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 1318.334
+    x: 1259.833
+    y: 4611.916
+  - height: 60.1680000000001
+    id: 177
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 188.333
+    x: 984.500166666667
+    y: 3495.24933333333
+  - height: 66.8346666666666
+    id: 178
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 210.999666666667
+    x: 1001.8335
+    y: 3561.916
+  - height: 78.8346999999999
+    id: 179
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 35
+    x: 1181.16666666667
+    y: 3479.91598333333
+  - height: 137.501333333333
+    id: 180
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 110.999666666667
+    x: 983.166833333333
+    y: 3271.24933333333
+  - height: 166.834333333333
+    id: 181
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 61.3333333333333
+    x: 1097.83333333333
+    y: 3225.91616666667
+  - height: 71.3339999999998
+    id: 182
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 15.3333
+    x: 1161.33335
+    y: 3192.083
+  - height: 31.834
+    id: 183
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 15.3333
+    x: 1143.33335
+    y: 3192.333
+  - height: 20.8339999999998
+    id: 184
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 15.3333
+    x: 1184.83335
+    y: 3189.583
+  - height: 17.8339999999998
+    id: 185
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 15.3333
+    x: 1112.33335
+    y: 3392.583
+  - height: 78.8339999999998
+    id: 186
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 49.3333
+    x: 1046.66668333333
+    y: 3190.583
+  - height: 20.834
+    id: 187
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 18.6666333333334
+    x: 1023.00001666667
+    y: 3229.583
+  - height: 34.8339999999998
+    id: 188
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 31.3333
+    x: 1191.33335
+    y: 3251.583
+  - height: 34.834
+    id: 190
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 31.3333
+    x: 1190.33335
+    y: 3325.583
+  - height: 34.834
+    id: 191
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 31.3333
+    x: 1192.33335
+    y: 3373.583
+  - height: 34.834
+    id: 192
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 88.3333
+    x: 1328.33335
+    y: 3597.583
+  - height: 88.8339999999998
+    id: 193
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 26.3333
+    x: 1286.83335
+    y: 3551.583
+  - height: 344.168
+    id: 194
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 202.666333333334
+    x: 1366.3335
+    y: 3741.916
+  - height: 198.834666666667
+    id: 195
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 67.9993333333332
+    x: 1572.00033333333
+    y: 3742.58266666667
+  - height: 108.168
+    id: 197
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 43.3330000000001
+    x: 1493.8335
+    y: 3525.916
+  - height: 106.168
+    id: 198
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 58.3330000000001
+    x: 1551.3335
+    y: 3526.916
+  - height: 50.1680000000001
+    id: 199
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 70.3330000000001
+    x: 1386.8335
+    y: 3469.916
+  - height: 44.1680000000001
+    id: 200
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 132.333
+    x: 1469.8335
+    y: 3469.916
+  - height: 112.834666666667
+    id: 205
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 88.6663333333333
+    x: 1295.66683333333
+    y: 3365.916
+  - height: 140.835
+    id: 206
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 36.6663000000001
+    x: 1461.00018333333
+    y: 3254.24916666667
+  - height: 40.835
+    id: 207
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 121.6663
+    x: 1463.00018333333
+    y: 3190.91583333333
+  - height: 40.835
+    id: 208
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 137.666
+    x: 1423.167
+    y: 2943.5825
+  - height: 63.835
+    id: 209
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 55.6659999999999
+    x: 1423.167
+    y: 2985.5825
+  - height: 50.1683333333335
+    id: 210
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 81.6659999999999
+    x: 1534.50033333333
+    y: 2999.5825
+  - height: 52.8349666666668
+    id: 211
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 39.6659999999999
+    x: 1575.83366666667
+    y: 2943.58251666667
+  - height: 80.1663666666668
+    id: 212
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 236.332066666667
+    x: 1107.83396666667
+    y: 2781.91681666667
+  - height: 22.667
+    id: 213
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 1180.6673
+    y: 3027.99983333333
+  - height: 22.667
+    id: 214
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 1235.33396666667
+    y: 3027.33316666667
+  - height: 22.667
+    id: 215
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 1285.33396666667
+    y: 3027.99983333333
+  - height: 22.667
+    id: 216
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 1324.6673
+    y: 3029.33316666667
+  - height: 22.667
+    id: 217
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 1237.33396666667
+    y: 2867.33316666667
+  - height: 22.667
+    id: 218
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 1181.33396666667
+    y: 2885.33316666667
+  - height: 22.667
+    id: 219
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 1292.00063333333
+    y: 2885.33316666667
+  - height: 68.1664000000001
+    id: 220
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 236.332
+    x: 1109.834
+    y: 2909.9168
+  - height: 38.1664000000001
+    id: 221
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 164.332
+    x: 1181.834
+    y: 2636.9168
+  - height: 36.1664000000001
+    id: 222
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 139.332
+    x: 1181.834
+    y: 2550.9168
+  - height: 31.1664000000001
+    id: 223
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 153.332
+    x: 1167.334
+    y: 2495.9168
+  - height: 22.667
+    id: 224
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 1325.6673
+    y: 2524.6665
+  - height: 114.1664
+    id: 226
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 73.3320000000001
+    x: 982.834
+    y: 2558.9168
+  - height: 57.1660000000002
+    id: 227
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 107.332
+    x: 1060.334
+    y: 2558.917
+  - height: 36.1660000000002
+    id: 228
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 51.3320000000001
+    x: 1109.334
+    y: 2637.417
+  - height: 52.1664000000001
+    id: 229
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 122.332
+    x: 1166.334
+    y: 2165.4168
+  - height: 82.1664000000001
+    id: 230
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 75.3320000000001
+    x: 1165.834
+    y: 2333.9168
+  - height: 82.1664000000001
+    id: 231
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 63.3320000000001
+    x: 1280.334
+    y: 2335.9168
+  - height: 39.9164000000001
+    id: 232
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 36.0820000000001
+    x: 1243.334
+    y: 2359.9168
+  - height: 87.1664
+    id: 233
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 75.332
+    x: 1165.334
+    y: 2229.9168
+  - height: 74.1664
+    id: 234
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 60.3320000000001
+    x: 1284.334
+    y: 2245.4168
+  - height: 39.9164
+    id: 237
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 36.082
+    x: 1244.959
+    y: 2263.0418
+  - height: 22.667
+    id: 238
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 1324.6673
+    y: 2211.6665
+  - height: 210.1664
+    id: 239
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 122.332
+    x: 1165.834
+    y: 1896.9168
+  - height: 89.1660000000002
+    id: 240
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 74.3320000000001
+    x: 965.834
+    y: 1998.917
+  - height: 108.166
+    id: 241
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 37.3319999999999
+    x: 1054.834
+    y: 1981.417
+  - height: 97.1659999999999
+    id: 242
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 54.3320000000001
+    x: 1007.334
+    y: 1757.917
+  - height: 130.166
+    id: 243
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 32.332
+    x: 967.834
+    y: 1758.417
+  - height: 97.1659999999999
+    id: 244
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 38.3320000000001
+    x: 1015.834
+    y: 1870.417
+  - height: 39.166
+    id: 245
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 42.332
+    x: 969.834
+    y: 1928.417
+  - height: 34.1659999999999
+    id: 246
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 91.3319999999999
+    x: 965.834
+    y: 1710.417
+  - height: 233.166
+    id: 247
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 75.6653333333334
+    x: 1164.834
+    y: 1548.75033333333
+  - height: 102.499333333333
+    id: 249
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 116.998633333333
+    x: 1242.16735
+    y: 1548.75033333333
+  - height: 126.499
+    id: 250
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 88.999
+    x: 1270.83383333333
+    y: 1655.41716666667
+  - height: 130.499
+    id: 251
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 276.999
+    x: 1454.16716666667
+    y: 1652.7505
+  - height: 133.165666666667
+    id: 252
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 155.665666666667
+    x: 1573.5005
+    y: 1452.08383333333
+  - height: 102.166
+    id: 253
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 180.998666666667
+    x: 1365.50066666667
+    y: 1892.25033333333
+  - height: 106.166
+    id: 254
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 100.999
+    x: 1453.5005
+    y: 1996.917
+  - height: 142.166
+    id: 255
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 143.665666666667
+    x: 1441.5005
+    y: 2124.25033333333
+  - height: 100.832666666667
+    id: 256
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 132.999333333333
+    x: 1564.167
+    y: 2020.917
+  - height: 107.499666666667
+    id: 257
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 59.6656666666668
+    x: 1341.5005
+    y: 2052.25016666667
+  - height: 76.1664000000001
+    id: 259
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 203.665333333333
+    x: 1365.50066666667
+    y: 2341.9168
+  - height: 181.499733333333
+    id: 260
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 318.331666666667
+    x: 1418.1675
+    y: 2492.58346666667
+  - height: 42.833333333333
+    id: 261
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 92.9986666666664
+    x: 1644.834
+    y: 2447.91666666667
+  - height: 80.1664
+    id: 262
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 198.998666666667
+    x: 1419.16733333333
+    y: 2779.9168
+  - height: 234.666666666667
+    id: 263
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 150.665333333333
+    x: 2140.66733333333
+    y: 140
+  - height: 241.333666666667
+    id: 264
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 150.665
+    x: 1846.00083333333
+    y: 486.6665
+  - height: 81.3340000000001
+    id: 265
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 210.665
+    x: 2000.6675
+    y: 649.999666666667
+  - height: 85.3340000000001
+    id: 266
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 298.665
+    x: 2086.6675
+    y: 485.999666666667
+  - height: 41.3340000000001
+    id: 267
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 101.331666666667
+    x: 2285.33416666667
+    y: 575.999666666667
+  - height: 129.334
+    id: 268
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 273.331666666666
+    x: 2390.6675
+    y: 485.333
+  - height: 237.334
+    id: 269
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 253.331666666667
+    x: 1844.6675
+    y: 836.666333333333
+  - height: 229.334
+    id: 270
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 122.665333333333
+    x: 2174.66733333333
+    y: 837.333
+  - height: 176.000666666667
+    id: 271
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 53.331666666666
+    x: 2434.6675
+    y: 893.333
+  - height: 133.334
+    id: 273
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 117.331666666666
+    x: 2228.00083333333
+    y: 1211.99966666667
+  - height: 133.334
+    id: 274
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 310.665333333333
+    x: 1844.00066666667
+    y: 1213.333
+  - height: 121.334
+    id: 275
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 293.331666666666
+    x: 1859.33416666667
+    y: 1465.333
+  - height: 121.334
+    id: 276
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 110.665333333334
+    x: 1860.00066666667
+    y: 1656.66633333333
+  - height: 121.334
+    id: 277
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 118.665
+    x: 2047.33416666667
+    y: 1652.66633333333
+  - height: 336.000666666667
+    id: 278
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 98.6653333333335
+    x: 2246.66733333333
+    y: 1451.333
+  - height: 50.1663333333333
+    id: 279
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 214.332333333333
+    x: 1624.16716666667
+    y: 1894.91683333333
+  - height: 192.832966666667
+    id: 280
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 70.3320000000001
+    x: 1772.834
+    y: 1957.58351666667
+  - height: 96.8330000000001
+    id: 281
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 178.332
+    x: 1774.16733333333
+    y: 2164.91683333333
+  - height: 72.8330000000001
+    id: 282
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 107.665333333333
+    x: 1661.50066666667
+    y: 2194.25016666667
+  - height: 103.499666666667
+    id: 283
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 75.665
+    x: 2191.50083333333
+    y: 1895.5835
+  - height: 123.5
+    id: 284
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 59.665
+    x: 1918.1675
+    y: 1893.58333333333
+  - height: 48.8333333333335
+    id: 285
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 207.665
+    x: 1980.83416666667
+    y: 1892.91666666667
+  - height: 80.8333
+    id: 286
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 59.665
+    x: 2101.50083333333
+    y: 1944.91668333333
+  - height: 120.8333
+    id: 287
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 59.665
+    x: 2200.83416666667
+    y: 2028.91668333333
+  - height: 27.5
+    id: 288
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 20.9983333333334
+    x: 2044.83416666667
+    y: 2163.58333333333
+  - height: 27.5
+    id: 289
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 20.9983
+    x: 2228.16751666667
+    y: 2179.58333333333
+  - height: 55.4999999999995
+    id: 290
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 91.664966666667
+    x: 2100.16751666667
+    y: 2144.91666666667
+  - height: 73.5
+    id: 291
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 159.665
+    x: 2032.83416666667
+    y: 2064.91666666667
+  - height: 39.5
+    id: 292
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 111.665
+    x: 1918.83416666667
+    y: 2050.25
+  - height: 67.5
+    id: 293
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 47.665
+    x: 2014.83416666667
+    y: 1982.91666666667
+  - height: 27.5
+    id: 294
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 52.665
+    x: 2141.1675
+    y: 2217.25
+  - height: 36.1666333333328
+    id: 295
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 251.665366666667
+    x: 1645.50065
+    y: 2397.25001666667
+  - height: 241.833266666667
+    id: 296
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 303.998333333333
+    x: 1975.50083333333
+    y: 2428.58336666667
+  - height: 163.833
+    id: 300
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 81.998
+    x: 1815.001
+    y: 2510.0835
+  - height: 274.833
+    id: 301
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 202.998
+    x: 1696.001
+    y: 2776.0835
+  - height: 48.1663333333331
+    id: 302
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 234.998
+    x: 2029.16766666667
+    y: 2782.5835
+  - height: 40.1662999999999
+    id: 303
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 114.998
+    x: 1974.501
+    y: 2902.58351666667
+  - height: 33.4996333333333
+    id: 304
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 162.998
+    x: 1974.501
+    y: 3013.25018333333
+  - height: 132.166266666667
+    id: 305
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 38.998
+    x: 2190.501
+    y: 2913.91686666667
+  - height: 38.8326666666667
+    id: 306
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 30.998
+    x: 2233.83433333333
+    y: 2959.25033333333
+  - height: 38.8327
+    id: 307
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 30.998
+    x: 2159.16766666667
+    y: 2960.58365
+  - height: 33.4996
+    id: 308
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 181.664666666667
+    x: 1813.16766666667
+    y: 3196.58353333333
+  - height: 102.832933333333
+    id: 309
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 74.9983333333334
+    x: 1662.50083333333
+    y: 3185.91686666667
+  - height: 88.1663333333336
+    id: 310
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 169.664966666667
+    x: 1566.50085
+    y: 3309.91683333333
+  - height: 138.832966666666
+    id: 311
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 65.665
+    x: 1815.1675
+    y: 3254.58351666667
+  - height: 86.8330000000001
+    id: 312
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 305.665
+    x: 1956.50083333333
+    y: 3309.25016666667
+  - height: 36.1663333333336
+    id: 313
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 197.665
+    x: 2068.50083333333
+    y: 3199.25016666667
+  - height: 72.1663333333331
+    id: 314
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 125.665
+    x: 2136.50083333333
+    y: 3469.91683333333
+  - height: 40.1662999999999
+    id: 315
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 40.3316666666665
+    x: 1622.50083333333
+    y: 3503.91685
+  - height: 54.8329666666668
+    id: 316
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 321.665033333333
+    x: 1670.50081666667
+    y: 3478.58351666667
+  - height: 25.4996333333333
+    id: 317
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 25.6650333333334
+    x: 2035.83415
+    y: 3499.91685
+  - height: 58.835
+    id: 318
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 199.9993
+    x: 1718.00035
+    y: 3644.5825
+  - height: 52.1683333333335
+    id: 319
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 105.332333333334
+    x: 1720.0005
+    y: 3706.5825
+  - height: 73.835
+    id: 320
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 201.9993
+    x: 1718.00035
+    y: 3829.5825
+  - height: 25.4996
+    id: 321
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 25.665
+    x: 1898.1675
+    y: 3793.2502
+  - height: 67.168333333334
+    id: 325
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 275.332333333334
+    x: 1644.33383333333
+    y: 4021.74916666667
+  - height: 37.8349666666665
+    id: 326
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 203.332
+    x: 1715.66733333333
+    y: 3982.41585
+  - height: 200.501666666667
+    id: 327
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 240.665666666666
+    x: 2021.66716666667
+    y: 3896.41583333333
+  - height: 177.835333333333
+    id: 328
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 241.999333333334
+    x: 2021.00033333333
+    y: 3647.749
+  - height: 116.000666666667
+    id: 329
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 131.998333333333
+    x: 2397.33416666667
+    y: 295.333
+  - height: 176.001
+    id: 330
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 118.664666666667
+    x: 2604.66766666667
+    y: 292.666166666667
+  - height: 92.001
+    id: 331
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 42.665
+    x: 2680.6675
+    y: 471.9995
+  - height: 117.334333333333
+    id: 332
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 191.998333333333
+    x: 2830.00083333333
+    y: 310.666166666667
+  - height: 65.3339999999999
+    id: 333
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 170.665
+    x: 2326.6675
+    y: 725.333
+  - height: 138.334
+    id: 334
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 400.665
+    x: 2438.6675
+    y: 1208.333
+  - height: 153.334333333333
+    id: 335
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 53.3317
+    x: 2572.00081666667
+    y: 922.666166666667
+  - height: 145.334
+    id: 336
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 117.3317
+    x: 2630.66748333333
+    y: 923.333
+  - height: 113.334
+    id: 337
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 109.332
+    x: 2606.66733333333
+    y: 725.999666666667
+  - height: 24.0006666666666
+    id: 338
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 23.9986666666664
+    x: 2572.00066666667
+    y: 812.666333333333
+  - height: 24.0007
+    id: 339
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 23.9987
+    x: 2732.00065
+    y: 778.666316666667
+  - height: 24.0007
+    id: 340
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 23.9987
+    x: 2732.00065
+    y: 725.332983333333
+  - height: 269.000666666667
+    id: 341
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 204.665
+    x: 2423.6675
+    y: 1454.833
+  - height: 178.334333333333
+    id: 342
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 292.665
+    x: 2733.6675
+    y: 1453.4995
+  - height: 209.001
+    id: 343
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 128.665
+    x: 2729.6675
+    y: 1709.4995
+  - height: 159.667666666667
+    id: 344
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 220.665
+    x: 2409.00083333333
+    y: 1794.16616666667
+  - height: 202.334666666667
+    id: 345
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 528.665
+    x: 2407.00083333333
+    y: 2029.49933333333
+  - height: 46.335
+    id: 346
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 200.665
+    x: 2405.00083333333
+    y: 2430.8325
+  - height: 34.335
+    id: 347
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 180.665
+    x: 2405.00083333333
+    y: 2486.16583333333
+  - height: 62.335
+    id: 348
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 120.665
+    x: 2408.33416666667
+    y: 2528.16583333333
+  - height: 98.8329666666664
+    id: 349
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 180.331333333334
+    x: 2406.501
+    y: 2782.58351666667
+  - height: 30.8330000000001
+    id: 350
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 160.331
+    x: 2623.16783333333
+    y: 2786.5835
+  - height: 57.4996666666666
+    id: 351
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 181.664333333334
+    x: 2602.50116666667
+    y: 2823.25016666667
+  - height: 88.1663333333336
+    id: 352
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 246.997666666667
+    x: 2407.16783333333
+    y: 2958.5835
+  - height: 53.4996333333333
+    id: 353
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 510.998
+    x: 2404.501
+    y: 3187.91685
+  - height: 88.1663
+    id: 354
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 246.998
+    x: 2732.501
+    y: 2958.58351666667
+  - height: 34.8329666666665
+    id: 355
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 113.664666666667
+    x: 2867.16766666667
+    y: 2919.91685
+  - height: 60.1662999999999
+    id: 356
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 194.998
+    x: 2860.501
+    y: 2781.25018333333
+  - height: 225.4996
+    id: 357
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 166.998
+    x: 2413.83433333333
+    y: 3318.58353333333
+  - height: 186.8329
+    id: 359
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 302.998
+    x: 2682.501
+    y: 3349.25021666667
+  - height: 306.8329
+    id: 360
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 158.998
+    x: 2407.83433333333
+    y: 3649.25021666667
+  - height: 284.166233333333
+    id: 361
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 68.3313333333335
+    x: 2677.16766666667
+    y: 3643.91688333333
+  - height: 106.8329
+    id: 362
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 122.998000000001
+    x: 2837.16766666667
+    y: 3821.25021666667
+  - height: 148.166233333333
+    id: 363
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 74.998
+    x: 2510.501
+    y: 4038.58355
+  - height: 148.166
+    id: 364
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 68.3313333333335
+    x: 2406.501
+    y: 4037.917
+  - height: 77.4993333333332
+    id: 365
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 17.6646333333333
+    x: 2487.16768333333
+    y: 4076.58366666667
+  - height: 20.1659666666674
+    id: 366
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 121.664600000001
+    x: 2611.1677
+    y: 4037.25035
+  - height: 77.4996666666666
+    id: 367
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 140.331333333334
+    x: 2821.16766666667
+    y: 4037.25016666667
+  - height: 64.1663666666673
+    id: 368
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 284.331
+    x: 2677.8345
+    y: 4125.25015
+  - height: 274.832633333334
+    id: 372
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 2261.66533333333
+    x: 2373.834
+    y: 4333.25035
+  - height: 98.8330000000001
+    id: 373
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 321.664666666667
+    x: 2825.16766666667
+    y: 3647.91683333333
+  - height: 105.499666666667
+    id: 374
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 282.998333333333
+    x: 3036.50083333333
+    y: 3819.91683333333
+  - height: 145.4997
+    id: 375
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 120.331
+    x: 3036.50116666667
+    y: 4037.25015
+  - height: 60.166666666667
+    id: 376
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 325.664333333334
+    x: 3227.8345
+    y: 4037.91666666667
+  - height: 78.8333333333339
+    id: 377
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 150.997666666667
+    x: 3237.16783333333
+    y: 4109.91666666667
+  - height: 102.8333
+    id: 378
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 97.664666666667
+    x: 3223.16766666667
+    y: 3644.58335
+  - height: 113.499966666667
+    id: 379
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 126.998
+    x: 3428.501
+    y: 3819.25001666667
+  - height: 22.8333000000011
+    id: 380
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 54.998
+    x: 3475.16766666667
+    y: 4163.25001666667
+  - height: 205.5
+    id: 381
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 69.664666666667
+    x: 3429.83433333333
+    y: 3541.91666666667
+  - height: 70.8333333333335
+    id: 382
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 73.6646999999998
+    x: 3521.16765
+    y: 3675.91666666667
+  - height: 114.8333
+    id: 383
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 333.6647
+    x: 3427.16765
+    y: 3348.58335
+  - height: 102.833
+    id: 384
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 233.665
+    x: 3513.1675
+    y: 3538.5835
+  - height: 80.8330000000001
+    id: 385
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 72.665
+    x: 3663.1675
+    y: 3767.5835
+  - height: 23.8330000000001
+    id: 386
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 29.665
+    x: 3674.1675
+    y: 3859.5835
+  - height: 23.833
+    id: 387
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 29.665
+    x: 3698.1675
+    y: 3692.0835
+  - height: 23.833
+    id: 388
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 23.665
+    x: 3664.1675
+    y: 3724.0835
+  - height: 23.833
+    id: 389
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 29.665
+    x: 3700.1675
+    y: 3644.0835
+  - height: 23.833
+    id: 390
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 29.665
+    x: 3601.1675
+    y: 3654.0835
+  - height: 271.8333
+    id: 391
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 25.6646999999998
+    x: 3634.16765
+    y: 3645.58335
+  - height: 186.833
+    id: 392
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 265.664666666667
+    x: 3053.83433333333
+    y: 3350.5835
+  - height: 148.1667
+    id: 393
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 173.664
+    x: 3619.83466666667
+    y: 4037.91665
+  - height: 54.8330000000001
+    id: 394
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 542.998333333333
+    x: 2992.50083333333
+    y: 3191.91683333333
+  - height: 133.499666666667
+    id: 395
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 220.331333333334
+    x: 3247.16766666667
+    y: 2917.91683333333
+  - height: 264.166666666667
+    id: 396
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 108.331
+    x: 3063.16783333333
+    y: 2783.91666666667
+  - height: 125.5
+    id: 397
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 442.997666666667
+    x: 3607.16783333333
+    y: 2989.25
+  - height: 125.5
+    id: 398
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 158.998
+    x: 3606.501
+    y: 3118.58333333333
+  - height: 52.166666666667
+    id: 399
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 176.331333333334
+    x: 3872.501
+    y: 3189.25
+  - height: 92.1666666666665
+    id: 400
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 308.331333333334
+    x: 3610.501
+    y: 2822.58333333333
+  - height: 233.001666666667
+    id: 401
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 256.665
+    x: 2685.00083333333
+    y: 2428.8325
+  - height: 122.335333333333
+    id: 402
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 236.665
+    x: 2989.00083333333
+    y: 2540.83233333333
+  - height: 69.002
+    id: 403
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 215.665
+    x: 3246.6675
+    y: 2779.499
+  - height: 148.002
+    id: 404
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 39.665
+    x: 3336.1675
+    y: 2630.499
+  - height: 89.002
+    id: 405
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 162.665
+    x: 3454.1675
+    y: 2592.499
+  - height: 128.002
+    id: 406
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 82.665
+    x: 3534.6675
+    y: 2461.499
+  - height: 82.335
+    id: 407
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 420.665
+    x: 3005.6675
+    y: 2397.49916666667
+  - height: 137.001666666667
+    id: 408
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 231.331666666666
+    x: 2935.00083333333
+    y: 1784.16583333333
+  - height: 309.002
+    id: 409
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 125.998666666666
+    x: 3044.334
+    y: 1924.83233333333
+  - height: 51.6686666666665
+    id: 410
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 311.332
+    x: 2932.334
+    y: 1655.499
+  - height: 122.335333333333
+    id: 411
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 852.665333333333
+    x: 2919.00066666667
+    y: 1215.499
+  - height: 194.335
+    id: 412
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 497.998333333333
+    x: 3129.6675
+    y: 1341.49916666667
+  - height: 147.667333333333
+    id: 413
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 953.998333333333
+    x: 2827.6675
+    y: 922.833
+  - height: 235.667
+    id: 414
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 752.664666666667
+    x: 3027.001
+    y: 684.833166666667
+  - height: 340.000666666667
+    id: 415
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 123.998666666666
+    x: 2829.334
+    y: 507.333
+  - height: 106.667666666667
+    id: 416
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 47.9989999999998
+    x: 2975.33383333333
+    y: 508.666166666667
+  - height: 181.334
+    id: 417
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 1585.998
+    x: 3046.001
+    y: 5.33300000000003
+  - height: 155.667
+    id: 418
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 1018.665
+    x: 3049.6675
+    y: 290.1665
+  - height: 229.667
+    id: 419
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 966.66
+    x: 3104.67
+    y: 450.1665
+  - height: 175.002
+    id: 420
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 357.999
+    x: 3277.0005
+    y: 2067.499
+  - height: 57.002
+    id: 421
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 293.999
+    x: 3337.0005
+    y: 2248.499
+  - height: 41.002
+    id: 422
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 117.999
+    x: 3514.33383333333
+    y: 2309.499
+  - height: 328.335
+    id: 423
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 385.998
+    x: 3251.001
+    y: 1636.8325
+  - height: 729.668666666667
+    id: 424
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 214.665666666667
+    x: 3741.0005
+    y: 1638.16566666667
+  - height: 321.334333333333
+    id: 426
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 57.3323333333333
+    x: 3887.57625757576
+    y: 1213.0298030303
+  - height: 25.334
+    id: 427
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 65.3323
+    x: 3771.33385
+    y: 1515.333
+  - height: 436.000666666667
+    id: 428
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 211.998966666667
+    x: 4087.33385
+    y: 1212.66633333333
+  - height: 252.001
+    id: 429
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 402.665666666667
+    x: 3887.33383333333
+    y: 812.666166666666
+  - height: 509.334333333333
+    id: 430
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 214.665666666666
+    x: 4184.66716666667
+    y: 191.332833333333
+  - height: 1212.3643030303
+    id: 431
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 81.3326666666671
+    x: 4378.667
+    y: 705.333
+  - height: 341.334333333333
+    id: 432
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 111.999
+    x: 4067.33383333333
+    y: 1668.66616666667
+  - height: 101.334
+    id: 433
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 381.332333333333
+    x: 4184.0005
+    y: 1923.99966666667
+  - height: 611.669
+    id: 434
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 102.666
+    x: 4074.667
+    y: 2015.1655
+  - height: 75.669
+    id: 435
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 450.666
+    x: 4182.667
+    y: 2554.1655
+  - height: 1695.669
+    id: 436
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 98.6660000000002
+    x: 4494.667
+    y: 2634.1655
+  - height: 222.002
+    id: 437
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 172.665
+    x: 3758
+    y: 2460
+  - height: 102.002
+    id: 438
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 302.665
+    x: 3995.6675
+    y: 2818.999
+  - height: 176.002
+    id: 439
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 172.665
+    x: 4124.6675
+    y: 2922.999
+  - height: 160.002
+    id: 440
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 184.665
+    x: 4123.6675
+    y: 3187.999
+  - height: 186.002
+    id: 441
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 176.665
+    x: 3873.6675
+    y: 3313.999
+  - height: 76.002
+    id: 442
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 232.665
+    x: 4071.6675
+    y: 3420.999
+  - height: 46.002
+    id: 443
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 250.665
+    x: 3869.6675
+    y: 3572.999
+  - height: 112.668666666666
+    id: 444
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 125.331666666667
+    x: 3869.33416666667
+    y: 3634.33233333333
+  - height: 146.002333333333
+    id: 445
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 122.665333333334
+    x: 4188.00066666667
+    y: 3566.33216666667
+  - height: 162.002
+    id: 446
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 229.331666666667
+    x: 4069.33416666667
+    y: 3726.999
+  - height: 24.6686666666665
+    id: 447
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 90.6653333333343
+    x: 4070.66733333333
+    y: 3696.33233333333
+  - height: 267.335666666667
+    id: 448
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 125.332
+    x: 3870.66733333333
+    y: 3915.6655
+  - height: 91.3359999999998
+    id: 449
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 86.6653333333329
+    x: 4001.334
+    y: 4092.99866666667
+  - height: 27.3359999999998
+    id: 450
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 125.332
+    x: 3868.00066666667
+    y: 3818.332
+  - height: 48.6686666666674
+    id: 451
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 234.665333333334
+    x: 4070.66733333333
+    y: 3965.66566666667
+  - height: 162.002033333333
+    id: 452
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 147.998333333333
+    x: 4156.00083333333
+    y: 4022.33231666667
+  - height: 982.667
+    id: 453
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 79.333
+    x: 20.3335
+    y: 744.6665
+  - height: 352.667
+    id: 454
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 175.333
+    x: 110.3335
+    y: 742.6665
+  - height: 22.667
+    id: 455
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 22.6654
+    x: 318.000633333333
+    y: 923.333166666667
+  - height: 22.667
+    id: 456
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 16.9154
+    x: 288.083966666667
+    y: 893.333166666667
+  - height: 50.6670000000001
+    id: 457
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 30.6663333333333
+    x: 450.666833333333
+    y: 749.333166666667
+  - height: 50.667
+    id: 458
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 105.332966666667
+    x: 590.000183333333
+    y: 743.999833333333
+  - height: 536.667
+    id: 459
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 133.333
+    x: 20.3335
+    y: 178.6665
+  - height: 140.667
+    id: 460
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 1433.333
+    x: 17.3335
+    y: 29.6665
+  - height: 350.667
+    id: 461
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 171.33
+    x: 1471.335
+    y: 21.6665
+  - height: 84.0003
+    id: 462
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 643.332
+    x: 1645.334
+    y: 23.99985
+  - height: 166.0003
+    id: 463
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 737.332
+    x: 2300.334
+    y: 21.99985
+  opacity: 1
+  type: objectgroup
+  visible: true
+  x: 0
+  y: 0
+nextlayerid: 4
+nextobjectid: 464
+orientation: orthogonal
+renderorder: right-down
+tiledversion: 1.11.2
+tileheight: 32
+tilesets: []
+tilewidth: 32
+type: map
+version: '1.10'
+width: 145

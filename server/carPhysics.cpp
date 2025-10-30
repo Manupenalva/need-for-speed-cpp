@@ -5,7 +5,7 @@
 
 #include "../common/carState.h"
 
-#define MAX_SPEED 5000.0f
+#define MAX_SPEED 7000.0f
 #define MIN_SPEED 100.0f
 #define ACCELERATION 400.0f
 #define ANGLE_ROTATION 4
