@@ -14,6 +14,8 @@
 #include <QTextStream>
 #include <QVBoxLayout>
 
+#define GRID_SIZE 50
+
 MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
     QVBoxLayout* layout = new QVBoxLayout(this);
     scene = new QGraphicsScene(this);
@@ -32,7 +34,7 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
     layout->setAlignment(saveButton, Qt::AlignCenter);
 
     connect(saveButton, &QPushButton::clicked, this, [this]() {
-        QString filePath = QString("/home/facu/Escritorio/%1.yaml").arg(currentCityName);
+        QString filePath = QString("./maps/%1.yaml").arg(currentCityName);
         exportToYaml(filePath);
         QCoreApplication::quit();
     });
@@ -53,15 +55,14 @@ void MapCanvas::loadCityMap(const QString& cityName) {
     QFileInfo fileInfo(cityName);
     currentCityName = fileInfo.baseName();
 
-    int gridSize = 40;
     QPen gridPen(Qt::lightGray);
     gridPen.setWidth(1);
 
-    for (int x = 0; x < mapPixmap.width(); x += gridSize) {
+    for (int x = 0; x < mapPixmap.width(); x += GRID_SIZE) {
         scene->addLine(x, 0, x, mapPixmap.height(), gridPen);
     }
 
-    for (int y = 0; y < mapPixmap.height(); y += gridSize) {
+    for (int y = 0; y < mapPixmap.height(); y += GRID_SIZE) {
         scene->addLine(0, y, mapPixmap.width(), y, gridPen);
     }
 
@@ -98,12 +99,11 @@ void MapCanvas::dropEvent(QDropEvent* event) {
 
     if (!pixmap.isNull()) {
         QPointF scenePos = view->mapToScene(event->position().toPoint());
-        int gridSize = 40;
-        qreal x = static_cast<int>(scenePos.x() / gridSize) * gridSize;
-        qreal y = static_cast<int>(scenePos.y() / gridSize) * gridSize;
+        qreal x = static_cast<int>(scenePos.x() / GRID_SIZE) * GRID_SIZE;
+        qreal y = static_cast<int>(scenePos.y() / GRID_SIZE) * GRID_SIZE;
 
         auto* item = scene->addPixmap(
-                pixmap.scaled(gridSize, gridSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                pixmap.scaled(GRID_SIZE, GRID_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         item->setPos(x, y);
         item->setZValue(10);
 
@@ -136,8 +136,8 @@ void MapCanvas::exportToYaml(const QString& filePath) {
     out << "city: " << currentCityName << "\n";
     out << "width: " << scene->width() << "\n";
     out << "height: " << scene->height() << "\n";
-    out << "celdWidth: " << 40 << "\n";
-    out << "celdHeight: " << 40 << "\n";
+    out << "celdWidth: " << GRID_SIZE << "\n";
+    out << "celdHeight: " << GRID_SIZE << "\n";
 
     auto writeElements = [&](const QString& elementType) {
         QList<QGraphicsItem*> itemsList = scene->items();
