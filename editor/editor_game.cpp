@@ -43,7 +43,7 @@ EditorGame::EditorGame(QWidget* parent): QMainWindow(parent) {
     setCentralWidget(stackedWidget);
     stackedWidget->setCurrentWidget(mainMenuWidget);
 
-    resize(800, 600);
+    resize(1280, 720);
 }
 
 EditorGame::~EditorGame() {}
