@@ -5,9 +5,12 @@
 #include <vector>
 
 #include "carState.h"
+#include "checkpointArrow.h"
+#include "checkpointInfo.h"
 #include "constants.h"
 #include "lobbyinfo.h"
 #include "messageDTOs.h"
+#include "npcState.h"
 #include "socket.h"
 
 class MessageReceiver {
@@ -33,6 +36,9 @@ private:
     // std::string obtain_lobby_name();
 
     CarState recv_car_state();
+    NpcState recv_npc_state();
+    CheckpointInfo recv_checkpoint_info();
+    CheckpointArrow recv_checkpoint_arrow();
     LobbyInfo recv_lobby_info();
 };
 #endif

@@ -25,4 +25,7 @@ target_sources(taller_common
         thread.h
         queue.h
         gameLoop_timer.h
+        checkpointArrow.h
+        checkpointInfo.h
+        npcState.h
     )
