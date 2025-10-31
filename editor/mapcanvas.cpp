@@ -136,6 +136,8 @@ void MapCanvas::exportToYaml(const QString& filePath) {
     out << "city: " << currentCityName << "\n";
     out << "width: " << scene->width() << "\n";
     out << "height: " << scene->height() << "\n";
+    out << "celdWidth: " << 50 << "\n";
+    out << "celdHeight: " << 50 << "\n";
 
     auto writeElements = [&](const QString& elementType) {
         QList<QGraphicsItem*> itemsList = scene->items();
