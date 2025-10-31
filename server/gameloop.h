@@ -13,14 +13,13 @@
 #include "../common/thread.h"
 #include "events/clienthandlermessage.h"
 
-#include "monitorClients.h"
+#include "racemonitor.h"
 
 
 class Gameloop: public Thread {
 private:
     std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue;
-    MonitorClients& games_monitor;
-    int game_id;
+    std::shared_ptr<Race> race;
     std::unordered_map<uint16_t, CarInputState> players_cars;
     uint32_t frames;
     b2WorldId world;
@@ -28,7 +27,7 @@ private:
 
 public:
     Gameloop(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
-             MonitorClients& games_monitor, int game_id);
+             std::shared_ptr<Race> race);
     void run() override;
 
 private:
@@ -36,6 +35,7 @@ private:
     void update_car_physics(const uint16_t& player_id);
     void update_positions();
     void update_car_input(const uint16_t& player_id, const uint8_t& action);
+    void broadcast_start();
 
     Gameloop(const Gameloop& other) = delete;
     Gameloop& operator=(const Gameloop& other) = delete;

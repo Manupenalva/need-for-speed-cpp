@@ -19,8 +19,8 @@ private:
     int next_game_id = 1;
 
 public:
-    void create_race();
-    void insert_client_to_race(const int& game_id, std::shared_ptr<ClientHandler> client);
+    int create_race();
+    bool insert_client_to_race(const int& game_id, std::shared_ptr<ClientHandler> client);
     void remove_race(const int& game_id);
     void clear();
     void remove_client_from_race(const int& game_id, const int& client_id);

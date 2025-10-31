@@ -6,7 +6,6 @@
 #include <mutex>
 #include <unordered_map>
 
-
 #include "client_handler.h"
 
 class MonitorClients {

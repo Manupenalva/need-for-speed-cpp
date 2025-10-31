@@ -16,16 +16,13 @@
 
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
-        MonitorClients& games_monitor, int game_id):
-        user_commands_queue(user_commands_queue),
-        games_monitor(games_monitor),
-        game_id(game_id),
-        frames(0) {
+        std::shared_ptr<Race> race):
+        user_commands_queue(user_commands_queue), race(race), frames(0) {
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity = {0.0f, 0.0f};
     world = b2CreateWorld(&worldDef);
 
-    std::vector<int> players_id = games_monitor.get_players_id(game_id);
+    std::vector<int> players_id = race->get_player_ids();
 
     for (const auto& id: players_id) {
         uint16_t player_id = id;
@@ -115,10 +112,19 @@ void Gameloop::broadcast_players() {
     msg.type = MsgType::STATE_UPDATE;
     msg.state = game_state;
 
-    games_monitor.broadcast_race_state(msg, game_id);
+    race->broadcast(msg);
+}
+
+void Gameloop::broadcast_start() {
+    ServerMessageDTO msg;
+    msg.type = MsgType::GAME_START;
+    race->broadcast(msg);
+    broadcast_players();
 }
 
 void Gameloop::run() {
+
+    broadcast_start();
     GameLoopTimer timer(TARGET_FPS);
     uint32_t iterations_behind = 1;
 

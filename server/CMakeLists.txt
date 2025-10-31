@@ -13,6 +13,8 @@ target_sources(taller_server
         carPhysics.cpp
         lobby.cpp
         monitorClients.cpp
+        racemonitor.cpp
+        monitorGames.cpp
     PUBLIC
         sender.h
         receiver.h
@@ -22,7 +24,6 @@ target_sources(taller_server
         gameloop.h
         gameSession.h
         monitorGames.h
-        monitorGames.cpp
         server.h
         carPhysics.h
         lobby.h

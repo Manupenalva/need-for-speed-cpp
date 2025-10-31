@@ -10,8 +10,8 @@
 #include "events/clienthandlermessage.h"
 
 #include "client_handler.h"
-#include "monitorGames.h"
 #include "monitorClients.h"
+#include "monitorGames.h"
 #include "receiver.h"
 
 class Acceptor: public Thread {
