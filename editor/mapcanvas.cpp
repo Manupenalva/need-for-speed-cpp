@@ -14,6 +14,10 @@
 #include <QTextStream>
 #include <QVBoxLayout>
 #include <QMessageBox>
+#include <QCursor>
+#include <QGraphicsItem>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsSceneMouseEvent>
 
 #define GRID_SIZE 50
 
@@ -91,6 +95,7 @@ void MapCanvas::dropEvent(QDropEvent* event) {
         return;
 
     QString type;
+    QString rotation = "";
     if (nameOrPath.contains("checkpoint", Qt::CaseInsensitive))
         type = "checkpoint";
     else if (nameOrPath.contains("start", Qt::CaseInsensitive))
@@ -99,8 +104,17 @@ void MapCanvas::dropEvent(QDropEvent* event) {
         type = "finish";
     else if (nameOrPath.contains("road", Qt::CaseInsensitive))
         type = "road";
-    else if (nameOrPath.contains("hint", Qt::CaseInsensitive))
+    else if (nameOrPath.contains("hint", Qt::CaseInsensitive)) {
         type = "hint";
+        if (nameOrPath.contains("Left", Qt::CaseInsensitive))
+            rotation = "left";
+        else if (nameOrPath.contains("Right", Qt::CaseInsensitive))
+            rotation = "right";
+        else if (nameOrPath.contains("Up", Qt::CaseInsensitive))
+            rotation = "up";
+        else if (nameOrPath.contains("Down", Qt::CaseInsensitive))
+            rotation = "down";
+    }
     else if (nameOrPath.contains("NPC", Qt::CaseInsensitive))
         type = "NPC";
     else
@@ -137,9 +151,17 @@ void MapCanvas::dropEvent(QDropEvent* event) {
     auto* item = scene->addPixmap(
             pixmap.scaled(GRID_SIZE, GRID_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     item->setPos(x, y);
-    item->setZValue(10);
+    if (type == "road")
+        item->setZValue(1);
+    else
+        item->setZValue(10);
 
     item->setData(0, type);
+    item->setData(1, rotation); 
+
+    item->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable |
+                   QGraphicsItem::ItemSendsGeometryChanges);
+    item->setCursor(Qt::OpenHandCursor);
 
     event->acceptProposedAction();
     
@@ -177,6 +199,10 @@ void MapCanvas::exportToYaml(const QString& filePath) {
                 QPointF pos = item->pos();
                 out << "  x: " << static_cast<int>(pos.x()) << "\n";
                 out << "  y: " << static_cast<int>(pos.y()) << "\n";
+                if (elementType == "hint") {
+                    QString rotation = item->data(1).toString();
+                    out << "  rotation: " << rotation << "\n";
+                }
             }
         }
     };

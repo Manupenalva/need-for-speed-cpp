@@ -67,6 +67,7 @@ void EditorGame::operEditorWithCity(const QString& cityName) {
     struct Tool {
         QString name;
         QString iconPath;
+        qreal rotation = 0;
     };
 
     std::vector<Tool> tools = {
@@ -77,7 +78,7 @@ void EditorGame::operEditorWithCity(const QString& cityName) {
             {"Add Start Line", "./editor/imgs/start.png"},
             {"Add Start Line", "./editor/imgs/start2.png"},
             {"Add Finish Line", "./editor/imgs/finish.png"},
-            {"Add Hint", "./editor/imgs/hint.png"},
+            {"Add Hint Left", "./editor/imgs/hint.png"},
             {"Add NPC", "./editor/imgs/npc.png"},
     };
 

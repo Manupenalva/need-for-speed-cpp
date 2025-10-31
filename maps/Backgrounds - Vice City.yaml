@@ -1,0 +1,38 @@
+city: Backgrounds - Vice City
+width: 4640
+height: 4672
+celdWidth: 50
+celdHeight: 50
+-start:
+  x: 200
+  y: 500
+  x: 150
+  y: 500
+-finish:
+  x: 150
+  y: 300
+-road:
+  x: 200
+  y: 350
+  x: 150
+  y: 350
+  x: 200
+  y: 400
+  x: 150
+  y: 400
+  x: 150
+  y: 450
+  x: 200
+  y: 450
+-checkpoint:
+  x: 150
+  y: 400
+  x: 200
+  y: 400
+-hint:
+  x: 250
+  y: 400
+  rotation: left
+-NPC:
+  x: 150
+  y: 200
