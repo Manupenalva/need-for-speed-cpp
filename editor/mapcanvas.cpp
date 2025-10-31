@@ -53,7 +53,7 @@ void MapCanvas::loadCityMap(const QString& cityName) {
     QFileInfo fileInfo(cityName);
     currentCityName = fileInfo.baseName();
 
-    int gridSize = 50;
+    int gridSize = 40;
     QPen gridPen(Qt::lightGray);
     gridPen.setWidth(1);
 
@@ -98,7 +98,7 @@ void MapCanvas::dropEvent(QDropEvent* event) {
 
     if (!pixmap.isNull()) {
         QPointF scenePos = view->mapToScene(event->position().toPoint());
-        int gridSize = 50;
+        int gridSize = 40;
         qreal x = static_cast<int>(scenePos.x() / gridSize) * gridSize;
         qreal y = static_cast<int>(scenePos.y() / gridSize) * gridSize;
 
@@ -136,8 +136,8 @@ void MapCanvas::exportToYaml(const QString& filePath) {
     out << "city: " << currentCityName << "\n";
     out << "width: " << scene->width() << "\n";
     out << "height: " << scene->height() << "\n";
-    out << "celdWidth: " << 50 << "\n";
-    out << "celdHeight: " << 50 << "\n";
+    out << "celdWidth: " << 40 << "\n";
+    out << "celdHeight: " << 40 << "\n";
 
     auto writeElements = [&](const QString& elementType) {
         QList<QGraphicsItem*> itemsList = scene->items();
