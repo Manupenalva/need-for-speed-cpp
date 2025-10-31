@@ -86,17 +86,6 @@ void MapCanvas::dropEvent(QDropEvent* event) {
     if (event->mimeData()->hasImage())
         pixmap = qvariant_cast<QPixmap>(event->mimeData()->imageData());
 
-    if (pixmap.isNull() && !nameOrPath.isEmpty()) {
-        if (nameOrPath.contains("checkpoint", Qt::CaseInsensitive))
-            pixmap.load("/home/facu/Imágenes/checkpoint.png");
-        else if (nameOrPath.contains("start", Qt::CaseInsensitive))
-            pixmap.load("/home/facu/Imágenes/start.png");
-        else if (nameOrPath.contains("finish", Qt::CaseInsensitive))
-            pixmap.load("/home/facu/Imágenes/finish.png");
-        else if (nameOrPath.contains("road", Qt::CaseInsensitive))
-            pixmap.load("/home/facu/Imágenes/road.png");
-    }
-
     if (!pixmap.isNull()) {
         QPointF scenePos = view->mapToScene(event->position().toPoint());
         qreal x = static_cast<int>(scenePos.x() / GRID_SIZE) * GRID_SIZE;
@@ -116,6 +105,10 @@ void MapCanvas::dropEvent(QDropEvent* event) {
             type = "finish";
         else if (nameOrPath.contains("road", Qt::CaseInsensitive))
             type = "road";
+        else if (nameOrPath.contains("hint", Qt::CaseInsensitive))
+            type = "hint";
+        else if (nameOrPath.contains("NPC", Qt::CaseInsensitive))
+            type = "NPC";
         else
             type = "unknown";
 
@@ -166,6 +159,7 @@ void MapCanvas::exportToYaml(const QString& filePath) {
     writeElements("road");
     writeElements("checkpoint");
     writeElements("hint");
+    writeElements("NPC");
 
     file.close();
 }

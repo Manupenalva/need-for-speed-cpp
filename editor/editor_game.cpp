@@ -70,10 +70,15 @@ void EditorGame::operEditorWithCity(const QString& cityName) {
     };
 
     std::vector<Tool> tools = {
-            {"Add Road", "/home/facu/Imágenes/road.png"},
-            {"Add Checkpoint", "/home/facu/Imágenes/checkpoint.png"},
-            {"Add Start Line", "/home/facu/Imágenes/start.png"},
-            {"Add Finish Line", "/home/facu/Imágenes/finish.png"},
+            {"Add Road", "./editor/imgs/road.png"},
+            {"Add Road", "./editor/imgs/road1.png"},
+            {"Add Road", "./editor/imgs/road2.png"},
+            {"Add Checkpoint", "./editor/imgs/checkpoint.png"},
+            {"Add Start Line", "./editor/imgs/start.png"},
+            {"Add Start Line", "./editor/imgs/start2.png"},
+            {"Add Finish Line", "./editor/imgs/finish.png"},
+            {"Add Hint", "./editor/imgs/hint.png"},
+            {"Add NPC", "./editor/imgs/npc.png"},
     };
 
     for (auto& t: tools) {
