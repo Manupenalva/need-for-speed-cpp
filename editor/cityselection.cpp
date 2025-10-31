@@ -3,6 +3,9 @@
 #include <QIcon>
 #include <QPixmap>
 #include <vector>
+#include <QDir>
+
+#define BACKGROUNDS "./client/assets/cities/"
 
 CitySelection::CitySelection(QWidget* parent): QWidget(parent) {
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
@@ -15,34 +18,31 @@ CitySelection::CitySelection(QWidget* parent): QWidget(parent) {
     mainLayout->addSpacing(20);
 
     auto* citiesLayout = new QHBoxLayout();
+    QDir citiesDir(BACKGROUNDS);
+    
+    QStringList nameFilters;
+    nameFilters << "*.png";
 
-    struct City {
-        QString name;
-        QString iconPath;
-    };
+    QFileInfoList cityFiles = citiesDir.entryInfoList(nameFilters, QDir::Files);
 
-    std::vector<City> cities = {
-            {"Liberty City", "/home/facu/Escritorio/tps/tp_grupal/tp-taller-g4/client/assets/"
-                             "cities/Backgrounds - Liberty City.png"},
-            {"San Andreas", "/home/facu/Escritorio/tps/tp_grupal/tp-taller-g4/client/assets/cities/"
-                            "Backgrounds - San Andreas.png"},
-            {"Vice City", "/home/facu/Escritorio/tps/tp_grupal/tp-taller-g4/client/assets/cities/"
-                          "Backgrounds - Vice City.png"}};
+    for (const QFileInfo& fileInfo : cityFiles) {
+        QString filePath = fileInfo.absoluteFilePath();
+        QString cityName = fileInfo.baseName();
 
-    for (auto& city: cities) {
         QVBoxLayout* cityLayout = new QVBoxLayout();
         QPushButton* cityButton = new QPushButton();
-        cityButton->setIcon(QIcon(city.iconPath));
+        cityButton->setIcon(QIcon(filePath));
         cityButton->setIconSize(QSize(200, 200));
         cityButton->setFixedSize(220, 220);
         QObject::connect(cityButton, &QPushButton::clicked, this,
-                        [this, city]() { emit citySelected(city.iconPath); });
-        QLabel* nameLabel = new QLabel(city.name);
+                        [this, filePath]() { emit citySelected(filePath); });
+        QLabel* nameLabel = new QLabel(cityName);
         nameLabel->setAlignment(Qt::AlignCenter);
         nameLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
         cityLayout->addWidget(cityButton);
         cityLayout->addWidget(nameLabel);
         citiesLayout->addLayout(cityLayout);
+
     }
 
     mainLayout->addLayout(citiesLayout);
