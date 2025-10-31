@@ -1,7 +1,12 @@
 #include "editor_game.h"
 
+#include <QDrag>
+#include <QDragEnterEvent>
+#include <QDropEvent>
 #include <QLabel>
+#include <QMimeData>
 #include <QVBoxLayout>
+#include <vector>
 
 EditorGame::EditorGame(QWidget* parent): QMainWindow(parent) {
     stackedWidget = new QStackedWidget(this);
@@ -46,6 +51,60 @@ EditorGame::~EditorGame() {}
 void EditorGame::goToCitySelection() { stackedWidget->setCurrentWidget(citySelectionWidget); }
 
 void EditorGame::operEditorWithCity(const QString& cityName) {
+    QWidget* editorContainer = new QWidget(this);
+    QHBoxLayout* editorLayout = new QHBoxLayout(editorContainer);
+
+    QWidget* toolsWidget = new QWidget(editorContainer);
+    QVBoxLayout* toolsLayout = new QVBoxLayout(toolsWidget);
+    toolsLayout->setAlignment(Qt::AlignTop);
+
+    QLabel* toolsTitle = new QLabel("Tools", toolsWidget);
+    toolsTitle->setAlignment(Qt::AlignCenter);
+    toolsTitle->setStyleSheet("font-size: 18px; font-weight: bold;");
+    toolsLayout->addWidget(toolsTitle);
+    toolsLayout->addSpacing(10);
+
+    struct Tool {
+        QString name;
+        QString iconPath;
+    };
+
+    std::vector<Tool> tools = {
+            {"Add Road", "/home/facu/Imágenes/road.png"},
+            {"Add Checkpoint", "/home/facu/Imágenes/checkpoint.png"},
+            {"Add Start Line", "/home/facu/Imágenes/start.png"},
+            {"Add Finish Line", "/home/facu/Imágenes/finish.png"},
+    };
+
+    for (auto& t: tools) {
+        QPushButton* toolButton = new QPushButton();
+        toolButton->setIcon(QIcon(t.iconPath));
+        toolButton->setIconSize(QSize(48, 48));
+        toolButton->setFixedSize(64, 64);
+        toolButton->setToolTip(t.name);
+        QObject::connect(toolButton, &QPushButton::pressed, [toolButton, t]() {
+            QMimeData* mimeData = new QMimeData;
+            mimeData->setText(t.name);
+            mimeData->setImageData(QPixmap(t.iconPath));
+
+            QDrag* drag = new QDrag(toolButton);
+            drag->setMimeData(mimeData);
+            drag->setPixmap(QPixmap(t.iconPath).scaled(48, 48, Qt::KeepAspectRatio));
+            drag->exec(Qt::CopyAction);
+        });
+
+        toolsLayout->addWidget(toolButton);
+    }
+
+    toolsWidget->setLayout(toolsLayout);
+    toolsWidget->setFixedWidth(120);
+
+    editorWidget = new MapCanvas(editorContainer);
     editorWidget->loadCityMap(cityName);
-    stackedWidget->setCurrentWidget(editorWidget);
+    editorLayout->addWidget(toolsWidget);
+    editorLayout->addWidget(editorWidget, 1);
+    editorContainer->setLayout(editorLayout);
+
+    stackedWidget->addWidget(editorContainer);
+    stackedWidget->setCurrentWidget(editorContainer);
 }
