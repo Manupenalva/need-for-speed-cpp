@@ -13,6 +13,7 @@
 #include <QPixmap>
 #include <QTextStream>
 #include <QVBoxLayout>
+#include <QMessageBox>
 
 #define GRID_SIZE 50
 
@@ -85,37 +86,63 @@ void MapCanvas::dropEvent(QDropEvent* event) {
     QPixmap pixmap;
     if (event->mimeData()->hasImage())
         pixmap = qvariant_cast<QPixmap>(event->mimeData()->imageData());
+    
+    if (pixmap.isNull()) 
+        return;
 
-    if (!pixmap.isNull()) {
-        QPointF scenePos = view->mapToScene(event->position().toPoint());
-        qreal x = static_cast<int>(scenePos.x() / GRID_SIZE) * GRID_SIZE;
-        qreal y = static_cast<int>(scenePos.y() / GRID_SIZE) * GRID_SIZE;
+    QString type;
+    if (nameOrPath.contains("checkpoint", Qt::CaseInsensitive))
+        type = "checkpoint";
+    else if (nameOrPath.contains("start", Qt::CaseInsensitive))
+        type = "start";
+    else if (nameOrPath.contains("finish", Qt::CaseInsensitive))
+        type = "finish";
+    else if (nameOrPath.contains("road", Qt::CaseInsensitive))
+        type = "road";
+    else if (nameOrPath.contains("hint", Qt::CaseInsensitive))
+        type = "hint";
+    else if (nameOrPath.contains("NPC", Qt::CaseInsensitive))
+        type = "NPC";
+    else
+        type = "unknown";
+    
+    int startCount = 0;
+    int finishCount = 0;
 
-        auto* item = scene->addPixmap(
-                pixmap.scaled(GRID_SIZE, GRID_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        item->setPos(x, y);
-        item->setZValue(10);
-
-        QString type;
-        if (nameOrPath.contains("checkpoint", Qt::CaseInsensitive))
-            type = "checkpoint";
-        else if (nameOrPath.contains("start", Qt::CaseInsensitive))
-            type = "start";
-        else if (nameOrPath.contains("finish", Qt::CaseInsensitive))
-            type = "finish";
-        else if (nameOrPath.contains("road", Qt::CaseInsensitive))
-            type = "road";
-        else if (nameOrPath.contains("hint", Qt::CaseInsensitive))
-            type = "hint";
-        else if (nameOrPath.contains("NPC", Qt::CaseInsensitive))
-            type = "NPC";
-        else
-            type = "unknown";
-
-        item->setData(0, type);
-
-        event->acceptProposedAction();
+    for (QGraphicsItem* item : scene->items()) {
+        QVariant data = item->data(0);
+        if (!data.isValid())
+            continue;
+        QString itemType = data.toString();
+        if (itemType == "start")
+            startCount++;
+        else if (itemType == "finish")
+            finishCount++;
     }
+
+    if (type == "start" && startCount >= 8) {
+        QMessageBox::warning(this, "Limite alcanzado", "Ya hay 8 puntos de inicio en el mapa.");
+        return;
+    }
+
+    if (type == "finish" && finishCount >= 1) {
+        QMessageBox::warning(this, "Limite alcanzado", "Ya hay 1 punto de finalización en el mapa.");
+        return;
+    }
+
+    QPointF scenePos = view->mapToScene(event->position().toPoint());
+    qreal x = static_cast<int>(scenePos.x() / GRID_SIZE) * GRID_SIZE;
+    qreal y = static_cast<int>(scenePos.y() / GRID_SIZE) * GRID_SIZE;
+
+    auto* item = scene->addPixmap(
+            pixmap.scaled(GRID_SIZE, GRID_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    item->setPos(x, y);
+    item->setZValue(10);
+
+    item->setData(0, type);
+
+    event->acceptProposedAction();
+    
 }
 
 void MapCanvas::exportToYaml(const QString& filePath) {
