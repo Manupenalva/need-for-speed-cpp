@@ -13,7 +13,7 @@ private:
     CarState& car_state;
 
 public:
-    CarPhysics(b2WorldId world, CarState& car_state, float x, float y);
+    CarPhysics(b2WorldId world, CarState& car_state);
     void accelerate();
     void brake();
     void turn_left();

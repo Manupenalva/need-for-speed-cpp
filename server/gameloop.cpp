@@ -8,7 +8,6 @@
 
 #include "../common/gameLoop_timer.h"
 #include "../libs/box2d/include/box2d/box2d.h"
-#include "../libs/box2d/include/box2d/id.h"
 #include "events/actionmessage.h"
 
 #include "carPhysics.h"
@@ -32,73 +31,28 @@ Gameloop::Gameloop(
 
     for (const auto& id: players_id) {
         uint16_t player_id = id;
-        players_cars[player_id].state = {
-                player_id, 0.0f + player_id * 100, 0.0f + player_id * 100, 0.0f, 0.0f, 0};
-        players_cars[player_id] = {
-                false,
-                false,
-                false,
-                false,
-                players_cars[player_id].state,
-                std::make_unique<CarPhysics>(world, players_cars[player_id].state,
-                                             0.0f + player_id * 100, 0.0f + player_id * 100)};
+        players_cars[player_id] = std::make_unique<Car>(player_id, world);
     }
 }
-
-
-void Gameloop::update_car_physics(const uint16_t& player_id) {
-    CarInputState& car = players_cars[player_id];
-
-    if (car.accelerating) {
-        car.physics->accelerate();
-    }
-    if (car.braking) {
-        car.physics->brake();
-    }
-    if (car.turning_left) {
-        car.physics->turn_left();
-    }
-    if (car.turning_right) {
-        car.physics->turn_right();
-    }
-}
-
 
 void Gameloop::update_positions() {
     for (auto& [player_id, car]: players_cars) {
-        update_car_physics(player_id);
+        car->update_physics();
     }
 
     float timeStep = 1.0f / 60.0f;
     b2World_Step(world, timeStep, 3);
 
     for (auto& [player_id, car]: players_cars) {
-        car.physics->update_position();
+        car->update_position();
     }
     for (auto& [player_id, car]: players_cars) {
-        car.physics->handle_hits();
+        car->handle_hits();
     }
 }
 
-// todo lo que sea constantes falla, hay que ponerlos en el .yaml
 void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action) {
-    if (action == ACT_ACCEL_PRESS) {
-        players_cars[player_id].accelerating = true;
-    } else if (action == ACT_ACCEL_RELEASE) {
-        players_cars[player_id].accelerating = false;
-    } else if (action == ACT_BRAKE_PRESS) {
-        players_cars[player_id].braking = true;
-    } else if (action == ACT_BRAKE_RELEASE) {
-        players_cars[player_id].braking = false;
-    } else if (action == ACT_LEFT_PRESS) {
-        players_cars[player_id].turning_left = true;
-    } else if (action == ACT_LEFT_RELEASE) {
-        players_cars[player_id].turning_left = false;
-    } else if (action == ACT_RIGHT_PRESS) {
-        players_cars[player_id].turning_right = true;
-    } else if (action == ACT_RIGHT_RELEASE) {
-        players_cars[player_id].turning_right = false;
-    }
+    players_cars[player_id]->update_input(action);
 }
 
 void Gameloop::broadcast_players() {
@@ -108,7 +62,7 @@ void Gameloop::broadcast_players() {
     uint16_t num_cars = 0;
     std::vector<CarState> cars;
     for (const auto& [id, car]: players_cars) {
-        cars.push_back(car.state);
+        cars.push_back(car->get_state());
         num_cars++;
     }
     game_state.frame = frames;

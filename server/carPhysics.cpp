@@ -10,13 +10,13 @@
 #define ACCELERATION 400.0f
 #define ANGLE_ROTATION 4
 
-CarPhysics::CarPhysics(b2WorldId world, CarState& car_state, float x, float y):
+CarPhysics::CarPhysics(b2WorldId world, CarState& car_state):
         world(world), life(100.0f), car_state(car_state) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;
     bodyDef.linearDamping = 2.0f;
     bodyDef.angularDamping = 5.0f;
-    bodyDef.position = {x, y};
+    bodyDef.position = {car_state.x, car_state.y};
     body = b2CreateBody(world, &bodyDef);
     b2Body_EnableContactEvents(body, true);
     b2Body_EnableHitEvents(body, true);

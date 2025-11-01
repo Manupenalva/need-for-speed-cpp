@@ -20,8 +20,11 @@ struct CarInputState {
     bool braking;
     bool turning_right;
     bool turning_left;
-    CarState state;
-    std::unique_ptr<CarPhysics> physics;
+};
+
+struct Position {
+    int x;
+    int y;
 };
 
 #endif
