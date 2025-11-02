@@ -20,6 +20,8 @@ public:
 private slots:
     void goToCitySelection();
     void operEditorWithCity(const QString& cityName);
+    void goToMapLoad();
+    void openEditorWithMap(const QString& mapPath);
 
 private:
     QStackedWidget* stackedWidget;

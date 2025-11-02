@@ -240,3 +240,104 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
     }
     return QWidget::eventFilter(obj, event);
 }
+
+void MapCanvas::importFromYaml(const QString& filePath) {
+    try {
+        QFile yamlFile(filePath);
+        if (!yamlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            qWarning("No se pudo abrir el archivo YAML: %s", filePath.toStdString().c_str());
+            return;
+        }
+
+        QByteArray fileData = yamlFile.readAll();
+        yamlFile.close();
+
+        YAML::Node config = YAML::Load(fileData.constData());
+
+        QString cityName = QString::fromStdString(config["city"].as<std::string>());
+        loadCityMap(QString("./client/assets/cities/%1.png").arg(cityName));
+
+        auto addElementsFromYaml = [&](const QString& elementType) {
+            if (config[elementType.toStdString()]) {
+                for (const auto& elem : config[elementType.toStdString()]) {
+                    int x = elem["x"].as<int>();
+                    int y = elem["y"].as<int>();
+                    int rotationDeg = 0;
+                    if (elementType == "hint" && elem["rotation"]) {
+                        QString rotationStr = QString::fromStdString(elem["rotation"].as<std::string>());
+                        if (rotationStr == "left")
+                            rotationDeg = 270;
+                        else if (rotationStr == "right")
+                            rotationDeg = 180;
+                        else if (rotationStr == "up")
+                            rotationDeg = 90;
+                        else
+                            rotationDeg = 0;
+                    }
+                    addElement(elementType, x, y, rotationDeg);
+                }
+            }
+        };
+
+        addElementsFromYaml("start");
+        addElementsFromYaml("finish");
+        addElementsFromYaml("road");
+        addElementsFromYaml("checkpoint");
+        addElementsFromYaml("hint");
+        addElementsFromYaml("NPC");
+
+    } catch (const YAML::Exception& e) {
+        qWarning("Error al leer el YAML: %s", e.what());
+    }
+}
+
+void MapCanvas::addElement(const QString& type, int x, int y, int rotationDeg) {
+    QString iconPath;
+    if (type == "road") {
+        iconPath = "./editor/imgs/road.png";
+    } else if (type == "checkpoint") {
+        iconPath = "./editor/imgs/checkpoint.png";
+    } else if (type == "start") {
+        iconPath = "./editor/imgs/start.png";
+    } else if (type == "finish") {
+        iconPath = "./editor/imgs/finish.png";
+    } else if (type == "hint") {
+        iconPath = "./editor/imgs/hint.png";
+    } else if (type == "NPC") {
+        iconPath = "./editor/imgs/npc.png";
+    } else {
+        return; 
+    }
+
+    QPixmap pixmap(iconPath);
+    if (pixmap.isNull()) {
+        qWarning("No se pudo cargar el ícono para el tipo: %s", type.toStdString().c_str());
+        return;
+    }
+
+    if (rotationDeg != 0) {
+        QTransform transform;
+        transform.rotate(rotationDeg);
+        pixmap = pixmap.transformed(transform, Qt::SmoothTransformation);
+    }
+    auto* item = scene->addPixmap(
+            pixmap.scaled(GRID_SIZE, GRID_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    item->setPos(x, y);
+    item->setZValue(type == "road" ? 1 : 10);
+    item->setData(0, type);
+    if (type == "hint") {
+        QString rotationStr;
+        if (rotationDeg == 270)
+            rotationStr = "left";
+        else if (rotationDeg == 180)
+            rotationStr = "right";
+        else if (rotationDeg == 90)
+            rotationStr = "up";
+        else
+            rotationStr = "down";
+        item->setData(1, rotationStr);
+    }
+    item->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable |
+                   QGraphicsItem::ItemSendsGeometryChanges);
+    item->setCursor(Qt::OpenHandCursor);
+}   
