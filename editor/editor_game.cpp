@@ -7,6 +7,8 @@
 #include <QMimeData>
 #include <QVBoxLayout>
 #include <vector>
+#include <QScrollArea>
+#include <QTransform>
 
 EditorGame::EditorGame(QWidget* parent): QMainWindow(parent) {
     stackedWidget = new QStackedWidget(this);
@@ -54,7 +56,7 @@ void EditorGame::operEditorWithCity(const QString& cityName) {
     QWidget* editorContainer = new QWidget(this);
     QHBoxLayout* editorLayout = new QHBoxLayout(editorContainer);
 
-    QWidget* toolsWidget = new QWidget(editorContainer);
+    QWidget* toolsWidget = new QWidget();
     QVBoxLayout* toolsLayout = new QVBoxLayout(toolsWidget);
     toolsLayout->setAlignment(Qt::AlignTop);
 
@@ -79,36 +81,52 @@ void EditorGame::operEditorWithCity(const QString& cityName) {
             {"Add Start Line", "./editor/imgs/start2.png"},
             {"Add Finish Line", "./editor/imgs/finish.png"},
             {"Add Hint Left", "./editor/imgs/hint.png"},
+            {"Add Hint Down", "./editor/imgs/hint.png", 270},
+            {"Add Hint Up", "./editor/imgs/hint.png", 90},
+            {"Add Hint Right", "./editor/imgs/hint.png", 180},
             {"Add NPC", "./editor/imgs/npc.png"},
     };
 
     for (auto& t: tools) {
         QPushButton* toolButton = new QPushButton();
-        toolButton->setIcon(QIcon(t.iconPath));
+        QPixmap base(t.iconPath);
+        if (!base.isNull() && t.rotation != 0) {
+            QTransform transform;
+            transform.rotate(t.rotation);
+            base = base.transformed(transform, Qt::SmoothTransformation);
+        }
+        toolButton->setIcon(base);
         toolButton->setIconSize(QSize(48, 48));
         toolButton->setFixedSize(64, 64);
         toolButton->setToolTip(t.name);
-        QObject::connect(toolButton, &QPushButton::pressed, [toolButton, t]() {
+        QObject::connect(toolButton, &QPushButton::pressed, [toolButton, t, base]() {
             QMimeData* mimeData = new QMimeData;
             mimeData->setText(t.name);
-            mimeData->setImageData(QPixmap(t.iconPath));
-
+            mimeData->setImageData(base);
+            mimeData->setData("application/x-rotation", QByteArray::number(static_cast<int>(t.rotation)));
             QDrag* drag = new QDrag(toolButton);
             drag->setMimeData(mimeData);
-            drag->setPixmap(QPixmap(t.iconPath).scaled(48, 48, Qt::KeepAspectRatio));
+            drag->setPixmap(base.scaled(48, 48, Qt::KeepAspectRatio));
             drag->exec(Qt::CopyAction);
         });
 
         toolsLayout->addWidget(toolButton);
     }
 
-    toolsWidget->setLayout(toolsLayout);
-    toolsWidget->setFixedWidth(120);
+    QScrollArea* scrollArea = new QScrollArea(editorContainer);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(toolsWidget);
+    scrollArea->setFixedWidth(140);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scrollArea->setFrameShape(QFrame::NoFrame);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     editorWidget = new MapCanvas(editorContainer);
     editorWidget->loadCityMap(cityName);
-    editorLayout->addWidget(toolsWidget);
+    editorLayout->addWidget(scrollArea);
     editorLayout->addWidget(editorWidget, 1);
+    editorLayout->setStretch(0, 0);
+    editorLayout->setStretch(1, 1);
     editorContainer->setLayout(editorLayout);
 
     stackedWidget->addWidget(editorContainer);

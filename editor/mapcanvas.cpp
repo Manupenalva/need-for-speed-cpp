@@ -151,10 +151,7 @@ void MapCanvas::dropEvent(QDropEvent* event) {
     auto* item = scene->addPixmap(
             pixmap.scaled(GRID_SIZE, GRID_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     item->setPos(x, y);
-    if (type == "road")
-        item->setZValue(1);
-    else
-        item->setZValue(10);
+    item->setZValue(type == "road" ? 1 : 10);
 
     item->setData(0, type);
     item->setData(1, rotation); 
