@@ -18,6 +18,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsSceneMouseEvent>
+#include <yaml-cpp/yaml.h>  
 
 #define GRID_SIZE 50
 
@@ -165,51 +166,56 @@ void MapCanvas::dropEvent(QDropEvent* event) {
 }
 
 void MapCanvas::exportToYaml(const QString& filePath) {
-    QFile file(filePath);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qWarning("No se pudo abrir el archivo para escribir");
-        return;
-    }
-
-    QTextStream out(&file);
-    out << "city: " << currentCityName << "\n";
-    out << "width: " << scene->width() << "\n";
-    out << "height: " << scene->height() << "\n";
-    out << "celdWidth: " << GRID_SIZE << "\n";
-    out << "celdHeight: " << GRID_SIZE << "\n";
-
-    auto writeElements = [&](const QString& elementType) {
-        QList<QGraphicsItem*> itemsList = scene->items();
-        bool wroteHeader = false;
-
-        for (QGraphicsItem* item: itemsList) {
-            QVariant data = item->data(0);
-            if (!data.isValid())
-                continue;
-
-            QString type = data.toString();
-            if (type == elementType) {
-                if (!wroteHeader) {
-                    out << "-" << elementType << ":\n";
-                    wroteHeader = true;
-                }
+    try {
+        YAML::Emitter out;
+        out << YAML::BeginMap;
+        out << YAML::Key << "city" << YAML::Value << currentCityName.toStdString();
+        out << YAML::Key << "width" << YAML::Value << static_cast<int>(scene->width());
+        out << YAML::Key << "height" << YAML::Value << static_cast<int>(scene->height());
+        out << YAML::Key << "celdWidth" << YAML::Value << GRID_SIZE;
+        out << YAML::Key << "celdHeight" << YAML::Value << GRID_SIZE;
+        
+        auto writeElements = [&](const QString& elementType) {
+            std::vector<YAML::Node> elements;
+            for (QGraphicsItem* item: scene->items()) {
+                if (!item->data(0).isValid())
+                    continue;
+                QString type = item->data(0).toString();
+                if (type != elementType) continue;
+                YAML::Node element;
                 QPointF pos = item->pos();
-                out << "  x: " << static_cast<int>(pos.x()) << "\n";
-                out << "  y: " << static_cast<int>(pos.y()) << "\n";
+                element["x"] = static_cast<int>(pos.x());
+                element["y"] = static_cast<int>(pos.y());
                 if (elementType == "hint") {
                     QString rotation = item->data(1).toString();
-                    out << "  rotation: " << rotation << "\n";
+                    element["rotation"] = rotation.toStdString();
                 }
+                elements.push_back(element);
             }
+            if (!elements.empty()) {
+                out << YAML::Key << elementType.toStdString() << YAML::Value << YAML::BeginSeq;
+                for (const auto& elem : elements) {
+                    out << elem;
+                }
+                out << YAML::EndSeq;
+            }
+        };
+        writeElements("start");
+        writeElements("finish");
+        writeElements("road");
+        writeElements("checkpoint");
+        writeElements("hint");
+        writeElements("NPC");
+
+        out << YAML::EndMap;
+
+        QFile yamlFile(filePath);
+        if (yamlFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream yamlOut(&yamlFile);
+            yamlOut << out.c_str();
+            yamlFile.close();
         }
-    };
-
-    writeElements("start");
-    writeElements("finish");
-    writeElements("road");
-    writeElements("checkpoint");
-    writeElements("hint");
-    writeElements("NPC");
-
-    file.close();
+    } catch (const YAML::Exception& e) {
+        qWarning("Error al generar el YAML: %s", e.what());
+    }
 }
