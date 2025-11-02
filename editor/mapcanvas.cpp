@@ -20,6 +20,8 @@
 #include <QGraphicsSceneMouseEvent>
 #include <yaml-cpp/yaml.h>
 #include <vector>
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 #define GRID_SIZE 50
 
@@ -30,6 +32,7 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
     view->setRenderHint(QPainter::Antialiasing);
     view->setDragMode(QGraphicsView::ScrollHandDrag);
     view->setScene(scene);
+    view->viewport()->installEventFilter(this);
 
     view->setAcceptDrops(false);
     setAcceptDrops(true);
@@ -219,4 +222,21 @@ void MapCanvas::exportToYaml(const QString& filePath) {
     } catch (const YAML::Exception& e) {
         qWarning("Error al generar el YAML: %s", e.what());
     }
+}
+
+bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
+    if (obj == view->viewport()) {
+        if (event->type() == QEvent::MouseButtonPress) {
+            QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+            if (mouseEvent->button() == Qt::RightButton) {
+                QGraphicsItem* item = scene->itemAt(view->mapToScene(mouseEvent->pos()), QTransform());
+                if (item && item->data(0).isValid()) {
+                    scene->removeItem(item);
+                    delete item;
+                    return true; 
+                }
+            }
+        }
+    }
+    return QWidget::eventFilter(obj, event);
 }
