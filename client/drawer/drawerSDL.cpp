@@ -3,9 +3,9 @@
 DrawerSDL::DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager, int client_id):
         client_id(client_id), renderer(renderer), texture_manager(texture_manager) {
     drawers.push_back(std::make_unique<MapDrawer>(renderer, texture_manager));
-    drawers.push_back(std::make_unique<CarDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<ArrowDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<CheckpointDrawer>(renderer, texture_manager));
+    drawers.push_back(std::make_unique<CarDrawer>(renderer, texture_manager));
 }
 
 void DrawerSDL::update_state(const ServerMessageDTO& msg, int iterations_ahead) {
