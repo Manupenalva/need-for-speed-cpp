@@ -13,7 +13,9 @@
 #include "../config/constants.h"
 #include "../graphics/texture_manager.h"
 
+#include "arrow_drawer.h"
 #include "car_drawer.h"
+#include "checkpoint_drawer.h"
 #include "drawer.h"
 #include "map_drawer.h"
 #include "renderedState.h"
