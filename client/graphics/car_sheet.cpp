@@ -25,7 +25,7 @@ void CarSheet::load_sprites() {
     int last_sprite_h = 0;
 
     for (int car_type = CAR_TYPE_1; car_type <= CAR_TYPE_7; ++car_type) {
-        std::vector<sprite> sprites_for_type;
+        std::vector<Sprite> sprites_for_type;
 
         int sprite_w = car_dimensions.at(static_cast<CarType>(car_type)).first;
         int sprite_h = car_dimensions.at(static_cast<CarType>(car_type)).second;
@@ -37,7 +37,7 @@ void CarSheet::load_sprites() {
             SDL2pp::Rect src_rect(col * sprite_w, last_sprite_h + row * sprite_h, sprite_w,
                                   sprite_h);
 
-            sprites_for_type.emplace_back(sprite{texture, src_rect});
+            sprites_for_type.emplace_back(Sprite{texture, src_rect});
         }
         last_sprite_h += sprite_h * ROWS_PER_CAR;
 
@@ -46,12 +46,12 @@ void CarSheet::load_sprites() {
 }
 
 
-sprite CarSheet::get_car_sprite(CarType car_type, float rotation) {
+Sprite CarSheet::get_car_sprite(CarType car_type, float rotation) {
     int rotation_index = get_rotation_index(rotation);
 
     auto it = car_sprites.find(car_type);
     if (it != car_sprites.end()) {
-        const std::vector<sprite>& sprites = it->second;
+        const std::vector<Sprite>& sprites = it->second;
         return sprites[rotation_index];
     }
     throw std::runtime_error("Car type or rotation not found in sprites.");

@@ -25,7 +25,7 @@ void DrawerSDL::update_state(const ServerMessageDTO& msg, int iterations_ahead) 
     const CarState& client_car = *it;
 
     // Obtener el sprite del mapa centrado en el auto del cliente
-    sprite map_sprite = texture_manager.get_map_sprite(ConfigReader::get_instance().get_map_id(),
+    Sprite map_sprite = texture_manager.get_map_sprite(ConfigReader::get_instance().get_map_id(),
                                                        client_car.x, client_car.y);
     RenderedState rendered_state{iterations_ahead, client_car, map_sprite, state};
 

@@ -29,14 +29,14 @@ public:
     void load_resources();
 
     // Métodos para obtener las texturas de los sprites
-    sprite get_car_sprite(int car_id, int rotation);
+    Sprite get_car_sprite(int car_id, int rotation);
 
     // paso un section_x e y para identificar la sección del mapa (ambos seran la pos actual del
     // auto)
-    sprite get_map_sprite(int map_id, int section_x, int section_y);
+    Sprite get_map_sprite(int map_id, int section_x, int section_y);
 
     // Metodo para obtener un sprite de carrera (flecha, checkpoint, salida, llegada, etc)
-    sprite get_race_sprite(int race_element, float direction);
+    Sprite_rotation get_race_sprite(int race_element, float direction);
 };
 
 #endif

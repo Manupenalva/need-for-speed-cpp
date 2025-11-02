@@ -22,7 +22,7 @@ public:
     virtual ~Drawer() = default;
     virtual void draw(const RenderedState& rendered_state) = 0;
 
-    sprite get_map_sprite(int map_id, float focus_x, float focus_y) {
+    Sprite get_map_sprite(int map_id, float focus_x, float focus_y) {
         return texture_manager.get_map_sprite(map_id, focus_x, focus_y);
     }
 };

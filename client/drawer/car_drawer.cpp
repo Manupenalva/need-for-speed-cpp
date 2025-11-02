@@ -33,7 +33,7 @@ CarState CarDrawer::calculate_position(const CarState& car, int iterations_ahead
 
 void CarDrawer::draw_car(const CarState& car, float screen_x, float screen_y) {
     // Lógica para dibujar el coche
-    sprite car_sprite = texture_manager.get_car_sprite(car.car_type, car.angle);
+    Sprite car_sprite = texture_manager.get_car_sprite(car.car_type, car.angle);
     SDL2pp::Rect dst_rect(static_cast<int>(screen_x), static_cast<int>(screen_y),
                           car_sprite.src_rect.w, car_sprite.src_rect.h);
     renderer.Copy(car_sprite.texture, car_sprite.src_rect, dst_rect);

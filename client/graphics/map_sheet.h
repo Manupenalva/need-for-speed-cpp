@@ -15,6 +15,10 @@
 
 #include "sprite.h"
 
+constexpr const char* LIBERTY_CITY_PATH = "Backgrounds - Liberty City.png";
+constexpr const char* SAN_ANDREAS_PATH = "Backgrounds - San Andreas.png";
+constexpr const char* VICE_CITY_PATH = "Backgrounds - Vice City.png";
+
 enum MapType {
     LIBERTY_CITY = 1,
     SAN_ANDREAS = 2,
@@ -36,7 +40,7 @@ public:
 
     void load_sprites();
 
-    sprite get_map_sprite(MapType map_type, int section_x, int section_y);
+    Sprite get_map_sprite(MapType map_type, int section_x, int section_y);
 };
 
 #endif

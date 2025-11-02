@@ -8,7 +8,7 @@
 struct RenderedState {
     int it_ahead;
     CarState client_car;
-    sprite map_sprite;
+    Sprite map_sprite;
     State state;
 };
 

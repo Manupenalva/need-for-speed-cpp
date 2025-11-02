@@ -6,9 +6,9 @@ MapSheet::MapSheet(SDL2pp::Renderer& renderer, const std::string& map_path):
 void MapSheet::load_sprites() {
     // Cargar texturas de mapas
     std::vector<std::pair<MapType, std::string>> map_files = {
-            {LIBERTY_CITY, map_path + "Backgrounds - Liberty City.png"},
-            {SAN_ANDREAS, map_path + "Backgrounds - San Andreas.png"},
-            {VICE_CITY, map_path + "Backgrounds - Vice City.png"}};
+            {LIBERTY_CITY, map_path + LIBERTY_CITY_PATH},
+            {SAN_ANDREAS, map_path + SAN_ANDREAS_PATH},
+            {VICE_CITY, map_path + VICE_CITY_PATH}};
     for (const auto& [map_type, file_path]: map_files) {
         auto texture = std::make_unique<SDL2pp::Texture>(renderer, SDL2pp::Surface(file_path));
         if (texture->Get() == nullptr) {
@@ -19,7 +19,7 @@ void MapSheet::load_sprites() {
     }
 }
 
-sprite MapSheet::get_map_sprite(MapType map_type, int section_x, int section_y) {
+Sprite MapSheet::get_map_sprite(MapType map_type, int section_x, int section_y) {
     auto it = map_textures.find(map_type);
     if (it == map_textures.end()) {
         throw std::runtime_error("Map type not found in textures.");
@@ -28,7 +28,7 @@ sprite MapSheet::get_map_sprite(MapType map_type, int section_x, int section_y) 
     SDL2pp::Texture& texture = *(it->second);
     SDL2pp::Rect src_rect = get_map_section_rect(texture, section_x, section_y);
 
-    return sprite{texture, src_rect};
+    return Sprite{texture, src_rect};
 }
 
 SDL2pp::Rect MapSheet::get_map_section_rect(SDL2pp::Texture& texture, int section_x,

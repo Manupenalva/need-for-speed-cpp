@@ -39,7 +39,7 @@ enum CarType {
 class CarSheet {
 private:
     SDL2pp::Texture texture;
-    std::unordered_map<CarType, std::vector<sprite>> car_sprites;
+    std::unordered_map<CarType, std::vector<Sprite>> car_sprites;
 
     int get_rotation_index(float rotation);
 
@@ -48,7 +48,7 @@ public:
 
     void load_sprites();
 
-    sprite get_car_sprite(CarType car_type, float rotation);
+    Sprite get_car_sprite(CarType car_type, float rotation);
 };
 
 #endif

@@ -26,14 +26,15 @@ enum RaceElement {
 class RaceSheet {
 private:
     SDL2pp::Renderer& renderer;
-    std::vector<sprite> race_sprites;
+    std::vector<Sprite> race_sprites;
+    std::string race_path;
 
 public:
     RaceSheet(SDL2pp::Renderer& renderer, const std::string& race_path);
 
     void load_sprites();
 
-    sprite get_race_sprite(const RaceElement RaceType, float direction);
+    Sprite_rotation get_race_sprite(const RaceElement RaceType, float direction);
 };
 
 #endif
