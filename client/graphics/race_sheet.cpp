@@ -10,7 +10,13 @@ void RaceSheet::load_sprites() {
             {RACE_CHECKPOINT, CHECKPOINT_PATH},
             {RACE_START_LINE, START_LINE_PATH}};
     for (const auto& [race_element, file_path]: race_files) {
-        SDL2pp::Texture texture(renderer, SDL2pp::Surface(file_path));
+        SDL2pp::Surface surface(file_path);
+
+        const uint32_t* pixel_color = static_cast<uint32_t*>(surface.Get()->pixels);
+        uint32_t color_key = pixel_color[0];
+        surface.SetColorKey(true, color_key);
+
+        SDL2pp::Texture texture(renderer, surface);
         if (texture.Get() == nullptr) {
             throw std::runtime_error("Error al cargar textura de carrera: " + file_path);
         }
