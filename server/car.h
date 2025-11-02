@@ -18,10 +18,10 @@ private:
     Position next_checkpoint;
     std::vector<float> race_times;
     std::unique_ptr<CarPhysics> physics;
-    b2WorldId world;
 
 public:
-    Car(const uint16_t& id, b2WorldId world);
+    explicit Car(const uint16_t& id);
+    void add_to_world(b2WorldId world, Position position);
     void update_input(const uint8_t& action);
     void update_physics();
     void update_position();

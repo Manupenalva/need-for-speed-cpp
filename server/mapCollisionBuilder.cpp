@@ -19,7 +19,6 @@ void MapCollisionBuilder::initialize_map_buildings(const std::string& path, b2Wo
             return;
         }
 
-        YAML::Node collisionsLayer;
         for (const auto& layer: map_collisions["layers"]) {
             if (layer["name"].as<std::string>() == "Colisiones") {
                 for (const auto& object: layer["objects"]) {

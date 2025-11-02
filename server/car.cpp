@@ -2,10 +2,9 @@
 
 #include "../common/constants.h"
 
-Car::Car(const uint16_t& id, b2WorldId world):
-        input_state(), state(id), next_checkpoint(), world(world) {
-    physics = std::make_unique<CarPhysics>(world, state);
-}
+Car::Car(const uint16_t& id): input_state(), state(id), next_checkpoint() {}
+
+void Car::add_to_world(b2WorldId world) { physics = std::make_unique<CarPhysics>(world, state); }
 
 void Car::update_input(const uint8_t& action) {
     if (action == ACT_ACCEL_PRESS) {

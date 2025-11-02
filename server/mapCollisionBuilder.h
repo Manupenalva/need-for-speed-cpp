@@ -1,5 +1,5 @@
-#ifndef CONFIG_READER_H
-#define CONFIG_READER_H
+#ifndef MAPCOLLISIONBUILDER_H
+#define MAPCOLLISIONBUILDER_H
 
 #include <iostream>
 #include <string>
@@ -16,9 +16,9 @@ public:
 private:
     static YAML::Node open_file(const std::string& path);
 
-    MapCollisionBuilder();
+    MapCollisionBuilder() = delete;
     MapCollisionBuilder(const MapCollisionBuilder&) = delete;
-    void operator=(const MapCollisionBuilder&) = delete;
+    MapCollisionBuilder& operator=(const MapCollisionBuilder&) = delete;
 };
 
 #endif

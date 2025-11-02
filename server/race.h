@@ -3,27 +3,29 @@
 
 #include <cstdint>
 #include <memory>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
 #include "../common/carState.h"
-
+#include "../libs/box2d/include/box2d/box2d.h"
 
 class Race {
 private:
     std::unordered_map<uint16_t, std::unique_ptr<Car>>& players_cars;
-    std::vector<std::unique_ptr<Car>> npcs;
-    float cell_width;
-    float cell_height;
-    Position start;
+    float celd_width;
+    float celd_height;
+    std::vector<Position> start_positions;
     Position finish;
     std::vector<Position> checkpoints;
+    std::string map_collisions_path;
 
 public:
-    Race(std::unordered_map<uint16_t, std::unique_ptr<Car>>& players_cars, const float& cell_width,
-         const float& cell_height, const Position& start, const Position& finish,
-         const std::vector<Position>& checkpoints);
-    void start_race();
+    Race(std::unordered_map<uint16_t, std::unique_ptr<Car>>& players_cars, const float& celd_width,
+         const float& celd_height, const std::vector<Position>& start_positions,
+         const Position& finish, const std::vector<Position>& checkpoints,
+         const std::string& map_path);
+    b2WorldId start_race();
 
 private:
     Race(const Race& other) = delete;
