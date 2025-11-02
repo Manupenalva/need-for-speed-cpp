@@ -10,6 +10,12 @@
 #include <QScrollArea>
 #include <QTransform>
 
+struct Tool {
+    QString name;
+    QString iconPath;
+    qreal rotation = 0;
+};
+
 EditorGame::EditorGame(QWidget* parent): QMainWindow(parent) {
     stackedWidget = new QStackedWidget(this);
 
@@ -65,12 +71,6 @@ void EditorGame::operEditorWithCity(const QString& cityName) {
     toolsTitle->setStyleSheet("font-size: 18px; font-weight: bold;");
     toolsLayout->addWidget(toolsTitle);
     toolsLayout->addSpacing(10);
-
-    struct Tool {
-        QString name;
-        QString iconPath;
-        qreal rotation = 0;
-    };
 
     std::vector<Tool> tools = {
             {"Add Road", "./editor/imgs/road.png"},

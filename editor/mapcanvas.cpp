@@ -18,7 +18,8 @@
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsSceneMouseEvent>
-#include <yaml-cpp/yaml.h>  
+#include <yaml-cpp/yaml.h>
+#include <vector>
 
 #define GRID_SIZE 50
 
