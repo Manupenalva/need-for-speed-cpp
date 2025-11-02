@@ -6,6 +6,7 @@ struct CheckpointInfo {
     uint16_t id;
     float x;
     float y;
+    float angle;
     float radius;  // Radio de activación del checkpoint
 };
 #endif

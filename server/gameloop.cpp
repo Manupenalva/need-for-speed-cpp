@@ -26,8 +26,17 @@ Gameloop::Gameloop(
 
     for (const auto& id: players_id) {
         uint16_t player_id = id;
-        players_cars[player_id].state = {
-                player_id, 0.0f + player_id * 100, 0.0f + player_id * 100, 0.0f, 0.0f, 0, {}, {}, false, 0, 100};
+        players_cars[player_id].state = {player_id,
+                                         0.0f + player_id * 100,
+                                         0.0f + player_id * 100,
+                                         0.0f,
+                                         0.0f,
+                                         0,
+                                         {},
+                                         {},
+                                         false,
+                                         0,
+                                         100};
         players_cars[player_id] = {
                 false,
                 false,

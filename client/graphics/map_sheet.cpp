@@ -1,8 +1,9 @@
 #include "map_sheet.h"
 
-MapSheet::MapSheet(const std::string& map_path): map_sprites(), map_path(map_path) {}
+MapSheet::MapSheet(SDL2pp::Renderer& renderer, const std::string& map_path):
+        renderer(renderer), map_textures(), map_path(map_path) {}
 
-void MapSheet::load_sprites(SDL2pp::Renderer& renderer) {
+void MapSheet::load_sprites() {
     // Cargar texturas de mapas
     std::vector<std::pair<MapType, std::string>> map_files = {
             {LIBERTY_CITY, map_path + "Backgrounds - Liberty City.png"},
@@ -14,14 +15,14 @@ void MapSheet::load_sprites(SDL2pp::Renderer& renderer) {
             throw std::runtime_error("Error al cargar textura de mapa: " + file_path);
         }
 
-        map_sprites.emplace(map_type, std::move(texture));
+        map_textures.emplace(map_type, std::move(texture));
     }
 }
 
 sprite MapSheet::get_map_sprite(MapType map_type, int section_x, int section_y) {
-    auto it = map_sprites.find(map_type);
-    if (it == map_sprites.end()) {
-        throw std::runtime_error("Map type not found in sprites.");
+    auto it = map_textures.find(map_type);
+    if (it == map_textures.end()) {
+        throw std::runtime_error("Map type not found in textures.");
     }
 
     SDL2pp::Texture& texture = *(it->second);
