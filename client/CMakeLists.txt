@@ -10,14 +10,18 @@ target_sources(taller_client
     graphics/car_sheet.cpp
     graphics/map_sheet.cpp
     graphics/texture_manager.cpp
+    graphics/race_sheet.cpp
     drawer/drawerSDL.cpp
+    drawer/car_drawer.cpp
+    drawer/map_drawer.cpp
+    drawer/arrow_drawer.cpp
+    drawer/checkpoint_drawer.cpp
     lobby/lobby.cpp
     events/keyDown_handler.cpp
     events/keyUp_handler.cpp
-    drawer/car_drawer.cpp
-    drawer/map_drawer.cpp
     config/config_reader.cpp
     game_launcher.cpp
+    
     PUBLIC
     # .h files
     client.h
@@ -29,12 +33,15 @@ target_sources(taller_client
     graphics/car_sheet.h
     graphics/map_sheet.h
     graphics/texture_manager.h
+    graphics/race_sheet.h
     events/event_handler.h
     events/keyDown_handler.h
     events/keyUp_handler.h
     drawer/car_drawer.h
     drawer/map_drawer.h
     drawer/drawerSDL.h
+    drawer/arrow_drawer.h
+    drawer/checkpoint_drawer.h
     lobby/lobby.h
     config/config_reader.h
     config/constants.h

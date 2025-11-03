@@ -20,6 +20,4 @@ int ConfigReader::get_window_width() { return config["window"]["width"].as<int>(
 
 int ConfigReader::get_window_height() { return config["window"]["height"].as<int>(); }
 
-int ConfigReader::get_player_car() { return config["player"]["car_type"].as<int>(); }
-
 int ConfigReader::get_map_id() { return config["map"]["id"].as<int>(); }

@@ -124,6 +124,7 @@ CheckpointInfo MessageReceiver::recv_checkpoint_info() {
     checkpoint.id = obtain_uint16();
     checkpoint.x = obtain_float();
     checkpoint.y = obtain_float();
+    checkpoint.angle = obtain_float();
     checkpoint.radius = obtain_float();
     return checkpoint;
 }

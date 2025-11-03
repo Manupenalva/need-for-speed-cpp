@@ -23,7 +23,6 @@ public:
     // Métodos para obtener tipos de valores especificos
     int get_window_width();
     int get_window_height();
-    int get_player_car();
     int get_map_id();
 };
 
