@@ -29,7 +29,7 @@ void SceneController::handleDropEvent(const DragInfo& dragInfo, int x, int y, bo
 int SceneController::countItemsOfType(const QString& type) const {
     int count = 0;
     for (QGraphicsItem* item : scene->items()) {
-        if (item->data(0).isValid() && item->data(0).toString() == type) {
+        if (item->data(0).isValid() && item->data(0).toString().contains(type, Qt::CaseInsensitive)) {
             count++;
         }
     }

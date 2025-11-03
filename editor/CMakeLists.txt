@@ -7,6 +7,7 @@ target_sources(taller_editor
     drag_info.cpp
     item_builder.cpp
     scene_controller.cpp
+    yaml_config.cpp
     PUBLIC
     # .h files
     cityselection.h
@@ -15,4 +16,5 @@ target_sources(taller_editor
     drag_info.h
     item_builder.h
     scene_controller.h
+    yaml_config.h
     )

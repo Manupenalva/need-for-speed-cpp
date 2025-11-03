@@ -26,6 +26,7 @@
 #include <QInputDialog>
 #include "scene_controller.h"
 #include "drag_info.h"
+#include "yaml_config.h"
 
 #define GRID_SIZE 50
 
@@ -53,9 +54,11 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
         QString fileName = QInputDialog::getText(this, "Save Map", "Enter map name:",
                                                  QLineEdit::Normal, currentCityName, &ok);
         if (controller->countItemsOfType("start") != 8) {
+            QMessageBox::warning(this, "Faltan starts", "Es necesario 8 starts.");
             return;
         }
         if (controller->countItemsOfType("finish") != 1){
+            QMessageBox::warning(this, "Faltan finishes", "Es necesario 1 finish.");
             return;
         }
         if (!ok || fileName.isEmpty()) {
@@ -109,12 +112,12 @@ void MapCanvas::dropEvent(QDropEvent* event) {
         return;
     }
 
-    if (dragInfo.getType() == "start" && controller->countItemsOfType("start") >= 8) {
+    if (dragInfo.getType().contains("start", Qt::CaseInsensitive) && controller->countItemsOfType("start") >= 8) {
         QMessageBox::warning(this, "Limite alcanzado", "Ya hay 8 puntos de inicio en el mapa.");
         return;
     }
 
-    if (dragInfo.getType() == "finish" && controller->countItemsOfType("finish") >= 1) {
+    if (dragInfo.getType().contains("finish", Qt::CaseInsensitive) && controller->countItemsOfType("finish") >= 1) {
         QMessageBox::warning(this, "Limite alcanzado", "Ya hay 1 punto de finalización en el mapa.");
         return;
     }
@@ -127,66 +130,8 @@ void MapCanvas::dropEvent(QDropEvent* event) {
 }
 
 void MapCanvas::exportToYaml(const QString& filePath) {
-    try {
-        YAML::Emitter out;
-        out << YAML::BeginMap;
-        out << YAML::Key << "city" << YAML::Value << currentCityName.toStdString();
-        out << YAML::Key << "width" << YAML::Value << static_cast<int>(scene->width());
-        out << YAML::Key << "height" << YAML::Value << static_cast<int>(scene->height());
-        out << YAML::Key << "celdWidth" << YAML::Value << GRID_SIZE;
-        out << YAML::Key << "celdHeight" << YAML::Value << GRID_SIZE;
-        
-        auto writeElements = [&](const QString& elementType) {
-            std::vector<YAML::Node> elements;
-            for (QGraphicsItem* item: scene->items()) {
-                if (!item->data(0).isValid())
-                    continue;
-                QString type = item->data(0).toString();
-                if (!type.contains(elementType, Qt::CaseInsensitive)) continue;
-                YAML::Node element;
-                QPointF pos = item->pos();
-                element["x"] = static_cast<int>(pos.x());
-                element["y"] = static_cast<int>(pos.y());
-                if (elementType == "hint") {
-                    int rotation = item->data(1).toInt();
-                    if (rotation == 0) {
-                        element["rotation"] = "left";                    
-                    } else if (rotation == 180) {
-                        element["rotation"] = "right";
-                    } else if (rotation == 90) {
-                        element["rotation"] = "up";
-                    } else {
-                        element["rotation"] = "down";
-                    }
-                }
-                elements.push_back(element);
-            }
-            if (!elements.empty()) {
-                out << YAML::Key << elementType.toStdString() << YAML::Value << YAML::BeginSeq;
-                for (const auto& elem : elements) {
-                    out << elem;
-                }
-                out << YAML::EndSeq;
-            }
-        };
-        writeElements("start");
-        writeElements("finish");
-        writeElements("road");
-        writeElements("checkpoint");
-        writeElements("hint");
-        writeElements("NPC");
-
-        out << YAML::EndMap;
-
-        QFile yamlFile(filePath);
-        if (yamlFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QTextStream yamlOut(&yamlFile);
-            yamlOut << out.c_str();
-            yamlFile.close();
-        }
-    } catch (const YAML::Exception& e) {
-        qWarning("Error al generar el YAML: %s", e.what());
-    }
+    YamlConfig yaml;
+    yaml.save(scene, currentCityName, GRID_SIZE, filePath);
 }
 
 bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
@@ -207,56 +152,10 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
 }
 
 void MapCanvas::importFromYaml(const QString& filePath) {
-    try {
-        QFile yamlFile(filePath);
-        if (!yamlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            qWarning("No se pudo abrir el archivo YAML: %s", filePath.toStdString().c_str());
-            return;
-        }
-
-        QByteArray fileData = yamlFile.readAll();
-        yamlFile.close();
-
-        YAML::Node config = YAML::Load(fileData.constData());
-
-        QString cityName = QString::fromStdString(config["city"].as<std::string>());
-        loadCityMap(QString("./client/assets/cities/%1.png").arg(cityName));
-
-        auto addElementsFromYaml = [&](const QString& elementType) {
-            if (config[elementType.toStdString()]) {
-                for (const auto& elem : config[elementType.toStdString()]) {
-                    int x = elem["x"].as<int>();
-                    int y = elem["y"].as<int>();
-                    int rotationDeg = 0;
-                    if (elementType == "hint" && elem["rotation"]) {
-                        QString rotationStr = QString::fromStdString(elem["rotation"].as<std::string>());
-                        if (rotationStr == "left")
-                            rotationDeg = 270;
-                        else if (rotationStr == "right")
-                            rotationDeg = 180;
-                        else if (rotationStr == "up")
-                            rotationDeg = 90;
-                        else
-                            rotationDeg = 0;
-                    }
-                    addElement(elementType, x, y, rotationDeg);
-                }
-            }
-        };
-
-        addElementsFromYaml("start");
-        addElementsFromYaml("finish");
-        addElementsFromYaml("road");
-        addElementsFromYaml("checkpoint");
-        addElementsFromYaml("hint");
-        addElementsFromYaml("NPC");
-
-    } catch (const YAML::Exception& e) {
-        qWarning("Error al leer el YAML: %s", e.what());
+    YamlConfig yaml;
+    yaml.load(filePath);
+    loadCityMap(QString("./client/assets/cities/%1.png").arg(yaml.getCity()));
+    for (const auto& [i, pos] : yaml.getItems()) {
+        controller->handleDropEvent(i, pos.x(), pos.y(), false);
     }
 }
-
-void MapCanvas::addElement(const QString& type, int x, int y, int rotationDeg) {
-    DragInfo dragInfo(type, rotationDeg, "");
-    controller->handleDropEvent(dragInfo, x, y, false);
-}   

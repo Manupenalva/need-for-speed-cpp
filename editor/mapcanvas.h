@@ -32,9 +32,6 @@ private:
     QPushButton* saveButton;
 
     SceneController* controller;
-
-    void addElement(const QString& type, int x, int y, int rotationDeg);
-    QString resolveCityMapPath(const QString& cityName, const QString& cityPathFromYaml) const;
 };
 
 #endif
