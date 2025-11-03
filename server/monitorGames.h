@@ -14,7 +14,7 @@
 
 class MonitorGames {
 private:
-    std::unordered_map<int, std::shared_ptr<Race>> games;
+    std::unordered_map<int, std::shared_ptr<RaceStruct>> games;
     std::mutex mtx;
     int next_game_id = 1;
 
@@ -24,7 +24,7 @@ public:
     void remove_race(const int& game_id);
     void clear();
     void remove_client_from_race(const int& game_id, const int& client_id);
-    std::shared_ptr<Race> get_race(const int& game_id);
+    std::shared_ptr<RaceStruct> get_race(const int& game_id);
 };
 
 #endif

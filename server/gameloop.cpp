@@ -17,14 +17,13 @@
 
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
-        MonitorClients& games_monitor, int game_id):
+        std::shared_ptr<RaceStruct> race_monitor):
         user_commands_queue(user_commands_queue),
-        games_monitor(games_monitor),
-        game_id(game_id),
+        race_monitor(race_monitor),
         races(),
         frames(0) {
 
-    std::vector<int> players_id = race->get_player_ids();
+    std::vector<int> players_id = race_monitor->get_player_ids();
 
     for (const auto& id: players_id) {
         uint16_t player_id = id;
@@ -42,13 +41,13 @@ void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action
 void Gameloop::broadcast_players() {
     ServerMessageDTO msg = races[0]->get_broadcast_message(frames);
 
-    race->broadcast(msg);
+    race_monitor->broadcast(msg);
 }
 
 void Gameloop::broadcast_start() {
     ServerMessageDTO msg;
     msg.type = MsgType::GAME_START;
-    race->broadcast(msg);
+    race_monitor->broadcast(msg);
     broadcast_players();
 }
 

@@ -8,13 +8,13 @@
 
 class GameSession {
 private:
-    std::shared_ptr<Race> race;
+    std::shared_ptr<RaceStruct> race;
     int game_id;
     std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue;
     Gameloop gameloop;
 
 public:
-    GameSession(const int& id, std::shared_ptr<Race> race);
+    GameSession(const int& id, std::shared_ptr<RaceStruct> race);
     void stop();
     ~GameSession();
     int get_id() const;

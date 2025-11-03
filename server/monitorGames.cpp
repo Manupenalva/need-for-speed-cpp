@@ -24,7 +24,7 @@ void MonitorGames::remove_client_from_race(const int& game_id, const int& client
 
 int MonitorGames::create_race() {
     std::lock_guard<std::mutex> lock(mtx);
-    games[next_game_id] = std::make_shared<Race>();
+    games[next_game_id] = std::make_shared<RaceStruct>();
     next_game_id++;
     return next_game_id - 1;
 }
@@ -40,7 +40,7 @@ void MonitorGames::clear() {
     games.clear();
 }
 
-std::shared_ptr<Race> MonitorGames::get_race(const int& game_id) {
+std::shared_ptr<RaceStruct> MonitorGames::get_race(const int& game_id) {
     std::lock_guard<std::mutex> lock(mtx);
     auto it = games.find(game_id);
     if (it != games.end()) {

@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-GameSession::GameSession(const int& id, std::shared_ptr<Race> race):
+GameSession::GameSession(const int& id, std::shared_ptr<RaceStruct> race):
         race(race),
         game_id(id),
         user_commands_queue(std::make_shared<Queue<std::shared_ptr<ClientHandlerMessage>>>()),

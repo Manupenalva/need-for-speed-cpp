@@ -19,7 +19,7 @@ private:
     std::mutex mtx;
 
 public:
-    Race();
+    RaceStruct();
 
     bool add_player(std::shared_ptr<ClientHandler> client);
 
