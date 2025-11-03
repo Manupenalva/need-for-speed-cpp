@@ -52,6 +52,12 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
         bool ok;
         QString fileName = QInputDialog::getText(this, "Save Map", "Enter map name:",
                                                  QLineEdit::Normal, currentCityName, &ok);
+        if (controller->countItemsOfType("start") != 8) {
+            return;
+        }
+        if (controller->countItemsOfType("finish") != 1){
+            return;
+        }
         if (!ok || fileName.isEmpty()) {
             return;
         }
