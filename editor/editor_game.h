@@ -22,6 +22,7 @@ private slots:
     void operEditorWithCity(const QString& cityName);
     void goToMapLoad();
     void openEditorWithMap(const QString& mapPath);
+    void buildTools(QVBoxLayout* toolsLayout);
 
 private:
     QStackedWidget* stackedWidget;

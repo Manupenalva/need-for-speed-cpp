@@ -22,6 +22,10 @@
 #include <vector>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QLineEdit>
+#include <QInputDialog>
+#include "scene_controller.h"
+#include "drag_info.h"
 
 #define GRID_SIZE 50
 
@@ -33,6 +37,7 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
     view->setDragMode(QGraphicsView::ScrollHandDrag);
     view->setScene(scene);
     view->viewport()->installEventFilter(this);
+    controller = new SceneController(scene);
 
     view->setAcceptDrops(false);
     setAcceptDrops(true);
@@ -87,93 +92,32 @@ void MapCanvas::loadCityMap(const QString& cityName) {
 }
 
 void MapCanvas::dragEnterEvent(QDragEnterEvent* event) {
-    if (event->mimeData()->hasImage() || event->mimeData()->hasUrls() ||
-        event->mimeData()->hasText()) {
+    if (event->mimeData()->hasFormat(DragInfo().mimeType())) {
         event->acceptProposedAction();
     }
 }
 
 void MapCanvas::dropEvent(QDropEvent* event) {
-    QString nameOrPath;
-
-    if (event->mimeData()->hasText())
-        nameOrPath = event->mimeData()->text();
-
-    QPixmap pixmap;
-    if (event->mimeData()->hasImage())
-        pixmap = qvariant_cast<QPixmap>(event->mimeData()->imageData());
-    
-    if (pixmap.isNull()) 
+    DragInfo dragInfo;
+    if (!dragInfo.unpack(event->mimeData()->data(dragInfo.mimeType()))) {
         return;
-
-    QString type;
-    QString rotation = "";
-    if (nameOrPath.contains("checkpoint", Qt::CaseInsensitive))
-        type = "checkpoint";
-    else if (nameOrPath.contains("start", Qt::CaseInsensitive))
-        type = "start";
-    else if (nameOrPath.contains("finish", Qt::CaseInsensitive))
-        type = "finish";
-    else if (nameOrPath.contains("road", Qt::CaseInsensitive))
-        type = "road";
-    else if (nameOrPath.contains("hint", Qt::CaseInsensitive)) {
-        type = "hint";
-        if (nameOrPath.contains("Left", Qt::CaseInsensitive))
-            rotation = "left";
-        else if (nameOrPath.contains("Right", Qt::CaseInsensitive))
-            rotation = "right";
-        else if (nameOrPath.contains("Up", Qt::CaseInsensitive))
-            rotation = "up";
-        else if (nameOrPath.contains("Down", Qt::CaseInsensitive))
-            rotation = "down";
-    }
-    else if (nameOrPath.contains("NPC", Qt::CaseInsensitive))
-        type = "NPC";
-    else
-        type = "unknown";
-    
-    int startCount = 0;
-    int finishCount = 0;
-
-    for (QGraphicsItem* item : scene->items()) {
-        QVariant data = item->data(0);
-        if (!data.isValid())
-            continue;
-        QString itemType = data.toString();
-        if (itemType == "start")
-            startCount++;
-        else if (itemType == "finish")
-            finishCount++;
     }
 
-    if (type == "start" && startCount >= 8) {
+    if (dragInfo.getType() == "start" && controller->countItemsOfType("start") >= 8) {
         QMessageBox::warning(this, "Limite alcanzado", "Ya hay 8 puntos de inicio en el mapa.");
         return;
     }
 
-    if (type == "finish" && finishCount >= 1) {
+    if (dragInfo.getType() == "finish" && controller->countItemsOfType("finish") >= 1) {
         QMessageBox::warning(this, "Limite alcanzado", "Ya hay 1 punto de finalización en el mapa.");
         return;
     }
 
     QPointF scenePos = view->mapToScene(event->position().toPoint());
-    qreal x = static_cast<int>(scenePos.x() / GRID_SIZE) * GRID_SIZE;
-    qreal y = static_cast<int>(scenePos.y() / GRID_SIZE) * GRID_SIZE;
-
-    auto* item = scene->addPixmap(
-            pixmap.scaled(GRID_SIZE, GRID_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    item->setPos(x, y);
-    item->setZValue(type == "road" ? 1 : 10);
-
-    item->setData(0, type);
-    item->setData(1, rotation); 
-
-    item->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable |
-                   QGraphicsItem::ItemSendsGeometryChanges);
-    item->setCursor(Qt::OpenHandCursor);
-
+    int x = static_cast<int>(scenePos.x() / GRID_SIZE) * GRID_SIZE;
+    int y = static_cast<int>(scenePos.y() / GRID_SIZE) * GRID_SIZE;
+    controller->handleDropEvent(dragInfo, x, y, false);
     event->acceptProposedAction();
-    
 }
 
 void MapCanvas::exportToYaml(const QString& filePath) {
@@ -192,14 +136,22 @@ void MapCanvas::exportToYaml(const QString& filePath) {
                 if (!item->data(0).isValid())
                     continue;
                 QString type = item->data(0).toString();
-                if (type != elementType) continue;
+                if (!type.contains(elementType, Qt::CaseInsensitive)) continue;
                 YAML::Node element;
                 QPointF pos = item->pos();
                 element["x"] = static_cast<int>(pos.x());
                 element["y"] = static_cast<int>(pos.y());
                 if (elementType == "hint") {
-                    QString rotation = item->data(1).toString();
-                    element["rotation"] = rotation.toStdString();
+                    int rotation = item->data(1).toInt();
+                    if (rotation == 0) {
+                        element["rotation"] = "left";                    
+                    } else if (rotation == 180) {
+                        element["rotation"] = "right";
+                    } else if (rotation == 90) {
+                        element["rotation"] = "up";
+                    } else {
+                        element["rotation"] = "down";
+                    }
                 }
                 elements.push_back(element);
             }
@@ -299,52 +251,6 @@ void MapCanvas::importFromYaml(const QString& filePath) {
 }
 
 void MapCanvas::addElement(const QString& type, int x, int y, int rotationDeg) {
-    QString iconPath;
-    if (type == "road") {
-        iconPath = "./editor/imgs/road.png";
-    } else if (type == "checkpoint") {
-        iconPath = "./editor/imgs/checkpoint.png";
-    } else if (type == "start") {
-        iconPath = "./editor/imgs/start.png";
-    } else if (type == "finish") {
-        iconPath = "./editor/imgs/finish.png";
-    } else if (type == "hint") {
-        iconPath = "./editor/imgs/hint.png";
-    } else if (type == "NPC") {
-        iconPath = "./editor/imgs/npc.png";
-    } else {
-        return; 
-    }
-
-    QPixmap pixmap(iconPath);
-    if (pixmap.isNull()) {
-        qWarning("No se pudo cargar el ícono para el tipo: %s", type.toStdString().c_str());
-        return;
-    }
-
-    if (rotationDeg != 0) {
-        QTransform transform;
-        transform.rotate(rotationDeg);
-        pixmap = pixmap.transformed(transform, Qt::SmoothTransformation);
-    }
-    auto* item = scene->addPixmap(
-            pixmap.scaled(GRID_SIZE, GRID_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    item->setPos(x, y);
-    item->setZValue(type == "road" ? 1 : 10);
-    item->setData(0, type);
-    if (type == "hint") {
-        QString rotationStr;
-        if (rotationDeg == 270)
-            rotationStr = "left";
-        else if (rotationDeg == 180)
-            rotationStr = "right";
-        else if (rotationDeg == 90)
-            rotationStr = "up";
-        else
-            rotationStr = "down";
-        item->setData(1, rotationStr);
-    }
-    item->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable |
-                   QGraphicsItem::ItemSendsGeometryChanges);
-    item->setCursor(Qt::OpenHandCursor);
+    DragInfo dragInfo(type, rotationDeg, "");
+    controller->handleDropEvent(dragInfo, x, y, false);
 }   

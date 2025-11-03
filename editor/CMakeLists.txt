@@ -4,9 +4,15 @@ target_sources(taller_editor
     editor_game.cpp
     mapcanvas.cpp
     main.cpp
+    drag_info.cpp
+    item_builder.cpp
+    scene_controller.cpp
     PUBLIC
     # .h files
     cityselection.h
     editor_game.h
     mapcanvas.h
+    drag_info.h
+    item_builder.h
+    scene_controller.h
     )

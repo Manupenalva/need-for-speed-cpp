@@ -7,6 +7,7 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QWidget>
+#include "scene_controller.h"
 
 class MapCanvas: public QWidget {
     Q_OBJECT
@@ -29,6 +30,8 @@ private:
     QString currentCityName;
 
     QPushButton* saveButton;
+
+    SceneController* controller;
 
     void addElement(const QString& type, int x, int y, int rotationDeg);
     QString resolveCityMapPath(const QString& cityName, const QString& cityPathFromYaml) const;
