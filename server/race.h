@@ -10,6 +10,8 @@
 #include "../common/carState.h"
 #include "../libs/box2d/include/box2d/box2d.h"
 
+#include "car.h"
+
 class Race {
 private:
     std::unordered_map<uint16_t, std::unique_ptr<Car>>& players_cars;
@@ -19,6 +21,7 @@ private:
     Position finish;
     std::vector<Position> checkpoints;
     std::string map_collisions_path;
+    b2WorldId world;
 
 public:
     Race(std::unordered_map<uint16_t, std::unique_ptr<Car>>& players_cars, const float& celd_width,

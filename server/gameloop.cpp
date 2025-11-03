@@ -12,7 +12,8 @@
 
 #include "carPhysics.h"
 #include "mapCollisionBuilder.h"
-#define TARGET_FPS 60  // esto va a ir con las demas ctes a un .YAML
+#include "raceBuilder.h"
+#define TARGET_FPS 60
 
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
@@ -20,17 +21,19 @@ Gameloop::Gameloop(
         user_commands_queue(user_commands_queue),
         games_monitor(games_monitor),
         game_id(game_id),
-        frames(0) {
-    b2WorldDef worldDef = b2DefaultWorldDef();
-    worldDef.gravity = {0.0f, 0.0f};
-    world = b2CreateWorld(&worldDef);
+        races(),
+        frames(0),
+        world() {
 
     std::vector<int> players_id = games_monitor.get_players_id(game_id);
 
     for (const auto& id: players_id) {
         uint16_t player_id = id;
-        players_cars[player_id] = std::make_unique<Car>(player_id, world);
+        players_cars[player_id] = std::make_unique<Car>(player_id);
     }
+
+    races.push_back(RaceBuilder::create_race("../server/assets/race_configs/trial_race.yaml",
+                                             players_cars));
 }
 
 void Gameloop::update_positions() {
@@ -76,6 +79,7 @@ void Gameloop::broadcast_players() {
 void Gameloop::run() {
     GameLoopTimer timer(TARGET_FPS);
     uint32_t iterations_behind = 1;
+    world = races[0]->start_race();
 
     while (should_keep_running()) {
         std::shared_ptr<ClientHandlerMessage> base_msg;

@@ -14,8 +14,9 @@
 
 class RaceBuilder {
 public:
-    static Race create_race(const std::string& path,
-                            std::unordered_map<uint16_t, std::unique_ptr<Car>>& players_cars);
+    static std::unique_ptr<Race> create_race(
+            const std::string& path,
+            std::unordered_map<uint16_t, std::unique_ptr<Car>>& players_cars);
 
 private:
     static YAML::Node open_file(const std::string& path);

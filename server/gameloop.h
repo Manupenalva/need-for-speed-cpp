@@ -15,6 +15,7 @@
 
 #include "car.h"
 #include "monitorclients.h"
+#include "race.h"
 
 
 class Gameloop: public Thread {
@@ -23,6 +24,7 @@ private:
     MonitorClients& games_monitor;
     int game_id;
     std::unordered_map<uint16_t, std::unique_ptr<Car>> players_cars;
+    std::vector<std::unique_ptr<Race>> races;
     uint32_t frames;
     b2WorldId world;
 

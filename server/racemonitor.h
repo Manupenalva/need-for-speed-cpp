@@ -7,8 +7,9 @@
 
 #include "client_handler.h"
 
-struct Race {
+struct RaceStruct {
     std::vector<std::shared_ptr<ClientHandler>> clients;
     std::mutex mtx;
 };
+
 #endif

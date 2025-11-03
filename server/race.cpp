@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "mapCollisionBuilder.h"
+
 Race::Race(std::unordered_map<uint16_t, std::unique_ptr<Car>>& players_cars,
            const float& celd_width, const float& celd_height,
            const std::vector<Position>& start_positions, const Position& finish,
@@ -12,11 +14,21 @@ Race::Race(std::unordered_map<uint16_t, std::unique_ptr<Car>>& players_cars,
         start_positions(start_positions),
         finish(finish),
         checkpoints(checkpoints),
-        map_collisions_path(map_path) {}
+        map_collisions_path(map_path),
+        world() {}
 
 b2WorldId Race::start_race() {
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity = {0.0f, 0.0f};
-    return b2CreateWorld(&worldDef);
-    // crear world, setear posision inicial de los autos y proximo checkpoint de los autos.
+    world = b2CreateWorld(&worldDef);
+
+    MapCollisionBuilder::initialize_map_buildings(map_collisions_path, world);
+
+    int i = 0;
+    for (const auto& [id, car]: players_cars) {
+        car->add_to_world(world, start_positions[i], checkpoints[0]);
+        i++;
+    }
+
+    return world;
 }

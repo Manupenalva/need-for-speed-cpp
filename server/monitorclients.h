@@ -20,7 +20,7 @@ class MonitorClients {
 private:
     std::unordered_map<int, std::shared_ptr<ClientHandler>> clients;
     // std::unordered_map<int, std::shared_ptr<gameSession>> races;
-    std::unordered_map<int, std::shared_ptr<Race>> races;
+    std::unordered_map<int, std::shared_ptr<RaceStruct>> races;
     std::unordered_map<int, int> client_to_race;
     std::mutex mtx;
     int race_id = 0;
@@ -63,7 +63,7 @@ public:
 
     void broadcast_race_state(const ServerMessageDTO& msg, int race_id) {
 
-        std::shared_ptr<Race> race;
+        std::shared_ptr<RaceStruct> race;
         // Tomamos el lock global solo para obtener un puntero seguro a la carrera
         {
             std::lock_guard<std::mutex> lock(mtx);
@@ -86,13 +86,13 @@ public:
     int create_race() {
         std::lock_guard<std::mutex> lock(mtx);
         int assigned_id = race_id;
-        races[assigned_id] = std::make_shared<Race>();
+        races[assigned_id] = std::make_shared<RaceStruct>();
         race_id++;
         return assigned_id;
     }
 
     AddClientResult add_client_to_race(int client_id, int race_id) {
-        std::shared_ptr<Race> race;
+        std::shared_ptr<RaceStruct> race;
         std::shared_ptr<ClientHandler> client;
 
         std::lock_guard<std::mutex> lock(mtx);
@@ -161,7 +161,7 @@ public:
         if (race_it == races.end())
             return;
 
-        std::shared_ptr<Race> race = race_it->second;
+        std::shared_ptr<RaceStruct> race = race_it->second;
 
         std::lock_guard<std::mutex> lock_race(race->mtx);
         for (auto& client: race->clients) {
@@ -175,7 +175,7 @@ public:
 
     std::vector<int> get_players_id(int race_id) {
         std::vector<int> players_id;
-        std::shared_ptr<Race> race;
+        std::shared_ptr<RaceStruct> race;
 
         {
             std::lock_guard<std::mutex> lock(mtx);
@@ -197,7 +197,7 @@ public:
 
     void set_game_queue(int race_id,
                         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> new_queue) {
-        std::shared_ptr<Race> race;
+        std::shared_ptr<RaceStruct> race;
 
         {
             std::lock_guard<std::mutex> lock(mtx);

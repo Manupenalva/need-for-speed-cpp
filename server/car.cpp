@@ -1,10 +1,20 @@
 #include "car.h"
 
+#include <iostream>
+
 #include "../common/constants.h"
 
-Car::Car(const uint16_t& id): input_state(), state(id), next_checkpoint() {}
+Car::Car(const uint16_t& id):
+        input_state(), state(id, 0.0f, 0.0f, 0.0f, 0.0f, 0), next_checkpoint() {}
 
-void Car::add_to_world(b2WorldId world) { physics = std::make_unique<CarPhysics>(world, state); }
+void Car::add_to_world(b2WorldId world, Position start_position, Position first_checkpoint) {
+    state.x = start_position.x;
+    state.y = start_position.y;
+
+    physics = std::make_unique<CarPhysics>(world, state);
+
+    next_checkpoint = first_checkpoint;
+}
 
 void Car::update_input(const uint8_t& action) {
     if (action == ACT_ACCEL_PRESS) {

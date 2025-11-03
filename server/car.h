@@ -21,7 +21,7 @@ private:
 
 public:
     explicit Car(const uint16_t& id);
-    void add_to_world(b2WorldId world, Position position);
+    void add_to_world(b2WorldId world, Position start_position, Position first_checkpoint);
     void update_input(const uint8_t& action);
     void update_physics();
     void update_position();

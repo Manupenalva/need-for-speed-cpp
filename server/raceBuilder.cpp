@@ -1,3 +1,5 @@
+#include "raceBuilder.h"
+
 #include <vector>
 
 #include "mapCollisionBuilder.h"
@@ -16,7 +18,7 @@ YAML::Node RaceBuilder::open_file(const std::string& path) {
     try {
         return YAML::LoadFile(path);
     } catch (const std::exception& e) {
-        std::cerr << "Error loading map collision file: " << e.what() << std::endl;
+        std::cerr << "Error loading race_config file: " << e.what() << std::endl;
         throw;
     }
 }
@@ -31,8 +33,8 @@ std::string RaceBuilder::get_map_collitions_path(const std::string& city_name) {
     }
 }
 
-Race RaceBuilder::create_race(const std::string& path, b2WorldId world,
-                              std::unordered_map<uint16_t, std::unique_ptr<Car>>& players_cars) {
+std::unique_ptr<Race> RaceBuilder::create_race(
+        const std::string& path, std::unordered_map<uint16_t, std::unique_ptr<Car>>& players_cars) {
     try {
         YAML::Node race_data = open_file(path);
         if (!race_data) {
@@ -45,9 +47,10 @@ Race RaceBuilder::create_race(const std::string& path, b2WorldId world,
         float celd_width = race_data["celdWidth"].as<float>();
         float celd_height = race_data["celdHeight"].as<float>();
 
+        YAML::Node finish_node = race_data["finish"][0];
         Position finish;
-        finish.x = race_data["finish"]["x"].as<float>();
-        finish.y = race_data["finish"]["y"].as<float>();
+        finish.x = finish_node["x"].as<float>();
+        finish.y = finish_node["y"].as<float>();
 
         std::vector<Position> start_positions;
         for (const auto& position: race_data["start"]) {
@@ -63,11 +66,11 @@ Race RaceBuilder::create_race(const std::string& path, b2WorldId world,
             checkpoints.push_back({x, y});
         }
 
-        return Race(players_cars, celd_width, celd_height, start_positions, finish, checkpoints,
-                    map_collitions_path);
+        return std::make_unique<Race>(players_cars, celd_width, celd_height, start_positions,
+                                      finish, checkpoints, map_collitions_path);
 
     } catch (const std::exception& e) {
-        std::cerr << "Error building the map with box2d: " << e.what() << std::endl;
+        std::cerr << "Error building the race: " << e.what() << std::endl;
         throw;
     }
 }
