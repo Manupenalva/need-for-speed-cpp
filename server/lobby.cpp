@@ -22,49 +22,70 @@ void Lobby::run() {
     }
 }
 
-int Lobby::create_race() { return clients_monitor.create_race(); }
-
-void Lobby::add_player_to_race(int playerId, int raceId) {
-    AddClientResult result = clients_monitor.add_client_to_race(playerId, raceId);
-    auto client = clients_monitor.get_client(playerId);
-    ServerMessageDTO response;
-    response.type = MsgType::JOIN_RESULT;
-    switch (result) {
-        case AddClientResult::RaceNotFound:
-        case AddClientResult::ClientNotFound:
-        case AddClientResult::RaceFull: {
-            response.joined = false;
-            client->send_msg(response);
-            break;
-        }
-        case AddClientResult::Added: {
-            response.joined = true;
-            client->send_msg(response);
-            break;
-        }
-        case AddClientResult::AddedToFullRace: {
-            response.joined = true;
-            client->send_msg(response);
-            start_race(playerId);
-            break;
-        }
-        default: {
-            break;
-        }
+void Lobby::handle_create_race(int client_id) {
+    int race_id = create_race();
+    auto client = clients_monitor.get_client(client_id);
+    if (!client) {
+        return;
     }
+    games_monitor.insert_client_to_race(race_id, client);
+    // Envio codigo de partida al cliente
+    ServerMessageDTO response;
+    response.type = MsgType::SEND_CLIENT_ID;
+    response.id = race_id;
+    client->send_msg(response);
 }
 
+void Lobby::handle_join_race(const std::shared_ptr<ClientHandlerMessage>& msg, int client_id) {
+    const auto* joinMsg = dynamic_cast<const JoinLobbyMessage*>(msg.get());
+    if (!joinMsg) {
+        return;
+    }
+    int lobby_code = joinMsg->get_race_id();
+    add_player_to_race(client_id, lobby_code);
+}
+
+int Lobby::create_race() { return games_monitor.create_race(); }
+
+void Lobby::add_player_to_race(int playerId, int raceId) {
+    auto client = clients_monitor.get_client(playerId);
+    if (!client) {
+        return;
+    }
+    bool result = games_monitor.insert_client_to_race(raceId, client);
+    ServerMessageDTO response;
+    response.type = MsgType::JOIN_RESULT;
+    if (!result) {
+        response.joined = false;
+    } else {
+        client->set_race_id(raceId);
+        response.joined = true;
+    }
+    client->send_msg(response);
+}
+
+
 void Lobby::remove_player_from_race(int playerId) {
-    clients_monitor.remove_client_from_race(playerId);
+    auto client = clients_monitor.get_client(playerId);
+    if (!client) {
+        return;
+    }
+    int race_id = client->get_race_id();
+    games_monitor.remove_client_from_race(race_id, playerId);
+    client->set_race_id(-1);
 }
 
 void Lobby::start_race(int playerId) {
-    int race_id = clients_monitor.get_player_race(playerId);
+    auto client = clients_monitor.get_client(playerId);
+    if (!client) {
+        return;
+    }
+    int race_id = client->get_race_id();
     if (race_id == -1) {
         return;
     }
     auto session = std::make_shared<GameSession>(
-            race_id, clients_monitor);  // Evito que se llame al destructor
+            race_id, games_monitor.get_race(race_id));  // Evito que se llame al destructor
     active_games.push_back(session);
 }
 
@@ -74,26 +95,11 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
 
     switch (type) {
         case MsgType::CREATE_RACE: {
-            clean_games();  // Limpio juegos terminados antes de crear uno nuevo
-            int race_id = create_race();
-            clients_monitor.add_client_to_race(client_id, race_id);
-            auto client = clients_monitor.get_client(client_id);
-            // Envio codigo de partida al cliente
-            if (client) {
-                ServerMessageDTO response;
-                response.type = MsgType::SEND_CLIENT_ID;
-                response.id = race_id;
-                client->send_msg(response);
-            }
+            handle_create_race(client_id);
             break;
         }
         case MsgType::JOIN_RACE: {
-            const auto* joinMsg = dynamic_cast<JoinLobbyMessage*>(msg.get());
-            if (!joinMsg) {
-                break;
-            }
-            int lobby_code = joinMsg->get_race_id();
-            add_player_to_race(client_id, lobby_code);
+            handle_join_race(msg, client_id);
             break;
         }
         case MsgType::EXIT_RACE: {
@@ -101,6 +107,7 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
             break;
         }
         case MsgType::START_RACE: {
+            clean_games();  // Limpio juegos terminados antes de crear uno nuevo
             start_race(client_id);
             break;
         }
@@ -114,11 +121,16 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
 }
 
 void Lobby::clean_games() {
-    active_games.erase(std::remove_if(active_games.begin(), active_games.end(),
-                                      [](const std::shared_ptr<GameSession>& game) {
-                                          return !game->is_running();
-                                      }),
-                       active_games.end());
+
+    for (auto it = active_games.begin(); it != active_games.end();) {
+        if (!(*it)->is_running()) {
+            (*it)->stop();
+            games_monitor.remove_race((*it)->get_id());
+            it = active_games.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }
 
 void Lobby::shutdown() {

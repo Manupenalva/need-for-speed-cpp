@@ -56,7 +56,8 @@ void MessageSender::serialize_lobby(const int lobby_id, MsgType type) {
 }
 
 void MessageSender::serialize_state(const State& state) {
-    buffer.resize(CODE_BYTES + LENGTH_BYTES + AMOUNT_BYTES + state.num_cars * CAR_STATE_BYTES);
+    buffer.resize(CODE_BYTES + 2 * LENGTH_BYTES + AMOUNT_BYTES + state.num_cars * CAR_STATE_BYTES +
+                  state.npcs.size() * NPC_STATE_BYTES);
     offset = 0;
     MsgType type = MsgType::STATE_UPDATE;
     append_bytes(&type, CODE_BYTES);
@@ -65,6 +66,11 @@ void MessageSender::serialize_state(const State& state) {
 
     for (const auto& car: state.cars) {
         append_car_state(car);
+    }
+
+    append_uint16(static_cast<uint16_t>(state.npcs.size()));
+    for (const auto& npc: state.npcs) {
+        append_npc_state(npc);
     }
 }
 
@@ -118,6 +124,32 @@ void MessageSender::append_car_state(const CarState& car) {
     append_float(car.angle);
     append_float(car.speed);
     append_uint16(car.lap);
+    append_checkpoint_info(car.checkpoint);
+    append_checkpoint_arrow(car.checkpoint_arrow);
+    uint8_t crashed_byte = car.crashed ? 0x01 : 0x00;
+    append_bytes(&crashed_byte, 1);
+    append_uint16(car.car_type);
+    append_uint16(car.health);
+}
+
+void MessageSender::append_npc_state(const NpcState& npc) {
+    append_float(npc.x);
+    append_float(npc.y);
+    append_float(npc.angle);
+    append_uint16(npc.car_type);
+}
+
+void MessageSender::append_checkpoint_info(const CheckpointInfo& checkpoint) {
+    append_uint16(checkpoint.id);
+    append_float(checkpoint.x);
+    append_float(checkpoint.y);
+    append_float(checkpoint.radius);
+}
+
+void MessageSender::append_checkpoint_arrow(const CheckpointArrow& arrow) {
+    append_float(arrow.x);
+    append_float(arrow.y);
+    append_float(arrow.angle);
 }
 
 void MessageSender::append_bytes(const void* data, size_t size) {

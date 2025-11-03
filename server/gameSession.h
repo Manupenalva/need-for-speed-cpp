@@ -4,20 +4,20 @@
 #include <memory>
 
 #include "gameloop.h"
-#include "monitorclients.h"
+#include "monitorGames.h"
 
 class GameSession {
 private:
-    MonitorClients& clients_monitor;
+    std::shared_ptr<Race> race;
     int game_id;
     std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue;
     Gameloop gameloop;
 
 public:
-    GameSession(const int& id, MonitorClients& clients_monitor);
-    // void start();
+    GameSession(const int& id, std::shared_ptr<Race> race);
     void stop();
     ~GameSession();
+    int get_id() const;
 
     bool is_running() const;
 

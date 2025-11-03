@@ -9,7 +9,8 @@
 #include "events/clienthandlermessage.h"
 
 #include "gameSession.h"
-#include "monitorclients.h"
+#include "monitorClients.h"
+#include "monitorGames.h"
 
 class Lobby: public Thread {
 
@@ -25,12 +26,15 @@ private:
     std::vector<std::shared_ptr<GameSession>> active_games;
     std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> lobby_queue;
     MonitorClients& clients_monitor;
+    MonitorGames games_monitor;
     int create_race();
     void add_player_to_race(int playerId, int raceId);
     void remove_player_from_race(int playerId);
     void start_race(int raceId);
     void manage_msg(std::shared_ptr<ClientHandlerMessage> msg);
     void clean_games();
+    void handle_create_race(int client_id);
+    void handle_join_race(const std::shared_ptr<ClientHandlerMessage>& msg, int client_id);
 };
 
 #endif

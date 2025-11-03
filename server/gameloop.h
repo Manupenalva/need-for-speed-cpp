@@ -13,9 +13,12 @@
 #include "../common/thread.h"
 #include "events/clienthandlermessage.h"
 
+
 #include "car.h"
 #include "monitorclients.h"
 #include "race.h"
+#include "racemonitor.h"
+
 
 
 class Gameloop: public Thread {
@@ -30,13 +33,14 @@ private:
 
 public:
     Gameloop(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
-             MonitorClients& games_monitor, int game_id);
+             std::shared_ptr<Race> race);
     void run() override;
 
 private:
     void broadcast_players();
     void update_positions();
     void update_car_input(const uint16_t& player_id, const uint8_t& action);
+    void broadcast_start();
 
     Gameloop(const Gameloop& other) = delete;
     Gameloop& operator=(const Gameloop& other) = delete;

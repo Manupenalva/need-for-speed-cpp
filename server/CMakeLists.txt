@@ -16,16 +16,18 @@ target_sources(taller_server
         car.cpp
         race.cpp
         raceBuilder.cpp
+        monitorClients.cpp
+        racemonitor.cpp
+        monitorGames.cpp
     PUBLIC
         sender.h
         receiver.h
-        monitorclients.h
+        monitorClients.h
         client_handler.h
         acceptor.h
         gameloop.h
         gameSession.h
         monitorGames.h
-        monitorGames.cpp
         server.h
         carPhysics.h
         lobby.h

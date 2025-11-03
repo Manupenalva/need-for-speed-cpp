@@ -35,7 +35,9 @@ private:
     void serialize_client_id(int id);
 
     void append_car_state(const CarState& car);
-    CarState parse_car_state(const std::vector<uint8_t>& data);
+    void append_npc_state(const NpcState& npc);
+    void append_checkpoint_info(const CheckpointInfo& checkpoint);
+    void append_checkpoint_arrow(const CheckpointArrow& arrow);
 
     size_t calculate_lobbies_size(const std::vector<LobbyInfo>& lobbies);
 

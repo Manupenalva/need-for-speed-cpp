@@ -22,6 +22,7 @@ private slots:
     void showConnectScreen();
     void connectServer();
     void createGame();
+    void startGame();
 
 private:
     QStackedWidget* stack;
@@ -33,6 +34,10 @@ private:
     QLineEdit* servname;
     QPushButton* connectButton;
     QPushButton* backButton;
+    QPushButton* startButton;
+    QWidget* startScreen;
+    bool host;
+    int raceC;
 };
 
 #endif

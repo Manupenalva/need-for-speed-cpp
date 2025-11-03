@@ -24,7 +24,7 @@ Gameloop::Gameloop(
         races(),
         frames(0) {
 
-    std::vector<int> players_id = games_monitor.get_players_id(game_id);
+    std::vector<int> players_id = race->get_player_ids();
 
     for (const auto& id: players_id) {
         uint16_t player_id = id;
@@ -42,10 +42,19 @@ void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action
 void Gameloop::broadcast_players() {
     ServerMessageDTO msg = races[0]->get_broadcast_message(frames);
 
-    games_monitor.broadcast_race_state(msg, game_id);
+    race->broadcast(msg);
+}
+
+void Gameloop::broadcast_start() {
+    ServerMessageDTO msg;
+    msg.type = MsgType::GAME_START;
+    race->broadcast(msg);
+    broadcast_players();
 }
 
 void Gameloop::run() {
+
+    broadcast_start();
     GameLoopTimer timer(TARGET_FPS);
     uint32_t iterations_behind = 1;
     races[0]->start_race();

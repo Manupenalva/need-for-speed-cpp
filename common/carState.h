@@ -7,6 +7,20 @@
 #include "checkpointArrow.h"
 #include "checkpointInfo.h"
 
+struct CarState {
+    uint16_t id;
+    float x;
+    float y;
+    float angle;
+    float speed;
+    uint16_t lap;
+    CheckpointInfo checkpoint;
+    CheckpointArrow checkpoint_arrow;
+    bool crashed;
+    uint16_t car_type;
+    uint16_t health;
+};
+
 struct CarInfo {
     uint16_t id;
     float x;

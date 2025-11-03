@@ -71,6 +71,11 @@ State MessageReceiver::recv_state_update() {
 
     std::generate(state.cars.begin(), state.cars.end(), [this]() { return recv_car_state(); });
 
+    uint16_t num_npcs = obtain_uint16();
+    state.npcs.resize(num_npcs);
+
+    std::generate(state.npcs.begin(), state.npcs.end(), [this]() { return recv_npc_state(); });
+
     return state;
 }
 
@@ -96,7 +101,39 @@ CarState MessageReceiver::recv_car_state() {
     car.angle = obtain_float();
     car.speed = obtain_float();
     car.lap = obtain_uint16();
+    car.checkpoint = recv_checkpoint_info();
+    car.checkpoint_arrow = recv_checkpoint_arrow();
+    uint8_t crashed_byte = obtain_byte();
+    car.crashed = (crashed_byte != 0);
+    car.car_type = obtain_uint16();
+    car.health = obtain_uint16();
     return car;
+}
+
+NpcState MessageReceiver::recv_npc_state() {
+    NpcState npc;
+    npc.x = obtain_float();
+    npc.y = obtain_float();
+    npc.angle = obtain_float();
+    npc.car_type = obtain_uint16();
+    return npc;
+}
+
+CheckpointInfo MessageReceiver::recv_checkpoint_info() {
+    CheckpointInfo checkpoint;
+    checkpoint.id = obtain_uint16();
+    checkpoint.x = obtain_float();
+    checkpoint.y = obtain_float();
+    checkpoint.radius = obtain_float();
+    return checkpoint;
+}
+
+CheckpointArrow MessageReceiver::recv_checkpoint_arrow() {
+    CheckpointArrow arrow;
+    arrow.x = obtain_float();
+    arrow.y = obtain_float();
+    arrow.angle = obtain_float();
+    return arrow;
 }
 
 LobbyInfo MessageReceiver::recv_lobby_info() {
