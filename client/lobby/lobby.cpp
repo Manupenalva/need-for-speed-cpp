@@ -39,21 +39,41 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), protocol
     layoutConnection->addWidget(backButton);
     connectScreen->setLayout(layoutConnection);
 
+    startScreen = new QWidget(this);
+    auto* startLayout = new QVBoxLayout(startScreen);
+    QLabel* startTitle = new QLabel("Lobby Start");
+    startTitle-> setAlignment(Qt::AlignCenter);
+    startTitle->setStyleSheet("font-size: 24px; font-weight: bold;");
+    startButton = new QPushButton("Start");
+
+    startLayout->addWidget(startTitle);
+    startLayout->addWidget(startButton);
+    startLayout->addWidget(backButton);
+    startScreen->setLayout(startLayout);
+
     stack->addWidget(menu);
     stack->addWidget(connectScreen);
+    stack->addWidget(startScreen);
     setCentralWidget(stack);
 
     connect(createGameButton, &QPushButton::clicked, this, &Lobby::createGame);
     connect(joinGameButton, &QPushButton::clicked, this, &Lobby::showConnectScreen);
     connect(connectButton, &QPushButton::clicked, this, &Lobby::connectServer);
     connect(backButton, &QPushButton::clicked, this, &Lobby::menuScreen);
+    connect(startButton, &QPushButton::clicked, this, &Lobby::startGame);
 
     setWindowTitle("Need for Speed 2D - Lobby");
     resize(400, 300);
     stack->setCurrentIndex(0);
 }
 
-void Lobby::menuScreen() { stack->setCurrentIndex(0); }
+void Lobby::menuScreen() { 
+    stack->setCurrentIndex(0); 
+    // ClientMessageDTO msg;
+    // msg.type = MsgType::EXIT_RACE;
+    // msg.lobby_id = raceC;
+    // protocol.send_client_message(msg);
+}
 
 void Lobby::showConnectScreen() { stack->setCurrentIndex(1); }
 
@@ -67,8 +87,10 @@ void Lobby::createGame() {
         QMessageBox::warning(this, "Error", "Failed to create a new game.");
         return;
     }
+    host = true;
     QMessageBox::information(this, "New Game", QString("Race code: %1").arg(response.id));
-    this->close();
+    raceC = response.id; 
+    stack->setCurrentIndex(2);
 }
 
 void Lobby::connectServer() {
@@ -95,7 +117,23 @@ void Lobby::connectServer() {
                              "Could not join the game. It may be full or nonexistent.");
         return;
     }
-
+    host = false;
+    raceC = msg.lobby_id; 
     QMessageBox::information(this, "Connecting", QString("Connectin to.. %1").arg(raceCode));
+    stack->setCurrentIndex(2);
+}
+
+void Lobby::startGame(){
+    if (!host) {
+        QMessageBox::warning(this, "Error",
+                        "Could not create a game because you are not the host");
+        return;
+    }
+    ClientMessageDTO msg;
+    msg.type = MsgType::START_RACE;
+    msg.lobby_id = raceC;
+    protocol.send_client_message(msg);
     this->close();
+    // Faltaria avisarle a todos los demas (unidos en la partida) que arranco asi se cierra la ventana
+    // Ademas de ir mandando cuantos jugadores hay metidos hasta que la arranque
 }
