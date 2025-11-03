@@ -143,6 +143,7 @@ void MessageSender::append_checkpoint_info(const CheckpointInfo& checkpoint) {
     append_uint16(checkpoint.id);
     append_float(checkpoint.x);
     append_float(checkpoint.y);
+    append_float(checkpoint.angle);
     append_float(checkpoint.radius);
 }
 
