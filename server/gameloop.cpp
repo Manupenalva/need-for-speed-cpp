@@ -22,8 +22,7 @@ Gameloop::Gameloop(
         games_monitor(games_monitor),
         game_id(game_id),
         races(),
-        frames(0),
-        world() {
+        frames(0) {
 
     std::vector<int> players_id = games_monitor.get_players_id(game_id);
 
@@ -34,22 +33,6 @@ Gameloop::Gameloop(
 
     races.push_back(RaceBuilder::create_race("../server/assets/race_configs/trial_race.yaml",
                                              players_cars));
-}
-
-void Gameloop::update_positions() {
-    for (auto& [player_id, car]: players_cars) {
-        car->update_physics();
-    }
-
-    float timeStep = 1.0f / 60.0f;
-    b2World_Step(world, timeStep, 3);
-
-    for (auto& [player_id, car]: players_cars) {
-        car->update_position();
-    }
-    for (auto& [player_id, car]: players_cars) {
-        car->handle_hits();
-    }
 }
 
 void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action) {
@@ -79,7 +62,7 @@ void Gameloop::broadcast_players() {
 void Gameloop::run() {
     GameLoopTimer timer(TARGET_FPS);
     uint32_t iterations_behind = 1;
-    world = races[0]->start_race();
+    races[0]->start_race();
 
     while (should_keep_running()) {
         std::shared_ptr<ClientHandlerMessage> base_msg;
@@ -91,7 +74,7 @@ void Gameloop::run() {
         }
 
         for (uint32_t i = 0; i < iterations_behind; i++) {
-            update_positions();
+            races[0]->update_state();
         }
 
         broadcast_players();

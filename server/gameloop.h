@@ -26,7 +26,6 @@ private:
     std::unordered_map<uint16_t, std::unique_ptr<Car>> players_cars;
     std::vector<std::unique_ptr<Race>> races;
     uint32_t frames;
-    b2WorldId world;
 
 
 public:

@@ -15,18 +15,18 @@ class Car {
 private:
     CarInputState input_state;
     CarState state;
-    Position next_checkpoint;
     std::vector<float> race_times;
     std::unique_ptr<CarPhysics> physics;
 
 public:
     explicit Car(const uint16_t& id);
-    void add_to_world(b2WorldId world, Position start_position, Position first_checkpoint);
+    void add_to_world(b2WorldId world, Position start_position);
     void update_input(const uint8_t& action);
     void update_physics();
     void update_position();
     void handle_hits();
     CarState get_state() const;
+    bool reached_checkpoint(Position next_checkpoint, float celd_width, float celd_height);
 
 private:
     Car(const Car& other) = delete;

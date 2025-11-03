@@ -4,16 +4,13 @@
 
 #include "../common/constants.h"
 
-Car::Car(const uint16_t& id):
-        input_state(), state(id, 0.0f, 0.0f, 0.0f, 0.0f, 0), next_checkpoint() {}
+Car::Car(const uint16_t& id): input_state(), state(id, 0.0f, 0.0f, 0.0f, 0.0f, 0) {}
 
-void Car::add_to_world(b2WorldId world, Position start_position, Position first_checkpoint) {
+void Car::add_to_world(b2WorldId world, Position start_position) {
     state.x = start_position.x;
     state.y = start_position.y;
 
     physics = std::make_unique<CarPhysics>(world, state);
-
-    next_checkpoint = first_checkpoint;
 }
 
 void Car::update_input(const uint8_t& action) {
@@ -56,3 +53,18 @@ void Car::update_position() { physics->update_position(); }
 void Car::handle_hits() { physics->handle_hits(); }
 
 CarState Car::get_state() const { return state; }
+
+bool Car::reached_checkpoint(Position next_checkpoint, float celd_width, float celd_height) {
+    if (state.x > (next_checkpoint.x + celd_width / 2.0f))
+        return false;
+    if (state.x < (next_checkpoint.x - celd_width / 2.0f))
+        return false;
+    if (state.y > (next_checkpoint.y + celd_height / 2.0f))
+        return false;
+    if (state.y < (next_checkpoint.y - celd_height / 2.0f))
+        return false;
+
+    std::cout << "alcancé un checkpoint en la posicion: " << state.x << ", " << state.y
+              << std::endl;
+    return true;
+}
