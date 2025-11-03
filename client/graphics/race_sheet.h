@@ -15,7 +15,7 @@
 
 constexpr const char* ARROW_PATH = "Flecha.png";
 constexpr const char* CHECKPOINT_PATH = "Checkpoint.png";
-constexpr const char* START_LINE_PATH = "StartLine.png";
+constexpr const char* START_LINE_PATH = "Salida.png";
 
 enum RaceElement {
     RACE_ARROW = 0,
