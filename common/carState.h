@@ -4,9 +4,10 @@
 #include <cstdint>
 #include <memory>
 
-#include "../server/carPhysics.h"
+#include "checkpointArrow.h"
+#include "checkpointInfo.h"
 
-struct CarState {
+struct CarInfo {
     uint16_t id;
     float x;
     float y;

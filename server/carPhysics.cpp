@@ -3,14 +3,12 @@
 #include <cmath>
 #include <iostream>
 
-#include "../common/carState.h"
-
 #define MAX_SPEED 7000.0f
 #define MIN_SPEED 100.0f
 #define ACCELERATION 400.0f
 #define ANGLE_ROTATION 4
 
-CarPhysics::CarPhysics(b2WorldId world, CarState& car_state):
+CarPhysics::CarPhysics(b2WorldId world, CarInfo& car_state):
         world(world), life(100.0f), car_state(car_state) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;

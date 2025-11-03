@@ -21,6 +21,7 @@ public:
 private:
     static YAML::Node open_file(const std::string& path);
     static std::string get_map_collitions_path(const std::string& city_name);
+    static float get_hint_angle(const std::string& rotation);
 
     RaceBuilder() = delete;
     RaceBuilder(const RaceBuilder&) = delete;

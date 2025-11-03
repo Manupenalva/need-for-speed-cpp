@@ -1,8 +1,8 @@
 #ifndef CARPHYSICS_H
 #define CARPHYSICS_H
 
+#include "../common/carState.h"
 #include "../libs/box2d/include/box2d/box2d.h"
-struct CarState;
 
 class CarPhysics {
 private:
@@ -10,10 +10,10 @@ private:
     b2ShapeId shape;
     b2WorldId world;
     float life;
-    CarState& car_state;
+    CarInfo& car_state;
 
 public:
-    CarPhysics(b2WorldId world, CarState& car_state);
+    CarPhysics(b2WorldId world, CarInfo& car_state);
     void accelerate();
     void brake();
     void turn_left();

@@ -40,21 +40,7 @@ void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action
 }
 
 void Gameloop::broadcast_players() {
-    ServerMessageDTO msg;
-
-    State game_state;
-    uint16_t num_cars = 0;
-    std::vector<CarState> cars;
-    for (const auto& [id, car]: players_cars) {
-        cars.push_back(car->get_state());
-        num_cars++;
-    }
-    game_state.frame = frames;
-    game_state.num_cars = num_cars;
-    game_state.cars = cars;
-
-    msg.type = MsgType::STATE_UPDATE;
-    msg.state = game_state;
+    ServerMessageDTO msg = races[0]->get_broadcast_message(frames);
 
     games_monitor.broadcast_race_state(msg, game_id);
 }

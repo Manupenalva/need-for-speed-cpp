@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "hint.h"
 #include "mapCollisionBuilder.h"
 
 
@@ -12,6 +13,11 @@
 #define LIBERTY_CITY_PATH "../server/assets/maps_buildings/LibertyCityCollitions.yaml"
 #define VICE_CITY_PATH "../server/assets/maps_buildings/ViceCityCollitions.yaml"
 #define SAN_ANDREAS_PATH "../server/assets/maps_buildings/SanAndreasCollitions.yaml"
+
+#define UP_ROTATION "up"
+#define DOWN_ROTATION "down"
+#define RIGHT_ROTATION "right"
+#define LEFT_ROTATION "left"
 
 
 YAML::Node RaceBuilder::open_file(const std::string& path) {
@@ -30,6 +36,18 @@ std::string RaceBuilder::get_map_collitions_path(const std::string& city_name) {
         return VICE_CITY_PATH;
     } else {
         return SAN_ANDREAS_PATH;
+    }
+}
+
+float RaceBuilder::get_hint_angle(const std::string& rotation) {
+    if (rotation == UP_ROTATION) {
+        return 0.0f;
+    } else if (rotation == DOWN_ROTATION) {
+        return 180.0f;
+    } else if (rotation == RIGHT_ROTATION) {
+        return 90.0f;
+    } else {
+        return 270.0f;
     }
 }
 
@@ -66,8 +84,17 @@ std::unique_ptr<Race> RaceBuilder::create_race(
             checkpoints.push_back({x, y});
         }
 
+        std::vector<Hint> hints;
+        for (const auto& hint: race_data["hint"]) {
+            int x = hint["x"].as<int>();
+            int y = hint["y"].as<int>();
+            std::string rotation = hint["rotation"].as<std::string>();
+            float angle = get_hint_angle(rotation);
+            hints.push_back({x, y, angle});
+        }
+
         return std::make_unique<Race>(players_cars, celd_width, celd_height, start_positions,
-                                      finish, checkpoints, map_collitions_path);
+                                      finish, checkpoints, hints, map_collitions_path);
 
     } catch (const std::exception& e) {
         std::cerr << "Error building the race: " << e.what() << std::endl;

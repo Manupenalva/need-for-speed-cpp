@@ -52,7 +52,7 @@ void Car::update_position() { physics->update_position(); }
 
 void Car::handle_hits() { physics->handle_hits(); }
 
-CarState Car::get_state() const { return state; }
+CarInfo Car::get_state_info() const { return state; }
 
 bool Car::reached_checkpoint(Position next_checkpoint, float celd_width, float celd_height) {
     if (state.x > (next_checkpoint.x + celd_width / 2.0f))

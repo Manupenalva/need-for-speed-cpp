@@ -35,5 +35,6 @@ target_sources(taller_server
         race.h
         raceBuilder.h
         playerRaceStatus.h
+        hint.h
         ${EVENTS_SRC}
     )

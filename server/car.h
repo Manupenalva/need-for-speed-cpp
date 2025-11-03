@@ -10,11 +10,13 @@
 
 #include "../common/carState.h"
 
+#include "carPhysics.h"
+
 
 class Car {
 private:
     CarInputState input_state;
-    CarState state;
+    CarInfo state;
     std::vector<float> race_times;
     std::unique_ptr<CarPhysics> physics;
 
@@ -25,7 +27,7 @@ public:
     void update_physics();
     void update_position();
     void handle_hits();
-    CarState get_state() const;
+    CarInfo get_state_info() const;
     bool reached_checkpoint(Position next_checkpoint, float celd_width, float celd_height);
 
 private:
