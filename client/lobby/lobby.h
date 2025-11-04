@@ -7,6 +7,7 @@
 #include <QStackedWidget>
 #include <QTimer>
 #include <string>
+#include <QLabel>
 
 #include "../../common/protocol.h"
 
@@ -39,6 +40,8 @@ private:
     QPushButton* backButton;
     QPushButton* startButton;
     QWidget* startScreen;
+    QLabel* playerLabel;
+    QLabel* codeLabel;
     bool host;
     int raceC;
 };

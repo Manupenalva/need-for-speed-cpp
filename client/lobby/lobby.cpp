@@ -46,8 +46,17 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), protocol
     startTitle->setAlignment(Qt::AlignCenter);
     startTitle->setStyleSheet("font-size: 24px; font-weight: bold;");
     startButton = new QPushButton("Start");
+    startButton->setEnabled(false);
+    playerLabel = new QLabel("Players: 1 / ?");
+    codeLabel = new QLabel("Game code: ?");
+    playerLabel->setAlignment(Qt::AlignCenter);
+    playerLabel->setStyleSheet("font-size: 16px;");
+    codeLabel->setAlignment(Qt::AlignCenter);
+    codeLabel->setStyleSheet("font-size: 16px;");
 
     startLayout->addWidget(startTitle);
+    startLayout->addWidget(playerLabel);
+    startLayout->addWidget(codeLabel);
     startLayout->addWidget(startButton);
     startLayout->addWidget(backButton);
     startScreen->setLayout(startLayout);
@@ -92,6 +101,7 @@ void Lobby::createGame() {
     host = true;
     QMessageBox::information(this, "New Game", QString("Race code: %1").arg(response.id));
     raceC = response.id;
+    codeLabel->setText(QString("Game Code: %1").arg(raceC));
     stack->setCurrentIndex(2);
     timer->start(1000);
 }
@@ -128,6 +138,7 @@ void Lobby::connectServer() {
     host = false;
     raceC = msg.lobby_id;
     QMessageBox::information(this, "Connecting", QString("Connectin to.. %1").arg(raceCode));
+    codeLabel->setText(QString("Game Code: %1").arg(raceC));
     stack->setCurrentIndex(2);
     timer->start(1000);  // Actualizar cada segundo
 }
@@ -143,8 +154,6 @@ void Lobby::startGame() {
     protocol.send_client_message(msg);
     timer->stop();
     this->close();
-    // Faltaria avisarle a todos los demas (unidos en la partida) que arranco asi se cierra la
-    // ventana Ademas de ir mandando cuantos jugadores hay metidos hasta que la arranque
 }
 
 void Lobby::updateLobby() {
@@ -153,7 +162,11 @@ void Lobby::updateLobby() {
     protocol.send_client_message(msg);
     ServerMessageDTO response = protocol.recv_server_message();
     if (response.type == MsgType::SEND_LOBBY_UPDATE) {
-        // Actualizar la UI con la información de los jugadores en la sala
+        auto& lobbyInfo = response.lobby_info;
+        int count = static_cast<int>(lobbyInfo.player_amount);
+        int max = static_cast<int>(lobbyInfo.max_players);
+        playerLabel->setText(QString("Players: %1 / %2").arg(count).arg(max));
+        startButton->setEnabled(host && count >= 2);
     } else if (response.type == MsgType::GAME_START) {
         timer->stop();
         this->close();
