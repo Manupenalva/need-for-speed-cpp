@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QStackedWidget>
+#include <QTimer>
 #include <string>
 
 #include "../../common/protocol.h"
@@ -23,12 +24,14 @@ private slots:
     void connectServer();
     void createGame();
     void startGame();
+    void updateLobby();
 
 private:
     QStackedWidget* stack;
     QWidget* menu;
     QPushButton* createGameButton;
     QPushButton* joinGameButton;
+    QTimer* timer;
 
     QWidget* connectScreen;
     QLineEdit* servname;

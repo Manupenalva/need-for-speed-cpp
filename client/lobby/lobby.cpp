@@ -10,6 +10,7 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), protocol
 
     menu = new QWidget(this);
     auto* layoutMenu = new QVBoxLayout(menu);
+    timer = new QTimer(this);
 
     QLabel* title = new QLabel("Need for Speed - 2D");
     title->setAlignment(Qt::AlignCenter);
@@ -61,6 +62,7 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), protocol
     connect(connectButton, &QPushButton::clicked, this, &Lobby::connectServer);
     connect(backButton, &QPushButton::clicked, this, &Lobby::menuScreen);
     connect(startButton, &QPushButton::clicked, this, &Lobby::startGame);
+    connect(timer, &QTimer::timeout, this, &Lobby::updateLobby);
 
     setWindowTitle("Need for Speed 2D - Lobby");
     resize(400, 300);
@@ -69,10 +71,10 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), protocol
 
 void Lobby::menuScreen() { 
     stack->setCurrentIndex(0); 
-    // ClientMessageDTO msg;
-    // msg.type = MsgType::EXIT_RACE;
-    // msg.lobby_id = raceC;
-    // protocol.send_client_message(msg);
+    ClientMessageDTO msg;
+    msg.type = MsgType::EXIT_RACE;
+    protocol.send_client_message(msg);
+    timer->stop();
 }
 
 void Lobby::showConnectScreen() { stack->setCurrentIndex(1); }
@@ -91,6 +93,7 @@ void Lobby::createGame() {
     QMessageBox::information(this, "New Game", QString("Race code: %1").arg(response.id));
     raceC = response.id; 
     stack->setCurrentIndex(2);
+    timer->start(1000);
 }
 
 void Lobby::connectServer() {
@@ -103,7 +106,12 @@ void Lobby::connectServer() {
 
     ClientMessageDTO msg;
     msg.type = MsgType::JOIN_RACE;
-    msg.lobby_id = raceCode.toUShort();
+    bool ok;
+    msg.lobby_id = raceCode.toUShort(&ok);
+    if (!ok) {
+        QMessageBox::warning(this, "Error", "Invalid race code");
+        return;
+    }
     protocol.send_client_message(msg);
     ServerMessageDTO response = protocol.recv_server_message();
 
@@ -121,6 +129,7 @@ void Lobby::connectServer() {
     raceC = msg.lobby_id; 
     QMessageBox::information(this, "Connecting", QString("Connectin to.. %1").arg(raceCode));
     stack->setCurrentIndex(2);
+    timer->start(1000); // Actualizar cada segundo
 }
 
 void Lobby::startGame(){
@@ -133,7 +142,21 @@ void Lobby::startGame(){
     msg.type = MsgType::START_RACE;
     msg.lobby_id = raceC;
     protocol.send_client_message(msg);
+    timer->stop();
     this->close();
     // Faltaria avisarle a todos los demas (unidos en la partida) que arranco asi se cierra la ventana
     // Ademas de ir mandando cuantos jugadores hay metidos hasta que la arranque
+}
+
+void Lobby::updateLobby() {
+    ClientMessageDTO msg;
+    msg.type = MsgType::GET_LOBBY_UPDATE;
+    protocol.send_client_message(msg);
+    ServerMessageDTO response = protocol.recv_server_message();
+    if (response.type == MsgType::SEND_LOBBY_UPDATE) {
+        // Actualizar la UI con la información de los jugadores en la sala
+    } else if (response.type == MsgType::GAME_START) {
+        timer->stop();
+        this->close();
+    }
 }
