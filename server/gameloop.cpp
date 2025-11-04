@@ -27,7 +27,7 @@ Gameloop::Gameloop(
         players_cars[player_id] = std::make_unique<Car>(player_id);
     }
 
-    races.push_back(RaceBuilder::create_race("../server/assets/race_configs/trial_race.yaml",
+    races.push_back(RaceBuilder::create_race("../maps/Backgrounds - Liberty City.yaml",
                                              players_cars));
 }
 
