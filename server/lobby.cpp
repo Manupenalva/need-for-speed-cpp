@@ -29,6 +29,7 @@ void Lobby::handle_create_race(int client_id) {
         return;
     }
     games_monitor.insert_client_to_race(race_id, client);
+    client->set_race_id(race_id);
     // Envio codigo de partida al cliente
     ServerMessageDTO response;
     response.type = MsgType::SEND_CLIENT_ID;
@@ -45,6 +46,23 @@ void Lobby::handle_join_race(const std::shared_ptr<ClientHandlerMessage>& msg, i
     add_player_to_race(client_id, lobby_code);
 }
 
+void Lobby::handle_lobby_update(int client_id) {
+    auto client = clients_monitor.get_client(client_id);
+    if (!client) {
+        return;
+    }
+    LobbyInfo lobby_info;
+    int race_id = client->get_race_id();
+    std::shared_ptr<RaceStruct> race = games_monitor.get_race(race_id);
+    lobby_info.lobby_id = static_cast<uint16_t>(race_id);
+    lobby_info.player_amount = race->size();
+    lobby_info.max_players = MAX_PLAYERS_RACE;
+    ServerMessageDTO response;
+    response.type = MsgType::SEND_LOBBY_UPDATE;
+    response.lobby_info = lobby_info;
+    client->send_msg(response);
+}
+    
 int Lobby::create_race() { return games_monitor.create_race(); }
 
 void Lobby::add_player_to_race(int playerId, int raceId) {
@@ -113,6 +131,10 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
         }
         case MsgType::GET_LOBBIES: {
             // send_lobbies_info(client_id);
+            break;
+        }
+        case MsgType::GET_LOBBY_UPDATE: {
+            handle_lobby_update(client_id);
             break;
         }
         default: {

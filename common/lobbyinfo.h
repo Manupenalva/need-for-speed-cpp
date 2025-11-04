@@ -5,7 +5,8 @@
 
 
 struct LobbyInfo {
-    std::string name;
+    uint16_t lobby_id;
     uint8_t player_amount;
+    uint8_t max_players;
 };
 #endif

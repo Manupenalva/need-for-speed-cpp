@@ -33,6 +33,7 @@ private:
     void serialize_join_result(bool joined);
     void serialize_lobby(const int lobby_id, MsgType type);
     void serialize_client_id(int id);
+    void serialize_lobby_update(const LobbyInfo& lobby_info);
 
     void append_car_state(const CarState& car);
     void append_npc_state(const NpcState& npc);

@@ -61,6 +61,9 @@ void Gameloop::run() {
     while (should_keep_running()) {
         std::shared_ptr<ClientHandlerMessage> base_msg;
         while (user_commands_queue->try_pop(base_msg)) {
+            if (base_msg->get_msg_type() != MsgType::DRIVING_EVENT) {
+                continue;
+            }
             std::shared_ptr<ActionMessage> msg = std::static_pointer_cast<ActionMessage>(base_msg);
             for (const auto& action: msg->get_actions()) {
                 update_car_input(msg->get_client_id(), action);

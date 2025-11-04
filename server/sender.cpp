@@ -7,7 +7,8 @@ void Sender::run() {
     while (should_keep_running()) {
 
         try {
-            protocol.send_server_message(queue.pop());
+            ServerMessageDTO msg = queue.pop();
+            protocol.send_server_message(msg);
         } catch (const ClosedQueue& e) {
             return;
         } catch (const std::exception& e) {

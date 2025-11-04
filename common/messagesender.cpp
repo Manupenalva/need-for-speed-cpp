@@ -13,14 +13,17 @@ void MessageSender::send_message(const ServerMessageDTO& msg) {
         case MsgType::STATE_UPDATE:
             serialize_state(msg.state);
             break;
-        case MsgType::SEND_LOBBIES_INFO:
-            serialize_lobbies(msg.lobbies);
-            break;
+        // case MsgType::SEND_LOBBIES_INFO:
+        //     serialize_lobbies(msg.lobbies);
+        //     break;
         case MsgType::JOIN_RESULT:
             serialize_join_result(msg.joined);
             break;
         case MsgType::SEND_CLIENT_ID:
             serialize_client_id(msg.id);
+            break;
+        case MsgType::SEND_LOBBY_UPDATE:
+            serialize_lobby_update(msg.lobby_info);
             break;
         default:
             buffer.resize(CODE_BYTES);
@@ -55,6 +58,8 @@ void MessageSender::serialize_lobby(const int lobby_id, MsgType type) {
     append_uint16(lobby_id);
 }
 
+
+
 void MessageSender::serialize_state(const State& state) {
     buffer.resize(CODE_BYTES + 2 * LENGTH_BYTES + AMOUNT_BYTES + state.num_cars * CAR_STATE_BYTES +
                   state.npcs.size() * NPC_STATE_BYTES);
@@ -73,6 +78,15 @@ void MessageSender::serialize_state(const State& state) {
         append_npc_state(npc);
     }
 }
+void MessageSender::serialize_lobby_update(const LobbyInfo& lobby_info) {
+    buffer.resize(LOBBY_BYTES);
+    offset = 0;
+    MsgType type = MsgType::SEND_LOBBY_UPDATE;
+    append_bytes(&type, CODE_BYTES);
+    append_uint16(lobby_info.lobby_id);
+    append_bytes(&lobby_info.player_amount, AMOUNT_PLAYERS_BYTES);
+    append_bytes(&lobby_info.max_players, AMOUNT_PLAYERS_BYTES);
+}
 
 void MessageSender::serialize_events(const std::vector<uint8_t>& events) {
     buffer.resize(events.size() + CODE_BYTES + LENGTH_BYTES);
@@ -84,21 +98,21 @@ void MessageSender::serialize_events(const std::vector<uint8_t>& events) {
 }
 
 
-void MessageSender::serialize_lobbies(const std::vector<LobbyInfo>& lobbies) {
+// void MessageSender::serialize_lobbies(const std::vector<LobbyInfo>& lobbies) {
 
-    offset = 0;
-    size_t total_size = calculate_lobbies_size(lobbies);
-    buffer.resize(total_size);
+//     offset = 0;
+//     size_t total_size = calculate_lobbies_size(lobbies);
+//     buffer.resize(total_size);
 
-    MsgType type = MsgType::SEND_LOBBIES_INFO;
-    append_bytes(&type, CODE_BYTES);
-    append_uint16(lobbies.size());
-    for (const auto& lobby: lobbies) {
-        append_uint16(lobby.name.size());
-        append_bytes(lobby.name.data(), lobby.name.size());
-        append_bytes(&lobby.player_amount, AMOUNT_PLAYERS_BYTES);
-    }
-}
+//     MsgType type = MsgType::SEND_LOBBIES_INFO;
+//     append_bytes(&type, CODE_BYTES);
+//     append_uint16(lobbies.size());
+//     for (const auto& lobby: lobbies) {
+//         append_uint16(lobby.name.size());
+//         append_bytes(lobby.name.data(), lobby.name.size());
+//         append_bytes(&lobby.player_amount, AMOUNT_PLAYERS_BYTES);
+//     }
+// }
 
 void MessageSender::serialize_join_result(bool joined) {
     buffer.resize(CODE_BYTES + 1);
@@ -176,14 +190,14 @@ void MessageSender::append_uint32(uint32_t x) {
     append_bytes(&x, AMOUNT_BYTES);
 }
 
-size_t MessageSender::calculate_lobbies_size(const std::vector<LobbyInfo>& lobbies) {
-    size_t total_size = 0;
-    total_size += CODE_BYTES;
-    total_size += LENGTH_BYTES;
-    for (const auto& lobby: lobbies) {
-        total_size += LENGTH_BYTES;
-        total_size += lobby.name.size();
-        total_size += AMOUNT_PLAYERS_BYTES;
-    }
-    return total_size;
-}
+// size_t MessageSender::calculate_lobbies_size(const std::vector<LobbyInfo>& lobbies) {
+//     size_t total_size = 0;
+//     total_size += CODE_BYTES;
+//     total_size += LENGTH_BYTES;
+//     for (const auto& lobby: lobbies) {
+//         total_size += LENGTH_BYTES;
+//         total_size += lobby.name.size();
+//         total_size += AMOUNT_PLAYERS_BYTES;
+//     }
+//     return total_size;
+// }

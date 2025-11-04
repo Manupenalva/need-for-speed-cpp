@@ -37,14 +37,17 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
         case MsgType::STATE_UPDATE:
             server_msg.state = recv_state_update();
             break;
-        case MsgType::SEND_LOBBIES_INFO:
-            server_msg.lobbies = recv_lobbies_info();
-            break;
+        // case MsgType::SEND_LOBBIES_INFO:
+        //     server_msg.lobbies = recv_lobbies_info();
+            // break;
         case MsgType::JOIN_RESULT:
             server_msg.joined = recv_join_result();
             break;
         case MsgType::SEND_CLIENT_ID:
             server_msg.id = static_cast<int>(obtain_uint32());
+            break;
+        case MsgType::SEND_LOBBY_UPDATE:
+            server_msg.lobby_info = recv_lobby_info();
             break;
         default:
             break;
@@ -139,9 +142,9 @@ CheckpointArrow MessageReceiver::recv_checkpoint_arrow() {
 
 LobbyInfo MessageReceiver::recv_lobby_info() {
     LobbyInfo lobby;
-    uint16_t name_size = obtain_uint16();
-    lobby.name = obtain_string(name_size);
+    lobby.lobby_id = obtain_uint16();
     lobby.player_amount = obtain_byte();
+    lobby.max_players = obtain_byte();
     return lobby;
 }
 

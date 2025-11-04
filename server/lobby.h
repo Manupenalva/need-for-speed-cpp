@@ -11,6 +11,8 @@
 #include "gameSession.h"
 #include "monitorClients.h"
 #include "monitorGames.h"
+#include "../common/lobbyinfo.h"
+#include "../common/constants.h"
 
 class Lobby: public Thread {
 
@@ -35,6 +37,6 @@ private:
     void clean_games();
     void handle_create_race(int client_id);
     void handle_join_race(const std::shared_ptr<ClientHandlerMessage>& msg, int client_id);
+    void handle_lobby_update(int client_id);
 };
-
 #endif
