@@ -39,7 +39,7 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
             break;
         // case MsgType::SEND_LOBBIES_INFO:
         //     server_msg.lobbies = recv_lobbies_info();
-            // break;
+        // break;
         case MsgType::JOIN_RESULT:
             server_msg.joined = recv_join_result();
             break;

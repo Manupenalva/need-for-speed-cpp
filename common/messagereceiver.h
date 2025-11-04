@@ -23,6 +23,7 @@ private:
     Socket& socket;
 
     State recv_state_update();
+    // cppcheck-suppress unusedPrivateFunction
     std::vector<LobbyInfo> recv_lobbies_info();
     std::vector<uint8_t> recv_driving_events();
     bool recv_join_result();
@@ -30,6 +31,7 @@ private:
     uint32_t obtain_uint32();
     uint16_t obtain_uint16();
     uint8_t obtain_byte();
+    // cppcheck-suppress unusedPrivateFunction
     std::string obtain_string(uint16_t size);
     float uint32_to_float(uint32_t n);
     float obtain_float();

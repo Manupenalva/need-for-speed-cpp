@@ -32,7 +32,8 @@ void RaceStruct::broadcast(const ServerMessageDTO& msg) {
     }
 }
 
-void RaceStruct::set_game_queue(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> new_queue) {
+void RaceStruct::set_game_queue(
+        std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> new_queue) {
     std::lock_guard<std::mutex> lock(mtx);
     for (auto& client: players) {
         client->set_game_queue(new_queue);

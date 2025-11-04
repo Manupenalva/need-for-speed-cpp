@@ -4,10 +4,10 @@
 #include "events/clienthandlermessage.h"
 #include "events/createlobbymessage.h"
 #include "events/getlobbiesmessage.h"
+#include "events/getlobbyupdatemessage.h"
 #include "events/joinlobbymessage.h"
 #include "events/quitgamemessage.h"
 #include "events/startracemessage.h"
-#include "events/getlobbyupdatemessage.h"
 
 Receiver::Receiver(Protocol& protocol,
                    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue, int id):

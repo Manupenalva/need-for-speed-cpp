@@ -3,7 +3,7 @@
 
 #include "clienthandlermessage.h"
 
-class GetLobbyUpdateMessage : public ClientHandlerMessage {
+class GetLobbyUpdateMessage: public ClientHandlerMessage {
 
 public:
     explicit GetLobbyUpdateMessage(int client_id):
@@ -11,4 +11,3 @@ public:
 };
 
 #endif
-    

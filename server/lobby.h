@@ -4,6 +4,8 @@
 #include <memory>
 #include <vector>
 
+#include "../common/constants.h"
+#include "../common/lobbyinfo.h"
 #include "../common/queue.h"
 #include "../common/thread.h"
 #include "events/clienthandlermessage.h"
@@ -11,8 +13,6 @@
 #include "gameSession.h"
 #include "monitorClients.h"
 #include "monitorGames.h"
-#include "../common/lobbyinfo.h"
-#include "../common/constants.h"
 
 class Lobby: public Thread {
 

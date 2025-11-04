@@ -59,7 +59,6 @@ void MessageSender::serialize_lobby(const int lobby_id, MsgType type) {
 }
 
 
-
 void MessageSender::serialize_state(const State& state) {
     buffer.resize(CODE_BYTES + 2 * LENGTH_BYTES + AMOUNT_BYTES + state.num_cars * CAR_STATE_BYTES +
                   state.npcs.size() * NPC_STATE_BYTES);

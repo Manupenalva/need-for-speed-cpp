@@ -13,11 +13,9 @@
 #include "../common/thread.h"
 #include "events/clienthandlermessage.h"
 
-
 #include "car.h"
 #include "race.h"
 #include "racemonitor.h"
-
 
 
 class Gameloop: public Thread {

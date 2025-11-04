@@ -1,18 +1,19 @@
 #ifndef DRAG_INFO_H
 #define DRAG_INFO_H
 
-#include <QString>
 #include <QByteArray>
+#include <QString>
 
 class DragInfo {
 private:
     QString type;
-    int rotation;
+    int rotation = 0;
     QString iconPath;
+
 public:
     DragInfo() = default;
     DragInfo(const QString& type, int rotation, const QString& iconPath);
-    
+
     QByteArray pack() const;
     bool unpack(const QByteArray& data);
     QString mimeType() const;

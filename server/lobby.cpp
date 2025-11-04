@@ -62,7 +62,7 @@ void Lobby::handle_lobby_update(int client_id) {
     response.lobby_info = lobby_info;
     client->send_msg(response);
 }
-    
+
 int Lobby::create_race() { return games_monitor.create_race(); }
 
 void Lobby::add_player_to_race(int playerId, int raceId) {

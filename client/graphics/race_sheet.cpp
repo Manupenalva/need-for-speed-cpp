@@ -16,18 +16,20 @@ void RaceSheet::load_sprites() {
         uint32_t color_key = pixel_color[0];
         surface.SetColorKey(true, color_key);
 
-        SDL2pp::Texture texture(renderer, surface);
-        if (texture.Get() == nullptr) {
+        auto texture = std::make_unique<SDL2pp::Texture>(renderer, surface);
+        if (texture->Get() == nullptr) {
             throw std::runtime_error("Error al cargar textura de carrera: " + file_path);
         }
 
-        SDL2pp::Rect src_rect(MAP_MIN_X, MAP_MIN_Y, texture.GetWidth(), texture.GetHeight());
-        race_sprites.emplace_back(texture, src_rect);
+        SDL2pp::Rect src_rect(MAP_MIN_X, MAP_MIN_Y, texture->GetWidth(), texture->GetHeight());
+
+        race_sprites.emplace_back(Sprite{*texture, src_rect});
+        textures.push_back(std::move(texture));
     }
 }
 
 Sprite_rotation RaceSheet::get_race_sprite(const RaceElement RaceType, float direction) {
     int index = static_cast<int>(RaceType);
-    Sprite sprite = race_sprites[index];
+    const Sprite& sprite = race_sprites[index];
     return Sprite_rotation{sprite, direction};
 }

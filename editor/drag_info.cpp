@@ -3,8 +3,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-DragInfo::DragInfo(const QString& type, int rotation, const QString& iconPath)
-    : type(type), rotation(rotation), iconPath(iconPath) {}
+DragInfo::DragInfo(const QString& type, int rotation, const QString& iconPath):
+        type(type), rotation(rotation), iconPath(iconPath) {}
 
 QByteArray DragInfo::pack() const {
     QJsonObject jsonData;
@@ -28,18 +28,10 @@ bool DragInfo::unpack(const QByteArray& data) {
     return true;
 }
 
-QString DragInfo::mimeType() const {
-    return "application/x-maptool";
-}
+QString DragInfo::mimeType() const { return "application/x-maptool"; }
 
-QString DragInfo::getType() const {
-    return type;
-}
+QString DragInfo::getType() const { return type; }
 
-int DragInfo::getRotation() const {
-    return rotation;
-}
+int DragInfo::getRotation() const { return rotation; }
 
-QString DragInfo::getIconPath() const {
-    return iconPath;
-}
+QString DragInfo::getIconPath() const { return iconPath; }

@@ -43,7 +43,7 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), protocol
     startScreen = new QWidget(this);
     auto* startLayout = new QVBoxLayout(startScreen);
     QLabel* startTitle = new QLabel("Lobby Start");
-    startTitle-> setAlignment(Qt::AlignCenter);
+    startTitle->setAlignment(Qt::AlignCenter);
     startTitle->setStyleSheet("font-size: 24px; font-weight: bold;");
     startButton = new QPushButton("Start");
 
@@ -69,8 +69,8 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), protocol
     stack->setCurrentIndex(0);
 }
 
-void Lobby::menuScreen() { 
-    stack->setCurrentIndex(0); 
+void Lobby::menuScreen() {
+    stack->setCurrentIndex(0);
     ClientMessageDTO msg;
     msg.type = MsgType::EXIT_RACE;
     protocol.send_client_message(msg);
@@ -91,7 +91,7 @@ void Lobby::createGame() {
     }
     host = true;
     QMessageBox::information(this, "New Game", QString("Race code: %1").arg(response.id));
-    raceC = response.id; 
+    raceC = response.id;
     stack->setCurrentIndex(2);
     timer->start(1000);
 }
@@ -126,16 +126,15 @@ void Lobby::connectServer() {
         return;
     }
     host = false;
-    raceC = msg.lobby_id; 
+    raceC = msg.lobby_id;
     QMessageBox::information(this, "Connecting", QString("Connectin to.. %1").arg(raceCode));
     stack->setCurrentIndex(2);
-    timer->start(1000); // Actualizar cada segundo
+    timer->start(1000);  // Actualizar cada segundo
 }
 
-void Lobby::startGame(){
+void Lobby::startGame() {
     if (!host) {
-        QMessageBox::warning(this, "Error",
-                        "Could not create a game because you are not the host");
+        QMessageBox::warning(this, "Error", "Could not create a game because you are not the host");
         return;
     }
     ClientMessageDTO msg;
@@ -144,8 +143,8 @@ void Lobby::startGame(){
     protocol.send_client_message(msg);
     timer->stop();
     this->close();
-    // Faltaria avisarle a todos los demas (unidos en la partida) que arranco asi se cierra la ventana
-    // Ademas de ir mandando cuantos jugadores hay metidos hasta que la arranque
+    // Faltaria avisarle a todos los demas (unidos en la partida) que arranco asi se cierra la
+    // ventana Ademas de ir mandando cuantos jugadores hay metidos hasta que la arranque
 }
 
 void Lobby::updateLobby() {

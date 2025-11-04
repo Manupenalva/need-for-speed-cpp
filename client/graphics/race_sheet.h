@@ -1,6 +1,7 @@
 #ifndef RACE_SHEET_H
 #define RACE_SHEET_H
 
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -26,6 +27,7 @@ enum RaceElement {
 class RaceSheet {
 private:
     SDL2pp::Renderer& renderer;
+    std::vector<std::unique_ptr<SDL2pp::Texture>> textures;
     std::vector<Sprite> race_sprites;
     std::string race_path;
 

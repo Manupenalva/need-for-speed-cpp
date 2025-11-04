@@ -7,6 +7,7 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QWidget>
+
 #include "scene_controller.h"
 
 class MapCanvas: public QWidget {

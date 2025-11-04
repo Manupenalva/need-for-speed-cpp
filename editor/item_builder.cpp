@@ -1,7 +1,7 @@
 #include "item_builder.h"
 
-#include <QTransform>
 #include <QPixmap>
+#include <QTransform>
 
 QGraphicsPixmapItem* ItemBuilder::buildItem(const DragInfo& info, const QSize& size) {
     QString iconPath;
@@ -23,7 +23,7 @@ QGraphicsPixmapItem* ItemBuilder::buildItem(const DragInfo& info, const QSize& s
     }
 
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(
-        pixmap.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            pixmap.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     item->setData(0, info.getType());
     item->setData(1, info.getRotation());
 
@@ -49,4 +49,3 @@ QString ItemBuilder::getIcon(const QString& type) const {
         return "";
     }
 }
-

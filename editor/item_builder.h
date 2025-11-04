@@ -2,8 +2,9 @@
 #define ITEM_BUILDER_H
 
 #include <QGraphicsPixmapItem>
-#include <QString>
 #include <QSize>
+#include <QString>
+
 #include "drag_info.h"
 
 class ItemBuilder {

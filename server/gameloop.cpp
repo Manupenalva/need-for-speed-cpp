@@ -18,10 +18,7 @@
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
         std::shared_ptr<RaceStruct> race_monitor):
-        user_commands_queue(user_commands_queue),
-        race_monitor(race_monitor),
-        races(),
-        frames(0) {
+        user_commands_queue(user_commands_queue), race_monitor(race_monitor), races(), frames(0) {
 
     std::vector<int> players_id = race_monitor->get_player_ids();
 
