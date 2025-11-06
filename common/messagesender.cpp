@@ -50,8 +50,7 @@ void MessageSender::serialize_car_catalog(const std::vector<CarProperties>& cata
 }
 
 void MessageSender::serialize_interval_state(const IntervalState& interval_state) {
-    buffer.resize(2 * AMOUNT_PLAYERS_BYTES + CODE_BYTES +
-                  LENGTH_BYTES +
+    buffer.resize(2 * AMOUNT_PLAYERS_BYTES + CODE_BYTES + LENGTH_BYTES +
                   interval_state.player_states.size() * PLAYER_STATE_BYTES);
     offset = 0;
     MsgType type = MsgType::INTERVAL_UPDATE;
@@ -88,7 +87,6 @@ void MessageSender::serialize_lobby(const int lobby_id, MsgType type) {
     append_bytes(&type, CODE_BYTES);
     append_uint16(lobby_id);
 }
-
 
 void MessageSender::serialize_state(const State& state) {
     buffer.resize(CODE_BYTES + 2 * LENGTH_BYTES + AMOUNT_BYTES + state.num_cars * CAR_STATE_BYTES +

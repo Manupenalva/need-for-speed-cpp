@@ -2,6 +2,7 @@
 #define PLAYERSTATE_H
 
 #include <cstdint>
+
 #include "carProperties.h"
 struct PlayerState {
     uint16_t player_id;
