@@ -2,9 +2,10 @@
 #define PLAYERSTATE_H
 
 #include <cstdint>
-
+#include "carProperties.h"
 struct PlayerState {
     uint8_t player_id;
+    bool ready;
     uint8_t previous_position;
     uint32_t result_time;             // in milliseconds
     uint32_t next_penalization_time;  // in milliseconds

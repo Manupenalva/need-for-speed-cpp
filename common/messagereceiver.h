@@ -35,6 +35,8 @@ private:
     std::string obtain_string(uint16_t size);
     float uint32_to_float(uint32_t n);
     float obtain_float();
+    CarProperties recv_car_properties();
+    PlayerState recv_player_state();
     // std::string obtain_lobby_name();
 
     CarState recv_car_state();
@@ -42,5 +44,7 @@ private:
     CheckpointInfo recv_checkpoint_info();
     CheckpointArrow recv_checkpoint_arrow();
     LobbyInfo recv_lobby_info();
+    std::vector<CarProperties> recv_car_catalog();
+    IntervalState recv_interval_state();
 };
 #endif

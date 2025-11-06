@@ -49,6 +49,12 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
         case MsgType::SEND_LOBBY_UPDATE:
             server_msg.lobby_info = recv_lobby_info();
             break;
+        case MsgType::SEND_CAR_CATALOG:
+            server_msg.car_catalog = recv_car_catalog();
+            break;
+        case MsgType::INTERVAL_UPDATE:
+            server_msg.interval_state = recv_interval_state();
+            break;
         default:
             break;
     }
@@ -146,6 +152,51 @@ LobbyInfo MessageReceiver::recv_lobby_info() {
     lobby.player_amount = obtain_byte();
     lobby.max_players = obtain_byte();
     return lobby;
+}
+
+IntervalState MessageReceiver::recv_interval_state() {
+    IntervalState interval_state;
+    interval_state.players_ready = obtain_byte();
+    interval_state.total_players = obtain_byte();
+    uint16_t num_players = obtain_uint16();
+    interval_state.player_states.resize(num_players);
+
+    std::generate(interval_state.player_states.begin(), interval_state.player_states.end(),
+                  [this]() { return recv_player_state(); });
+
+    return interval_state;
+}
+
+std::vector<CarProperties> MessageReceiver::recv_car_catalog() {
+    uint16_t catalog_size = obtain_uint16();
+    std::vector<CarProperties> catalog;
+    catalog.resize(catalog_size);
+
+    std::generate(catalog.begin(), catalog.end(), [this]() { return recv_car_properties(); });
+
+    return catalog;
+}
+
+CarProperties MessageReceiver::recv_car_properties() {
+    CarProperties car_prop;
+    car_prop.car_id = obtain_byte();
+    car_prop.max_speed = obtain_uint16();
+    car_prop.acceleration = obtain_uint16();
+    car_prop.max_health = obtain_uint16();
+    car_prop.mass = obtain_uint16();
+    car_prop.control = obtain_uint16();
+    return car_prop;
+}
+
+PlayerState MessageReceiver::recv_player_state() {
+    PlayerState player_state;
+    player_state.player_id = obtain_byte();
+    player_state.ready = obtain_byte() != 0;
+    player_state.previous_position = obtain_byte();
+    player_state.result_time = obtain_uint32();
+    player_state.next_penalization_time = obtain_uint32();
+    player_state.car_properties = recv_car_properties();
+    return player_state;
 }
 
 uint32_t MessageReceiver::obtain_uint32() {
