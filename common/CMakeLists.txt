@@ -28,4 +28,7 @@ target_sources(taller_common
         checkpointArrow.h
         checkpointInfo.h
         npcState.h
+        carProperties.h
+        intervalState.h
+        playerState.h
     )

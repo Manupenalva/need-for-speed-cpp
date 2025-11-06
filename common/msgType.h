@@ -12,6 +12,7 @@ enum class MsgType : uint8_t {
     GET_LOBBIES,
     START_RACE,
     GET_LOBBY_UPDATE,
+    GET_CAR_CATALOG,
 
     // Servidor → Cliente
     GAME_START,
@@ -21,6 +22,10 @@ enum class MsgType : uint8_t {
     JOIN_RESULT,
     SEND_CLIENT_ID,
     SEND_LOBBY_UPDATE,
+    RACE_FINISHED,
+    RACE_STARTED,
+    INTERVAL_UPDATE,
+    SEND_CAR_CATALOG,
 
     INVALID = 255
 

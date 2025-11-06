@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "carProperties.h"
+#include "intervalState.h"
 #include "lobbyinfo.h"
 #include "msgType.h"
 #include "state.h"
@@ -26,8 +28,17 @@ struct ServerMessageDTO {
     LobbyInfo lobby_info;
     bool joined = false;
     int id;
+    std::vector<CarProperties> car_catalog;
+    IntervalState interval_state;
 
     ServerMessageDTO():
-            type(MsgType::INVALID), state(), message(""), lobby_info(), joined(false), id(0) {}
+            type(MsgType::INVALID),
+            state(),
+            message(""),
+            lobby_info(),
+            joined(false),
+            id(0),
+            car_catalog(),
+            interval_state() {}
 };
 #endif
