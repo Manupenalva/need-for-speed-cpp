@@ -34,11 +34,15 @@ private:
     void serialize_lobby(const int lobby_id, MsgType type);
     void serialize_client_id(int id);
     void serialize_lobby_update(const LobbyInfo& lobby_info);
+    void serialize_car_catalog(const std::vector<CarProperties>& catalog);
+    void serialize_interval_state(const IntervalState& interval_state);
 
     void append_car_state(const CarState& car);
     void append_npc_state(const NpcState& npc);
     void append_checkpoint_info(const CheckpointInfo& checkpoint);
     void append_checkpoint_arrow(const CheckpointArrow& arrow);
+    void append_car_properties(const CarProperties& car_prop);
+    void append_player_state(const PlayerState& player_state);
 
     size_t calculate_lobbies_size(const std::vector<LobbyInfo>& lobbies);
 

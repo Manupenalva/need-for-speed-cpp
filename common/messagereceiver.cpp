@@ -44,7 +44,7 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
             server_msg.joined = recv_join_result();
             break;
         case MsgType::SEND_CLIENT_ID:
-            server_msg.id = static_cast<int>(obtain_uint32());
+            server_msg.id = static_cast<int>(obtain_uint16());
             break;
         case MsgType::SEND_LOBBY_UPDATE:
             server_msg.lobby_info = recv_lobby_info();

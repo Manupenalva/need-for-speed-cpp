@@ -4,7 +4,7 @@
 #include <cstdint>
 #include "carProperties.h"
 struct PlayerState {
-    uint8_t player_id;
+    uint16_t player_id;
     bool ready;
     uint8_t previous_position;
     uint32_t result_time;             // in milliseconds

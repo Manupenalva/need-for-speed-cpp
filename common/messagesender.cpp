@@ -25,12 +25,43 @@ void MessageSender::send_message(const ServerMessageDTO& msg) {
         case MsgType::SEND_LOBBY_UPDATE:
             serialize_lobby_update(msg.lobby_info);
             break;
+        case MsgType::SEND_CAR_CATALOG:
+            serialize_car_catalog(msg.car_catalog);
+            break;
+        case MsgType::INTERVAL_UPDATE:
+            serialize_interval_state(msg.interval_state);
         default:
             buffer.resize(CODE_BYTES);
             offset = 0;
             append_bytes(&msg.type, CODE_BYTES);
     }
     socket.sendall(buffer.data(), buffer.size());
+}
+
+void MessageSender::serialize_car_catalog(const std::vector<CarProperties>& catalog) {
+    buffer.resize(CODE_BYTES + LENGTH_BYTES + catalog.size() * CAR_PROPERTIES_BYTES);
+    offset = 0;
+    MsgType type = MsgType::SEND_CAR_CATALOG;
+    append_bytes(&type, CODE_BYTES);
+    append_uint16(static_cast<uint16_t>(catalog.size()));
+    for (const auto& car_prop: catalog) {
+        append_car_properties(car_prop);
+    }
+}
+
+void MessageSender::serialize_interval_state(const IntervalState& interval_state) {
+    buffer.resize(2 * AMOUNT_PLAYERS_BYTES + CODE_BYTES +
+                  LENGTH_BYTES +
+                  interval_state.player_states.size() * PLAYER_STATE_BYTES);
+    offset = 0;
+    MsgType type = MsgType::INTERVAL_UPDATE;
+    append_bytes(&type, CODE_BYTES);
+    append_bytes(&interval_state.players_ready, AMOUNT_PLAYERS_BYTES);
+    append_bytes(&interval_state.total_players, AMOUNT_PLAYERS_BYTES);
+    append_uint16(static_cast<uint16_t>(interval_state.player_states.size()));
+    for (const auto& player_state: interval_state.player_states) {
+        append_player_state(player_state);
+    }
 }
 
 void MessageSender::send_message(const ClientMessageDTO& msg) {
@@ -123,11 +154,11 @@ void MessageSender::serialize_join_result(bool joined) {
 }
 
 void MessageSender::serialize_client_id(int id) {
-    buffer.resize(CODE_BYTES + AMOUNT_BYTES);
+    buffer.resize(CODE_BYTES + ID_BYTES);
     offset = 0;
     MsgType type = MsgType::SEND_CLIENT_ID;
     append_bytes(&type, CODE_BYTES);
-    append_uint32(static_cast<uint32_t>(id));
+    append_uint16(static_cast<uint16_t>(id));
 }
 
 void MessageSender::append_car_state(const CarState& car) {
@@ -164,6 +195,25 @@ void MessageSender::append_checkpoint_arrow(const CheckpointArrow& arrow) {
     append_float(arrow.x);
     append_float(arrow.y);
     append_float(arrow.angle);
+}
+
+void MessageSender::append_car_properties(const CarProperties& car_prop) {
+    append_bytes(&car_prop.car_id, 1);
+    append_uint16(car_prop.max_speed);
+    append_uint16(car_prop.acceleration);
+    append_uint16(car_prop.max_health);
+    append_uint16(car_prop.mass);
+    append_uint16(car_prop.control);
+}
+
+void MessageSender::append_player_state(const PlayerState& player_state) {
+    append_bytes(&player_state.player_id, 1);
+    uint8_t ready_byte = player_state.ready ? 0x01 : 0x00;
+    append_bytes(&ready_byte, 1);
+    append_bytes(&player_state.previous_position, 1);
+    append_uint32(player_state.result_time);
+    append_uint32(player_state.next_penalization_time);
+    append_car_properties(player_state.car_properties);
 }
 
 void MessageSender::append_bytes(const void* data, size_t size) {
