@@ -51,8 +51,8 @@ float RaceBuilder::get_hint_angle(const std::string& rotation) {
     }
 }
 
-std::unique_ptr<Race> RaceBuilder::create_race(
-        const std::string& path, std::unordered_map<uint16_t, std::unique_ptr<Car>>& players_cars) {
+std::unique_ptr<Race> RaceBuilder::create_race(const std::string& path,
+                                               std::unordered_map<uint16_t, Car>& players_cars) {
     try {
         YAML::Node race_data = open_file(path);
         if (!race_data) {

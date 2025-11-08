@@ -10,6 +10,7 @@
 #include "../libs/box2d/include/box2d/box2d.h"
 #include "events/actionmessage.h"
 
+#include "carBuilder.h"
 #include "carPhysics.h"
 #include "mapCollisionBuilder.h"
 #include "raceBuilder.h"
@@ -18,21 +19,10 @@
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
         std::shared_ptr<RaceStruct> race_monitor):
-        user_commands_queue(user_commands_queue), race_monitor(race_monitor), races(), frames(0) {
-
-    std::vector<int> players_id = race_monitor->get_player_ids();
-
-    for (const auto& id: players_id) {
-        uint16_t player_id = id;
-        players_cars[player_id] = std::make_unique<Car>(player_id);
-    }
-
-    races.push_back(RaceBuilder::create_race("../maps/Backgrounds - Liberty City.yaml",
-                                             players_cars));
-}
+        user_commands_queue(user_commands_queue), race_monitor(race_monitor), races(), frames(0) {}
 
 void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action) {
-    players_cars[player_id]->update_input(action);
+    players_cars[player_id].update_input(action);
 }
 
 void Gameloop::broadcast_players() {
@@ -48,7 +38,31 @@ void Gameloop::broadcast_start() {
     broadcast_players();
 }
 
+
+void Gameloop::initialize_races() {
+
+    // mando el catalogo a todos los jugadores, luego recibo la respuesta de cada uno a partir de la
+    // comand queue. Cuando estén todos recién ahí sigo con la creación de las carreras.
+
+    std::vector<int> players_id = race_monitor->get_player_ids();
+
+    for (const auto& id: players_id) {
+        uint16_t player_id = id;
+        players_cars[player_id] = CarBuilder::create_car(
+                "../server/assets/cars_configs/cars_config.yaml", player_id, 1);
+    }
+
+    // una vez que tengo todos los autos ahí creo todas las carreras recorriendo la carpeta con
+    // la libreria correspondiente
+    races.push_back(
+            RaceBuilder::create_race("../maps/Backgrounds - Liberty City.yaml", players_cars));
+
+    // por ahora es un auto con un byte hardcodeado, y una carrera sola
+}
+
 void Gameloop::run() {
+
+    initialize_races();
 
     broadcast_start();
     GameLoopTimer timer(TARGET_FPS);

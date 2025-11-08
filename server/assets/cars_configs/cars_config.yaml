@@ -5,6 +5,8 @@
   health: 50
   mass: 40
   drivability: 80
+  long: 41
+  width: 11
 2:
   name: "Muscle car"
   max_speed: 80
@@ -12,6 +14,8 @@
   health: 40
   mass: 20
   drivability: 60
+  long: 41
+  width: 11
 3:
   name: "Sports car"
   max_speed: 100
@@ -19,6 +23,8 @@
   health: 30
   mass: 20
   drivability: 30
+  long: 41
+  width: 11
 4:
   name: "Electric car"
   max_speed: 60
@@ -26,6 +32,8 @@
   health: 40
   mass: 20
   drivability: 70
+  long: 41
+  width: 11
 5:
   name: "All terrain"
   max_speed: 60
@@ -33,6 +41,8 @@
   health: 60
   mass: 40
   drivability: 100
+  long: 41
+  width: 11
 6:
   name: "van"
   max_speed: 60
@@ -40,6 +50,8 @@
   health: 60
   mass: 50
   drivability: 90
+  long: 41
+  width: 11
 7:
   name: "truck"
   max_speed: 40
@@ -47,3 +59,5 @@
   health: 100
   mass: 80
   drivability: 80
+  long: 41
+  width: 11

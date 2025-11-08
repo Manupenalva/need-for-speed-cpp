@@ -4,13 +4,26 @@
 
 #include "../common/constants.h"
 
-Car::Car(const uint16_t& id): input_state(), state(id, 0.0f, 0.0f, 0.0f, 0.0f, 0) {}
+Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
+         const float& acceleration, const float& health, const float& mass,
+         const float& drivability, const float& car_long, const float& car_width):
+        input_state(),
+        state(id, 0.0f, 0.0f, 0.0f, 0.0f, 0),
+        car_name(name),
+        max_speed(max_speed),
+        acceleration(acceleration),
+        health(health),
+        mass(mass),
+        drivability(drivability),
+        car_long(car_long),
+        car_width(car_width) {}
 
 void Car::add_to_world(b2WorldId world, Position start_position) {
     state.x = start_position.x;
     state.y = start_position.y;
 
-    physics = std::make_unique<CarPhysics>(world, state);
+    physics = std::make_unique<CarPhysics>(world, state, max_speed, acceleration, mass, drivability,
+                                           car_long, car_width);
 }
 
 void Car::update_input(const uint8_t& action) {
@@ -50,7 +63,7 @@ void Car::update_physics() {
 
 void Car::update_position() { physics->update_position(); }
 
-void Car::handle_hits() { physics->handle_hits(); }
+void Car::handle_hits() { physics->handle_hits(health); }
 
 CarInfo Car::get_state_info() const { return state; }
 
