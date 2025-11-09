@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <cmath>
+#include <filesystem>
 #include <iostream>
 #include <ostream>
 #include <thread>
@@ -51,13 +52,15 @@ void Gameloop::initialize_races() {
         players_cars[player_id] = CarBuilder::create_car(
                 "../server/assets/cars_configs/cars_config.yaml", player_id, 1);
     }
+    // por ahora es un auto con un byte hardcodeado
 
     // una vez que tengo todos los autos ahí creo todas las carreras recorriendo la carpeta con
     // la libreria correspondiente
-    races.push_back(
-            RaceBuilder::create_race("../maps/Backgrounds - Liberty City.yaml", players_cars));
-
-    // por ahora es un auto con un byte hardcodeado, y una carrera sola
+    for (const auto& entry: std::filesystem::directory_iterator("../server/assets/race_configs")) {
+        if (entry.is_regular_file() && entry.path().extension() == ".yaml") {
+            races.push_back(RaceBuilder::create_race(entry.path(), players_cars));
+        }
+    }
 }
 
 void Gameloop::run() {
