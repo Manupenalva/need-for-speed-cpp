@@ -11,10 +11,10 @@ private:
     b2WorldId world;
     CarInfo& car_state;
 
-    float max_speed;
-    float acceleration;
-    float mass;
-    float drivability;
+    float max_speed_factor;
+    float acceleration_factor;
+    float mass_factor;
+    float drivability_factor;
 
 public:
     CarPhysics(b2WorldId world, CarInfo& car_state, const float& max_speed,

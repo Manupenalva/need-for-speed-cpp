@@ -4,7 +4,7 @@
   acceleration: 50
   health: 50
   mass: 40
-  drivability: 80
+  drivability: 90
   long: 32
   width: 26
 2:
@@ -13,7 +13,7 @@
   acceleration: 90
   health: 40
   mass: 20
-  drivability: 60
+  drivability: 80
   long: 42
   width: 26
 3:
@@ -22,7 +22,7 @@
   acceleration: 100
   health: 30
   mass: 20
-  drivability: 30
+  drivability: 50
   long: 42
   width: 26
 4:
@@ -54,10 +54,10 @@
   width: 26
 7:
   name: "truck"
-  max_speed: 40
-  acceleration: 30
+  max_speed: 30
+  acceleration: 20
   health: 100
   mass: 80
-  drivability: 80
+  drivability: 90
   long: 53
   width: 26

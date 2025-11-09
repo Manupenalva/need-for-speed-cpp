@@ -3,24 +3,25 @@
 #include <cmath>
 #include <iostream>
 
-#define MAX_SPEED 7000.0f
+#define BASE_MAX_SPEED 10000.0f
+#define BASE_ACCELERATION 1000.0f
+#define BASE_ANGLE_ROTATION 4
+#define BASE_FRICTION 10.0f
 #define MIN_SPEED 100.0f
-#define ACCELERATION 400.0f
-#define ANGLE_ROTATION 4
 
 CarPhysics::CarPhysics(b2WorldId world, CarInfo& car_state, const float& max_speed,
                        const float& acceleration, const float& mass, const float& drivability,
                        const float& car_long, const float& car_width):
         world(world),
         car_state(car_state),
-        max_speed(max_speed),
-        acceleration(acceleration),
-        mass(mass),
-        drivability(drivability) {
+        max_speed_factor(max_speed / 100.0f),
+        acceleration_factor(acceleration / 100.0f),
+        mass_factor(mass / 100.0f),
+        drivability_factor(drivability / 100.0f) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;
-    bodyDef.linearDamping = 2.0f;
-    bodyDef.angularDamping = 5.0f;
+    bodyDef.linearDamping = BASE_FRICTION * mass_factor;
+    bodyDef.angularDamping = BASE_FRICTION * mass_factor;
     bodyDef.position = {car_state.x, car_state.y};
     body = b2CreateBody(world, &bodyDef);
     b2Body_EnableContactEvents(body, true);
@@ -46,8 +47,10 @@ void CarPhysics::accelerate() {
         b2Body_SetLinearVelocity(body, initial_velocity);
     }
 
-    if (speed < MAX_SPEED) {
-        b2Body_ApplyForceToCenter(body, {direction.x * ACCELERATION, direction.y * ACCELERATION},
+    if (speed < (BASE_MAX_SPEED * max_speed_factor)) {
+        b2Body_ApplyForceToCenter(body,
+                                  {direction.x * (BASE_ACCELERATION * acceleration_factor),
+                                   direction.y * (BASE_ACCELERATION * acceleration_factor)},
                                   true);
     }
 }
@@ -59,7 +62,7 @@ void CarPhysics::brake() {
 }
 
 void CarPhysics::turn_left() {
-    car_state.angle -= ANGLE_ROTATION;
+    car_state.angle -= (BASE_ANGLE_ROTATION / drivability_factor);
 
     if (car_state.angle < 0.0f) {
         car_state.angle += 360.0f;
@@ -76,7 +79,7 @@ void CarPhysics::turn_left() {
 }
 
 void CarPhysics::turn_right() {
-    car_state.angle += ANGLE_ROTATION;
+    car_state.angle += (BASE_ANGLE_ROTATION / drivability_factor);
 
     if (car_state.angle >= 360.f) {
         car_state.angle -= 360.0f;
