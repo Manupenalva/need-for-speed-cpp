@@ -10,6 +10,7 @@
 #include "events/selectcarmessage.h"
 #include "events/setreadymessage.h"
 #include "events/startracemessage.h"
+#include "events/getcatalogmessage.h"
 
 Receiver::Receiver(Protocol& protocol,
                    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue, int id):
@@ -52,6 +53,9 @@ void Receiver::run() {
                     break;
                 case MsgType::SET_READY:
                     game_message = std::make_shared<SetReadyMessage>(id);
+                    break;
+                case MsgType::GET_CAR_CATALOG:
+                    game_message = std::make_shared<GetCatalogMessage>(id);
                     break;
                 default:
                     continue;
