@@ -7,9 +7,9 @@
 
 Lobby::Lobby(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> lobbyQueue,
              MonitorClients& clientsMonitor):
-        lobby_queue(std::move(lobbyQueue)), clients_monitor(clientsMonitor) {
-            car_catalog = CarBuilder("../server/assets/cars_configs/cars_config.yaml").get_catalog();
-        }
+        lobby_queue(std::move(lobbyQueue)),
+        clients_monitor(clientsMonitor),
+        car_catalog(CarBuilder("../server/assets/cars_configs/cars_config.yaml").get_catalog()) {}
 
 void Lobby::run() {
     std::shared_ptr<ClientHandlerMessage> msg;

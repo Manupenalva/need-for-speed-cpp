@@ -213,6 +213,7 @@ void MessageSender::append_checkpoint_info(const CheckpointInfo& checkpoint) {
     append_float(checkpoint.y);
     append_float(checkpoint.angle);
     append_float(checkpoint.radius);
+    append_bytes(&checkpoint.type, CODE_BYTES);
 }
 
 void MessageSender::append_checkpoint_arrow(const CheckpointArrow& arrow) {

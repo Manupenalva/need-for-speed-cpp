@@ -10,10 +10,10 @@
 #include "../common/thread.h"
 #include "events/clienthandlermessage.h"
 
+#include "carBuilder.h"
 #include "gameSession.h"
 #include "monitorClients.h"
 #include "monitorGames.h"
-#include "carBuilder.h"
 
 class Lobby: public Thread {
 

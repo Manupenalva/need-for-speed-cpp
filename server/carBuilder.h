@@ -7,8 +7,9 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include "car.h"
 #include "../common/carProperties.h"
+
+#include "car.h"
 
 
 class CarBuilder {

@@ -10,12 +10,12 @@
 #include "../common/gameLoop_timer.h"
 #include "../libs/box2d/include/box2d/box2d.h"
 #include "events/actionmessage.h"
+#include "events/selectcarmessage.h"
 
 #include "carBuilder.h"
 #include "carPhysics.h"
 #include "mapCollisionBuilder.h"
 #include "raceBuilder.h"
-#include "events/selectcarmessage.h"
 #define TARGET_FPS 60
 
 Gameloop::Gameloop(
@@ -64,7 +64,7 @@ void Gameloop::initialize_races() {
     }
 }
 
-void Gameloop::receive_selected_cars(){
+void Gameloop::receive_selected_cars() {
     CarBuilder builder("../server/assets/cars_configs/cars_config.yaml");
     while (should_keep_running()) {
         std::shared_ptr<ClientHandlerMessage> base_msg;
@@ -75,7 +75,7 @@ void Gameloop::receive_selected_cars(){
                 continue;
             }
             std::shared_ptr<SelectCarMessage> msg =
-                std::static_pointer_cast<SelectCarMessage>(base_msg);
+                    std::static_pointer_cast<SelectCarMessage>(base_msg);
 
             int player_id = msg->get_client_id();
             int selected_car = msg->get_car_id();
@@ -87,10 +87,8 @@ void Gameloop::receive_selected_cars(){
             }
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
-        
     }
 }
-    
 
 
 void Gameloop::run() {

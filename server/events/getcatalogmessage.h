@@ -5,7 +5,7 @@
 
 class GetCatalogMessage : public ClientHandlerMessage {
 public:
-    GetCatalogMessage(int client_id) : ClientHandlerMessage(client_id, MsgType::GET_CAR_CATALOG) {}
+    explicit GetCatalogMessage(int client_id) : ClientHandlerMessage(client_id, MsgType::GET_CAR_CATALOG) {}
 };
 
 #endif

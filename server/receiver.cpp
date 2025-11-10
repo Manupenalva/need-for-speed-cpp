@@ -3,6 +3,7 @@
 #include "events/actionmessage.h"
 #include "events/clienthandlermessage.h"
 #include "events/createlobbymessage.h"
+#include "events/getcatalogmessage.h"
 #include "events/getlobbiesmessage.h"
 #include "events/getlobbyupdatemessage.h"
 #include "events/joinlobbymessage.h"
@@ -10,7 +11,6 @@
 #include "events/selectcarmessage.h"
 #include "events/setreadymessage.h"
 #include "events/startracemessage.h"
-#include "events/getcatalogmessage.h"
 
 Receiver::Receiver(Protocol& protocol,
                    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue, int id):

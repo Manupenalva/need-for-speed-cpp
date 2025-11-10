@@ -19,6 +19,7 @@ private:
     std::mutex mtx;
 
     void reap();
+
 public:
     RaceStruct();
 
@@ -33,7 +34,6 @@ public:
     void broadcast(const ServerMessageDTO& msg);
 
     int size();
-    
 };
 
 #endif

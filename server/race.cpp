@@ -85,8 +85,11 @@ CheckpointInfo Race::get_next_checkpoint_info(const uint16_t car_id) {
     Position checkpoint = checkpoints[status.current_checkpoint_index];
 
     return {static_cast<uint16_t>(status.current_checkpoint_index),
-            static_cast<float>(checkpoint.x), static_cast<float>(checkpoint.y), 0.0f,
-            celd_width};  // Angulo hardcodeado para compilar
+            static_cast<float>(checkpoint.x),
+            static_cast<float>(checkpoint.y),
+            0.0f,
+            celd_width,
+            COMMON_CHECKPOINT};  // Angulo y tipo hardcodeado para compilar
 }
 
 CheckpointArrow Race::get_next_checkpoint_arrow(const uint16_t car_id) {
