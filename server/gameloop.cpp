@@ -37,7 +37,7 @@ void Gameloop::broadcast_players(const int& race_index) {
     race_monitor->broadcast(msg);
 }
 
-void Gameloop::broadcast_event(const uint8_t msg_type) {
+void Gameloop::broadcast_event(const MsgType msg_type) {
     ServerMessageDTO msg;
     msg.type = msg_type;
     race_monitor->broadcast(msg);
@@ -77,7 +77,7 @@ void Gameloop::receive_selected_cars() {
     }
 }
 
-void Gameloop::handle_upgrade_phase() {
+void Gameloop::handle_upgrades_phase() {
     std::this_thread::sleep_for(std::chrono::seconds(10));
 
     std::shared_ptr<ClientHandlerMessage> base_msg;

@@ -38,8 +38,9 @@ private:
     void update_positions();
     void update_car_input(const uint16_t& player_id, const uint8_t& action);
     void receive_selected_cars();
-    void broadcast_event(const uint8_t msg_type);
+    void broadcast_event(const MsgType msg_type);
     void handle_upgrades_phase();
+    void handle_race(const int& race_index);
     void upgrade_car_stats(const uint16_t& player_id, const uint8_t& action);
 
     Gameloop(const Gameloop& other) = delete;

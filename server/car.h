@@ -53,7 +53,6 @@ public:
             car_name("default"),
             max_speed(0),
             acceleration(0),
-            health(0),
             mass(0),
             drivability(0),
             car_long(0),

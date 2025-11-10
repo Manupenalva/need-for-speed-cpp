@@ -36,7 +36,6 @@ Car CarBuilder::create_car(const int& id, const int& car_type) {
     }
 }
 
-/*
 std::vector<CarProperties> CarBuilder::get_catalog() {
     try {
         if (!cars_data) {
@@ -64,4 +63,4 @@ std::vector<CarProperties> CarBuilder::get_catalog() {
         std::cerr << "Error getting the catalog: " << e.what() << std::endl;
         throw;
     }
-}*/
+}
