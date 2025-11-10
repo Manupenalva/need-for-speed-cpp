@@ -15,8 +15,9 @@ struct ClientMessageDTO {
     MsgType type;
     std::vector<uint8_t> events;
     uint16_t lobby_id;
+    uint16_t car_id;
 
-    ClientMessageDTO(): type(MsgType::INVALID), events(), lobby_id(-1) {}
+    ClientMessageDTO(): type(MsgType::INVALID), events(), lobby_id(-1), car_id(0) {}
 };
 
 
@@ -28,6 +29,7 @@ struct ServerMessageDTO {
     LobbyInfo lobby_info;
     bool joined = false;
     int id;
+    uint8_t map_number;
     std::vector<CarProperties> car_catalog;
     IntervalState interval_state;
 
@@ -38,6 +40,7 @@ struct ServerMessageDTO {
             lobby_info(),
             joined(false),
             id(0),
+            map_number(0),
             car_catalog(),
             interval_state() {}
 };

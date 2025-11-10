@@ -30,12 +30,43 @@ void MessageSender::send_message(const ServerMessageDTO& msg) {
             break;
         case MsgType::INTERVAL_UPDATE:
             serialize_interval_state(msg.interval_state);
+        case MsgType::SEND_MAP_NUMBER:
+            serialize_map_number(msg.map_number);
         default:
             buffer.resize(CODE_BYTES);
             offset = 0;
             append_bytes(&msg.type, CODE_BYTES);
     }
     socket.sendall(buffer.data(), buffer.size());
+}
+
+
+void MessageSender::send_message(const ClientMessageDTO& msg) {
+
+    switch (msg.type) {
+        case MsgType::DRIVING_EVENT:
+            serialize_events(msg.events);
+            break;
+        case MsgType::CREATE_RACE:
+        case MsgType::JOIN_RACE:
+            serialize_lobby(msg.lobby_id, msg.type);
+            break;
+        case MsgType::SELECT_CAR:
+            serialize_car_number(msg.car_id);
+        default:
+            buffer.resize(CODE_BYTES);
+            offset = 0;
+            append_bytes(&msg.type, CODE_BYTES);
+    }
+    socket.sendall(buffer.data(), buffer.size());
+}
+
+void MessageSender::serialize_map_number(const uint8_t map_number) {
+    buffer.resize(CODE_BYTES + MAP_NUMBER_BYTES);
+    offset = 0;
+    MsgType type = MsgType::SEND_MAP_NUMBER;
+    append_bytes(&type, CODE_BYTES);
+    append_bytes(&map_number, MAP_NUMBER_BYTES);
 }
 
 void MessageSender::serialize_car_catalog(const std::vector<CarProperties>& catalog) {
@@ -61,24 +92,6 @@ void MessageSender::serialize_interval_state(const IntervalState& interval_state
     for (const auto& player_state: interval_state.player_states) {
         append_player_state(player_state);
     }
-}
-
-void MessageSender::send_message(const ClientMessageDTO& msg) {
-
-    switch (msg.type) {
-        case MsgType::DRIVING_EVENT:
-            serialize_events(msg.events);
-            break;
-        case MsgType::CREATE_RACE:
-        case MsgType::JOIN_RACE:
-            serialize_lobby(msg.lobby_id, msg.type);
-            break;
-        default:
-            buffer.resize(CODE_BYTES);
-            offset = 0;
-            append_bytes(&msg.type, CODE_BYTES);
-    }
-    socket.sendall(buffer.data(), buffer.size());
 }
 
 void MessageSender::serialize_lobby(const int lobby_id, MsgType type) {
@@ -123,6 +136,14 @@ void MessageSender::serialize_events(const std::vector<uint8_t>& events) {
     append_bytes(&type, CODE_BYTES);
     append_uint16(events.size());
     append_bytes(events.data(), events.size());
+}
+
+void MessageSender::serialize_car_number(const uint16_t car_id) {
+    buffer.resize(CODE_BYTES + ID_BYTES);
+    offset = 0;
+    MsgType type = MsgType::SELECT_CAR;
+    append_bytes(&type, CODE_BYTES);
+    append_uint16(car_id);
 }
 
 

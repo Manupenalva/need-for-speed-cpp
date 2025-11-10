@@ -9,6 +9,7 @@
 #define CODE_BYTES 1
 #define AMOUNT_PLAYERS_BYTES 1
 #define BOOL_BYTES 1
+#define MAP_NUMBER_BYTES 1
 #define CAR_STATE_BYTES                                                        \
     (ID_BYTES + 4 * AMOUNT_BYTES + 3 * LENGTH_BYTES + CHECKPOINT_ARROW_BYTES + \
      CHECKPOINT_INFO_BYTES + BOOL_BYTES)
