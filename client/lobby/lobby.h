@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <string>
 #include <QLabel>
+#include <QListWidget>
 
 #include "../../common/protocol.h"
 
@@ -26,6 +27,9 @@ private slots:
     void createGame();
     void startGame();
     void updateLobby();
+    void showCarSelection();
+    void showCatalog();
+    void confirmCar();
 
 private:
     QStackedWidget* stack;
@@ -44,6 +48,12 @@ private:
     QLabel* codeLabel;
     bool host;
     int raceC;
+
+    QWidget* carSelectionScreen;
+    QListWidget* carList;
+    QPushButton* confirmButton;
+    QLabel* carPreview;
+    uint16_t chosenCar = 0;
 };
 
 #endif
