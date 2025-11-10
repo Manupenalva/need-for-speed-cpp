@@ -26,36 +26,39 @@ void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action
     players_cars[player_id].update_input(action);
 }
 
+void Gameloop::upgrade_car_stats(const uint16_t& player_id, const uint8_t& action) {
+    players_cars[player_id].upgrade_stats(action);
+}
+
 void Gameloop::broadcast_players(const int& race_index) {
     ServerMessageDTO msg = races[race_index]->get_broadcast_message(frames);
 
     race_monitor->broadcast(msg);
 }
 
-void Gameloop::broadcast_start(const int& race_index) {
+void Gameloop::broadcast_event(const uint8_t msg_type, const int& race_index) {
     ServerMessageDTO msg;
-    msg.type = MsgType::GAME_START;
+    msg.type = msg_type;
     race_monitor->broadcast(msg);
     broadcast_players(race_index);
 }
 
-
 void Gameloop::initialize_races() {
-    // mando el catalogo a todos los jugadores, luego recibo la respuesta de cada uno a partir de la
-    // comand queue. Cuando estén todos recién ahí sigo con la creación de las carreras.
-
-    std::vector<int> players_id = race_monitor->get_player_ids();
-
     CarBuilder builder("../server/assets/cars_configs/cars_config.yaml");
 
-    for (const auto& id: players_id) {
+    std::shared_ptr<ClientHandlerMessage> base_msg;
+    while (user_commands_queue->try_pop(base_msg) && should_keep_running()) {
+        if (base_msg->get_msg_type() != MsgType::SELECT_CAR) {
+            continue;
+        }
+        std::shared_ptr<SelectCarMessage> msg =
+                std::static_pointer_cast<SelectCarMessage>(base_msg);
+        uint16_t car_id = msg.get_car_id();
+        int id = msg->get_client_id();
         uint16_t player_id = id;
-        players_cars[player_id] = builder.create_car(player_id, 1);
+        players_cars[player_id] = builder.create_car(player_id, car_id);
     }
-    // por ahora es un auto con un byte hardcodeado
 
-    // una vez que tengo todos los autos ahí creo todas las carreras recorriendo la carpeta con
-    // la libreria correspondiente
     for (const auto& entry: std::filesystem::directory_iterator("../server/assets/race_configs")) {
         if (entry.is_regular_file() && entry.path().extension() == ".yaml") {
             races.push_back(RaceBuilder::create_race(entry.path(), players_cars));
@@ -63,10 +66,23 @@ void Gameloop::initialize_races() {
     }
 }
 
+void Gameloop::handle_upgrade_phase() {
+    std::this_thread::sleep_for(std::chrono::seconds(10));
 
-void Gameloop::manage_race(const int& race_index) {
-    std::cout << "Entre a manage_race (carrera nueva)" << std::endl;
-    broadcast_start(race_index);
+    std::shared_ptr<ClientHandlerMessage> base_msg;
+    while (user_commands_queue->try_pop(base_msg) && should_keep_running()) {
+        if (base_msg->get_msg_type() != MsgType::DRIVING_EVENT) {
+            continue;
+        }
+        std::shared_ptr<ActionMessage> msg = std::static_pointer_cast<ActionMessage>(base_msg);
+        for (const auto& action: msg->get_actions()) {
+            upgrade_car_stats(msg->get_client_id(), action);
+        }
+    }
+}
+
+void Gameloop::handle_race(const int& race_index) {
+    broadcast_event(MsgType::RACE_STARTED, race_index);
 
     frames = 0;
     GameLoopTimer timer(TARGET_FPS);
@@ -94,17 +110,19 @@ void Gameloop::manage_race(const int& race_index) {
 
         timer.sleep_and_calc_next_it(iterations_behind);
     }
+
+    broadcast_event(MsgType::RACE_FINISHED, race_index);
+
+    handle_upgrade_phase();
 }
 
-
 void Gameloop::run() {
-
     initialize_races();
-    std::cout << "Tengo para jugar " << races.size() << " carreras" << std::endl;
+    broadcast_event(MsgType::GAME_START, race_index);
     for (size_t i = 0; i < races.size(); i++) {
-        std::cout << "Estoy usando una carrera" << std::endl;
-        manage_race(i);
+        handle_race(i);
         if (!should_keep_running())
             return;
     }
+    broadcast_event(MsgType::GAME_END, race_index);
 }

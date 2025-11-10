@@ -38,7 +38,10 @@ private:
     void update_positions();
     void update_car_input(const uint16_t& player_id, const uint8_t& action);
     void broadcast_start(const int& race_index);
-    void manage_race(const int& race_index);
+    void broadcast_end(const int& race_index);
+    void handle_race(const int& race_index);
+    void handle_upgrades_phase();
+    void upgrade_car_stats(const uint16_t& player_id, const uint8_t& action);
 
     Gameloop(const Gameloop& other) = delete;
     Gameloop& operator=(const Gameloop& other) = delete;

@@ -24,11 +24,12 @@ private:
     std::string car_name;
     float max_speed;
     float acceleration;
-    float health;
     float mass;
     float drivability;
     float car_long;
     float car_width;
+
+    float current_penalization;
 
 public:
     Car(const uint16_t& id, const std::string& name, const float& max_speed,
@@ -37,6 +38,7 @@ public:
 
     void add_to_world(b2WorldId world, Position start_position);
     void update_input(const uint8_t& action);
+    void upgrade_stats(const uint8_t& action);
     void update_physics();
     void update_position();
     void handle_hits();
@@ -55,7 +57,8 @@ public:
             mass(0),
             drivability(0),
             car_long(0),
-            car_width(0) {}
+            car_width(0),
+            current_penalization(0) {}
 
 private:
     Car(const Car& other) = delete;
