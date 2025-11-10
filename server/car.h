@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
@@ -20,8 +21,20 @@ private:
     std::vector<float> race_times;
     std::unique_ptr<CarPhysics> physics;
 
+    std::string car_name;
+    float max_speed;
+    float acceleration;
+    float health;
+    float mass;
+    float drivability;
+    float car_long;
+    float car_width;
+
 public:
-    explicit Car(const uint16_t& id);
+    Car(const uint16_t& id, const std::string& name, const float& max_speed,
+        const float& acceleration, const float& health, const float& mass, const float& drivability,
+        const float& car_long, const float& car_width);
+
     void add_to_world(b2WorldId world, Position start_position);
     void update_input(const uint8_t& action);
     void update_physics();
@@ -29,6 +42,20 @@ public:
     void handle_hits();
     CarInfo get_state_info() const;
     bool reached_checkpoint(Position next_checkpoint, float celd_width, float celd_height);
+
+    Car(Car&& other) = default;
+    Car& operator=(Car&& other) = default;
+    Car():
+            input_state(false, false, false, false),
+            state(0, 0, 0, 0, 0, 0),
+            car_name("default"),
+            max_speed(0),
+            acceleration(0),
+            health(0),
+            mass(0),
+            drivability(0),
+            car_long(0),
+            car_width(0) {}
 
 private:
     Car(const Car& other) = delete;

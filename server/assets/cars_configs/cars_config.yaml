@@ -1,0 +1,63 @@
+1:
+  name: "Family car"
+  max_speed: 60
+  acceleration: 50
+  health: 50
+  mass: 40
+  drivability: 90
+  long: 32
+  width: 26
+2:
+  name: "Muscle car"
+  max_speed: 80
+  acceleration: 90
+  health: 40
+  mass: 20
+  drivability: 80
+  long: 42
+  width: 26
+3:
+  name: "Sports car"
+  max_speed: 100
+  acceleration: 100
+  health: 30
+  mass: 20
+  drivability: 50
+  long: 42
+  width: 26
+4:
+  name: "Electric car"
+  max_speed: 60
+  acceleration: 70
+  health: 40
+  mass: 20
+  drivability: 70
+  long: 42
+  width: 26
+5:
+  name: "All terrain"
+  max_speed: 60
+  acceleration: 40
+  health: 60
+  mass: 40
+  drivability: 100
+  long: 42
+  width: 31
+6:
+  name: "van"
+  max_speed: 60
+  acceleration: 60
+  health: 60
+  mass: 50
+  drivability: 90
+  long: 42
+  width: 26
+7:
+  name: "truck"
+  max_speed: 30
+  acceleration: 20
+  health: 100
+  mass: 80
+  drivability: 90
+  long: 53
+  width: 26

@@ -22,7 +22,7 @@ class Gameloop: public Thread {
 private:
     std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue;
     std::shared_ptr<RaceStruct> race_monitor;
-    std::unordered_map<uint16_t, std::unique_ptr<Car>> players_cars;
+    std::unordered_map<uint16_t, Car> players_cars;
     std::vector<std::unique_ptr<Race>> races;
     uint32_t frames;
 
@@ -33,6 +33,7 @@ public:
     void run() override;
 
 private:
+    void initialize_races();
     void broadcast_players();
     void update_positions();
     void update_car_input(const uint16_t& player_id, const uint8_t& action);

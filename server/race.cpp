@@ -8,11 +8,10 @@
 #include "hint.h"
 #include "mapCollisionBuilder.h"
 
-Race::Race(std::unordered_map<uint16_t, std::unique_ptr<Car>>& players_cars,
-           const float& celd_width, const float& celd_height,
-           const std::vector<Position>& start_positions, const Position& finish,
-           const std::vector<Position>& checkpoints, const std::vector<Hint>& hints,
-           const std::string& map_path):
+Race::Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_width,
+           const float& celd_height, const std::vector<Position>& start_positions,
+           const Position& finish, const std::vector<Position>& checkpoints,
+           const std::vector<Hint>& hints, const std::string& map_path):
         players_cars(players_cars),
         players_status(),
         celd_width(celd_width),
@@ -34,8 +33,8 @@ b2WorldId Race::start_race() {
     MapCollisionBuilder::initialize_map_buildings(map_collisions_path, world);
 
     int i = 0;
-    for (const auto& [id, car]: players_cars) {
-        car->add_to_world(world, start_positions[i]);
+    for (auto& [id, car]: players_cars) {
+        car.add_to_world(world, start_positions[i]);
         players_status[id] = {false, 0, 0};
         i++;
     }
@@ -51,7 +50,7 @@ void Race::update_state() {
             continue;
 
         Position next_checkpoint = checkpoints[status.current_checkpoint_index];
-        if (car->reached_checkpoint(next_checkpoint, celd_width, celd_height)) {
+        if (car.reached_checkpoint(next_checkpoint, celd_width, celd_height)) {
             status.current_checkpoint_index++;
             if (status.current_checkpoint_index >= checkpoints.size()) {
                 std::cout << "terminé la carrera" << std::endl;
@@ -60,12 +59,12 @@ void Race::update_state() {
         }
 
         Hint next_hint = hints[status.current_hint_index];
-        if (car->reached_checkpoint(next_hint.position, celd_width, celd_height)) {
+        if (car.reached_checkpoint(next_hint.position, celd_width, celd_height)) {
             if ((status.current_hint_index + 1) < hints.size())
                 status.current_hint_index++;
         }
 
-        car->update_physics();
+        car.update_physics();
     }
 
     float timeStep = 1.0f / 60.0f;
@@ -73,11 +72,11 @@ void Race::update_state() {
 
     for (auto& [id, car]: players_cars) {
         if (!players_status[id].has_finished)
-            car->update_position();
+            car.update_position();
     }
     for (auto& [id, car]: players_cars) {
         if (!players_status[id].has_finished)
-            car->handle_hits();
+            car.handle_hits();
     }
 }
 
@@ -104,7 +103,7 @@ ServerMessageDTO Race::get_broadcast_message(float frames) {
     uint16_t num_cars = 0;
     std::vector<CarState> cars;
     for (const auto& [id, car]: players_cars) {
-        CarInfo car_info = car->get_state_info();
+        CarInfo car_info = car.get_state_info();
         CheckpointInfo checkpoint_info = get_next_checkpoint_info(id);
         CheckpointArrow checkpoint_arrow = get_next_checkpoint_arrow(id);
 
