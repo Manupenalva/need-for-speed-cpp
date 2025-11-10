@@ -40,6 +40,24 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), protocol
     layoutConnection->addWidget(backButton);
     connectScreen->setLayout(layoutConnection);
 
+    carSelectionScreen = new QWidget(this);
+    auto* carLayout = new QVBoxLayout(carSelectionScreen);
+    QLabel* carTitle = new QLabel("Choose your car");
+    carTitle->setAlignment(Qt::AlignCenter);
+    carTitle->setStyleSheet("font-size: 24px; font-weight: bold;");
+    carList = new QListWidget();
+    carList->setSelectionMode(QAbstractItemView::SingleSelection);
+    carPreview = new QLabel("Select a car to see details");
+    carPreview->setAlignment(Qt::AlignCenter);
+    carPreview->setStyleSheet("font-size: 14px;");
+    confirmButton = new QPushButton("Confirm");
+    carLayout->addWidget(carTitle);
+    carLayout->addWidget(carList); 
+    carLayout->addWidget(carPreview);
+    carLayout->addWidget(confirmButton);
+    carLayout->addWidget(backButton);
+    carSelectionScreen->setLayout(carLayout);
+
     startScreen = new QWidget(this);
     auto* startLayout = new QVBoxLayout(startScreen);
     QLabel* startTitle = new QLabel("Lobby Start");
@@ -63,6 +81,7 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), protocol
 
     stack->addWidget(menu);
     stack->addWidget(connectScreen);
+    stack->addWidget(carSelectionScreen);
     stack->addWidget(startScreen);
     setCentralWidget(stack);
 
@@ -71,6 +90,15 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), protocol
     connect(connectButton, &QPushButton::clicked, this, &Lobby::connectServer);
     connect(backButton, &QPushButton::clicked, this, &Lobby::menuScreen);
     connect(startButton, &QPushButton::clicked, this, &Lobby::startGame);
+    connect(carList, &QListWidget::currentRowChanged, this, [this](int row){
+        if (row < 0) {
+            carPreview->setText("Select a car to see details");
+            return;
+        }
+        auto* it = carList->item(row);
+        carPreview->setText(it ? it->toolTip() : "");
+    });
+    connect(confirmButton, &QPushButton::clicked, this, &Lobby::confirmCar);
     connect(timer, &QTimer::timeout, this, &Lobby::updateLobby);
 
     setWindowTitle("Need for Speed 2D - Lobby");
@@ -102,8 +130,7 @@ void Lobby::createGame() {
     QMessageBox::information(this, "New Game", QString("Race code: %1").arg(response.id));
     raceC = response.id;
     codeLabel->setText(QString("Game Code: %1").arg(raceC));
-    stack->setCurrentIndex(2);
-    timer->start(1000);
+    showCarSelection();
 }
 
 void Lobby::connectServer() {
@@ -139,8 +166,7 @@ void Lobby::connectServer() {
     raceC = msg.lobby_id;
     QMessageBox::information(this, "Connecting", QString("Connectin to.. %1").arg(raceCode));
     codeLabel->setText(QString("Game Code: %1").arg(raceC));
-    stack->setCurrentIndex(2);
-    timer->start(1000);  // Actualizar cada segundo
+    showCarSelection();
 }
 
 void Lobby::startGame() {
@@ -152,8 +178,8 @@ void Lobby::startGame() {
     msg.type = MsgType::START_RACE;
     msg.lobby_id = raceC;
     protocol.send_client_message(msg);
-    timer->stop();
-    this->close();
+    // timer->stop();
+    // this->close();
 }
 
 void Lobby::updateLobby() {
@@ -169,6 +195,52 @@ void Lobby::updateLobby() {
         startButton->setEnabled(host && count >= 2);
     } else if (response.type == MsgType::GAME_START) {
         timer->stop();
+        ClientMessageDTO msg;
+        msg.type = MsgType::SELECT_CAR;
+        msg.car_id = chosenCar;
+        protocol.send_client_message(msg);
         this->close();
     }
+}
+
+void Lobby::showCarSelection() {
+    stack->setCurrentIndex(2);
+    showCatalog();
+}
+
+void Lobby::showCatalog() {
+    ClientMessageDTO req;
+    req.type = MsgType::GET_CAR_CATALOG;
+    protocol.send_client_message(req);
+
+    ServerMessageDTO resp = protocol.recv_server_message();
+
+    if (resp.type != MsgType::SEND_CAR_CATALOG) {
+        QMessageBox::warning(this, "Error", "Could not get car catalog.");
+        return;
+    }
+
+    carList->clear();
+
+    for (const auto& car : resp.car_catalog) {
+        auto* item = new QListWidgetItem(QString("Car %1").arg(car.car_id));
+        item->setData(Qt::UserRole, static_cast<int>(car.car_id));
+        item->setToolTip(QString("Max speed: %1\nAcceleration: %2\nHealth: %3\nMass: %4\nControl: %5")
+                        .arg(car.max_speed).arg(car.acceleration).arg(car.max_health)
+                        .arg(car.mass).arg(car.control));
+        carList->addItem(item);
+    }
+
+    if (carList->count() > 0) carList->setCurrentRow(0);
+}
+
+void Lobby::confirmCar() {
+    auto* item = carList->currentItem();
+    if (!item) {
+        QMessageBox::information(this, "Select car", "Please choose a car.");
+        return;
+    }
+    chosenCar = static_cast<uint16_t>(item->data(Qt::UserRole).toInt());
+    stack->setCurrentIndex(3);
+    timer->start(1000);
 }
