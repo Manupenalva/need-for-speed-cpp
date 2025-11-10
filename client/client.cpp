@@ -11,7 +11,8 @@ Client::Client(Protocol& protocol, const int id):
         drawer(window.get_renderer(), texture_manager, id),
         kb_reader(events_queue),
         last_state(),
-        has_last_state(false) {}
+        has_last_state(false),
+        is_in_race(false) {}
 
 
 void Client::run() {
@@ -25,7 +26,7 @@ void Client::run() {
 
         while (_keep_running) {
             // Procesar todos los mensajes entrantes y actualizar el estado interno
-            kb_reader.listen_to_keyboard(_keep_running);
+            kb_reader.listen_to_keyboard(_keep_running, is_in_race);
 
             // Ejecutar una iteración lógica (actualizaciones locales / físicas)
             update_state_from_server();
@@ -64,11 +65,16 @@ void Client::update_state_from_server() {
     // enviada.
     ServerMessageDTO server_msg;
     while (server_queue.try_pop(server_msg)) {
-        if (server_msg.type != MsgType::STATE_UPDATE) {
-            continue;
+        if (server_msg.type == MsgType::STATE_UPDATE) {
+            last_state = server_msg;
+            has_last_state = true;
         }
-        last_state = server_msg;
-        has_last_state = true;
+        if (server_msg.type == MsgType::GAME_START) {
+            is_in_race = true;
+        }
+        if (server_msg.type == MsgType::GAME_END) {
+            is_in_race = false;
+        }
     }
 }
 

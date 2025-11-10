@@ -19,6 +19,7 @@ target_sources(taller_client
     lobby/lobby.cpp
     events/keyDown_handler.cpp
     events/keyUp_handler.cpp
+    events/quit_handler.cpp
     config/config_reader.cpp
     game_launcher.cpp
     
@@ -37,6 +38,8 @@ target_sources(taller_client
     events/event_handler.h
     events/keyDown_handler.h
     events/keyUp_handler.h
+    events/eventDTO.h
+    events/quit_handler.h
     drawer/car_drawer.h
     drawer/map_drawer.h
     drawer/drawerSDL.h

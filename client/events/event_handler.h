@@ -11,6 +11,8 @@
 #include "../../common/messageDTOs.h"
 #include "../../common/queue.h"
 
+#include "eventDTO.h"
+
 class EventHandler {
 protected:
     Queue<ClientMessageDTO>& message_queue;
@@ -20,7 +22,7 @@ public:
     explicit EventHandler(Queue<ClientMessageDTO>& queue): message_queue(queue) {}
     virtual ~EventHandler() = default;
 
-    virtual void handle_event(const SDL_Event& event, ClientMessageDTO& msg) = 0;
+    virtual bool handle_event(EventDTO& event_dto) = 0;
 };
 
 #endif
