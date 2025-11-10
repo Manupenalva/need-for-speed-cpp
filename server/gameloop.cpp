@@ -37,7 +37,6 @@ void Gameloop::broadcast_start() {
     ServerMessageDTO msg;
     msg.type = MsgType::GAME_START;
     race_monitor->broadcast(msg);
-    broadcast_players();
 }
 
 
@@ -95,7 +94,7 @@ void Gameloop::run() {
     broadcast_start();
     receive_selected_cars();
     initialize_races();
-
+    broadcast_players();
 
     GameLoopTimer timer(TARGET_FPS);
     uint32_t iterations_behind = 1;
