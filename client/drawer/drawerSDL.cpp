@@ -1,14 +1,17 @@
 #include "drawerSDL.h"
 
 DrawerSDL::DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager, int client_id):
-        client_id(client_id), renderer(renderer), texture_manager(texture_manager) {
+        client_id(client_id),
+        renderer(renderer),
+        texture_manager(texture_manager),
+        upgrade_screen_drawer(renderer, texture_manager) {
     drawers.push_back(std::make_unique<MapDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<ArrowDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<CheckpointDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<CarDrawer>(renderer, texture_manager));
 }
 
-void DrawerSDL::update_state(const ServerMessageDTO& msg, int iterations_ahead) {
+void DrawerSDL::update_game_state(const ServerMessageDTO& msg, int iterations_ahead) {
     if (msg.type != MsgType::STATE_UPDATE) {
         return;
     }
@@ -33,3 +36,5 @@ void DrawerSDL::update_state(const ServerMessageDTO& msg, int iterations_ahead) 
         drawer->draw(rendered_state);  // Usa polimorfismo para dibujar
     }
 }
+
+void DrawerSDL::show_upgrade_screen() { upgrade_screen_drawer.draw(); }

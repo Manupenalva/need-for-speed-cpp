@@ -79,12 +79,18 @@ void Client::update_state_from_server() {
 }
 
 void Client::update_animation_frames(int iterations_ahead) {
-    // Si tenemos un estado para dibujar, pedir al drawer que lo pinte
-    if (has_last_state) {
+    // Si tenemos un estado para dibujar y la carrera esta en curso, pedir al drawer que lo pinte
+    if (has_last_state && is_in_race) {
         // Limpiar la pantalla antes de dibujar (solo cuando hay un nuevo estado)
         clear_display();
-        drawer.update_state(last_state, iterations_ahead);
+        drawer.update_game_state(last_state, iterations_ahead);
         window.present();
         has_last_state = false;  // Ya se dibujó este estado
+    }
+    if (!is_in_race) {
+        // Mostrar pantalla de mejora de auto
+        clear_display();
+        drawer.show_upgrade_screen();
+        window.present();
     }
 }

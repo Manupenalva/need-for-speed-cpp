@@ -4,13 +4,15 @@ TextureManager::TextureManager(SDL2pp::Renderer& renderer, const std::string& as
         renderer(renderer),
         car_sheet(renderer, assets_path + CAR_PATH),
         map_sheet(renderer, assets_path + MAP_PATH),
-        race_sheet(renderer, assets_path + RACE_PATH) {}
+        race_sheet(renderer, assets_path + RACE_PATH),
+        upgrade_screen_sheet(renderer, assets_path + UPGRADE_SCREEN_PATH) {}
 
 
 void TextureManager::load_resources() {
     car_sheet.load_sprites();
     map_sheet.load_sprites();
     race_sheet.load_sprites();
+    upgrade_screen_sheet.load_sprite();
 }
 
 Sprite TextureManager::get_car_sprite(int car_id, int rotation) {
@@ -26,4 +28,8 @@ Sprite TextureManager::get_map_sprite(int map_id, int section_x, int section_y) 
 Sprite_rotation TextureManager::get_race_sprite(int race_element, float direction) {
     RaceElement race_type = static_cast<RaceElement>(race_element);
     return race_sheet.get_race_sprite(race_type, direction);
+}
+
+Sprite TextureManager::get_upgrade_screen_sprite() {
+    return upgrade_screen_sheet.get_screen_sprite();
 }
