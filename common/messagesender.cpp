@@ -30,12 +30,15 @@ void MessageSender::send_message(const ServerMessageDTO& msg) {
             break;
         case MsgType::INTERVAL_UPDATE:
             serialize_interval_state(msg.interval_state);
+            break;
         case MsgType::SEND_MAP_NUMBER:
             serialize_map_number(msg.map_number);
+            break;
         default:
             buffer.resize(CODE_BYTES);
             offset = 0;
             append_bytes(&msg.type, CODE_BYTES);
+            break;
     }
     socket.sendall(buffer.data(), buffer.size());
 }
@@ -53,10 +56,12 @@ void MessageSender::send_message(const ClientMessageDTO& msg) {
             break;
         case MsgType::SELECT_CAR:
             serialize_car_number(msg.car_id);
+            break;
         default:
             buffer.resize(CODE_BYTES);
             offset = 0;
             append_bytes(&msg.type, CODE_BYTES);
+            break;
     }
     socket.sendall(buffer.data(), buffer.size());
 }
