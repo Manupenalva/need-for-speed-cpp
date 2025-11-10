@@ -36,3 +36,32 @@ Car CarBuilder::create_car(const int& id, const int& car_type) {
         throw;
     }
 }
+
+std::vector<CarProperties> CarBuilder::get_catalog() {
+    try {
+        if (!cars_data) {
+            throw std::runtime_error("Invalid YAML archive");
+        }
+
+        std::vector<CarProperties> catalog;
+        uint8_t car_id = 1;
+        for (const auto& car_node: cars_data) {
+            const auto& car_parameters = car_node.second;
+
+            CarProperties car_properties;
+            car_properties.car_id = car_id;
+            car_properties.max_speed = car_parameters["max_speed"].as<uint16_t>();
+            car_properties.acceleration = car_parameters["acceleration"].as<uint16_t>();
+            car_properties.max_health = car_parameters["health"].as<uint16_t>();
+            car_properties.mass = car_parameters["mass"].as<uint16_t>();
+            car_properties.control = car_parameters["drivability"].as<uint16_t>();
+            car_id++;
+            catalog.push_back(car_properties);
+        }
+
+        return catalog;
+    } catch (const std::exception& e) {
+        std::cerr << "Error getting the catalog: " << e.what() << std::endl;
+        throw;
+    }
+}
