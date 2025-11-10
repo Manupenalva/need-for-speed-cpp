@@ -18,6 +18,7 @@ private:
     std::list<std::shared_ptr<ClientHandler>> players;
     std::mutex mtx;
 
+    void reap();
 public:
     RaceStruct();
 
@@ -32,6 +33,7 @@ public:
     void broadcast(const ServerMessageDTO& msg);
 
     int size();
+    
 };
 
 #endif
