@@ -20,6 +20,9 @@ ClientMessageDTO MessageReceiver::recv_client_message() {
         case MsgType::JOIN_RACE:
             client_msg.lobby_id = obtain_uint16();
             break;
+        case MsgType::SELECT_CAR:
+            client_msg.car_id = obtain_uint16();
+            break;
         default:
             break;
     }
@@ -54,6 +57,9 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
             break;
         case MsgType::INTERVAL_UPDATE:
             server_msg.interval_state = recv_interval_state();
+            break;
+        case MsgType::SEND_MAP_NUMBER:
+            server_msg.map_number = obtain_byte();
             break;
         default:
             break;

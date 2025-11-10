@@ -7,6 +7,8 @@
 #include "events/getlobbyupdatemessage.h"
 #include "events/joinlobbymessage.h"
 #include "events/quitgamemessage.h"
+#include "events/selectcarmessage.h"
+#include "events/setreadymessage.h"
 #include "events/startracemessage.h"
 
 Receiver::Receiver(Protocol& protocol,
@@ -44,6 +46,12 @@ void Receiver::run() {
                     break;
                 case MsgType::GET_LOBBY_UPDATE:
                     game_message = std::make_shared<GetLobbyUpdateMessage>(id);
+                    break;
+                case MsgType::SELECT_CAR:
+                    game_message = std::make_shared<SelectCarMessage>(id, msg.car_id);
+                    break;
+                case MsgType::SET_READY:
+                    game_message = std::make_shared<SetReadyMessage>(id);
                     break;
                 default:
                     continue;
