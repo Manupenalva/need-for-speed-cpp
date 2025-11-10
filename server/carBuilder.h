@@ -8,6 +8,7 @@
 #include <yaml-cpp/yaml.h>
 
 #include "car.h"
+#include "../common/carProperties.h"
 
 
 class CarBuilder {

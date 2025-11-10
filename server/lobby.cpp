@@ -7,7 +7,9 @@
 
 Lobby::Lobby(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> lobbyQueue,
              MonitorClients& clientsMonitor):
-        lobby_queue(std::move(lobbyQueue)), clients_monitor(clientsMonitor) {}
+        lobby_queue(std::move(lobbyQueue)), clients_monitor(clientsMonitor) {
+            car_catalog = CarBuilder("assets/cars_configs/cars_config.yaml").get_catalog();
+        }
 
 void Lobby::run() {
     std::shared_ptr<ClientHandlerMessage> msg;
@@ -60,6 +62,17 @@ void Lobby::handle_lobby_update(int client_id) {
     ServerMessageDTO response;
     response.type = MsgType::SEND_LOBBY_UPDATE;
     response.lobby_info = lobby_info;
+    client->send_msg(response);
+}
+
+void Lobby::handle_get_car_catalog(int client_id) {
+    auto client = clients_monitor.get_client(client_id);
+    if (!client) {
+        return;
+    }
+    ServerMessageDTO response;
+    response.type = MsgType::SEND_CAR_CATALOG;
+    response.car_catalog = car_catalog;
     client->send_msg(response);
 }
 
@@ -135,6 +148,10 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
         }
         case MsgType::GET_LOBBY_UPDATE: {
             handle_lobby_update(client_id);
+            break;
+        }
+        case MsgType::GET_CAR_CATALOG: {
+            handle_get_car_catalog(client_id);
             break;
         }
         default: {
