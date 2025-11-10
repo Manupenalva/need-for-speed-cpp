@@ -8,6 +8,8 @@
 #include "hint.h"
 #include "mapCollisionBuilder.h"
 
+#define MAX_TIME 600.0f  // esto es 10', quizas debería ir en el yaml y recibirlo en el constructor
+
 Race::Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_width,
            const float& celd_height, const std::vector<Position>& start_positions,
            const Position& finish, const std::vector<Position>& checkpoints,
@@ -53,7 +55,6 @@ void Race::update_state() {
         if (car.reached_checkpoint(next_checkpoint, celd_width, celd_height)) {
             status.current_checkpoint_index++;
             if (status.current_checkpoint_index >= checkpoints.size()) {
-                std::cout << "terminé la carrera" << std::endl;
                 status.has_finished = true;
             }
         }
@@ -69,6 +70,7 @@ void Race::update_state() {
 
     float timeStep = 1.0f / 60.0f;
     b2World_Step(world, timeStep, 3);
+    current_time += timeStep;
 
     for (auto& [id, car]: players_cars) {
         if (!players_status[id].has_finished)
@@ -107,10 +109,17 @@ ServerMessageDTO Race::get_broadcast_message(float frames) {
         CheckpointInfo checkpoint_info = get_next_checkpoint_info(id);
         CheckpointArrow checkpoint_arrow = get_next_checkpoint_arrow(id);
 
-        CarState state = {
-                id,           car_info.x,      car_info.y,       car_info.angle, car_info.speed,
-                car_info.lap, checkpoint_info, checkpoint_arrow, false,          1,
-                100};
+        CarState state = {id,
+                          car_info.x,
+                          car_info.y,
+                          car_info.angle,
+                          car_info.speed,
+                          car_info.lap,
+                          checkpoint_info,
+                          checkpoint_arrow,
+                          car_info.crashed,
+                          car_info.car_type,
+                          car_info.health};
 
         cars.push_back(state);
         num_cars++;
@@ -123,4 +132,17 @@ ServerMessageDTO Race::get_broadcast_message(float frames) {
     msg.state = game_state;
 
     return msg;
+}
+
+bool Race::is_finished() {
+    if (current_time >= MAX_TIME) {
+        return true;
+    }
+
+    for (auto& [id, car]: players_cars) {
+        if (!players_status[id].has_finished) {
+            return false;
+        }
+    }
+    return true;
 }

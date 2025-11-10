@@ -33,7 +33,7 @@ private:
 public:
     Car(const uint16_t& id, const std::string& name, const float& max_speed,
         const float& acceleration, const float& health, const float& mass, const float& drivability,
-        const float& car_long, const float& car_width);
+        const float& car_long, const float& car_width, const int& car_type);
 
     void add_to_world(b2WorldId world, Position start_position);
     void update_input(const uint8_t& action);
@@ -47,7 +47,7 @@ public:
     Car& operator=(Car&& other) = default;
     Car():
             input_state(false, false, false, false),
-            state(0, 0, 0, 0, 0, 0),
+            state(0, 0, 0, 0, 0, 0, false, 0, 0),
             car_name("default"),
             max_speed(0),
             acceleration(0),

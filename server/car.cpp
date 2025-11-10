@@ -6,9 +6,10 @@
 
 Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
          const float& acceleration, const float& health, const float& mass,
-         const float& drivability, const float& car_long, const float& car_width):
+         const float& drivability, const float& car_long, const float& car_width,
+         const int& car_type):
         input_state(),
-        state(id, 0.0f, 0.0f, 0.0f, 0.0f, 0),
+        state(id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, car_type, health),
         car_name(name),
         max_speed(max_speed),
         acceleration(acceleration),
@@ -21,6 +22,7 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
 void Car::add_to_world(b2WorldId world, Position start_position) {
     state.x = start_position.x;
     state.y = start_position.y;
+    state.angle = 0.0f;
 
     physics = std::make_unique<CarPhysics>(world, state, max_speed, acceleration, mass, drivability,
                                            car_long, car_width);

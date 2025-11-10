@@ -21,6 +21,7 @@ struct CarState {
     uint16_t health;
 };
 
+// esto podría ir dentro de CarState para no repetir.
 struct CarInfo {
     uint16_t id;
     float x;
@@ -28,6 +29,9 @@ struct CarInfo {
     float angle;
     float speed;
     uint16_t lap;
+    bool crashed;
+    uint16_t car_type;
+    uint16_t health;
 };
 
 struct CarInputState {

@@ -11,7 +11,6 @@ CarBuilder::CarBuilder(const std::string& path) {
     }
 }
 
-
 Car CarBuilder::create_car(const int& id, const int& car_type) {
     try {
         if (!cars_data) {
@@ -30,13 +29,14 @@ Car CarBuilder::create_car(const int& id, const int& car_type) {
         float car_width = car_parameters["width"].as<float>();
 
         return Car(id, name, max_speed, acceleration, health, mass, drivability, car_long,
-                   car_width);
+                   car_width, car_type);
     } catch (const std::exception& e) {
         std::cerr << "Error building the car: " << e.what() << std::endl;
         throw;
     }
 }
 
+/*
 std::vector<CarProperties> CarBuilder::get_catalog() {
     try {
         if (!cars_data) {
@@ -64,4 +64,4 @@ std::vector<CarProperties> CarBuilder::get_catalog() {
         std::cerr << "Error getting the catalog: " << e.what() << std::endl;
         throw;
     }
-}
+}*/

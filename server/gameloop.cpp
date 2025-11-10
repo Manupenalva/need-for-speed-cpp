@@ -26,17 +26,17 @@ void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action
     players_cars[player_id].update_input(action);
 }
 
-void Gameloop::broadcast_players() {
-    ServerMessageDTO msg = races[0]->get_broadcast_message(frames);
+void Gameloop::broadcast_players(const int& race_index) {
+    ServerMessageDTO msg = races[race_index]->get_broadcast_message(frames);
 
     race_monitor->broadcast(msg);
 }
 
-void Gameloop::broadcast_start() {
+void Gameloop::broadcast_start(const int& race_index) {
     ServerMessageDTO msg;
     msg.type = MsgType::GAME_START;
     race_monitor->broadcast(msg);
-    broadcast_players();
+    broadcast_players(race_index);
 }
 
 
@@ -63,16 +63,17 @@ void Gameloop::initialize_races() {
     }
 }
 
-void Gameloop::run() {
 
-    initialize_races();
+void Gameloop::manage_race(const int& race_index) {
+    std::cout << "Entre a manage_race (carrera nueva)" << std::endl;
+    broadcast_start(race_index);
 
-    broadcast_start();
+    frames = 0;
     GameLoopTimer timer(TARGET_FPS);
     uint32_t iterations_behind = 1;
-    races[0]->start_race();
+    races[race_index]->start_race();
 
-    while (should_keep_running()) {
+    while (!races[race_index]->is_finished() && should_keep_running()) {
         std::shared_ptr<ClientHandlerMessage> base_msg;
         while (user_commands_queue->try_pop(base_msg)) {
             if (base_msg->get_msg_type() != MsgType::DRIVING_EVENT) {
@@ -85,12 +86,25 @@ void Gameloop::run() {
         }
 
         for (uint32_t i = 0; i < iterations_behind; i++) {
-            races[0]->update_state();
+            races[race_index]->update_state();
         }
 
-        broadcast_players();
+        broadcast_players(race_index);
         frames++;
 
         timer.sleep_and_calc_next_it(iterations_behind);
+    }
+}
+
+
+void Gameloop::run() {
+
+    initialize_races();
+    std::cout << "Tengo para jugar " << races.size() << " carreras" << std::endl;
+    for (size_t i = 0; i < races.size(); i++) {
+        std::cout << "Estoy usando una carrera" << std::endl;
+        manage_race(i);
+        if (!should_keep_running())
+            return;
     }
 }
