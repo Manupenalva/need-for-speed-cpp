@@ -34,11 +34,13 @@ public:
 
 private:
     void initialize_races();
-    void broadcast_players();
+    void broadcast_players(const int& race_index);
     void update_positions();
     void update_car_input(const uint16_t& player_id, const uint8_t& action);
-    void broadcast_start();
     void receive_selected_cars();
+    void broadcast_event(const uint8_t msg_type);
+    void handle_upgrades_phase();
+    void upgrade_car_stats(const uint16_t& player_id, const uint8_t& action);
 
     Gameloop(const Gameloop& other) = delete;
     Gameloop& operator=(const Gameloop& other) = delete;

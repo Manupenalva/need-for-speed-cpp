@@ -6,21 +6,23 @@
 
 Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
          const float& acceleration, const float& health, const float& mass,
-         const float& drivability, const float& car_long, const float& car_width):
+         const float& drivability, const float& car_long, const float& car_width,
+         const int& car_type):
         input_state(),
-        state(id, 0.0f, 0.0f, 0.0f, 0.0f, 0),
+        state(id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, car_type, health),
         car_name(name),
         max_speed(max_speed),
         acceleration(acceleration),
-        health(health),
         mass(mass),
         drivability(drivability),
         car_long(car_long),
-        car_width(car_width) {}
+        car_width(car_width),
+        current_penalization(0.0f) {}
 
 void Car::add_to_world(b2WorldId world, Position start_position) {
     state.x = start_position.x;
     state.y = start_position.y;
+    state.angle = 0.0f;
 
     physics = std::make_unique<CarPhysics>(world, state, max_speed, acceleration, mass, drivability,
                                            car_long, car_width);
@@ -43,6 +45,25 @@ void Car::update_input(const uint8_t& action) {
         input_state.turning_right = true;
     } else if (action == ACT_RIGHT_RELEASE) {
         input_state.turning_right = false;
+    }
+}
+
+void Car::update_stats(const uint8_t& action) {
+    if (action == ACT_IMPROVE_SPEED) {
+        max_speed += 5;
+        current_penalization += 2.0f;
+    } else if (action == ACT_IMPROVE_ACCELERATION) {
+        acceleration += 5;
+        current_penalization += 2.0f;
+    } else if (action == ACT_IMPROVE_HEALTH) {
+        state.health += 5;
+        current_penalization += 2.0f;
+    } else if (action == ACT_IMPROVE_MASS) {
+        mass += 5;
+        current_penalization += 2.0f;
+    } else if (action == ACT_IMPROVE_HANDLING) {
+        drivability += 5;
+        current_penalization += 2.0f;
     }
 }
 
@@ -80,4 +101,9 @@ bool Car::reached_checkpoint(Position next_checkpoint, float celd_width, float c
     std::cout << "alcancé un checkpoint en la posicion: " << state.x << ", " << state.y
               << std::endl;
     return true;
+}
+
+void Car::finish_race(float race_time) {
+    race_times.push_back(race_time + current_penalization);
+    current_penalization = 0.0f;
 }
