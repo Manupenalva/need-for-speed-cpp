@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-YAML::Node CarBuilder::open_file(const std::string& path) {
+CarBuilder::CarBuilder(const std::string& path) {
     try {
-        return YAML::LoadFile(path);
+        cars_data = YAML::LoadFile(path);
     } catch (const std::exception& e) {
         std::cerr << "Error loading cars_config file: " << e.what() << std::endl;
         throw;
@@ -12,11 +12,10 @@ YAML::Node CarBuilder::open_file(const std::string& path) {
 }
 
 
-Car CarBuilder::create_car(const std::string& path, const int& id, const int& car_type) {
+Car CarBuilder::create_car(const int& id, const int& car_type) {
     try {
-        YAML::Node cars_data = open_file(path);
         if (!cars_data) {
-            throw std::runtime_error("Invalid YAML archive: " + path);
+            throw std::runtime_error("Invalid YAML archive");
         }
 
         YAML::Node car_parameters = cars_data[car_type];

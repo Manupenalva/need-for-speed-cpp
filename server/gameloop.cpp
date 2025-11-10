@@ -41,16 +41,16 @@ void Gameloop::broadcast_start() {
 
 
 void Gameloop::initialize_races() {
-
     // mando el catalogo a todos los jugadores, luego recibo la respuesta de cada uno a partir de la
     // comand queue. Cuando estén todos recién ahí sigo con la creación de las carreras.
 
     std::vector<int> players_id = race_monitor->get_player_ids();
 
+    CarBuilder builder("../server/assets/cars_configs/cars_config.yaml");
+
     for (const auto& id: players_id) {
         uint16_t player_id = id;
-        players_cars[player_id] = CarBuilder::create_car(
-                "../server/assets/cars_configs/cars_config.yaml", player_id, 1);
+        players_cars[player_id] = builder.create_car(player_id, 1);
     }
     // por ahora es un auto con un byte hardcodeado
 

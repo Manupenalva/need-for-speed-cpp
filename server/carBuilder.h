@@ -11,12 +11,13 @@
 
 class CarBuilder {
 public:
-    static Car create_car(const std::string& path, const int& id, const int& car_type);
+    YAML::Node cars_data;
+
+    explicit CarBuilder(const std::string& path);
+    Car create_car(const int& id, const int& car_type);
+    // std::vector<CarProperties> get_catalog();
 
 private:
-    static YAML::Node open_file(const std::string& path);
-
-    CarBuilder() = delete;
     CarBuilder(const CarBuilder&) = delete;
     CarBuilder& operator=(const CarBuilder&) = delete;
 };
