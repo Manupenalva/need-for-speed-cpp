@@ -56,6 +56,7 @@ void Race::update_state() {
             status.current_checkpoint_index++;
             if (status.current_checkpoint_index >= checkpoints.size()) {
                 status.has_finished = true;
+                car.finish_race(current_time);
             }
         }
 

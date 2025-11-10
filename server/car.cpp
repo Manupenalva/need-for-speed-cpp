@@ -48,7 +48,7 @@ void Car::update_input(const uint8_t& action) {
     }
 }
 
-void Car::update_stats(const uint8_t& action) {
+void Car::upgrade_stats(const uint8_t& action) {
     if (action == ACT_IMPROVE_SPEED) {
         max_speed += 5;
         current_penalization += 2.0f;
@@ -84,7 +84,7 @@ void Car::update_physics() {
 
 void Car::update_position() { physics->update_position(); }
 
-void Car::handle_hits() { physics->handle_hits(health); }
+void Car::handle_hits() { physics->handle_hits(); }
 
 CarInfo Car::get_state_info() const { return state; }
 

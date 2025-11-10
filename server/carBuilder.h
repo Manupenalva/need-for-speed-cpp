@@ -18,7 +18,7 @@ public:
 
     explicit CarBuilder(const std::string& path);
     Car create_car(const int& id, const int& car_type);
-    // std::vector<CarProperties> get_catalog();
+    std::vector<CarProperties> get_catalog();
 
 private:
     CarBuilder(const CarBuilder&) = delete;

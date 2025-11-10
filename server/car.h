@@ -44,6 +44,7 @@ public:
     void handle_hits();
     CarInfo get_state_info() const;
     bool reached_checkpoint(Position next_checkpoint, float celd_width, float celd_height);
+    void finish_race(float race_time);
 
     Car(Car&& other) = default;
     Car& operator=(Car&& other) = default;

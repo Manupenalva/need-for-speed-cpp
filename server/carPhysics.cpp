@@ -101,17 +101,17 @@ void CarPhysics::update_position() {
     car_state.y = pos.y;
 }
 
-void CarPhysics::handle_hits(float& health) {
+void CarPhysics::handle_hits() {
     b2ContactEvents events = b2World_GetContactEvents(world);
     for (int i = 0; i < events.beginCount; i++) {
         if ((events.hitEvents[i].shapeIdA.index1 == shape.index1) ||
             (events.beginEvents[i].shapeIdB.index1 == shape.index1)) {
-            handle_hit_event(events.hitEvents[i], health);
+            handle_hit_event(events.hitEvents[i]);
         }
     }
 }
 
-void CarPhysics::handle_hit_event(const b2ContactHitEvent& event, float& health) {
+void CarPhysics::handle_hit_event(const b2ContactHitEvent& event) {
     b2Vec2 crash_normal = event.normal;
     b2Vec2 new_normal = crash_normal;
 
@@ -119,10 +119,10 @@ void CarPhysics::handle_hit_event(const b2ContactHitEvent& event, float& health)
         new_normal = {-crash_normal.x, -crash_normal.y};
     }
 
-    handle_crash(new_normal, health);
+    handle_crash(new_normal);
 }
 
-void CarPhysics::handle_crash(const b2Vec2& normal, float& health) {
+void CarPhysics::handle_crash(const b2Vec2& normal) {
     float rad = car_state.angle * M_PI / 180.0f;
 
     b2Vec2 forward = {cosf(rad), sinf(rad)};
@@ -131,11 +131,11 @@ void CarPhysics::handle_crash(const b2Vec2& normal, float& health) {
     if (crash_direction > 0.7f) {  // le doy de frente, disminuye la velocidad y resta vida
         brake();
         brake();
-        health -= 30;
+        car_state.health -= 30;
     } else if (crash_direction < -0.7f) {  // me pega el, solo resta vida
-        health -= 20;
+        car_state.health -= 20;
     } else {  // me dan en el costado, pierdo menos vida y velocidad que de frente
         brake();
-        health -= 10;
+        car_state.health -= 10;
     }
 }

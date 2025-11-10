@@ -124,7 +124,7 @@ void Gameloop::handle_race(const int& race_index) {
 
     broadcast_event(MsgType::RACE_FINISHED);
 
-    handle_upgrade_phase();
+    handle_upgrades_phase();
 }
 
 void Gameloop::run() {
