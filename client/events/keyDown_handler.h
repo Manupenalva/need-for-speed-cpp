@@ -10,7 +10,7 @@ class KeyDownHandler: public EventHandler {
 public:
     explicit KeyDownHandler(Queue<ClientMessageDTO>& queue);
 
-    void handle_event(const SDL_Event& event, ClientMessageDTO& msg) override;
+    bool handle_event(EventDTO& event_dto) override;
 };
 
 #endif

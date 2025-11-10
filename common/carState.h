@@ -6,19 +6,43 @@
 
 #include "checkpointArrow.h"
 #include "checkpointInfo.h"
+#include "npcState.h"
 
 struct CarState {
-    uint16_t id;
-    float x;
-    float y;
-    float angle;
-    float speed;
-    uint16_t lap;
-    CheckpointInfo checkpoint;
-    CheckpointArrow checkpoint_arrow;
-    bool crashed;
-    uint16_t car_type;
-    uint16_t health;
+    uint16_t id = 0;
+    float x = 0.0f;
+    float y = 0.0f;
+    float angle = 0.0f;
+    float speed = 0.0f;
+    uint16_t lap = 0;
+    CheckpointInfo checkpoint{};
+    CheckpointArrow checkpoint_arrow{};
+    bool crashed = false;
+    uint16_t car_type = 0;
+    uint16_t health = 100;
+
+    // Constructor por defecto
+    CarState() = default;
+
+    // Constructor para facilitar el dibujo de npcs
+    explicit CarState(const NpcState& npc):
+            x(npc.x), y(npc.y), angle(npc.angle), car_type(npc.car_type) {}
+
+    // Constructor completo
+    CarState(uint16_t id, float x, float y, float angle, float speed, uint16_t lap,
+             const CheckpointInfo& checkpoint, const CheckpointArrow& checkpoint_arrow,
+             bool crashed, uint16_t car_type, uint16_t health):
+            id(id),
+            x(x),
+            y(y),
+            angle(angle),
+            speed(speed),
+            lap(lap),
+            checkpoint(checkpoint),
+            checkpoint_arrow(checkpoint_arrow),
+            crashed(crashed),
+            car_type(car_type),
+            health(health) {}
 };
 
 struct CarInfo {

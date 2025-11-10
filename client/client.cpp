@@ -11,7 +11,8 @@ Client::Client(Protocol& protocol, const int id):
         drawer(window.get_renderer(), texture_manager, id),
         kb_reader(events_queue),
         last_state(),
-        has_last_state(false) {}
+        has_last_state(false),
+        is_in_race(true) {}
 
 
 void Client::run() {
@@ -25,7 +26,7 @@ void Client::run() {
 
         while (_keep_running) {
             // Procesar todos los mensajes entrantes y actualizar el estado interno
-            kb_reader.listen_to_keyboard(_keep_running);
+            kb_reader.listen_to_keyboard(_keep_running, is_in_race);
 
             // Ejecutar una iteración lógica (actualizaciones locales / físicas)
             update_state_from_server();
@@ -64,21 +65,32 @@ void Client::update_state_from_server() {
     // enviada.
     ServerMessageDTO server_msg;
     while (server_queue.try_pop(server_msg)) {
-        if (server_msg.type != MsgType::STATE_UPDATE) {
-            continue;
+        if (server_msg.type == MsgType::STATE_UPDATE) {
+            last_state = server_msg;
+            has_last_state = true;
         }
-        last_state = server_msg;
-        has_last_state = true;
+        if (server_msg.type == MsgType::RACE_STARTED) {
+            is_in_race = true;
+        }
+        if (server_msg.type == MsgType::RACE_FINISHED) {
+            is_in_race = false;
+        }
     }
 }
 
 void Client::update_animation_frames(int iterations_ahead) {
-    // Si tenemos un estado para dibujar, pedir al drawer que lo pinte
-    if (has_last_state) {
+    // Si tenemos un estado para dibujar y la carrera esta en curso, pedir al drawer que lo pinte
+    if (has_last_state && is_in_race) {
         // Limpiar la pantalla antes de dibujar (solo cuando hay un nuevo estado)
         clear_display();
-        drawer.update_state(last_state, iterations_ahead);
+        drawer.update_game_state(last_state, iterations_ahead);
         window.present();
         has_last_state = false;  // Ya se dibujó este estado
+    }
+    if (!is_in_race) {
+        // Mostrar pantalla de mejora de auto
+        clear_display();
+        drawer.show_upgrade_screen();
+        window.present();
     }
 }

@@ -10,15 +10,18 @@ KeyUpHandler::KeyUpHandler(Queue<ClientMessageDTO>& queue): EventHandler(queue) 
     key_to_command[SDLK_q] = ACT_NITRO_RELEASE;  // Nitro (no se que tecla tiene asignada)
 }
 
-void KeyUpHandler::handle_event(const SDL_Event& event, ClientMessageDTO& msg) {
+bool KeyUpHandler::handle_event(EventDTO& event_dto) {
     // Manejar el evento de tecla presionada
-    if (event.type == SDL_KEYUP) {
-        SDL_Keycode key = event.key.keysym.sym;
+    if (event_dto.event.type == SDL_KEYUP) {
+        SDL_Keycode key = event_dto.event.key.keysym.sym;
+
         // Procesar la tecla presionada según sea necesario
         auto it = key_to_command.find(key);
         if (it != key_to_command.end()) {
+            ClientMessageDTO& msg = event_dto.msg;
             uint8_t command = it->second;
             msg.events.push_back(command);
         }
     }
+    return true;
 }

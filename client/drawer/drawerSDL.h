@@ -19,6 +19,7 @@
 #include "drawer.h"
 #include "map_drawer.h"
 #include "renderedState.h"
+#include "upgradeScreen_drawer.h"
 
 class DrawerSDL {
 private:
@@ -26,12 +27,16 @@ private:
     SDL2pp::Renderer& renderer;
     TextureManager& texture_manager;
     std::vector<std::unique_ptr<Drawer>> drawers;
+    UpgradeScreenDrawer upgrade_screen_drawer;
 
 public:
     explicit DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager, int client_id);
 
-    // Actualiza la vista según el estado recibido
-    void update_state(const ServerMessageDTO& msg, int iterations_ahead);
+    // Actualiza la vista según el estado recibido de la carrera
+    void update_game_state(const ServerMessageDTO& msg, int iterations_ahead);
+
+    // Muestra en pantalla la screen para mejorar el auto
+    void show_upgrade_screen();
 };
 
 #endif

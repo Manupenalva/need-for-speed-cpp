@@ -4,19 +4,19 @@ KeyboardReader::KeyboardReader(Queue<ClientMessageDTO>& queue): message_queue(qu
     // Agregar handlers de eventos
     handlers.push_back(std::make_unique<KeyDownHandler>(message_queue));
     handlers.push_back(std::make_unique<KeyUpHandler>(message_queue));
+    handlers.push_back(std::make_unique<QuitEventHandler>(message_queue));
 }
 
-void KeyboardReader::listen_to_keyboard(std::atomic<bool>& running) {
+void KeyboardReader::listen_to_keyboard(std::atomic<bool>& running, const bool in_race) {
     SDL_Event event;
     ClientMessageDTO msg;
     msg.type = MsgType::DRIVING_EVENT;
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
-            running = false;
-            return;
-        }
+        EventDTO event_dto{event, msg, in_race, running};
         for (auto& handler: handlers) {
-            handler->handle_event(event, msg);
+            if (!handler->handle_event(event_dto)) {
+                return;
+            }
         }
     }
     // Si se registraron eventos, enviarlos al queue

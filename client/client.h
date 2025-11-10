@@ -34,6 +34,7 @@ private:
     // Último estado recibido del servidor para dibujar
     ServerMessageDTO last_state;
     bool has_last_state;
+    bool is_in_race;
 
     void init_resources();
     void update_state_from_server();

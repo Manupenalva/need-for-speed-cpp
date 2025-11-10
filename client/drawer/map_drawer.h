@@ -8,7 +8,6 @@
 #include "drawer.h"
 
 class MapDrawer: public Drawer {
-private:
 public:
     explicit MapDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager);
 

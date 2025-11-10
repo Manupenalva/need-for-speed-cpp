@@ -1,14 +1,14 @@
 #ifndef LOBBY_H
 #define LOBBY_H
 
+#include <QLabel>
 #include <QLineEdit>
+#include <QListWidget>
 #include <QMainWindow>
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QTimer>
 #include <string>
-#include <QLabel>
-#include <QListWidget>
 
 #include "../../common/protocol.h"
 

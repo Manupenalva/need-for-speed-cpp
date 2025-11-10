@@ -5,8 +5,9 @@ CheckpointDrawer::CheckpointDrawer(SDL2pp::Renderer& renderer, TextureManager& t
 
 void CheckpointDrawer::draw(const RenderedState& rendered_state) {
     CarState client_car = rendered_state.client_car;
-    Sprite_rotation checkpoint_sprite =
-            texture_manager.get_race_sprite(RACE_CHECKPOINT, client_car.checkpoint.angle);
+
+    Sprite_rotation checkpoint_sprite = texture_manager.get_race_sprite(
+            client_car.checkpoint.type, client_car.checkpoint.angle);  // type 1 o 2
 
     SDL2pp::Rect map_rect = rendered_state.map_sprite.src_rect;
     int screen_x = static_cast<int>(client_car.checkpoint.x) - map_rect.x;

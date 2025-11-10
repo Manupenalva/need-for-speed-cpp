@@ -10,10 +10,11 @@
 
 #include "../../common/messageDTOs.h"
 #include "../../common/queue.h"
+#include "../events/eventDTO.h"
 #include "../events/event_handler.h"
 #include "../events/keyDown_handler.h"
 #include "../events/keyUp_handler.h"
-
+#include "../events/quit_handler.h"
 
 class KeyboardReader {
 private:
@@ -23,7 +24,7 @@ private:
 public:
     explicit KeyboardReader(Queue<ClientMessageDTO>& queue);
 
-    void listen_to_keyboard(std::atomic<bool>& running);
+    void listen_to_keyboard(std::atomic<bool>& running, const bool in_race);
 };
 
 #endif

@@ -10,11 +10,13 @@
 #include "map_sheet.h"
 #include "race_sheet.h"
 #include "sprite.h"
+#include "upgradeScreen_sheet.h"
 
 #define CAR_PATH "cars/Cars.png"
 #define PEOPLE_PATH "people/Mobile - Grand Theft Auto 4 - Miscellaneous - People.png"
 #define MAP_PATH "cities/"
 #define RACE_PATH "race/"
+#define UPGRADE_SCREEN_PATH "upgrade/Upgrade_Screen.png"
 
 class TextureManager {
 private:
@@ -22,6 +24,7 @@ private:
     CarSheet car_sheet;
     MapSheet map_sheet;
     RaceSheet race_sheet;
+    UpgradeScreenSheet upgrade_screen_sheet;
 
 public:
     TextureManager(SDL2pp::Renderer& renderer, const std::string& assets_path);
@@ -37,6 +40,9 @@ public:
 
     // Metodo para obtener un sprite de carrera (flecha, checkpoint, salida, llegada, etc)
     Sprite_rotation get_race_sprite(int race_element, float direction);
+
+    // Metodo para obtener el sprite de la pantalla de mejoras
+    Sprite get_upgrade_screen_sprite();
 };
 
 #endif
