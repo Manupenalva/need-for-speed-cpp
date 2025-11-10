@@ -11,7 +11,7 @@
 struct EventDTO {
     const SDL_Event event;
     ClientMessageDTO& msg;
-    bool& in_race;
+    const bool in_race;
     std::atomic<bool>& keep_running;
 };
 

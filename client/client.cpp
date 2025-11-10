@@ -69,10 +69,10 @@ void Client::update_state_from_server() {
             last_state = server_msg;
             has_last_state = true;
         }
-        if (server_msg.type == MsgType::GAME_START) {
+        if (server_msg.type == MsgType::RACE_STARTED) {
             is_in_race = true;
         }
-        if (server_msg.type == MsgType::GAME_END) {
+        if (server_msg.type == MsgType::RACE_FINISHED) {
             is_in_race = false;
         }
     }
