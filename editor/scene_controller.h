@@ -14,9 +14,11 @@ public:
     void handleDropEvent(const DragInfo& dragInfo, int x, int y, bool del);
     int countItemsOfType(const QString& type) const;
 
+    void countCheckpointsIds();
 private:
     QGraphicsScene* scene;
     ItemBuilder itemBuilder;
+    int id = 0;
 };
 
 #endif

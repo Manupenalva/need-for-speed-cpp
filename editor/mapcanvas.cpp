@@ -64,7 +64,7 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
         if (!ok || fileName.isEmpty()) {
             return;
         }
-        QString filePath = QString("./maps/%1.yaml").arg(fileName);
+        QString filePath = QString("../maps/%1.yaml").arg(fileName);
         exportToYaml(filePath);
         QMessageBox::information(this, "Map Saved", "Map saved successfully!");
         QCoreApplication::quit();
