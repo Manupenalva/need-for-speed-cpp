@@ -4,8 +4,8 @@
 #include <QFileDialog>
 #include <QMimeData>
 #include <QPixmap>
-#include <QToolButton>
 #include <QTransform>
+#include <QToolButton>
 
 #include "cityselection.h"
 #include "drag_info.h"
@@ -16,7 +16,6 @@ EditorGame::EditorGame(QWidget* parent): QMainWindow(parent), ui(new Ui::EditorG
     ui->setupUi(this);
 
     setUpNav();
-    setUpLoad();
     setUpTools();
 
     if (ui->citySelection) {
@@ -33,28 +32,18 @@ EditorGame::~EditorGame() { delete ui; }
 void EditorGame::setUpNav() {
     connect(ui->btnCreateCity, &QPushButton::clicked,
             [this] { ui->stackedWidget->setCurrentWidget(ui->pageCitySelection); });
-    connect(ui->btnLoadMap, &QPushButton::clicked,
-            [this] { ui->stackedWidget->setCurrentWidget(ui->pageLoadMap); });
+    connect(ui->btnLoadMap, &QPushButton::clicked, this, &EditorGame::setUpLoad);
     connect(ui->btnBackFromCity, &QPushButton::clicked,
-            [this] { ui->stackedWidget->setCurrentWidget(ui->pageMainMenu); });
-    connect(ui->btnBackFromLoad, &QPushButton::clicked,
             [this] { ui->stackedWidget->setCurrentWidget(ui->pageMainMenu); });
 }
 
 void EditorGame::setUpLoad() {
-    connect(ui->btnBrowseMap, &QPushButton::clicked, [this] {
-        const auto path =
-                QFileDialog::getOpenFileName(this, "Open YAML", ".", "YAML (*.yaml *.yml)");
-        if (!path.isEmpty())
-            ui->lineMapPath->setText(path);
-    });
-    connect(ui->btnOpenMap, &QPushButton::clicked, [this] {
-        const auto path = ui->lineMapPath->text().trimmed();
-        if (path.isEmpty())
-            return;
-        ui->mapCanvas->importFromYaml(path);
-        ui->stackedWidget->setCurrentWidget(ui->pageEditor);
-    });
+    const auto path =
+            QFileDialog::getOpenFileName(this, "Open YAML", ".", "YAML (*.yaml *.yml)");
+    if (path.isEmpty())
+        return;
+    ui->mapCanvas->importFromYaml(path);
+    ui->stackedWidget->setCurrentWidget(ui->pageEditor);
 }
 
 void EditorGame::setUpTools() {
