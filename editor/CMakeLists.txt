@@ -1,5 +1,6 @@
 target_sources(taller_editor
     PRIVATE
+    EditorGame.ui
     cityselection.cpp
     editor_game.cpp
     mapcanvas.cpp

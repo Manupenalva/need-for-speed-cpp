@@ -1,183 +1,111 @@
 #include "editor_game.h"
 
 #include <QDrag>
-#include <QDragEnterEvent>
-#include <QDropEvent>
 #include <QFileDialog>
-#include <QLabel>
 #include <QMimeData>
-#include <QScrollArea>
+#include <QPixmap>
+#include <QToolButton>
 #include <QTransform>
-#include <QVBoxLayout>
-#include <vector>
 
+#include "cityselection.h"
 #include "drag_info.h"
+#include "mapcanvas.h"
+#include "ui_EditorGame.h"
 
-struct Tool {
-    QString type;
-    QString iconPath;
-    int rotation = 0;
-};
+EditorGame::EditorGame(QWidget* parent): QMainWindow(parent), ui(new Ui::EditorGame) {
+    ui->setupUi(this);
 
-EditorGame::EditorGame(QWidget* parent): QMainWindow(parent) {
-    stackedWidget = new QStackedWidget(this);
+    setUpNav();
+    setUpLoad();
+    setUpTools();
 
-    mainMenuWidget = new QWidget(this);
-    QVBoxLayout* mainMenuLayout = new QVBoxLayout(mainMenuWidget);
-
-    QLabel* titleLabel = new QLabel("Editor Main Menu", mainMenuWidget);
-    titleLabel->setAlignment(Qt::AlignCenter);
-    titleLabel->setStyleSheet("font-size: 24px; font-weight: bold;");
-
-    QPushButton* selectCityButton = new QPushButton("Create City Map");
-    selectCityButton->setFixedHeight(50);
-
-    QPushButton* loadMapButton = new QPushButton("Load Existing Map");
-    loadMapButton->setFixedHeight(50);
-
-    mainMenuLayout->addWidget(titleLabel);
-    mainMenuLayout->addSpacing(20);
-    mainMenuLayout->addWidget(selectCityButton);
-    mainMenuLayout->setAlignment(selectCityButton, Qt::AlignCenter);
-    mainMenuLayout->addWidget(loadMapButton);
-    mainMenuLayout->setAlignment(loadMapButton, Qt::AlignCenter);
-    mainMenuWidget->setLayout(mainMenuLayout);
-
-
-    connect(selectCityButton, &QPushButton::clicked, this, &EditorGame::goToCitySelection);
-    connect(loadMapButton, &QPushButton::clicked, this, &EditorGame::goToMapLoad);
-
-    citySelectionWidget = new CitySelection(this);
-    connect(citySelectionWidget, &CitySelection::citySelected, this,
-            &EditorGame::operEditorWithCity);
-
-    editorWidget = new MapCanvas(this);
-
-    stackedWidget->addWidget(mainMenuWidget);
-    stackedWidget->addWidget(citySelectionWidget);
-    stackedWidget->addWidget(editorWidget);
-
-    setCentralWidget(stackedWidget);
-    stackedWidget->setCurrentWidget(mainMenuWidget);
-
-    resize(1280, 720);
+    if (ui->citySelection) {
+        connect(ui->citySelection, &CitySelection::citySelected, this,
+                [this](const QString& filePath) {
+                    ui->mapCanvas->loadCityMap(filePath);
+                    ui->stackedWidget->setCurrentWidget(ui->pageEditor);
+                });
+    }
 }
 
-EditorGame::~EditorGame() {}
+EditorGame::~EditorGame() { delete ui; }
 
-void EditorGame::goToCitySelection() { stackedWidget->setCurrentWidget(citySelectionWidget); }
+void EditorGame::setUpNav() {
+    connect(ui->btnCreateCity, &QPushButton::clicked,
+            [this] { ui->stackedWidget->setCurrentWidget(ui->pageCitySelection); });
+    connect(ui->btnLoadMap, &QPushButton::clicked,
+            [this] { ui->stackedWidget->setCurrentWidget(ui->pageLoadMap); });
+    connect(ui->btnBackFromCity, &QPushButton::clicked,
+            [this] { ui->stackedWidget->setCurrentWidget(ui->pageMainMenu); });
+    connect(ui->btnBackFromLoad, &QPushButton::clicked,
+            [this] { ui->stackedWidget->setCurrentWidget(ui->pageMainMenu); });
+}
 
-void EditorGame::buildTools(QVBoxLayout* toolsLayout) {
-    QLabel* toolsTitle = new QLabel("Tools");
-    toolsTitle->setAlignment(Qt::AlignCenter);
-    toolsTitle->setStyleSheet("font-size: 18px; font-weight: bold;");
-    toolsLayout->addWidget(toolsTitle);
-    toolsLayout->addSpacing(10);
+void EditorGame::setUpLoad() {
+    connect(ui->btnBrowseMap, &QPushButton::clicked, [this] {
+        const auto path =
+                QFileDialog::getOpenFileName(this, "Open YAML", ".", "YAML (*.yaml *.yml)");
+        if (!path.isEmpty())
+            ui->lineMapPath->setText(path);
+    });
+    connect(ui->btnOpenMap, &QPushButton::clicked, [this] {
+        const auto path = ui->lineMapPath->text().trimmed();
+        if (path.isEmpty())
+            return;
+        ui->mapCanvas->importFromYaml(path);
+        ui->stackedWidget->setCurrentWidget(ui->pageEditor);
+    });
+}
 
-    std::vector<Tool> tools = {
-            {"Add Road", "./editor/imgs/road.png"},
-            {"Add Road", "./editor/imgs/road1.png"},
-            {"Add Road", "./editor/imgs/road2.png"},
-            {"Add Checkpoint", "./editor/imgs/checkpoint.png"},
-            {"Add Start Line", "./editor/imgs/start.png"},
-            {"Add Start Line", "./editor/imgs/start2.png"},
-            {"Add Finish Line", "./editor/imgs/finish.png"},
-            {"Add Hint Left", "./editor/imgs/hint.png"},
-            {"Add Hint Down", "./editor/imgs/hint.png", 270},
-            {"Add Hint Up", "./editor/imgs/hint.png", 90},
-            {"Add Hint Right", "./editor/imgs/hint.png", 180},
-            {"Add NPC", "./editor/imgs/npc.png"},
-    };
+void EditorGame::setUpTools() {
+    rotateIcon(ui->toolHintLeft, "../editor/imgs/hint.png", 0);
+    rotateIcon(ui->toolHintDown, "../editor/imgs/hint.png", 270);
+    rotateIcon(ui->toolHintUp, "../editor/imgs/hint.png", 90);
+    rotateIcon(ui->toolHintRight, "../editor/imgs/hint.png", 180);
 
-    for (auto& t: tools) {
-        QPushButton* toolButton = new QPushButton();
-        QPixmap base(t.iconPath);
-        if (!base.isNull() && t.rotation != 0) {
-            QTransform transform;
-            transform.rotate(t.rotation);
-            base = base.transformed(transform, Qt::SmoothTransformation);
+    dragMovement(ui->toolRoad, "road", 0, "../editor/imgs/road.png");
+    dragMovement(ui->toolRoad1, "road1", 0, "../editor/imgs/road1.png");
+    dragMovement(ui->toolRoad2, "road2", 0, "../editor/imgs/road2.png");
+    dragMovement(ui->toolCheckpoint, "checkpoint", 0, "../editor/imgs/checkpoint.png");
+    dragMovement(ui->toolStart, "start", 0, "../editor/imgs/start.png");
+    dragMovement(ui->toolStart2, "start2", 0, "../editor/imgs/start2.png");
+    dragMovement(ui->toolFinish, "finish", 0, "../editor/imgs/finish.png");
+    dragMovement(ui->toolHintLeft, "hint", 0, "../editor/imgs/hint.png");
+    dragMovement(ui->toolHintDown, "hint", 270, "../editor/imgs/hint.png");
+    dragMovement(ui->toolHintUp, "hint", 90, "../editor/imgs/hint.png");
+    dragMovement(ui->toolHintRight, "hint", 180, "../editor/imgs/hint.png");
+    dragMovement(ui->toolNPC, "npc", 0, "../editor/imgs/npc.png");
+}
+
+void EditorGame::dragMovement(QToolButton* btn, const QString& type, int rotDeg,
+                              const QString& iconPath) {
+    if (!btn)
+        return;
+    QObject::connect(btn, &QToolButton::pressed, btn, [=] {
+        DragInfo d(type, rotDeg, iconPath);
+        auto* mime = new QMimeData;
+        mime->setData(d.mimeType(), d.pack());
+        auto* drag = new QDrag(btn);
+        drag->setMimeData(mime);
+
+        QPixmap px(iconPath);
+        if (!px.isNull() && rotDeg) {
+            QTransform t;
+            t.rotate(rotDeg);
+            px = px.transformed(t, Qt::SmoothTransformation);
         }
-        toolButton->setIcon(base);
-        toolButton->setIconSize(QSize(48, 48));
-        toolButton->setFixedSize(64, 64);
-        toolButton->setToolTip(t.type);
-        QObject::connect(toolButton, &QPushButton::pressed, [toolButton, t, base]() {
-            DragInfo dragInfo(t.type, t.rotation, t.iconPath);
-            QMimeData* mimeData = new QMimeData;
-            mimeData->setData(dragInfo.mimeType(), dragInfo.pack());
-            QDrag* drag = new QDrag(toolButton);
-            drag->setMimeData(mimeData);
-            drag->setPixmap(base.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-            drag->exec(Qt::CopyAction);
-        });
-        toolsLayout->addWidget(toolButton);
+        drag->setPixmap(px.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        drag->exec(Qt::CopyAction);
+    });
+}
+
+void EditorGame::rotateIcon(QToolButton* btn, const QString& iconPath, int rotDeg) {
+    QPixmap base(iconPath);
+    if (!base.isNull() && rotDeg) {
+        QTransform t;
+        t.rotate(rotDeg);
+        base = base.transformed(t, Qt::SmoothTransformation);
     }
-}
-
-void EditorGame::operEditorWithCity(const QString& cityName) {
-    QWidget* editorContainer = new QWidget(this);
-    QHBoxLayout* editorLayout = new QHBoxLayout(editorContainer);
-
-    QWidget* toolsWidget = new QWidget();
-    QVBoxLayout* toolsLayout = new QVBoxLayout(toolsWidget);
-    toolsLayout->setAlignment(Qt::AlignTop);
-
-    buildTools(toolsLayout);
-
-    QScrollArea* scrollArea = new QScrollArea(editorContainer);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(toolsWidget);
-    scrollArea->setFixedWidth(140);
-    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scrollArea->setFrameShape(QFrame::NoFrame);
-    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-
-    editorWidget = new MapCanvas(editorContainer);
-    editorWidget->loadCityMap(cityName);
-    editorLayout->addWidget(scrollArea);
-    editorLayout->addWidget(editorWidget, 1);
-    editorLayout->setStretch(0, 0);
-    editorLayout->setStretch(1, 1);
-    editorContainer->setLayout(editorLayout);
-
-    stackedWidget->addWidget(editorContainer);
-    stackedWidget->setCurrentWidget(editorContainer);
-}
-
-void EditorGame::goToMapLoad() {
-    QString mapPath =
-            QFileDialog::getOpenFileName(this, "Open Map YAML", "", "YAML Files (*.yaml *.yml)");
-    if (!mapPath.isEmpty()) {
-        openEditorWithMap(mapPath);
-    }
-}
-
-void EditorGame::openEditorWithMap(const QString& mapPath) {
-    QWidget* editorContainer = new QWidget(this);
-    QHBoxLayout* editorLayout = new QHBoxLayout(editorContainer);
-
-    QWidget* toolsWidget = new QWidget();
-    QVBoxLayout* toolsLayout = new QVBoxLayout(toolsWidget);
-    toolsLayout->setAlignment(Qt::AlignTop);
-
-    buildTools(toolsLayout);
-
-    QScrollArea* scrollArea = new QScrollArea(editorContainer);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(toolsWidget);
-    scrollArea->setFixedWidth(140);
-    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scrollArea->setFrameShape(QFrame::NoFrame);
-    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-
-    editorWidget = new MapCanvas(editorContainer);
-    editorWidget->importFromYaml(mapPath);
-    editorLayout->addWidget(scrollArea);
-    editorLayout->addWidget(editorWidget, 1);
-    editorLayout->setStretch(0, 0);
-    editorLayout->setStretch(1, 1);
-    editorContainer->setLayout(editorLayout);
-
-    stackedWidget->addWidget(editorContainer);
-    stackedWidget->setCurrentWidget(editorContainer);
+    btn->setIcon(base);
+    btn->setIconSize(QSize(48, 48));
 }

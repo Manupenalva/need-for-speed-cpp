@@ -2,6 +2,7 @@
 
 #include <QFile>
 #include <QGraphicsItem>
+#include <string>
 #include <vector>
 
 bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int gridSize,
@@ -41,7 +42,7 @@ bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int grid
 void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene,
                                const QString& elementType) {
     std::vector<YAML::Node> elements;
-    for (QGraphicsItem* item: scene->items()) {
+    for (QGraphicsItem* item: scene->items(Qt::AscendingOrder)) {
         if (!item->data(0).isValid())
             continue;
         QString type = item->data(0).toString();
@@ -63,8 +64,12 @@ void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene,
                 element["rotation"] = "down";
             }
         }
+        if (elementType == "checkpoint") {
+            element["id"] = item->data(2).toInt();
+        }
         elements.push_back(element);
     }
+
     if (!elements.empty()) {
         out << YAML::Key << elementType.toStdString() << YAML::Value << YAML::BeginSeq;
         for (const auto& elem: elements) {

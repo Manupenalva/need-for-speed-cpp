@@ -2,32 +2,27 @@
 #define EDITOR_GAME_H
 
 #include <QMainWindow>
-#include <QPushButton>
-#include <QStackedWidget>
-#include <QWidget>
 
-#include "cityselection.h"
-#include "mapcanvas.h"
+QT_BEGIN_NAMESPACE
+namespace Ui {
+class EditorGame;
+}
+QT_END_NAMESPACE
 
 class EditorGame: public QMainWindow {
     Q_OBJECT
 
 public:
     explicit EditorGame(QWidget* parent = nullptr);
-    ~EditorGame();
+    ~EditorGame() override;
 
-    // cppcheck-suppress unknownMacro
-private slots:
-    void goToCitySelection();
-    void operEditorWithCity(const QString& cityName);
-    void goToMapLoad();
-    void openEditorWithMap(const QString& mapPath);
-    void buildTools(QVBoxLayout* toolsLayout);
 
 private:
-    QStackedWidget* stackedWidget;
-    QWidget* mainMenuWidget;
-    CitySelection* citySelectionWidget;
-    MapCanvas* editorWidget;
+    Ui::EditorGame* ui;
+    void setUpNav();
+    void setUpLoad();
+    void setUpTools();
+    void dragMovement(QToolButton* btn, const QString& type, int rotDeg, const QString& iconPath);
+    void rotateIcon(QToolButton* btn, const QString& iconPath, int rotDeg);
 };
 #endif
