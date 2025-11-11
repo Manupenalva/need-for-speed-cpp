@@ -74,18 +74,18 @@ void EditorGame::buildTools(QVBoxLayout* toolsLayout) {
     toolsLayout->addSpacing(10);
 
     std::vector<Tool> tools = {
-        {"Add Road", "./editor/imgs/road.png"},
-        {"Add Road", "./editor/imgs/road1.png"},
-        {"Add Road", "./editor/imgs/road2.png"},
-        {"Add Checkpoint", "./editor/imgs/checkpoint.png"},
-        {"Add Start Line", "./editor/imgs/start.png"},
-        {"Add Start Line", "./editor/imgs/start2.png"},
-        {"Add Finish Line", "./editor/imgs/finish.png"},
-        {"Add Hint Left", "./editor/imgs/hint.png"},
-        {"Add Hint Down", "./editor/imgs/hint.png", 270},
-        {"Add Hint Up", "./editor/imgs/hint.png", 90},
-        {"Add Hint Right", "./editor/imgs/hint.png", 180},
-        {"Add NPC", "./editor/imgs/npc.png"},
+        {"Add Road", "../editor/imgs/road.png"},
+        {"Add Road", "../editor/imgs/road1.png"},
+        {"Add Road", "../editor/imgs/road2.png"},
+        {"Add Checkpoint", "../editor/imgs/checkpoint.png"},
+        {"Add Start Line", "../editor/imgs/start.png"},
+        {"Add Start Line", "../editor/imgs/start2.png"},
+        {"Add Finish Line", "../editor/imgs/finish.png"},
+        {"Add Hint Left", "../editor/imgs/hint.png"},
+        {"Add Hint Down", "../editor/imgs/hint.png", 270},
+        {"Add Hint Up", "../editor/imgs/hint.png", 90},
+        {"Add Hint Right", "../editor/imgs/hint.png", 180},
+        {"Add NPC", "../editor/imgs/npc.png"},
     };
 
     for (auto& t: tools) {
