@@ -94,7 +94,7 @@ void EditorGame::dragMovement(QToolButton* btn, const QString& type, int rotDeg,
             t.rotate(rotDeg);
             px = px.transformed(t, Qt::SmoothTransformation);
         }
-        drag->setPixmap(px.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        drag->setPixmap(px.scaled(50, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         drag->exec(Qt::CopyAction);
     });
 }
