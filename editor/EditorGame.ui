@@ -78,52 +78,6 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="pageLoadMap">
-       <layout class="QVBoxLayout" name="vboxLoad">
-        <item>
-         <widget class="QLabel" name="labelLoad">
-          <property name="text">
-           <string>Load Map (.yaml)</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="hLoad">
-          <item>
-           <widget class="QLineEdit" name="lineMapPath"/>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btnBrowseMap">
-            <property name="text">
-             <string>Browse…</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QListWidget" name="listRecentMaps"/>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="hLoadNav">
-          <item>
-           <widget class="QPushButton" name="btnOpenMap">
-            <property name="text">
-             <string>Open</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btnBackFromLoad">
-            <property name="text">
-             <string>Back</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
       <widget class="QWidget" name="pageEditor">
        <layout class="QVBoxLayout" name="vboxEditor">
         <item>

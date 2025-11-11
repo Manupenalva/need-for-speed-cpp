@@ -2,6 +2,7 @@
 #define EDITOR_GAME_H
 
 #include <QMainWindow>
+#include <QToolButton>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
