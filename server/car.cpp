@@ -26,6 +26,7 @@ void Car::add_to_world(b2WorldId world, Position start_position) {
 
     physics = std::make_unique<CarPhysics>(world, state, max_speed, acceleration, mass, drivability,
                                            car_long, car_width);
+    std::cout << "Me agregaron a la carrera, mi velocidad punta es " << max_speed << std::endl;
 }
 
 void Car::update_input(const uint8_t& action) {
@@ -52,6 +53,7 @@ void Car::upgrade_stats(const uint8_t& action) {
     if (action == ACT_IMPROVE_SPEED) {
         max_speed += 5;
         current_penalization += 2.0f;
+        std::cout << "Mejoré la velocidad" << std::endl;
     } else if (action == ACT_IMPROVE_ACCELERATION) {
         acceleration += 5;
         current_penalization += 2.0f;
