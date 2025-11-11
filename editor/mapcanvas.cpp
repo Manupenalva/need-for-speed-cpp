@@ -1,36 +1,26 @@
 #include "mapcanvas.h"
 
-#include <QBrush>
 #include <QCoreApplication>
-#include <QCursor>
 #include <QDrag>
 #include <QDragEnterEvent>
 #include <QDropEvent>
-#include <QFile>
 #include <QFileInfo>
 #include <QGraphicsItem>
-#include <QGraphicsPixmapItem>
-#include <QGraphicsRectItem>
-#include <QGraphicsSceneMouseEvent>
 #include <QInputDialog>
-#include <QKeyEvent>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QMimeData>
 #include <QMouseEvent>
 #include <QPen>
 #include <QPixmap>
-#include <QTextStream>
 #include <QVBoxLayout>
-#include <vector>
-
-#include <yaml-cpp/yaml.h>
 
 #include "drag_info.h"
-#include "scene_controller.h"
 #include "yaml_config.h"
 
 #define GRID_SIZE 50
+#define MAX_PLAYERS 8
+#define MAX_FINISH 1
 
 MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -55,11 +45,11 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
         bool ok;
         QString fileName = QInputDialog::getText(
                 this, "Save Map", "Enter map name:", QLineEdit::Normal, currentCityName, &ok);
-        if (controller->countItemsOfType("start") != 8) {
+        if (controller->countItemsOfType("start") != MAX_PLAYERS) {
             QMessageBox::warning(this, "Starts missing", "It is neccessary to be 8 starts points.");
             return;
         }
-        if (controller->countItemsOfType("finish") != 1) {
+        if (controller->countItemsOfType("finish") != MAX_FINISH) {
             QMessageBox::warning(this, "Finish missing", "It is neccessary to be 1 finish line.");
             return;
         }
@@ -115,14 +105,14 @@ void MapCanvas::dropEvent(QDropEvent* event) {
     }
 
     if (dragInfo.getType().contains("start", Qt::CaseInsensitive) &&
-        controller->countItemsOfType("start") >= 8) {
+        controller->countItemsOfType("start") >= MAX_PLAYERS) {
         QMessageBox::warning(this, "Limit reach",
                              "There are 8 starting points in the map. Please remove one.");
         return;
     }
 
     if (dragInfo.getType().contains("finish", Qt::CaseInsensitive) &&
-        controller->countItemsOfType("finish") >= 1) {
+        controller->countItemsOfType("finish") >= MAX_FINISH) {
         QMessageBox::warning(
                 this, "Limit reach",
                 "There is a finish line in the map. Please remove to drop the new one.");

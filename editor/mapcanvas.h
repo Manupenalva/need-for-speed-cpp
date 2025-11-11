@@ -4,7 +4,6 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QPixmap>
 #include <QPushButton>
 #include <QWidget>
 
