@@ -3,10 +3,12 @@
 
 #include <QGraphicsScene>
 #include <QString>
-#include <yaml-cpp/yaml.h>
-#include <vector>
-#include "drag_info.h"
 #include <utility>
+#include <vector>
+
+#include <yaml-cpp/yaml.h>
+
+#include "drag_info.h"
 
 class YamlConfig {
 private:
@@ -14,6 +16,7 @@ private:
     void addElements(YAML::Node& out, const QString& elementType);
     QString selectedCity;
     std::vector<std::pair<DragInfo, QPoint>> items;
+
 public:
     YamlConfig() = default;
 

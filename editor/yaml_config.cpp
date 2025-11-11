@@ -1,10 +1,12 @@
 #include "yaml_config.h"
 
-#include <vector>
-#include <QGraphicsItem>
 #include <QFile>
+#include <QGraphicsItem>
+#include <string>
+#include <vector>
 
-bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int gridSize, const QString& path) {
+bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int gridSize,
+                      const QString& path) {
     try {
         YAML::Emitter out;
         out << YAML::BeginMap;
@@ -14,7 +16,7 @@ bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int grid
         out << YAML::Key << "height" << YAML::Value << static_cast<int>(scene->height());
         out << YAML::Key << "celdWidth" << YAML::Value << gridSize;
         out << YAML::Key << "celdHeight" << YAML::Value << gridSize;
-        
+
         writeElements(out, scene, "start");
         writeElements(out, scene, "finish");
         writeElements(out, scene, "road");
@@ -37,13 +39,15 @@ bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int grid
     }
 }
 
-void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene, const QString& elementType) {
+void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene,
+                               const QString& elementType) {
     std::vector<YAML::Node> elements;
     for (QGraphicsItem* item: scene->items(Qt::AscendingOrder)) {
         if (!item->data(0).isValid())
             continue;
         QString type = item->data(0).toString();
-        if (!type.contains(elementType, Qt::CaseInsensitive)) continue;
+        if (!type.contains(elementType, Qt::CaseInsensitive))
+            continue;
         YAML::Node element;
         QPointF pos = item->pos();
         element["x"] = static_cast<int>(pos.x());
@@ -51,7 +55,7 @@ void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene, 
         if (elementType == "hint") {
             int rotation = item->data(1).toInt();
             if (rotation == 0) {
-                element["rotation"] = "left";                    
+                element["rotation"] = "left";
             } else if (rotation == 180) {
                 element["rotation"] = "right";
             } else if (rotation == 90) {
@@ -68,7 +72,7 @@ void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene, 
 
     if (!elements.empty()) {
         out << YAML::Key << elementType.toStdString() << YAML::Value << YAML::BeginSeq;
-        for (const auto& elem : elements) {
+        for (const auto& elem: elements) {
             out << elem;
         }
         out << YAML::EndSeq;
@@ -103,9 +107,9 @@ bool YamlConfig::load(const QString& path) {
     }
 }
 
-void YamlConfig::addElements(YAML::Node& config, const QString& elementType){
+void YamlConfig::addElements(YAML::Node& config, const QString& elementType) {
     if (config[elementType.toStdString()]) {
-        for (const auto& elem : config[elementType.toStdString()]) {
+        for (const auto& elem: config[elementType.toStdString()]) {
             int x = elem["x"].as<int>();
             int y = elem["y"].as<int>();
             int rotationDeg = 0;
@@ -122,13 +126,9 @@ void YamlConfig::addElements(YAML::Node& config, const QString& elementType){
             }
             items.emplace_back(DragInfo(elementType, rotationDeg, QString{}), QPoint(x, y));
         }
-    } 
+    }
 }
 
-QString YamlConfig::getCity() {
-    return selectedCity;
-}
+QString YamlConfig::getCity() { return selectedCity; }
 
-std::vector<std::pair<DragInfo, QPoint>> YamlConfig::getItems() {
-    return items;
-}
+std::vector<std::pair<DragInfo, QPoint>> YamlConfig::getItems() { return items; }

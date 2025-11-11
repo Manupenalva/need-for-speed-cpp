@@ -2,30 +2,32 @@
 
 #include <QBrush>
 #include <QCoreApplication>
+#include <QCursor>
 #include <QDrag>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QFile>
 #include <QFileInfo>
+#include <QGraphicsItem>
+#include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
+#include <QGraphicsSceneMouseEvent>
+#include <QInputDialog>
+#include <QKeyEvent>
+#include <QLineEdit>
+#include <QMessageBox>
 #include <QMimeData>
+#include <QMouseEvent>
 #include <QPen>
 #include <QPixmap>
 #include <QTextStream>
 #include <QVBoxLayout>
-#include <QMessageBox>
-#include <QCursor>
-#include <QGraphicsItem>
-#include <QGraphicsPixmapItem>
-#include <QGraphicsSceneMouseEvent>
-#include <yaml-cpp/yaml.h>
 #include <vector>
-#include <QMouseEvent>
-#include <QKeyEvent>
-#include <QLineEdit>
-#include <QInputDialog>
-#include "scene_controller.h"
+
+#include <yaml-cpp/yaml.h>
+
 #include "drag_info.h"
+#include "scene_controller.h"
 #include "yaml_config.h"
 
 #define GRID_SIZE 50
@@ -51,13 +53,13 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
 
     connect(saveButton, &QPushButton::clicked, this, [this]() {
         bool ok;
-        QString fileName = QInputDialog::getText(this, "Save Map", "Enter map name:",
-                                                 QLineEdit::Normal, currentCityName, &ok);
+        QString fileName = QInputDialog::getText(
+                this, "Save Map", "Enter map name:", QLineEdit::Normal, currentCityName, &ok);
         if (controller->countItemsOfType("start") != 8) {
             QMessageBox::warning(this, "Faltan starts", "Es necesario 8 starts.");
             return;
         }
-        if (controller->countItemsOfType("finish") != 1){
+        if (controller->countItemsOfType("finish") != 1) {
             QMessageBox::warning(this, "Faltan finishes", "Es necesario 1 finish.");
             return;
         }
@@ -112,13 +114,16 @@ void MapCanvas::dropEvent(QDropEvent* event) {
         return;
     }
 
-    if (dragInfo.getType().contains("start", Qt::CaseInsensitive) && controller->countItemsOfType("start") >= 8) {
+    if (dragInfo.getType().contains("start", Qt::CaseInsensitive) &&
+        controller->countItemsOfType("start") >= 8) {
         QMessageBox::warning(this, "Limite alcanzado", "Ya hay 8 puntos de inicio en el mapa.");
         return;
     }
 
-    if (dragInfo.getType().contains("finish", Qt::CaseInsensitive) && controller->countItemsOfType("finish") >= 1) {
-        QMessageBox::warning(this, "Limite alcanzado", "Ya hay 1 punto de finalización en el mapa.");
+    if (dragInfo.getType().contains("finish", Qt::CaseInsensitive) &&
+        controller->countItemsOfType("finish") >= 1) {
+        QMessageBox::warning(this, "Limite alcanzado",
+                             "Ya hay 1 punto de finalización en el mapa.");
         return;
     }
 
@@ -139,13 +144,24 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
         if (event->type() == QEvent::MouseButtonPress) {
             QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
             if (mouseEvent->button() == Qt::RightButton) {
-                QGraphicsItem* item = scene->itemAt(view->mapToScene(mouseEvent->pos()), QTransform());
+                QGraphicsItem* item =
+                        scene->itemAt(view->mapToScene(mouseEvent->pos()), QTransform());
                 if (item && item->data(0).isValid()) {
                     scene->removeItem(item);
                     delete item;
-                    return true; 
+                    return true;
                 }
             }
+        }
+        if (event->type() == QEvent::DragEnter || event->type() == QEvent::DragMove) {
+            QDragEnterEvent* dragEvent = static_cast<QDragEnterEvent*>(event);
+            dragEnterEvent(dragEvent);
+            return true;
+        }
+        if (event->type() == QEvent::Drop) {
+            QDropEvent* d = static_cast<QDropEvent*>(event);
+            dropEvent(d);
+            return true;
         }
     }
     return QWidget::eventFilter(obj, event);
@@ -155,7 +171,7 @@ void MapCanvas::importFromYaml(const QString& filePath) {
     YamlConfig yaml;
     yaml.load(filePath);
     loadCityMap(QString("../client/assets/cities/%1.png").arg(yaml.getCity()));
-    for (const auto& [i, pos] : yaml.getItems()) {
+    for (const auto& [i, pos]: yaml.getItems()) {
         controller->handleDropEvent(i, pos.x(), pos.y(), false);
     }
     controller->countCheckpointsIds();

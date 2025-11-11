@@ -1,9 +1,9 @@
 #include "cityselection.h"
 
+#include <QDir>
 #include <QIcon>
 #include <QPixmap>
 #include <vector>
-#include <QDir>
 
 #define BACKGROUNDS "../client/assets/cities/"
 
@@ -19,13 +19,13 @@ CitySelection::CitySelection(QWidget* parent): QWidget(parent) {
 
     auto* citiesLayout = new QHBoxLayout();
     QDir citiesDir(BACKGROUNDS);
-    
+
     QStringList nameFilters;
     nameFilters << "*.png";
 
     QFileInfoList cityFiles = citiesDir.entryInfoList(nameFilters, QDir::Files);
 
-    for (const QFileInfo& fileInfo : cityFiles) {
+    for (const QFileInfo& fileInfo: cityFiles) {
         QString filePath = fileInfo.absoluteFilePath();
         QString cityName = fileInfo.baseName();
 
@@ -35,14 +35,13 @@ CitySelection::CitySelection(QWidget* parent): QWidget(parent) {
         cityButton->setIconSize(QSize(200, 200));
         cityButton->setFixedSize(220, 220);
         QObject::connect(cityButton, &QPushButton::clicked, this,
-                        [this, filePath]() { emit citySelected(filePath); });
+                         [this, filePath]() { emit citySelected(filePath); });
         QLabel* nameLabel = new QLabel(cityName);
         nameLabel->setAlignment(Qt::AlignCenter);
         nameLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
         cityLayout->addWidget(cityButton);
         cityLayout->addWidget(nameLabel);
         citiesLayout->addLayout(cityLayout);
-
     }
 
     mainLayout->addLayout(citiesLayout);

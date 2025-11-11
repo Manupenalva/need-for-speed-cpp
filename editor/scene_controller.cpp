@@ -1,13 +1,15 @@
 #include "scene_controller.h"
 
+#include <algorithm>
+
 #define GRID_SIZE 50
 
-SceneController::SceneController(QGraphicsScene* scene) : scene(scene) {}
+SceneController::SceneController(QGraphicsScene* scene): scene(scene) {}
 
 void SceneController::handleDropEvent(const DragInfo& dragInfo, int x, int y, bool del) {
     if (del) {
         QList<QGraphicsItem*> itemsAtPos = scene->items(QPointF(x, y));
-        for (QGraphicsItem* item : itemsAtPos) {
+        for (QGraphicsItem* item: itemsAtPos) {
             if (item->data(0).isValid() && item->data(0).toString() == dragInfo.getType()) {
                 scene->removeItem(item);
                 delete item;
@@ -32,8 +34,9 @@ void SceneController::handleDropEvent(const DragInfo& dragInfo, int x, int y, bo
 
 int SceneController::countItemsOfType(const QString& type) const {
     int count = 0;
-    for (QGraphicsItem* item : scene->items()) {
-        if (item->data(0).isValid() && item->data(0).toString().contains(type, Qt::CaseInsensitive)) {
+    for (QGraphicsItem* item: scene->items()) {
+        if (item->data(0).isValid() &&
+            item->data(0).toString().contains(type, Qt::CaseInsensitive)) {
             count++;
         }
     }
@@ -42,7 +45,7 @@ int SceneController::countItemsOfType(const QString& type) const {
 
 void SceneController::countCheckpointsIds() {
     id = 0;
-    for (auto* it : scene->items()) {
+    for (auto* it: scene->items()) {
         const auto t = it->data(0).toString();
         if (t.contains("checkpoint", Qt::CaseInsensitive)) {
             id = std::max(id, it->data(2).toInt());
