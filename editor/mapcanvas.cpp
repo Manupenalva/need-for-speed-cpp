@@ -56,11 +56,11 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
         QString fileName = QInputDialog::getText(
                 this, "Save Map", "Enter map name:", QLineEdit::Normal, currentCityName, &ok);
         if (controller->countItemsOfType("start") != 8) {
-            QMessageBox::warning(this, "Faltan starts", "Es necesario 8 starts.");
+            QMessageBox::warning(this, "Starts missing", "It is neccessary to be 8 starts points.");
             return;
         }
         if (controller->countItemsOfType("finish") != 1) {
-            QMessageBox::warning(this, "Faltan finishes", "Es necesario 1 finish.");
+            QMessageBox::warning(this, "Finish missing", "It is neccessary to be 1 finish line.");
             return;
         }
         if (!ok || fileName.isEmpty()) {
@@ -116,14 +116,16 @@ void MapCanvas::dropEvent(QDropEvent* event) {
 
     if (dragInfo.getType().contains("start", Qt::CaseInsensitive) &&
         controller->countItemsOfType("start") >= 8) {
-        QMessageBox::warning(this, "Limite alcanzado", "Ya hay 8 puntos de inicio en el mapa.");
+        QMessageBox::warning(this, "Limit reach",
+                             "There are 8 starting points in the map. Please remove one.");
         return;
     }
 
     if (dragInfo.getType().contains("finish", Qt::CaseInsensitive) &&
         controller->countItemsOfType("finish") >= 1) {
-        QMessageBox::warning(this, "Limite alcanzado",
-                             "Ya hay 1 punto de finalización en el mapa.");
+        QMessageBox::warning(
+                this, "Limit reach",
+                "There is a finish line in the map. Please remove to drop the new one.");
         return;
     }
 
