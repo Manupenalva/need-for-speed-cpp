@@ -154,7 +154,7 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
 void MapCanvas::importFromYaml(const QString& filePath) {
     YamlConfig yaml;
     yaml.load(filePath);
-    loadCityMap(QString("./client/assets/cities/%1.png").arg(yaml.getCity()));
+    loadCityMap(QString("../client/assets/cities/%1.png").arg(yaml.getCity()));
     for (const auto& [i, pos] : yaml.getItems()) {
         controller->handleDropEvent(i, pos.x(), pos.y(), false);
     }
