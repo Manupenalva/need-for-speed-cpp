@@ -19,6 +19,7 @@ struct CarState {
     CheckpointArrow checkpoint_arrow{};
     bool crashed = false;
     bool under_bridge = false;
+    bool braking = false;
     uint16_t car_type = 0;
     uint16_t health = 100;
 
