@@ -158,4 +158,5 @@ void MapCanvas::importFromYaml(const QString& filePath) {
     for (const auto& [i, pos] : yaml.getItems()) {
         controller->handleDropEvent(i, pos.x(), pos.y(), false);
     }
+    controller->countCheckpointsIds();
 }
