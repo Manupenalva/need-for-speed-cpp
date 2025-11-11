@@ -120,6 +120,8 @@ CarState MessageReceiver::recv_car_state() {
     car.checkpoint_arrow = recv_checkpoint_arrow();
     uint8_t crashed_byte = obtain_byte();
     car.crashed = (crashed_byte != 0);
+    uint8_t under_bridge_byte = obtain_byte();
+    car.under_bridge = (under_bridge_byte != 0);
     car.car_type = obtain_uint16();
     car.health = obtain_uint16();
     return car;
