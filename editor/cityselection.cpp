@@ -5,7 +5,7 @@
 #include <QPixmap>
 #include <vector>
 
-#define BACKGROUNDS "./client/assets/cities/"
+#define BACKGROUNDS "../client/assets/cities/"
 
 CitySelection::CitySelection(QWidget* parent): QWidget(parent) {
     QVBoxLayout* mainLayout = new QVBoxLayout(this);

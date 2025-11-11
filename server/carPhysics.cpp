@@ -3,8 +3,8 @@
 #include <cmath>
 #include <iostream>
 
-#define BASE_MAX_SPEED 10000.0f
-#define BASE_ACCELERATION 1000.0f
+#define BASE_MAX_SPEED 10000000.0f
+#define BASE_ACCELERATION 1000000.0f
 #define BASE_ANGLE_ROTATION 4
 #define BASE_FRICTION 10.0f
 #define MIN_SPEED 100.0f
@@ -40,12 +40,7 @@ void CarPhysics::accelerate() {
 
     b2Vec2 velocity = b2Body_GetLinearVelocity(body);
     float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
-
-    if (speed < MIN_SPEED) {
-        speed = MIN_SPEED;
-        b2Vec2 initial_velocity = {direction.x * MIN_SPEED, direction.y * MIN_SPEED};
-        b2Body_SetLinearVelocity(body, initial_velocity);
-    }
+    std::cout << "Mi velocidad es " << speed << std::endl;
 
     if (speed < (BASE_MAX_SPEED * max_speed_factor)) {
         b2Body_ApplyForceToCenter(body,

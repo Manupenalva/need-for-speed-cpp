@@ -9,8 +9,8 @@
   width: 26
 2:
   name: "Muscle car"
-  max_speed: 80
-  acceleration: 90
+  max_speed: 65
+  acceleration: 60
   health: 40
   mass: 20
   drivability: 80
@@ -18,8 +18,8 @@
   width: 26
 3:
   name: "Sports car"
-  max_speed: 100
-  acceleration: 100
+  max_speed: 70
+  acceleration: 80
   health: 30
   mass: 20
   drivability: 50
@@ -27,7 +27,7 @@
   width: 26
 4:
   name: "Electric car"
-  max_speed: 60
+  max_speed: 65
   acceleration: 70
   health: 40
   mass: 20
@@ -37,7 +37,7 @@
 5:
   name: "All terrain"
   max_speed: 60
-  acceleration: 40
+  acceleration: 50
   health: 60
   mass: 40
   drivability: 100
@@ -54,8 +54,8 @@
   width: 26
 7:
   name: "truck"
-  max_speed: 30
-  acceleration: 20
+  max_speed: 55
+  acceleration: 50
   health: 100
   mass: 80
   drivability: 90

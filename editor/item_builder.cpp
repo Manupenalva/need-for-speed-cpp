@@ -34,17 +34,17 @@ QGraphicsPixmapItem* ItemBuilder::buildItem(const DragInfo& info, const QSize& s
 
 QString ItemBuilder::getIcon(const QString& type) const {
     if (type.contains("road", Qt::CaseInsensitive)) {
-        return "./editor/imgs/road.png";
+        return "../editor/imgs/road.png";
     } else if (type.contains("checkpoint", Qt::CaseInsensitive)) {
-        return "./editor/imgs/checkpoint.png";
+        return "../editor/imgs/checkpoint.png";
     } else if (type.contains("start", Qt::CaseInsensitive)) {
-        return "./editor/imgs/start.png";
+        return "../editor/imgs/start.png";
     } else if (type.contains("finish", Qt::CaseInsensitive)) {
-        return "./editor/imgs/finish.png";
+        return "../editor/imgs/finish.png";
     } else if (type.contains("hint", Qt::CaseInsensitive)) {
-        return "./editor/imgs/hint.png";
+        return "../editor/imgs/hint.png";
     } else if (type.contains("NPC", Qt::CaseInsensitive)) {
-        return "./editor/imgs/npc.png";
+        return "../editor/imgs/npc.png";
     } else {
         return "";
     }
