@@ -12,7 +12,7 @@ class SceneController {
 public:
     explicit SceneController(QGraphicsScene* scene);
 
-    void handleDropEvent(const DragInfo& dragInfo, int x, int y, bool del);
+    void handleDropEvent(const DragInfo& dragInfo, int x, int y);
     int countItemsOfType(const QString& type) const;
 
     void countCheckpointsIds();

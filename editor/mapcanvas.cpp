@@ -130,7 +130,7 @@ void MapCanvas::dropEvent(QDropEvent* event) {
     QPointF scenePos = view->mapToScene(event->position().toPoint());
     int x = static_cast<int>(scenePos.x() / GRID_SIZE) * GRID_SIZE;
     int y = static_cast<int>(scenePos.y() / GRID_SIZE) * GRID_SIZE;
-    controller->handleDropEvent(dragInfo, x, y, false);
+    controller->handleDropEvent(dragInfo, x, y);
     event->acceptProposedAction();
 }
 
@@ -172,7 +172,7 @@ void MapCanvas::importFromYaml(const QString& filePath) {
     yaml.load(filePath);
     loadCityMap(QString("../client/assets/cities/%1.png").arg(yaml.getCity()));
     for (const auto& [i, pos]: yaml.getItems()) {
-        controller->handleDropEvent(i, pos.x(), pos.y(), false);
+        controller->handleDropEvent(i, pos.x(), pos.y());
     }
     controller->countCheckpointsIds();
 }

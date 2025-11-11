@@ -107,7 +107,7 @@ bool YamlConfig::load(const QString& path) {
     }
 }
 
-void YamlConfig::addElements(YAML::Node& config, const QString& elementType) {
+void YamlConfig::addElements(const YAML::Node& config, const QString& elementType) {
     if (config[elementType.toStdString()]) {
         for (const auto& elem: config[elementType.toStdString()]) {
             int x = elem["x"].as<int>();

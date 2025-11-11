@@ -13,7 +13,7 @@
 class YamlConfig {
 private:
     void writeElements(YAML::Emitter& out, const QGraphicsScene* scene, const QString& elementType);
-    void addElements(YAML::Node& out, const QString& elementType);
+    void addElements(const YAML::Node& out, const QString& elementType);
     QString selectedCity;
     std::vector<std::pair<DragInfo, QPoint>> items;
 
