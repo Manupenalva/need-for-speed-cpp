@@ -14,6 +14,7 @@
 #include "drawer/drawerSDL.h"
 #include "graphics/texture_manager.h"
 #include "keyboard/keyboard_reader.h"
+#include "sounds_manager/sounds_eventsHandler.h"
 #include "window/windowSDL.h"
 
 #include "receiver.h"
@@ -28,6 +29,8 @@ private:
     Receiver receiver;
     WindowSDL window;
     TextureManager texture_manager;
+    SoundsManager sounds_manager;
+    SoundsEventsHandler sounds_events_handler;
     DrawerSDL drawer;
     KeyboardReader kb_reader;
 

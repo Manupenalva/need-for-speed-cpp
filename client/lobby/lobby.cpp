@@ -52,7 +52,7 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), protocol
     carPreview->setStyleSheet("font-size: 14px;");
     confirmButton = new QPushButton("Confirm");
     carLayout->addWidget(carTitle);
-    carLayout->addWidget(carList); 
+    carLayout->addWidget(carList);
     carLayout->addWidget(carPreview);
     carLayout->addWidget(confirmButton);
     carLayout->addWidget(backButton);
@@ -90,7 +90,7 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), protocol
     connect(connectButton, &QPushButton::clicked, this, &Lobby::connectServer);
     connect(backButton, &QPushButton::clicked, this, &Lobby::menuScreen);
     connect(startButton, &QPushButton::clicked, this, &Lobby::startGame);
-    connect(carList, &QListWidget::currentRowChanged, this, [this](int row){
+    connect(carList, &QListWidget::currentRowChanged, this, [this](int row) {
         if (row < 0) {
             carPreview->setText("Select a car to see details");
             return;
@@ -222,16 +222,21 @@ void Lobby::showCatalog() {
 
     carList->clear();
 
-    for (const auto& car : resp.car_catalog) {
+    for (const auto& car: resp.car_catalog) {
         auto* item = new QListWidgetItem(QString("Car %1").arg(car.car_id));
         item->setData(Qt::UserRole, static_cast<int>(car.car_id));
-        item->setToolTip(QString("Max speed: %1\nAcceleration: %2\nHealth: %3\nMass: %4\nControl: %5")
-                        .arg(car.max_speed).arg(car.acceleration).arg(car.max_health)
-                        .arg(car.mass).arg(car.control));
+        item->setToolTip(
+                QString("Max speed: %1\nAcceleration: %2\nHealth: %3\nMass: %4\nControl: %5")
+                        .arg(car.max_speed)
+                        .arg(car.acceleration)
+                        .arg(car.max_health)
+                        .arg(car.mass)
+                        .arg(car.control));
         carList->addItem(item);
     }
 
-    if (carList->count() > 0) carList->setCurrentRow(0);
+    if (carList->count() > 0)
+        carList->setCurrentRow(0);
 }
 
 void Lobby::confirmCar() {

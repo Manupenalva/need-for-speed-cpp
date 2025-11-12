@@ -8,6 +8,8 @@ Client::Client(Protocol& protocol, const int id):
         receiver(protocol, server_queue),
         window(TITTLE_CLIENT),
         texture_manager(window.get_renderer(), PATH),
+        sounds_manager(),
+        sounds_events_handler(sounds_manager, id),
         drawer(window.get_renderer(), texture_manager, id),
         kb_reader(events_queue),
         last_state(),
@@ -23,6 +25,7 @@ void Client::run() {
     try {
         // Variables de iteración
         uint32_t iterations_ahead = 0;
+        sounds_manager.play_music(MAIN_MUSIC);
 
         while (_keep_running) {
             // Procesar todos los mensajes entrantes y actualizar el estado interno
@@ -56,7 +59,11 @@ void Client::stop() {
     _is_alive = false;
 }
 
-void Client::init_resources() { texture_manager.load_resources(); }
+void Client::init_resources() {
+    texture_manager.load_resources();
+    sounds_manager.load_music();
+    sounds_manager.load_effects();
+}
 
 void Client::clear_display() { window.clear(); }
 
@@ -85,6 +92,8 @@ void Client::update_animation_frames(int iterations_ahead) {
         clear_display();
         drawer.update_game_state(last_state, iterations_ahead);
         window.present();
+
+        sounds_events_handler.process_message(last_state);
         has_last_state = false;  // Ya se dibujó este estado
     }
     if (!is_in_race) {

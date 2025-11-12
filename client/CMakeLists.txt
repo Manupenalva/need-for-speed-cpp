@@ -24,6 +24,8 @@ target_sources(taller_client
     events/quit_handler.cpp
     config/config_reader.cpp
     game_launcher.cpp
+    sounds_manager/sounds_manager.cpp
+    sounds_manager/sounds_eventsHandler.cpp
     
     PUBLIC
     # .h files
@@ -55,4 +57,6 @@ target_sources(taller_client
     game_launcher.h
     drawer/drawer.h
     drawer/renderedState.h
+    sounds_manager/sounds_manager.h
+    sounds_manager/sounds_eventsHandler.h
     )

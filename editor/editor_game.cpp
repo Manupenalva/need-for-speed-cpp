@@ -4,8 +4,8 @@
 #include <QFileDialog>
 #include <QMimeData>
 #include <QPixmap>
-#include <QTransform>
 #include <QToolButton>
+#include <QTransform>
 
 #include "cityselection.h"
 #include "drag_info.h"
@@ -38,8 +38,7 @@ void EditorGame::setUpNav() {
 }
 
 void EditorGame::setUpLoad() {
-    const auto path =
-            QFileDialog::getOpenFileName(this, "Open YAML", ".", "YAML (*.yaml *.yml)");
+    const auto path = QFileDialog::getOpenFileName(this, "Open YAML", ".", "YAML (*.yaml *.yml)");
     if (path.isEmpty())
         return;
     ui->mapCanvas->importFromYaml(path);
