@@ -21,6 +21,10 @@ protected:
     MessageReceiver receiver;
 
     ProtocolTestServer(): sender(mem_socket), receiver(mem_socket) {}
+
+    void TearDown() override {
+        EXPECT_TRUE(mem_socket.is_empty()) << "MemorySocket buffer is not empty after test. " << mem_socket.buffer.size() << " bytes remaining.";
+    }
 };
 
 
@@ -98,6 +102,7 @@ bool verify_car_props(const CarProperties& car1, const CarProperties& car2) {
 }
 bool verify_player_state(const PlayerState& ps1, const PlayerState& ps2) {
     return (ps1.player_id == ps2.player_id) && (ps1.ready == ps2.ready) &&
+           (ps1.ready == ps2.ready) &&
            (ps1.previous_position == ps2.previous_position) &&
            (ps1.result_time == ps2.result_time) &&
            (ps1.next_penalization_time == ps2.next_penalization_time) &&
@@ -113,7 +118,8 @@ TEST_F(ProtocolTestServer, IntervalState) {
     interval_state.total_players = 10;
     PlayerState player1{1, true, 1, 60000, 0, {1, 200, 10, 100, 1500, 80}};
     PlayerState player2{2, false, 2, 62000, 5000, {2, 220, 12, 110, 1400, 85}};
-    interval_state.player_states = {player1, player2};
+    PlayerState player3{3, true, 3, 58000, 0, {1, 200, 10, 100, 1500, 80}};
+    interval_state.player_states = {player1, player2, player3};
     send_msg.interval_state = interval_state;
 
     sender.send_message(send_msg);
@@ -123,9 +129,10 @@ TEST_F(ProtocolTestServer, IntervalState) {
     EXPECT_EQ(recv_msg.type, MsgType::INTERVAL_UPDATE);
     EXPECT_EQ(recv_msg.interval_state.players_ready, 2);
     EXPECT_EQ(recv_msg.interval_state.total_players, 10);
-    ASSERT_EQ(recv_msg.interval_state.player_states.size(), 2);
+    ASSERT_EQ(recv_msg.interval_state.player_states.size(), 3);
     EXPECT_TRUE(verify_player_state(recv_msg.interval_state.player_states[0], player1));
     EXPECT_TRUE(verify_player_state(recv_msg.interval_state.player_states[1], player2));
+    EXPECT_TRUE(verify_player_state(recv_msg.interval_state.player_states[2], player3));
 }
 
 bool verify_checkpoint_info(const CheckpointInfo& cp1, const CheckpointInfo& cp2) {

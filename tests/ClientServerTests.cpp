@@ -12,6 +12,10 @@ protected:
     MessageReceiver receiver;
 
     ProtocolTestClient(): sender(mem_socket), receiver(mem_socket) {}
+
+    void TearDown() override {
+        EXPECT_TRUE(mem_socket.is_empty()) << "MemorySocket buffer is not empty after test.";
+    }
 };
 
 TEST_F(ProtocolTestClient, JoinRace) {
