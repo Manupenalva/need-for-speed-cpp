@@ -8,6 +8,10 @@
 #define BASE_ANGLE_ROTATION 4
 #define BASE_FRICTION 10.0f
 #define MIN_SPEED 100.0f
+#define LIGHT_CRASH_DAMAGE 1
+#define MEDIUM_CRASH_DAMAGE 3
+#define HEAVY_CRASH_DAMAGE 5
+#define MIN_HEAVY_CRASH_PERCENT 0.6f
 
 CarPhysics::CarPhysics(b2WorldId world, CarInfo& car_state, const float& max_speed,
                        const float& acceleration, const float& mass, const float& drivability,
@@ -123,14 +127,50 @@ void CarPhysics::handle_crash(const b2Vec2& normal) {
     b2Vec2 forward = {cosf(rad), sinf(rad)};
 
     float crash_direction = (forward.x * normal.x) + (forward.y * normal.y);
-    if (crash_direction > 0.7f) {  // le doy de frente, disminuye la velocidad y resta vida
+
+    b2Vec2 velocity = b2Body_GetLinearVelocity(body);
+    float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+    // limite en base a la configuracion del auto
+    float car_physics_max_speed = BASE_MAX_SPEED * max_speed_factor;
+
+    handle_crash_damage(speed, crash_direction, car_physics_max_speed);
+}
+
+void CarPhysics::handle_crash_damage(const float speed, const float crash_direction,
+                                     const float car_physics_max_speed) {
+    if (crash_direction > 0.7f) {  // golpe frontal
         brake();
         brake();
-        car_state.health -= 30;
-    } else if (crash_direction < -0.7f) {  // me pega el, solo resta vida
-        car_state.health -= 20;
-    } else {  // me dan en el costado, pierdo menos vida y velocidad que de frente
+        float heavy_crash_limit = car_physics_max_speed * MIN_HEAVY_CRASH_PERCENT;
+        float medium_crash_limit = car_physics_max_speed * (MIN_HEAVY_CRASH_PERCENT / 2.0f);
+        if (speed > heavy_crash_limit) {
+            apply_damage(HEAVY_CRASH_DAMAGE);
+        } else if (speed > medium_crash_limit) {
+            apply_damage(MEDIUM_CRASH_DAMAGE);
+        } else {
+            apply_damage(LIGHT_CRASH_DAMAGE);
+        }
+    } else if (crash_direction < -0.7f) {  // golpe de atras, leve
+        apply_damage(LIGHT_CRASH_DAMAGE);
+    } else {  // golpe lateral
         brake();
-        car_state.health -= 10;
+        float medium_side_crash_limit = car_physics_max_speed * (MIN_HEAVY_CRASH_PERCENT * 0.7f);
+        if (speed > medium_side_crash_limit) {
+            apply_damage(MEDIUM_CRASH_DAMAGE);
+        } else {
+            apply_damage(LIGHT_CRASH_DAMAGE);
+        }
+    }
+}
+
+void CarPhysics::apply_damage(const int dmg) {
+    if (car_state.health <= dmg) {
+        car_state.health = 0;
+        car_state.crashed = true;
+    } else {
+        if (dmg >= MEDIUM_CRASH_DAMAGE) {
+            car_state.crashed = true;
+        }
+        car_state.health -= dmg;
     }
 }

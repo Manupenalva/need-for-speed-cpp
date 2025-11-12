@@ -18,6 +18,7 @@ Race::Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_wi
         players_status(),
         celd_width(celd_width),
         celd_height(celd_height),
+        corners(),
         start_positions(start_positions),
         checkpoints(checkpoints),
         hints(hints),
@@ -32,13 +33,20 @@ b2WorldId Race::start_race() {
     worldDef.gravity = {0.0f, 0.0f};
     world = b2CreateWorld(&worldDef);
 
-    MapCollisionBuilder::initialize_map_buildings(map_collisions_path, world);
+    corners = MapCollisionBuilder::initialize_map_buildings(map_collisions_path, world);
 
     int i = 0;
     for (auto& [id, car]: players_cars) {
         car.add_to_world(world, start_positions[i]);
         players_status[id] = {false, 0, 0};
         i++;
+    }
+
+    for (const auto& corner: corners) {
+        std::cout << "Tengo una esquina en la posicion: " << corner.position.x << ", "
+                  << corner.position.y << std::endl;
+        std::cout << "Su id es: " << corner.id << " y tiene: " << corner.neighbors.size()
+                  << " vecinos" << std::endl;
     }
 
     return world;

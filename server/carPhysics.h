@@ -30,6 +30,9 @@ public:
 private:
     void handle_hit_event(const b2ContactHitEvent& event);
     void handle_crash(const b2Vec2& normal);
+    void apply_damage(const int dmg);
+    void handle_crash_damage(const float speed, const float crash_direction,
+                             const float car_physics_max_speed);
 };
 
 #endif

@@ -12,6 +12,7 @@
 #include "../libs/box2d/include/box2d/box2d.h"
 
 #include "car.h"
+#include "corner.h"
 #include "hint.h"
 #include "playerRaceStatus.h"
 
@@ -21,6 +22,7 @@ private:
     std::unordered_map<uint16_t, PlayerRaceStatus> players_status;
     float celd_width;
     float celd_height;
+    std::vector<Corner> corners;
     std::vector<Position> start_positions;
     std::vector<Position> checkpoints;
     std::vector<Hint> hints;
