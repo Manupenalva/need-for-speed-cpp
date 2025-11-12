@@ -1,6 +1,5 @@
 #include "sounds_eventsHandler.h"
 
-
 SoundsEventsHandler::SoundsEventsHandler(SoundsManager& manager, int client_id):
         soundsManager(manager), client_car_id(client_id) {}
 

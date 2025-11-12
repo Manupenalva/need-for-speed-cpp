@@ -11,18 +11,18 @@
 
 #include "animation_sheet.h"
 
-const char* PATH_CRASH = "../client/assets/animations/choque.png";
+constexpr const char* PATH_CRASH = "../client/assets/animations/choque.png";
 
 #define CRASH_TYPES_PER_ROW 4
 #define CRASH_TYPES_PER_COL 2
-#define WIDTH_IMAGE 519
-#define HEIGHT_IMAGE 259
+#define CRASH_WIDTH_IMAGE 519
+#define CRASH_HEIGHT_IMAGE 259
 
 class CrashSheet: public AnimationSheet {
 public:
     explicit CrashSheet(SDL2pp::Renderer& renderer): AnimationSheet(renderer, PATH_CRASH) {
-        width_image = WIDTH_IMAGE;
-        height_image = HEIGHT_IMAGE;
+        width_image = CRASH_WIDTH_IMAGE;
+        height_image = CRASH_HEIGHT_IMAGE;
         types_per_row = CRASH_TYPES_PER_ROW;
         types_per_col = CRASH_TYPES_PER_COL;
     }

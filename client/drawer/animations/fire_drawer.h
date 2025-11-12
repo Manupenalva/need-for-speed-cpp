@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <vector>
 
-#include "drawer.h"
+#include "../drawer.h"
 
 #define AMOUNT_OF_FIRES 15
 
