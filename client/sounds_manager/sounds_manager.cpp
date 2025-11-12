@@ -6,14 +6,16 @@ void SoundsManager::load_music() {
     try {
         musics[MAIN_MUSIC] = std::make_unique<SDL2pp::Music>(MUSIC_PATH);
     } catch (const std::exception& e) {
-        throw std::runtime_error("Failed to load music: " + MUSIC_PATH + " Error: " + e.what());
+        throw std::runtime_error(std::string("Failed to load music: ") + MUSIC_PATH +
+                                 " Error: " + e.what());
     }
 }
 
 void SoundsManager::play_music(const MusicID id, int loops) {
     auto it = musics.find(id);
     if (it != musics.end()) {
-        it->second->Play(loops);
+        Mix_VolumeMusic(MIX_MAX_VOLUME / 2);  // Ajustar volumen de la música
+        mixer.PlayMusic(*it->second, loops);
     } else {
         throw std::runtime_error("Music ID not found: " + std::to_string(id));
     }

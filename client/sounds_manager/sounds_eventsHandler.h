@@ -6,7 +6,7 @@
 #include <map>
 #include <unordered_map>
 
-#include "../common/messageDTOs.h"
+#include "../../common/messageDTOs.h"
 
 #include "sounds_manager.h"
 

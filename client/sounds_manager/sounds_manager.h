@@ -3,26 +3,24 @@
 
 #include <map>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <unordered_map>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_mixer.h>
 #include <SDL2pp/Chunk.hh>
+#include <SDL2pp/Mixer.hh>
 #include <SDL2pp/Music.hh>
 
 enum MusicID { MAIN_MUSIC = 0 };
 
-constexpr const char* MUSIC_PATH = "../client/resources/sounds/Need For Speed Music.mp3"
+constexpr const char* MUSIC_PATH = "../client/resources/sounds/Need For Speed Music.mp3";
 
-        enum EffectID {
-            CAR_CRASH = 0,
-            CAR_BRAKE = 1
-        };
+enum EffectID { CAR_CRASH = 0, CAR_BRAKE = 1 };
 
 const std::map<EffectID, std::string> EFFECTS_PATH = {
-        {CAR_CRASH, "../client/resources/sounds/effects/Car Crash Sound.wav"},
-        {CAR_BRAKE, "../client/resources/sounds/effects/Car Braking Sound.wav"}};
+        {CAR_CRASH, "../client/resources/sounds/Car Crash Sound.wav"},
+        {CAR_BRAKE, "../client/resources/sounds/Car Braking Sound.wav"}};
 
 class SoundsManager {
 private:
@@ -38,7 +36,7 @@ public:
     void stop_music();
 
     void load_effects();
-    void play_effect(EffectID id, int loops = 0, float volume);
+    void play_effect(EffectID id, int loops = 0, float volume = 1.0f);
 };
 
 #endif
