@@ -201,7 +201,7 @@ CarProperties MessageReceiver::recv_car_properties() {
 
 PlayerState MessageReceiver::recv_player_state() {
     PlayerState player_state;
-    player_state.player_id = obtain_byte();
+    player_state.player_id = obtain_uint16();
     player_state.ready = obtain_byte() != 0;
     player_state.previous_position = obtain_byte();
     player_state.result_time = obtain_uint32();

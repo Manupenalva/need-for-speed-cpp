@@ -235,7 +235,7 @@ void MessageSender::append_car_properties(const CarProperties& car_prop) {
 }
 
 void MessageSender::append_player_state(const PlayerState& player_state) {
-    append_bytes(&player_state.player_id, 1);
+    append_uint16(player_state.player_id);
     uint8_t ready_byte = player_state.ready ? 0x01 : 0x00;
     append_bytes(&ready_byte, 1);
     append_bytes(&player_state.previous_position, 1);
