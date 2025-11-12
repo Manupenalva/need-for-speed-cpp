@@ -5,7 +5,9 @@ TextureManager::TextureManager(SDL2pp::Renderer& renderer, const std::string& as
         car_sheet(renderer, assets_path + CAR_PATH),
         map_sheet(renderer, assets_path + MAP_PATH),
         race_sheet(renderer, assets_path + RACE_PATH),
-        upgrade_screen_sheet(renderer, assets_path + UPGRADE_SCREEN_PATH) {}
+        upgrade_screen_sheet(renderer, assets_path + UPGRADE_SCREEN_PATH),
+        fire_sheet(renderer),
+        crash_sheet(renderer) {}
 
 
 void TextureManager::load_resources() {
@@ -13,6 +15,8 @@ void TextureManager::load_resources() {
     map_sheet.load_sprites();
     race_sheet.load_sprites();
     upgrade_screen_sheet.load_sprite();
+    fire_sheet.load_sprites();
+    crash_sheet.load_sprites();
 }
 
 Sprite TextureManager::get_car_sprite(int car_id, int rotation) {
@@ -32,4 +36,10 @@ Sprite_rotation TextureManager::get_race_sprite(int race_element, float directio
 
 Sprite TextureManager::get_upgrade_screen_sprite() {
     return upgrade_screen_sheet.get_screen_sprite();
+}
+
+Sprite TextureManager::get_fire_sprite(int fire_type) { return fire_sheet.get_sprite(fire_type); }
+
+Sprite TextureManager::get_crash_sprite(int crash_type) {
+    return crash_sheet.get_sprite(crash_type);
 }
