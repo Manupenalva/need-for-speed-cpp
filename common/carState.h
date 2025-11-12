@@ -45,6 +45,23 @@ struct CarState {
             crashed(crashed),
             car_type(car_type),
             health(health) {}
+
+    CarState(uint16_t id, float x, float y, float angle, float speed, uint16_t lap,
+             const CheckpointInfo& checkpoint, const CheckpointArrow& checkpoint_arrow,
+             bool crashed, bool under_bridge, bool braking, uint16_t car_type, uint16_t health):
+            id(id),
+            x(x),
+            y(y),
+            angle(angle),
+            speed(speed),
+            lap(lap),
+            checkpoint(checkpoint),
+            checkpoint_arrow(checkpoint_arrow),
+            crashed(crashed),
+            under_bridge(under_bridge),
+            braking(braking),
+            car_type(car_type),
+            health(health) {}
 };
 
 // esto podría ir dentro de CarState para no repetir.

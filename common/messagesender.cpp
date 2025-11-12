@@ -4,7 +4,7 @@
 #include <cstring>
 #include <string>
 
-MessageSender::MessageSender(Socket& socket): socket(socket), buffer(), offset(0) {}
+MessageSender::MessageSender(ISocket& socket): socket(socket), buffer(), offset(0) {}
 
 
 void MessageSender::send_message(const ServerMessageDTO& msg) {
@@ -50,7 +50,6 @@ void MessageSender::send_message(const ClientMessageDTO& msg) {
         case MsgType::DRIVING_EVENT:
             serialize_events(msg.events);
             break;
-        case MsgType::CREATE_RACE:
         case MsgType::JOIN_RACE:
             serialize_lobby(msg.lobby_id, msg.type);
             break;

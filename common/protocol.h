@@ -2,10 +2,12 @@
 #define PROTOCOL_H
 
 #include <cstdint>
+#include <memory>
 #include <vector>
 
 #include <netinet/in.h>
 
+#include "SocketInterface.h"
 #include "constants.h"
 #include "messageDTOs.h"
 #include "messagereceiver.h"
@@ -33,7 +35,7 @@ public:
     void shutdown_receive();
 
 private:
-    Socket socket;
+    std::unique_ptr<ISocket> socket;
     MessageSender sender;
     MessageReceiver receiver;
 };

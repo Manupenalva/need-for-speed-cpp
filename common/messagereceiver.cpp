@@ -5,7 +5,7 @@
 
 #include <netinet/in.h>
 
-MessageReceiver::MessageReceiver(Socket& socket): socket(socket) {}
+MessageReceiver::MessageReceiver(ISocket& socket): socket(socket) {}
 
 ClientMessageDTO MessageReceiver::recv_client_message() {
     MsgType type;
