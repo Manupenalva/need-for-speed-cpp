@@ -196,6 +196,10 @@ void MessageSender::append_car_state(const CarState& car) {
     append_checkpoint_arrow(car.checkpoint_arrow);
     uint8_t crashed_byte = car.crashed ? 0x01 : 0x00;
     append_bytes(&crashed_byte, 1);
+    uint8_t under_bridge_byte = car.under_bridge ? 0x01 : 0x00;
+    append_bytes(&under_bridge_byte, 1);
+    uint8_t braking_byte = car.braking ? 0x01 : 0x00;
+    append_bytes(&braking_byte, 1);
     append_uint16(car.car_type);
     append_uint16(car.health);
 }
