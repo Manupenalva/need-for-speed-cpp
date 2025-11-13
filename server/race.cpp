@@ -120,7 +120,7 @@ ServerMessageDTO Race::get_broadcast_message(float frames) {
         CarInfo car_info = car.get_state_info();
         CheckpointInfo checkpoint_info = get_next_checkpoint_info(id);
         CheckpointArrow checkpoint_arrow = get_next_checkpoint_arrow(id);
-
+        
         CarState state = {id,
                           car_info.x,
                           car_info.y,

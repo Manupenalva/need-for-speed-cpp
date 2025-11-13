@@ -11,7 +11,8 @@
 #define LIGHT_CRASH_DAMAGE 1
 #define MEDIUM_CRASH_DAMAGE 3
 #define HEAVY_CRASH_DAMAGE 5
-#define MIN_HEAVY_CRASH_PERCENT 0.6f
+#define MIN_HEAVY_CRASH_PERCENT 0.7f
+#define COEFICIENT_VELOCITY_LIMIT 150.0f
 
 CarPhysics::CarPhysics(b2WorldId world, CarInfo& car_state, const float& max_speed,
                        const float& acceleration, const float& mass, const float& drivability,
@@ -102,6 +103,7 @@ void CarPhysics::update_position() {
 
 void CarPhysics::handle_hits() {
     b2ContactEvents events = b2World_GetContactEvents(world);
+    car_state.crashed = false;
     for (int i = 0; i < events.beginCount; i++) {
         if ((events.hitEvents[i].shapeIdA.index1 == shape.index1) ||
             (events.beginEvents[i].shapeIdB.index1 == shape.index1)) {
@@ -131,7 +133,7 @@ void CarPhysics::handle_crash(const b2Vec2& normal) {
     b2Vec2 velocity = b2Body_GetLinearVelocity(body);
     float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
     // limite en base a la configuracion del auto
-    float car_physics_max_speed = BASE_MAX_SPEED * max_speed_factor;
+    float car_physics_max_speed = COEFICIENT_VELOCITY_LIMIT * (max_speed_factor * acceleration_factor / mass_factor);
 
     handle_crash_damage(speed, crash_direction, car_physics_max_speed);
 }
@@ -154,7 +156,7 @@ void CarPhysics::handle_crash_damage(const float speed, const float crash_direct
         apply_damage(LIGHT_CRASH_DAMAGE);
     } else {  // golpe lateral
         brake();
-        float medium_side_crash_limit = car_physics_max_speed * (MIN_HEAVY_CRASH_PERCENT * 0.7f);
+        float medium_side_crash_limit = car_physics_max_speed * (MIN_HEAVY_CRASH_PERCENT);
         if (speed > medium_side_crash_limit) {
             apply_damage(MEDIUM_CRASH_DAMAGE);
         } else {
