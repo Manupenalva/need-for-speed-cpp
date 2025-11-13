@@ -46,16 +46,14 @@ void MapCollisionBuilder::connect_corners(std::vector<Corner>& corners, b2WorldI
     }
 }
 
-std::vector<Corner> MapCollisionBuilder::initialize_map_buildings(const std::string& path,
-                                                                  b2WorldId world) {
+NpcsData MapCollisionBuilder::initialize_map_buildings(const std::string& path, b2WorldId world) {
     try {
         YAML::Node map_collisions = open_file(path);
         if (!map_collisions) {
             std::cerr << "Invalid YAML archive: " << path << std::endl;
             return {};
         }
-
-        std::vector<Corner> corners;
+        NpcsData npcs_data;
 
         for (const auto& layer: map_collisions["layers"]) {
             if (layer["name"].as<std::string>() == "Colisiones") {
@@ -88,14 +86,23 @@ std::vector<Corner> MapCollisionBuilder::initialize_map_buildings(const std::str
                     corner.id = current_corner_id;
                     corner.position.x = object["x"].as<float>() - 25.0f;
                     corner.position.y = object["y"].as<float>() - 25.0f;
-                    corners.push_back(corner);
-                    corner.id = current_corner_id++;
+                    npcs_data.corners.push_back(corner);
+                    current_corner_id++;
                 }
-                connect_corners(corners, world);
+                connect_corners(npcs_data.corners, world);
+            }
+
+            if (layer["name"].as<std::string>() == "Npcs") {
+                for (const auto& object: layer["objects"]) {
+                    Position position;
+                    position.x = object["x"].as<float>() - 25.0f;
+                    position.y = object["y"].as<float>() - 25.0f;
+                    npcs_data.spawn_positions.push_back(position);
+                }
             }
         }
 
-        return corners;
+        return npcs_data;
     } catch (const std::exception& e) {
         std::cerr << "Error building the map with box2d: " << e.what() << std::endl;
         throw;

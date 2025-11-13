@@ -34,7 +34,8 @@ b2WorldId Race::start_race() {
     worldDef.gravity = {0.0f, 0.0f};
     world = b2CreateWorld(&worldDef);
 
-    corners = MapCollisionBuilder::initialize_map_buildings(map_collisions_path, world);
+    NpcsData npcs_data = MapCollisionBuilder::initialize_map_buildings(map_collisions_path, world);
+    corners = npcs_data.corners;
 
     int i = 0;
     for (auto& [id, car]: players_cars) {
@@ -43,7 +44,11 @@ b2WorldId Race::start_race() {
         i++;
     }
 
-    npcs.emplace_back(std::make_unique<Npc>(Position{57, 65}, corners, world));
+    for (const auto& spawn_position: npcs_data.spawn_positions) {
+        std::cout << "Creando npc en la posicion " << spawn_position.x << ", " << spawn_position.y
+                  << std::endl;
+        npcs.emplace_back(std::make_unique<Npc>(spawn_position, corners, world));
+    }
 
     return world;
 }
