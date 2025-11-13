@@ -3,7 +3,7 @@
 #include <cmath>
 #include <iostream>
 
-#define BASE_MAX_SPEED 10000000.0f
+#define BASE_MAX_SPEED 250.0f
 #define BASE_ACCELERATION 1000000.0f
 #define BASE_ANGLE_ROTATION 4
 #define BASE_FRICTION 10.0f
@@ -13,6 +13,9 @@
 #define HEAVY_CRASH_DAMAGE 5
 #define MEDIUM_CRASH_LIMIT 900.0f
 #define HEAVY_CRASH_LIMIT 1500.0f
+#define REVERSE_ACCELERATION_FACTOR 0.5f
+#define REVERSE_SPEED_FACTOR 0.25f
+#define MIN_GAME_SPEED 5.0f
 
 CarPhysics::CarPhysics(b2WorldId world, CarInfo& car_state, const float& max_speed,
                        const float& acceleration, const float& mass, const float& drivability,
@@ -56,13 +59,44 @@ void CarPhysics::accelerate() {
     }
 }
 
+void CarPhysics::deaccelerate() {
+    b2Vec2 velocity = b2Body_GetLinearVelocity(body);
+    float rad = car_state.angle * M_PI / 180.0f;
+    float forward_speed = velocity.x * cosf(rad) + velocity.y * sinf(rad);
+
+    if (forward_speed > MIN_GAME_SPEED) {
+        b2Body_SetLinearVelocity(body, {velocity.x * 0.95f, velocity.y * 0.95f});
+        car_state.braking = true;
+    } else {
+        b2Vec2 reverseDirection = {-cosf(rad), -sinf(rad)};  // 'angle' es la orientación del auto
+        float maxReverseSpeed = (BASE_MAX_SPEED * max_speed_factor) * REVERSE_SPEED_FACTOR;
+        float reverseSpeed = std::abs(velocity.x * reverseDirection.x + velocity.y * reverseDirection.y);
+
+        if (reverseSpeed < maxReverseSpeed) {
+            b2Body_ApplyForceToCenter(
+                    body,
+                    {reverseDirection.x * (BASE_ACCELERATION * acceleration_factor * REVERSE_ACCELERATION_FACTOR),
+                     reverseDirection.y * (BASE_ACCELERATION * acceleration_factor * REVERSE_ACCELERATION_FACTOR)},
+                    true);
+        }
+    }
+}
+
 void CarPhysics::brake() {
     b2Vec2 velocity = b2Body_GetLinearVelocity(body);
+    if ((std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y)) > 0) {
+        car_state.braking = true;
+    }
 
     b2Body_SetLinearVelocity(body, {velocity.x * 0.9f, velocity.y * 0.9f});
 }
 
 void CarPhysics::turn_left() {
+    b2Vec2 velocity = b2Body_GetLinearVelocity(body);
+    float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+    if (speed < MIN_GAME_SPEED) {
+        return;
+    }
     car_state.angle -= (BASE_ANGLE_ROTATION / drivability_factor);
 
     if (car_state.angle < 0.0f) {
@@ -70,16 +104,20 @@ void CarPhysics::turn_left() {
     }
 
     float rad = car_state.angle * M_PI / 180.0f;
-    b2Vec2 direction = {cosf(rad), sinf(rad)};
+    b2Vec2 forward = {cosf(rad), sinf(rad)};
+    float forward_speed = velocity.x * forward.x + velocity.y * forward.y;
 
-    b2Vec2 velocity = b2Body_GetLinearVelocity(body);
-    float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
-
-    b2Vec2 new_velocity = {direction.x * speed, direction.y * speed};
+    b2Vec2 new_velocity = {forward.x * forward_speed, forward.y * forward_speed};
     b2Body_SetLinearVelocity(body, new_velocity);
 }
 
 void CarPhysics::turn_right() {
+
+    b2Vec2 velocity = b2Body_GetLinearVelocity(body);
+    float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+    if (speed < MIN_GAME_SPEED) {
+        return;
+    }
     car_state.angle += (BASE_ANGLE_ROTATION / drivability_factor);
 
     if (car_state.angle >= 360.f) {
@@ -87,12 +125,10 @@ void CarPhysics::turn_right() {
     }
 
     float rad = car_state.angle * M_PI / 180.0f;
-    b2Vec2 direction = {cosf(rad), sinf(rad)};
+    b2Vec2 forward = {cosf(rad), sinf(rad)};
+    float forward_speed = velocity.x * forward.x + velocity.y * forward.y;
 
-    b2Vec2 velocity = b2Body_GetLinearVelocity(body);
-    float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
-
-    b2Vec2 new_velocity = {direction.x * speed, direction.y * speed};
+    b2Vec2 new_velocity = {forward.x * forward_speed, forward.y * forward_speed};
     b2Body_SetLinearVelocity(body, new_velocity);
 }
 
@@ -173,6 +209,7 @@ void CarPhysics::apply_damage(const int dmg) {
     if (car_state.health <= dmg) {
         car_state.health = 0;
         car_state.crashed = true;
+        car_state.exploded = true;
     } else {
         if (dmg >= MEDIUM_CRASH_DAMAGE) {
             car_state.crashed = true;

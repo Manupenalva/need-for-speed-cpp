@@ -9,7 +9,7 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
          const float& drivability, const float& car_long, const float& car_width,
          const int& car_type):
         input_state(),
-        state({id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, car_type, health}),
+        state({id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, false, static_cast<uint16_t>(car_type), static_cast<uint16_t>(health)}),
         car_name(name),
         max_speed(max_speed),
         acceleration(acceleration),
@@ -70,11 +70,12 @@ void Car::upgrade_stats(const uint8_t& action) {
 }
 
 void Car::update_physics() {
+    state.braking = false;
     if (input_state.accelerating) {
         physics->accelerate();
     }
     if (input_state.braking) {
-        physics->brake();
+        physics->deaccelerate();
     }
     if (input_state.turning_left) {
         physics->turn_left();

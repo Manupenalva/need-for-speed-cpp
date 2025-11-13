@@ -51,7 +51,7 @@ public:
     Car& operator=(Car&& other) = default;
     Car():
             input_state(false, false, false, false),
-            state(0, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, 0, 0),
+            state(0, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, false, 0, 0),
             car_name("default"),
             max_speed(0),
             acceleration(0),

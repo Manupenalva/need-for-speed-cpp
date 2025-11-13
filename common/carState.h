@@ -58,11 +58,12 @@ struct CarInfo {
     bool crashed;
     bool under_bridge;
     bool braking;
+    bool exploded;
     uint16_t car_type;
     uint16_t health;
 
     CarInfo(uint16_t id, float x, float y, float angle, float speed, uint16_t lap,
-            bool crashed, bool under_bridge, bool braking, uint16_t car_type, uint16_t health):
+            bool crashed, bool under_bridge, bool braking, bool exploded, uint16_t car_type, uint16_t health):
             id(id),
             x(x),
             y(y),
@@ -72,6 +73,7 @@ struct CarInfo {
             crashed(crashed),
             under_bridge(under_bridge),
             braking(braking),
+            exploded(exploded),
             car_type(car_type),
             health(health) {}
 };

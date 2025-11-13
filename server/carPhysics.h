@@ -21,6 +21,7 @@ public:
                const float& acceleration, const float& mass, const float& drivability,
                const float& car_long, const float& car_width);
     void accelerate();
+    void deaccelerate();
     void brake();
     void turn_left();
     void turn_right();
