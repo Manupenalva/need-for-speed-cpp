@@ -11,7 +11,8 @@
 #define LIGHT_CRASH_DAMAGE 1
 #define MEDIUM_CRASH_DAMAGE 3
 #define HEAVY_CRASH_DAMAGE 5
-#define MIN_HEAVY_CRASH_PERCENT 0.7f
+#define MEDIUM_CRASH_LIMIT 50.0f
+#define HEAVY_CRASH_LIMIT 90.0f
 #define COEFICIENT_VELOCITY_LIMIT 150.0f
 
 CarPhysics::CarPhysics(b2WorldId world, CarInfo& car_state, const float& max_speed,
@@ -115,39 +116,37 @@ void CarPhysics::handle_hits() {
 void CarPhysics::handle_hit_event(const b2ContactHitEvent& event) {
     b2Vec2 crash_normal = event.normal;
     b2Vec2 new_normal = crash_normal;
-
+    float other_mass = 0.0f;
     if (event.shapeIdB.index1 == shape.index1) {
         new_normal = {-crash_normal.x, -crash_normal.y};
+        other_mass = get_mass_from_shape(event.shapeIdA);
+    } else {
+        other_mass = get_mass_from_shape(event.shapeIdB);
     }
+    float impact_force = (mass_factor + other_mass) * event.approachSpeed;
 
-    handle_crash(new_normal);
+    handle_crash(new_normal, impact_force);
 }
 
-void CarPhysics::handle_crash(const b2Vec2& normal) {
+void CarPhysics::handle_crash(const b2Vec2& normal, const float impact_force) {
     float rad = car_state.angle * M_PI / 180.0f;
-
     b2Vec2 forward = {cosf(rad), sinf(rad)};
 
     float crash_direction = (forward.x * normal.x) + (forward.y * normal.y);
-
-    b2Vec2 velocity = b2Body_GetLinearVelocity(body);
-    float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
     // limite en base a la configuracion del auto
-    float car_physics_max_speed = COEFICIENT_VELOCITY_LIMIT * (max_speed_factor * acceleration_factor / mass_factor);
-
-    handle_crash_damage(speed, crash_direction, car_physics_max_speed);
+    handle_crash_damage(impact_force, crash_direction);
 }
 
-void CarPhysics::handle_crash_damage(const float speed, const float crash_direction,
-                                     const float car_physics_max_speed) {
+void CarPhysics::handle_crash_damage(const float impact_force, const float crash_direction) {
+    float heavy_crash_limit  = mass_factor * HEAVY_CRASH_LIMIT;
+    float medium_crash_limit = mass_factor * MEDIUM_CRASH_LIMIT;
+
     if (crash_direction > 0.7f) {  // golpe frontal
         brake();
         brake();
-        float heavy_crash_limit = car_physics_max_speed * MIN_HEAVY_CRASH_PERCENT;
-        float medium_crash_limit = car_physics_max_speed * (MIN_HEAVY_CRASH_PERCENT / 2.0f);
-        if (speed > heavy_crash_limit) {
+        if (impact_force > heavy_crash_limit) {
             apply_damage(HEAVY_CRASH_DAMAGE);
-        } else if (speed > medium_crash_limit) {
+        } else if (impact_force > medium_crash_limit) {
             apply_damage(MEDIUM_CRASH_DAMAGE);
         } else {
             apply_damage(LIGHT_CRASH_DAMAGE);
@@ -156,8 +155,7 @@ void CarPhysics::handle_crash_damage(const float speed, const float crash_direct
         apply_damage(LIGHT_CRASH_DAMAGE);
     } else {  // golpe lateral
         brake();
-        float medium_side_crash_limit = car_physics_max_speed * (MIN_HEAVY_CRASH_PERCENT);
-        if (speed > medium_side_crash_limit) {
+        if (impact_force > heavy_crash_limit) {
             apply_damage(MEDIUM_CRASH_DAMAGE);
         } else {
             apply_damage(LIGHT_CRASH_DAMAGE);
@@ -175,4 +173,21 @@ void CarPhysics::apply_damage(const int dmg) {
         }
         car_state.health -= dmg;
     }
+}
+
+float CarPhysics::get_mass_from_shape(b2ShapeId shapeId) {
+    if (B2_IS_NULL(shapeId)) {
+        return 0.0f;
+    }
+
+    // Obtener el bodyId desde el shapeId
+    b2BodyId bodyId = b2Shape_GetBody(shapeId);
+
+    if (B2_IS_NULL(bodyId)) {
+        return 0.0f;
+    }
+
+    // Obtener la masa del cuerpo
+    float mass = b2Body_GetMass(bodyId);
+    return mass;
 }

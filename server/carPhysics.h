@@ -29,10 +29,10 @@ public:
 
 private:
     void handle_hit_event(const b2ContactHitEvent& event);
-    void handle_crash(const b2Vec2& normal);
+    void handle_crash(const b2Vec2& normal, const float impact_force);
     void apply_damage(const int dmg);
-    void handle_crash_damage(const float speed, const float crash_direction,
-                             const float car_physics_max_speed);
+    void handle_crash_damage(const float impact_force, const float crash_direction);
+    float get_mass_from_shape(b2ShapeId shapeId);
 };
 
 #endif
