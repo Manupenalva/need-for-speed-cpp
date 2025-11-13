@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#define MAX_CORNER_DISTANCE 500.0f
+#define MAX_CORNER_DISTANCE 600.0f
 
 YAML::Node MapCollisionBuilder::open_file(const std::string& path) {
     try {
