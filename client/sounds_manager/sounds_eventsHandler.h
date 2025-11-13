@@ -22,6 +22,7 @@ private:
     int client_car_id;
     std::map<int, bool> prev_crash_states;  // Mapa para rastrear estados previos de choque
     std::map<int, bool> prev_brake_states;  // Mapa para rastrear estados previos de frenado
+    std::map<int, bool> prev_burst_states;  // Mapa para rastrear estados previos de explosión
     std::unordered_map<EffectID, std::chrono::steady_clock::time_point> last_played_times;
 
     void process_car_state(const CarState& car, float client_x, float client_y);

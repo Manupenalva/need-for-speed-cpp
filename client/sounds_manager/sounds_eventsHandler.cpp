@@ -36,6 +36,12 @@ void SoundsEventsHandler::process_car_state(const CarState& car, float client_x,
         soundsManager.play_effect(CAR_BRAKE, WITHOUT_LOOPS, volume);
     }
     prev_brake_states[car.id] = car.braking;
+
+    // Sonido de explosión
+    if (car.exploded && !prev_burst_states[car.id] && can_play_sound(CAR_BURST)) {
+        soundsManager.play_effect(CAR_BURST, WITHOUT_LOOPS, volume);
+    }
+    prev_burst_states[car.id] = car.exploded;
 }
 
 float SoundsEventsHandler::compute_volume(float x1, float y1, float x2, float y2) {
