@@ -1,5 +1,6 @@
 #include "race.h"
 
+#include <algorithm>
 #include <string>
 
 #include "../common/carState.h"
@@ -42,12 +43,7 @@ b2WorldId Race::start_race() {
         i++;
     }
 
-    for (const auto& corner: corners) {
-        std::cout << "Tengo una esquina en la posicion: " << corner.position.x << ", "
-                  << corner.position.y << std::endl;
-        std::cout << "Su id es: " << corner.id << " y tiene: " << corner.neighbors.size()
-                  << " vecinos" << std::endl;
-    }
+    npcs.emplace_back(std::make_unique<Npc>(Position{57, 65}, corners, world));
 
     return world;
 }
@@ -75,6 +71,10 @@ void Race::update_state() {
         }
 
         car.update_physics();
+    }
+
+    for (const auto& npc: npcs) {
+        npc->update_position();
     }
 
     float timeStep = 1.0f / 60.0f;
@@ -136,9 +136,15 @@ ServerMessageDTO Race::get_broadcast_message(float frames) {
         cars.push_back(state);
         num_cars++;
     }
+
+    std::vector<NpcState> npcs_state;
+    std::transform(npcs.begin(), npcs.end(), std::back_inserter(npcs_state),
+                   [](const auto& npc) { return npc->get_state(); });
+
     game_state.frame = frames;
     game_state.num_cars = num_cars;
     game_state.cars = cars;
+    game_state.npcs = npcs_state;
 
     msg.type = MsgType::STATE_UPDATE;
     msg.state = game_state;
