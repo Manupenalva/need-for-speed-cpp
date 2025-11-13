@@ -1,8 +1,8 @@
 #include "car_sheet.h"
 
-CarSheet::CarSheet(SDL2pp::Renderer& renderer, const std::string& car_path):
-        texture(renderer, [&car_path]() {
-            SDL2pp::Surface surface(car_path);
+CarSheet::CarSheet(SDL2pp::Renderer& renderer):
+        texture(renderer, []() {
+            SDL2pp::Surface surface(CAR_PATH);
 
             uint32_t* pixel_color = static_cast<uint32_t*>(surface.Get()->pixels);
             uint32_t color_key = pixel_color[0];
@@ -11,7 +11,7 @@ CarSheet::CarSheet(SDL2pp::Renderer& renderer, const std::string& car_path):
             return surface;
         }()) {
     if (texture.Get() == nullptr) {
-        throw std::runtime_error("Error al cargar textura de autos: " + car_path);
+        throw std::runtime_error("Error al cargar textura de autos: " + std::string(CAR_PATH));
     }
 }
 

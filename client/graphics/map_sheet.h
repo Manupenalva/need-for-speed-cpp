@@ -15,10 +15,6 @@
 
 #include "sprite.h"
 
-constexpr const char* LIBERTY_CITY_PATH = "Backgrounds - Liberty City.png";
-constexpr const char* SAN_ANDREAS_PATH = "Backgrounds - San Andreas.png";
-constexpr const char* VICE_CITY_PATH = "Backgrounds - Vice City.png";
-
 enum MapType {
     LIBERTY_CITY = 1,
     SAN_ANDREAS = 2,
@@ -31,12 +27,11 @@ private:
     // nos interesa en base a la posicion del auto.
     SDL2pp::Renderer& renderer;
     std::unordered_map<MapType, std::unique_ptr<SDL2pp::Texture>> map_textures;
-    std::string map_path;
 
     SDL2pp::Rect get_map_section_rect(SDL2pp::Texture& texture, int section_x, int section_y);
 
 public:
-    explicit MapSheet(SDL2pp::Renderer& renderer, const std::string& map_path);
+    explicit MapSheet(SDL2pp::Renderer& renderer);
 
     void load_sprites();
 

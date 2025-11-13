@@ -1,14 +1,13 @@
 #include "race_sheet.h"
 
-RaceSheet::RaceSheet(SDL2pp::Renderer& renderer, const std::string& race_path):
-        renderer(renderer), race_sprites(), race_path(race_path) {}
+RaceSheet::RaceSheet(SDL2pp::Renderer& renderer): renderer(renderer), race_sprites() {}
 
 void RaceSheet::load_sprites() {
     // Cargar texturas de carrera
     std::vector<std::pair<RaceElement, std::string>> race_files = {
-            {RACE_ARROW, race_path + ARROW_PATH},
-            {RACE_CHECKPOINT, race_path + CHECKPOINT_PATH},
-            {RACE_START_LINE, race_path + START_LINE_PATH}};
+            {RACE_ARROW, ARROW_PATH},
+            {RACE_CHECKPOINT, CHECKPOINT_PATH},
+            {RACE_START_LINE, START_LINE_PATH}};
     for (const auto& [race_element, file_path]: race_files) {
         SDL2pp::Surface surface(file_path);
 

@@ -7,11 +7,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "../../config/constants.h"
 #include "../sprite.h"
 
 #include "animation_sheet.h"
-
-constexpr const char* PATH_FIRE = "../client/assets/animations/fuego.png";
 
 #define FIRE_TYPES_PER_ROW 5
 #define FIRE_TYPES_PER_COL 3

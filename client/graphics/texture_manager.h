@@ -15,12 +15,6 @@
 #include "sprite.h"
 #include "upgradeScreen_sheet.h"
 
-#define CAR_PATH "cars/Cars.png"
-#define PEOPLE_PATH "people/Mobile - Grand Theft Auto 4 - Miscellaneous - People.png"
-#define MAP_PATH "cities/"
-#define RACE_PATH "race/"
-#define UPGRADE_SCREEN_PATH "upgrade/Upgrade_Screen.png"
-
 class TextureManager {
 private:
     SDL2pp::Renderer& renderer;
@@ -32,7 +26,7 @@ private:
     BurstSheet burst_sheet;
 
 public:
-    TextureManager(SDL2pp::Renderer& renderer, const std::string& assets_path);
+    explicit TextureManager(SDL2pp::Renderer& renderer);
 
     void load_resources();
 

@@ -7,7 +7,7 @@ Client::Client(Protocol& protocol, const int id):
         sender(protocol, events_queue),
         receiver(protocol, server_queue),
         window(TITTLE_CLIENT),
-        texture_manager(window.get_renderer(), PATH),
+        texture_manager(window.get_renderer()),
         sounds_manager(),
         sounds_events_handler(sounds_manager, id),
         drawer(window.get_renderer(), texture_manager, id),

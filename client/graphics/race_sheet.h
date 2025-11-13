@@ -14,9 +14,6 @@
 
 #include "sprite.h"
 
-constexpr const char* ARROW_PATH = "Flecha.png";
-constexpr const char* CHECKPOINT_PATH = "Checkpoint.png";
-constexpr const char* START_LINE_PATH = "Salida.png";
 
 enum RaceElement {
     RACE_ARROW = 0,
@@ -29,10 +26,9 @@ private:
     SDL2pp::Renderer& renderer;
     std::vector<std::unique_ptr<SDL2pp::Texture>> textures;
     std::vector<Sprite> race_sprites;
-    std::string race_path;
 
 public:
-    RaceSheet(SDL2pp::Renderer& renderer, const std::string& race_path);
+    explicit RaceSheet(SDL2pp::Renderer& renderer);
 
     void load_sprites();
 

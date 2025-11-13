@@ -44,7 +44,7 @@ private:
     int get_rotation_index(float rotation);
 
 public:
-    CarSheet(SDL2pp::Renderer& renderer, const std::string& car_path);
+    explicit CarSheet(SDL2pp::Renderer& renderer);
 
     void load_sprites();
 

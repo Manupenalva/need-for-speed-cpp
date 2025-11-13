@@ -1,14 +1,12 @@
 #include "map_sheet.h"
 
-MapSheet::MapSheet(SDL2pp::Renderer& renderer, const std::string& map_path):
-        renderer(renderer), map_textures(), map_path(map_path) {}
+MapSheet::MapSheet(SDL2pp::Renderer& renderer): renderer(renderer), map_textures() {}
 
 void MapSheet::load_sprites() {
     // Cargar texturas de mapas
-    std::vector<std::pair<MapType, std::string>> map_files = {
-            {LIBERTY_CITY, map_path + LIBERTY_CITY_PATH},
-            {SAN_ANDREAS, map_path + SAN_ANDREAS_PATH},
-            {VICE_CITY, map_path + VICE_CITY_PATH}};
+    std::vector<std::pair<MapType, std::string>> map_files = {{LIBERTY_CITY, LIBERTY_CITY_PATH},
+                                                              {SAN_ANDREAS, SAN_ANDREAS_PATH},
+                                                              {VICE_CITY, VICE_CITY_PATH}};
     for (const auto& [map_type, file_path]: map_files) {
         auto texture = std::make_unique<SDL2pp::Texture>(renderer, SDL2pp::Surface(file_path));
         if (texture->Get() == nullptr) {

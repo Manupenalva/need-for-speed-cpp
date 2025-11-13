@@ -7,11 +7,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "../../config/constants.h"
 #include "../sprite.h"
 
 #include "animation_sheet.h"
-
-constexpr const char* PATH_BURST = "../client/assets/animations/explosion.png";
 
 #define BURST_TYPES_PER_ROW 4
 #define BURST_TYPES_PER_COL 2

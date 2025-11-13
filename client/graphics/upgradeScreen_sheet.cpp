@@ -1,16 +1,14 @@
 #include "upgradeScreen_sheet.h"
 
-UpgradeScreenSheet::UpgradeScreenSheet(SDL2pp::Renderer& renderer,
-                                       const std::string& upgrade_screen_path):
-        renderer(renderer), texture(), upgrade_screen_path(upgrade_screen_path) {}
+UpgradeScreenSheet::UpgradeScreenSheet(SDL2pp::Renderer& renderer): renderer(renderer), texture() {}
 
 
 void UpgradeScreenSheet::load_sprite() {
-    SDL2pp::Surface surface(upgrade_screen_path);
+    SDL2pp::Surface surface(UPGRADE_SCREEN_PATH);
     texture = std::make_unique<SDL2pp::Texture>(renderer, surface);
     if (texture->Get() == nullptr) {
         throw std::runtime_error("Error al cargar textura de pantalla de mejoras: " +
-                                 upgrade_screen_path);
+                                 std::string(UPGRADE_SCREEN_PATH));
     }
 }
 

@@ -1,11 +1,11 @@
 #include "texture_manager.h"
 
-TextureManager::TextureManager(SDL2pp::Renderer& renderer, const std::string& assets_path):
+TextureManager::TextureManager(SDL2pp::Renderer& renderer):
         renderer(renderer),
-        car_sheet(renderer, assets_path + CAR_PATH),
-        map_sheet(renderer, assets_path + MAP_PATH),
-        race_sheet(renderer, assets_path + RACE_PATH),
-        upgrade_screen_sheet(renderer, assets_path + UPGRADE_SCREEN_PATH),
+        car_sheet(renderer),
+        map_sheet(renderer),
+        race_sheet(renderer),
+        upgrade_screen_sheet(renderer),
         fire_sheet(renderer),
         burst_sheet(renderer) {}
 
