@@ -1,6 +1,7 @@
 #include "sounds_manager.h"
 
-SoundsManager::SoundsManager(): mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096) {}
+SoundsManager::SoundsManager():
+        mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, CHANNELS, CHUNK_SIZE) {}
 
 void SoundsManager::load_music() {
     try {
@@ -14,7 +15,8 @@ void SoundsManager::load_music() {
 void SoundsManager::play_music(const MusicID id, int loops) {
     auto it = musics.find(id);
     if (it != musics.end()) {
-        Mix_VolumeMusic(MIX_MAX_VOLUME / 2);  // Ajustar volumen de la música
+        Mix_VolumeMusic(
+                ConfigReader::get_instance().get_music_volume());  // Ajustar volumen de la música
         mixer.PlayMusic(*it->second, loops);
     } else {
         throw std::runtime_error("Music ID not found: " + std::to_string(id));

@@ -24,6 +24,7 @@ public:
     int get_window_width();
     int get_window_height();
     int get_map_id();
+    int get_music_volume();
 };
 
 #endif

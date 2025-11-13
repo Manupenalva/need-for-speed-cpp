@@ -4,3 +4,6 @@ window:
 
 map:
   id: 1
+
+music:
+  volume: 20

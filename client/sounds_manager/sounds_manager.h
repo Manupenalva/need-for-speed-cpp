@@ -1,7 +1,6 @@
 #ifndef SOUNDS_MANAGER_H
 #define SOUNDS_MANAGER_H
 
-#include <map>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -12,15 +11,11 @@
 #include <SDL2pp/Mixer.hh>
 #include <SDL2pp/Music.hh>
 
-enum MusicID { MAIN_MUSIC = 0 };
+#include "../config/config_reader.h"
+#include "../config/constants.h"
 
-constexpr const char* MUSIC_PATH = "../client/resources/sounds/Need For Speed Music.mp3";
-
-enum EffectID { CAR_CRASH = 0, CAR_BRAKE = 1 };
-
-const std::map<EffectID, std::string> EFFECTS_PATH = {
-        {CAR_CRASH, "../client/resources/sounds/Car Crash Sound.wav"},
-        {CAR_BRAKE, "../client/resources/sounds/Car Braking Sound.wav"}};
+#define CHANNELS 2
+#define CHUNK_SIZE 4096
 
 class SoundsManager {
 private:
