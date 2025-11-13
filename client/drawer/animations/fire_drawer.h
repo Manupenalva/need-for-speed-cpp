@@ -21,10 +21,10 @@ struct FireInstance {
 class FireDrawer: public Drawer {
 private:
     std::vector<FireInstance> fires;
-    int frame_duration = 5;  // Duración de cada frame en ticks
+    int frame_duration = 10;  // Duración de cada frame en ticks
 
     void check_new_fires(const RenderedState& rendered_state);
-    void update_fires();
+    void update_fires(const RenderedState& rendered_state);
     void clear_inactive_fires();
 
 public:

@@ -5,7 +5,7 @@ FireDrawer::FireDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manag
 
 void FireDrawer::draw(const RenderedState& rendered_state) {
     check_new_fires(rendered_state);
-    update_fires();
+    update_fires(rendered_state);
     clear_inactive_fires();
 }
 
@@ -25,7 +25,7 @@ void FireDrawer::check_new_fires(const RenderedState& rendered_state) {
     }
 }
 
-void FireDrawer::update_fires() {
+void FireDrawer::update_fires(const RenderedState& rendered_state) {
     for (auto& fire: fires) {
         if (fire.active) {
             fire.tick_count++;
@@ -34,13 +34,17 @@ void FireDrawer::update_fires() {
                 fire.current_frame++;
                 if (fire.current_frame >= AMOUNT_OF_FIRES) {
                     fire.active = false;  // Desactivar el fuego después de la última frame
+                    continue;
                 }
             }
 
             Sprite fire_sprite = texture_manager.get_fire_sprite(fire.current_frame);
-            SDL2pp::Rect dst_rect(static_cast<int>(fire.x) - fire_sprite.src_rect.w / 2,
-                                  static_cast<int>(fire.y) - fire_sprite.src_rect.h / 2,
-                                  fire_sprite.src_rect.w, fire_sprite.src_rect.h);
+
+            int screen_x = static_cast<int>(fire.x) - rendered_state.map_sprite.src_rect.x;
+            int screen_y = static_cast<int>(fire.y) - rendered_state.map_sprite.src_rect.y;
+
+            SDL2pp::Rect dst_rect(screen_x, screen_y, fire_sprite.src_rect.w,
+                                  fire_sprite.src_rect.h);
 
             renderer.Copy(fire_sprite.texture, fire_sprite.src_rect, dst_rect);
         }

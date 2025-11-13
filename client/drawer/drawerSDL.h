@@ -12,6 +12,7 @@
 #include "../../common/messageDTOs.h"
 #include "../config/constants.h"
 #include "../graphics/texture_manager.h"
+#include "animations/fire_drawer.h"
 
 #include "arrow_drawer.h"
 #include "car_drawer.h"
