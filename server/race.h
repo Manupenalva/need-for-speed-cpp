@@ -14,11 +14,13 @@
 #include "car.h"
 #include "corner.h"
 #include "hint.h"
+#include "npc.h"
 #include "playerRaceStatus.h"
 
 class Race {
 private:
     std::unordered_map<uint16_t, Car>& players_cars;
+    std::vector<std::unique_ptr<Npc>> npcs;
     std::unordered_map<uint16_t, PlayerRaceStatus> players_status;
     float celd_width;
     float celd_height;

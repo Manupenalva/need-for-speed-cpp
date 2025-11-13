@@ -12,9 +12,15 @@
 #include "corner.h"
 
 
+struct NpcsData {
+    std::vector<Corner> corners;
+    std::vector<Position> spawn_positions;
+};
+
+
 class MapCollisionBuilder {
 public:
-    static std::vector<Corner> initialize_map_buildings(const std::string& path, b2WorldId world);
+    static NpcsData initialize_map_buildings(const std::string& path, b2WorldId world);
 
 private:
     static YAML::Node open_file(const std::string& path);
