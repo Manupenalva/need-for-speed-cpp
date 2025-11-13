@@ -45,12 +45,13 @@ public:
     CarInfo get_state_info() const;
     bool reached_checkpoint(Position next_checkpoint, float celd_width, float celd_height);
     void finish_race(float race_time);
+    void reset_inputs();
 
     Car(Car&& other) = default;
     Car& operator=(Car&& other) = default;
     Car():
             input_state(false, false, false, false),
-            state(0, 0, 0, 0, 0, 0, false, 0, 0),
+            state(0, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, 0, 0),
             car_name("default"),
             max_speed(0),
             acceleration(0),

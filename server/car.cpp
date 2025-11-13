@@ -9,8 +9,7 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
          const float& drivability, const float& car_long, const float& car_width,
          const int& car_type):
         input_state(),
-        state({id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, static_cast<uint16_t>(car_type),
-               static_cast<uint16_t>(health)}),
+        state({id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, car_type, health}),
         car_name(name),
         max_speed(max_speed),
         acceleration(acceleration),
@@ -109,4 +108,12 @@ bool Car::reached_checkpoint(Position next_checkpoint, float celd_width, float c
 void Car::finish_race(float race_time) {
     race_times.push_back(race_time + current_penalization);
     current_penalization = 0.0f;
+    reset_inputs();
+}
+
+void Car::reset_inputs() {
+    input_state.accelerating = false;
+    input_state.braking = false;
+    input_state.turning_left = false;
+    input_state.turning_right = false;
 }
