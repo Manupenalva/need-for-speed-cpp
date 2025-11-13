@@ -19,7 +19,7 @@ target_sources(taller_client
     drawer/arrow_drawer.cpp
     drawer/checkpoint_drawer.cpp
     drawer/upgradeScreen_drawer.cpp
-    drawer/animations/fire_drawer.cpp
+    drawer/animations/animations_drawer.cpp
     lobby/lobby.cpp
     events/keyDown_handler.cpp
     events/keyUp_handler.cpp
@@ -44,7 +44,7 @@ target_sources(taller_client
     graphics/upgradeScreen_sheet.h
     graphics/animations/animation_sheet.h
     graphics/animations/fire_sheet.h
-    graphics/animations/crash_sheet.h
+    graphics/animations/burst_sheet.h
     events/event_handler.h
     events/keyDown_handler.h
     events/keyUp_handler.h
@@ -57,6 +57,8 @@ target_sources(taller_client
     drawer/checkpoint_drawer.h
     drawer/upgradeScreen_drawer.h
     drawer/animations/fire_drawer.h
+    drawer/animations/burst_drawer.h
+    drawer/animations/animations_drawer.h
     lobby/lobby.h
     config/config_reader.h
     config/constants.h

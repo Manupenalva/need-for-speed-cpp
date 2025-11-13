@@ -6,7 +6,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "animations/crash_sheet.h"
+#include "animations/burst_sheet.h"
 #include "animations/fire_sheet.h"
 
 #include "car_sheet.h"
@@ -29,7 +29,7 @@ private:
     RaceSheet race_sheet;
     UpgradeScreenSheet upgrade_screen_sheet;
     FireSheet fire_sheet;
-    CrashSheet crash_sheet;
+    BurstSheet burst_sheet;
 
 public:
     TextureManager(SDL2pp::Renderer& renderer, const std::string& assets_path);
@@ -52,8 +52,8 @@ public:
     // Metodo para obtener el sprite de fuego
     Sprite get_fire_sprite(int fire_type);
 
-    // Metodo para obtener el sprite de choque
-    Sprite get_crash_sprite(int crash_type);
+    // Metodo para obtener el sprite de explosión
+    Sprite get_burst_sprite(int burst_type);
 };
 
 #endif

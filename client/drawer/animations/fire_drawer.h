@@ -4,33 +4,25 @@
 #include <algorithm>
 #include <vector>
 
-#include "../drawer.h"
+#include "animations_drawer.h"
 
 #define AMOUNT_OF_FIRES 15
+#define FIRE_DURATION 10
 
-struct FireInstance {
-    float x;
-    float y;
-    int current_frame;
-    int tick_count;
-    bool active;
-
-    FireInstance(float x, float y): x(x), y(y), current_frame(0), tick_count(0), active(true) {}
-};
-
-class FireDrawer: public Drawer {
-private:
-    std::vector<FireInstance> fires;
-    int frame_duration = 10;  // Duración de cada frame en ticks
-
-    void check_new_fires(const RenderedState& rendered_state);
-    void update_fires(const RenderedState& rendered_state);
-    void clear_inactive_fires();
-
+class FireDrawer: public AnimationsDrawer {
 public:
-    explicit FireDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager);
-
-    void draw(const RenderedState& rendered_state) override;
+    FireDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager):
+            AnimationsDrawer(
+                    renderer, texture_manager,
+                    [](const CarState& car_state) {
+                        return car_state.crashed;  // Condición para activar el fuego: si el auto
+                                                   // está chocado
+                    },
+                    [](TextureManager& texture_manager, int frame) {
+                        return texture_manager.get_fire_sprite(
+                                frame);  // Obtener el sprite de fuego correspondiente al frame
+                    },
+                    AMOUNT_OF_FIRES, FIRE_DURATION) {}
 };
 
 #endif
