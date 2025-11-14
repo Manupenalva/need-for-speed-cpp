@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include "SocketInterface.h"
 #include "carState.h"
 #include "checkpointArrow.h"
 #include "checkpointInfo.h"
@@ -15,12 +16,12 @@
 
 class MessageReceiver {
 public:
-    explicit MessageReceiver(Socket& socket);
+    explicit MessageReceiver(ISocket& socket);
     ClientMessageDTO recv_client_message();
     ServerMessageDTO recv_server_message();
 
 private:
-    Socket& socket;
+    ISocket& socket;
 
     State recv_state_update();
     // cppcheck-suppress unusedPrivateFunction

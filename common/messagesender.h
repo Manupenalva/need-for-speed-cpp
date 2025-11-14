@@ -7,6 +7,7 @@
 
 #include <netinet/in.h>
 
+#include "SocketInterface.h"
 #include "constants.h"
 #include "lobbyinfo.h"
 #include "messageDTOs.h"
@@ -16,14 +17,14 @@
 
 class MessageSender {
 public:
-    explicit MessageSender(Socket& socket);
+    explicit MessageSender(ISocket& socket);
     ~MessageSender() = default;
 
     void send_message(const ServerMessageDTO& msg);
     void send_message(const ClientMessageDTO& msg);
 
 private:
-    Socket& socket;
+    ISocket& socket;
     std::vector<uint8_t> buffer;
     size_t offset;
 

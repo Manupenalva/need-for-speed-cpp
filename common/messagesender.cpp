@@ -4,7 +4,7 @@
 #include <cstring>
 #include <string>
 
-MessageSender::MessageSender(Socket& socket): socket(socket), buffer(), offset(0) {}
+MessageSender::MessageSender(ISocket& socket): socket(socket), buffer(), offset(0) {}
 
 
 void MessageSender::send_message(const ServerMessageDTO& msg) {
@@ -50,7 +50,6 @@ void MessageSender::send_message(const ClientMessageDTO& msg) {
         case MsgType::DRIVING_EVENT:
             serialize_events(msg.events);
             break;
-        case MsgType::CREATE_RACE:
         case MsgType::JOIN_RACE:
             serialize_lobby(msg.lobby_id, msg.type);
             break;
@@ -196,6 +195,8 @@ void MessageSender::append_car_state(const CarState& car) {
     append_checkpoint_arrow(car.checkpoint_arrow);
     uint8_t crashed_byte = car.crashed ? 0x01 : 0x00;
     append_bytes(&crashed_byte, 1);
+    uint8_t exploded_byte = car.exploded ? 0x01 : 0x00;
+    append_bytes(&exploded_byte, 1);
     uint8_t under_bridge_byte = car.under_bridge ? 0x01 : 0x00;
     append_bytes(&under_bridge_byte, 1);
     uint8_t braking_byte = car.braking ? 0x01 : 0x00;
@@ -236,7 +237,7 @@ void MessageSender::append_car_properties(const CarProperties& car_prop) {
 }
 
 void MessageSender::append_player_state(const PlayerState& player_state) {
-    append_bytes(&player_state.player_id, 1);
+    append_uint16(player_state.player_id);
     uint8_t ready_byte = player_state.ready ? 0x01 : 0x00;
     append_bytes(&ready_byte, 1);
     append_bytes(&player_state.previous_position, 1);
