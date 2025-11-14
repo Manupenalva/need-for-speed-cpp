@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>586</width>
+    <height>422</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -510,7 +510,7 @@ QPushButton#backStartButton:pressed {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>586</width>
      <height>23</height>
     </rect>
    </property>
