@@ -4,12 +4,12 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QPointF>
 #include <QPushButton>
 #include <QWidget>
-#include <QPointF>
 
-#include "scene_controller.h"
 #include "drag_info.h"
+#include "scene_controller.h"
 
 class MapCanvas: public QWidget {
     Q_OBJECT

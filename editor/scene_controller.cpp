@@ -25,7 +25,7 @@ void SceneController::handleDropEvent(const DragInfo& dragInfo, int x, int y) {
     if (dragInfo.getType().contains("hint", Qt::CaseInsensitive)) {
         if (dragInfo.getId() > 0) {
             item->setData(2, dragInfo.getId());
-        } 
+        }
     }
     scene->addItem(item);
 }
@@ -38,17 +38,8 @@ int SceneController::countItemsOfType(const QString& type) const {
     }));
 }
 
-void SceneController::countCheckpointsIds() {
-    id = 0;
-    for (auto* it: scene->items()) {
-        const auto t = it->data(0).toString();
-        if (t.contains("checkpoint", Qt::CaseInsensitive)) {
-            id = std::max(id, it->data(2).toInt());
-        }
-    }
-}
-
-void SceneController::placeHint(const DragInfo& info, const QPointF& hintPos, QGraphicsItem* checkpointItem) {
+void SceneController::placeHint(const DragInfo& info, const QPointF& hintPos,
+                                QGraphicsItem* checkpointItem) {
     QGraphicsPixmapItem* hint = itemBuilder.buildItem(info, QSize(GRID_SIZE, GRID_SIZE));
     hint->setPos(hintPos.x(), hintPos.y());
     hint->setData(2, checkpointItem->data(2).toInt());

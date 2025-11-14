@@ -37,4 +37,4 @@ int DragInfo::getRotation() const { return rotation; }
 
 QString DragInfo::getIconPath() const { return iconPath; }
 
-int DragInfo::getId() const { return id;}
+int DragInfo::getId() const { return id; }

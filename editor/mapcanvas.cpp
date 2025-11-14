@@ -144,7 +144,8 @@ void MapCanvas::dropEvent(QDropEvent* event) {
                              "You must place at least one checkpoint before placing hints");
         return;
     }
-    QMessageBox::information(this, "Select checkpoint", "Select the checkpoint to associate this new hint. ESC to exit.");
+    QMessageBox::information(this, "Select checkpoint",
+                             "Select the checkpoint to associate this new hint. ESC to exit.");
     event->acceptProposedAction();
     selecting = true;
     info = dragInfo;
@@ -164,9 +165,9 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
             if (selecting && mouseEvent->button() == Qt::LeftButton) {
                 QPointF scenePos = view->mapToScene(mouseEvent->pos());
                 const auto items = scene->items(scenePos);
-                for (auto* i : items) {
+                for (auto* i: items) {
                     const auto t = i->data(0).toString();
-                    if(t.contains("checkpoint", Qt::CaseInsensitive)) {
+                    if (t.contains("checkpoint", Qt::CaseInsensitive)) {
                         controller->placeHint(info, hintPos, i);
                         selecting = false;
                         return true;
@@ -217,5 +218,5 @@ void MapCanvas::importFromYaml(const QString& filePath) {
     for (const auto& [i, pos]: yaml.getItems()) {
         controller->handleDropEvent(i, pos.x(), pos.y());
     }
-    //controller->countCheckpointsIds();
 }
+
