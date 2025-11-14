@@ -13,12 +13,6 @@ protocol(protocol) {
 
     stack = ui->stackedWidget;
     timer = new QTimer(this);
-    
-    ui->carTitleLabel->setAlignment(Qt::AlignCenter);
-    ui->startTitleLabel->setAlignment(Qt::AlignCenter);
-    ui->carPreviewLabel->setAlignment(Qt::AlignCenter);
-    ui->playersLabel->setAlignment(Qt::AlignCenter);
-    ui->gameCodeLabel->setAlignment(Qt::AlignCenter);
 
     ui->carListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 
@@ -45,7 +39,7 @@ protocol(protocol) {
     connect(timer, &QTimer::timeout, this, &Lobby::updateLobby);
 
     setWindowTitle("Need for Speed 2D - Lobby");
-    resize(400, 300);
+    resize(600, 500);
     stack->setCurrentIndex(0);
 }
 
