@@ -12,6 +12,7 @@
 #include "../common/queue.h"
 #include "../common/thread.h"
 #include "events/clienthandlermessage.h"
+#include "../common/cheatcodes.h"
 
 #include "car.h"
 #include "race.h"
@@ -43,6 +44,7 @@ private:
     void handle_race(const int& race_index);
     void upgrade_car_stats(const uint16_t& player_id, const uint8_t& action);
     void broadcast_interval(const int& race_index);
+    void handle_cheat_code(const uint16_t& player_id, const CheatCode& cheat_code, int race_index);
 
     Gameloop(const Gameloop& other) = delete;
     Gameloop& operator=(const Gameloop& other) = delete;

@@ -48,6 +48,8 @@ public:
     CheckpointArrow get_next_checkpoint_arrow(const uint16_t car_id);
     const std::vector<std::tuple<uint16_t, float>>& get_race_results();
     ServerMessageDTO get_interval_message();
+    void force_finish_race(const uint16_t& player_id);
+    void force_lose_race(const uint16_t& player_id);
 
 private:
     void handle_sensors();

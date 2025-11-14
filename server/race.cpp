@@ -226,3 +226,15 @@ void Race::handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* brid
         car->interact_with_bridge(sensor_shape, BridgeLayer::BOTTOM);
     }
 }
+
+void Race::force_finish_race(const uint16_t& player_id) {
+    players_status[player_id].has_finished = true;
+    players_cars[player_id].finish_race(current_time, race_results.size() + 1);
+}
+
+void Race::force_lose_race(const uint16_t& player_id) {
+    Car& car = players_cars[player_id];
+    players_status[player_id].has_finished = true;
+    car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
+    car.explode();
+}

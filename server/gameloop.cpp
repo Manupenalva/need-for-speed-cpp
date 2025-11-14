@@ -11,6 +11,7 @@
 #include "../libs/box2d/include/box2d/box2d.h"
 #include "events/actionmessage.h"
 #include "events/selectcarmessage.h"
+#include "events/cheatmessage.h"
 
 #include "carBuilder.h"
 #include "carPhysics.h"
@@ -118,13 +119,16 @@ void Gameloop::handle_race(const int& race_index) {
     while (!races[race_index]->is_finished() && should_keep_running()) {
         std::shared_ptr<ClientHandlerMessage> base_msg;
         while (user_commands_queue->try_pop(base_msg)) {
-            if (base_msg->get_msg_type() != MsgType::DRIVING_EVENT) {
-                continue;
+            if (base_msg->get_msg_type() == MsgType::DRIVING_EVENT) {
+                std::shared_ptr<ActionMessage> msg = std::static_pointer_cast<ActionMessage>(base_msg);
+                for (const auto& action: msg->get_actions()) {
+                    update_car_input(msg->get_client_id(), action);
+                }   
+            } else if (base_msg->get_msg_type() == MsgType::CHEAT_CODE) {
+                std::shared_ptr<CheatMessage> msg = std::static_pointer_cast<CheatMessage>(base_msg);
+                handle_cheat_code(msg->get_client_id(), msg->get_cheat_code(), race_index);
             }
-            std::shared_ptr<ActionMessage> msg = std::static_pointer_cast<ActionMessage>(base_msg);
-            for (const auto& action: msg->get_actions()) {
-                update_car_input(msg->get_client_id(), action);
-            }
+            
         }
 
         for (uint32_t i = 0; i < iterations_behind; i++) {
@@ -140,6 +144,25 @@ void Gameloop::handle_race(const int& race_index) {
     broadcast_event(MsgType::RACE_FINISHED);
 
     handle_upgrades_phase(race_index);
+}
+
+void Gameloop::handle_cheat_code(const uint16_t& player_id, const CheatCode& cheat_code, int race_index) {
+    switch (cheat_code) {
+        case CheatCode::INFINITE_HEALTH:
+            players_cars[player_id].activate_infinite_health();
+            break;
+        case CheatCode::WIN_AUTOMATICALLY:
+            races[race_index]->force_finish_race(player_id);
+            break;
+        case CheatCode::LOSE_AUTOMATICALLY:
+            races[race_index]->force_lose_race(player_id);
+            break;
+        case CheatCode::MAX_STATS:
+            players_cars[player_id].maximize_stats();
+            break;
+        default:
+            break;
+    }
 }
 
 void Gameloop::run() {
