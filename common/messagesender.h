@@ -39,6 +39,8 @@ private:
     void serialize_interval_state(const IntervalState& interval_state);
     void serialize_map_number(const uint8_t map_number);
     void serialize_car_number(const uint16_t car_id);
+    void serialize_cheat_code(const CheatCode cheat_code);
+    void serialize_minimap_info(const MinimapInfo& minimap_info);
 
     void append_car_state(const CarState& car);
     void append_npc_state(const NpcState& npc);
