@@ -124,20 +124,20 @@ QPushButton:pressed {
             <property name="styleSheet">
              <string notr="true">QPushButton {
     font: 800 14pt &quot;Ubuntu Sans&quot;;
-    color: rgb(255, 60, 80);                      /* rojo neón */
-    background-color: rgba(0, 0, 0, 160);         /* negro semi-transparente */
+    color: rgb(255, 60, 80);                     
+    background-color: rgba(0, 0, 0, 160);        
     border: 2px solid rgb(255, 60, 80);
     border-radius: 10px;
     padding: 6px 24px;
 }
 
 QPushButton:hover {
-    background-color: rgba(255, 60, 80, 60);      /* brillo al pasar el mouse */
+    background-color: rgba(255, 60, 80, 60);    
 }
 
 QPushButton:pressed {
     background-color: rgb(255, 60, 80);
-    color: black;                                 /* efecto “botón hundido” */
+    color: black;                            
 }
 </string>
             </property>
@@ -176,9 +176,9 @@ QScrollArea &gt; QWidget &gt; QWidget {
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>0</y>
-               <width>101</width>
-               <height>1076</height>
+               <y>-401</y>
+               <width>106</width>
+               <height>1171</height>
               </rect>
              </property>
              <property name="styleSheet">
@@ -291,19 +291,16 @@ QToolButton {
     icon-size: 32px;                              
 }
 
-/* Hover: más brillo */
 QToolButton:hover {
     background-color: rgba(255, 60, 80, 40);
     border: 1px solid rgb(255, 60, 80);
 }
 
-/* Cuando la tool está seleccionada */
 QToolButton:checked {
     background-color: rgba(255, 60, 80, 120);
     border: 2px solid rgb(255, 255, 255);
 }
 
-/* Texto debajo del ícono, en rojo neón */
 QToolButton {
     color: rgb(255, 60, 80);
     font: 700 10pt &quot;Ubuntu Sans&quot;;
@@ -345,19 +342,16 @@ QToolButton {
     icon-size: 32px;                               
 }
 
-/* Hover: más brillo */
 QToolButton:hover {
     background-color: rgba(255, 60, 80, 40);
     border: 1px solid rgb(255, 60, 80);
 }
 
-/* Cuando la tool está seleccionada */
 QToolButton:checked {
     background-color: rgba(255, 60, 80, 120);
     border: 2px solid rgb(255, 255, 255);
 }
 
-/* Texto debajo del ícono, en rojo neón */
 QToolButton {
     color: rgb(255, 60, 80);
     font: 700 10pt &quot;Ubuntu Sans&quot;;
@@ -408,8 +402,8 @@ QToolButton {
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QToolButton {
-    background-color: rgba(0, 0, 0, 160);         
-    border: 1px solid rgba(255, 60, 80, 150);       
+	background-color: rgba(255, 215, 0, 230);  
+    border: 1px solid white;    
     border-radius: 8px;
     padding: 4px;
     icon-size: 32px;                               
@@ -426,7 +420,7 @@ QToolButton:checked {
 }
 
 QToolButton {
-    color: rgb(255, 60, 80);
+    color: black;
     font: 700 10pt &quot;Ubuntu Sans&quot;;
 }
 </string>
@@ -459,11 +453,11 @@ QToolButton {
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QToolButton {
-    background-color: rgba(0, 0, 0, 160);          
-    border: 1px solid rgba(255, 60, 80, 150);     
+	background-color: rgba(255, 215, 0, 230);  
+    border: 1px solid white;    
     border-radius: 8px;
     padding: 4px;
-    icon-size: 32px;                                
+    icon-size: 32px;                               
 }
 
 QToolButton:hover {
@@ -477,7 +471,7 @@ QToolButton:checked {
 }
 
 QToolButton {
-    color: rgb(255, 60, 80);
+    color: black;
     font: 700 10pt &quot;Ubuntu Sans&quot;;
 }
 </string>
@@ -684,26 +678,23 @@ QToolButton {
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QToolButton {
-    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
-    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+    background-color: rgba(0, 0, 0, 160);          
+    border: 1px solid rgba(255, 60, 80, 150);      
     border-radius: 8px;
     padding: 4px;
-    icon-size: 32px;                                /* tamaño del ícono */
+    icon-size: 32px;                               
 }
 
-/* Hover: más brillo */
 QToolButton:hover {
     background-color: rgba(255, 60, 80, 40);
     border: 1px solid rgb(255, 60, 80);
 }
 
-/* Cuando la tool está seleccionada */
 QToolButton:checked {
     background-color: rgba(255, 60, 80, 120);
     border: 2px solid rgb(255, 255, 255);
 }
 
-/* Texto debajo del ícono, en rojo neón */
 QToolButton {
     color: rgb(255, 60, 80);
     font: 700 10pt &quot;Ubuntu Sans&quot;;
@@ -753,28 +744,25 @@ QToolButton {
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QToolButton {
-    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
-    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+	background-color: rgba(255, 60, 80, 230);
+    border: 1px solid white;    
     border-radius: 8px;
     padding: 4px;
-    icon-size: 32px;                                /* tamaño del ícono */
+    icon-size: 32px;                               
 }
 
-/* Hover: más brillo */
 QToolButton:hover {
     background-color: rgba(255, 60, 80, 40);
     border: 1px solid rgb(255, 60, 80);
 }
 
-/* Cuando la tool está seleccionada */
 QToolButton:checked {
     background-color: rgba(255, 60, 80, 120);
     border: 2px solid rgb(255, 255, 255);
 }
 
-/* Texto debajo del ícono, en rojo neón */
 QToolButton {
-    color: rgb(255, 60, 80);
+    color: black;
     font: 700 10pt &quot;Ubuntu Sans&quot;;
 }
 </string>
@@ -822,26 +810,23 @@ QToolButton {
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QToolButton {
-    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
-    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+    background-color: rgba(0, 0, 0, 160);         
+    border: 1px solid rgba(255, 60, 80, 150);     
     border-radius: 8px;
     padding: 4px;
-    icon-size: 32px;                                /* tamaño del ícono */
+    icon-size: 32px;                               
 }
 
-/* Hover: más brillo */
 QToolButton:hover {
     background-color: rgba(255, 60, 80, 40);
     border: 1px solid rgb(255, 60, 80);
 }
 
-/* Cuando la tool está seleccionada */
 QToolButton:checked {
     background-color: rgba(255, 60, 80, 120);
     border: 2px solid rgb(255, 255, 255);
 }
 
-/* Texto debajo del ícono, en rojo neón */
 QToolButton {
     color: rgb(255, 60, 80);
     font: 700 10pt &quot;Ubuntu Sans&quot;;
@@ -876,26 +861,23 @@ QToolButton {
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QToolButton {
-    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
-    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+    background-color: rgba(0, 0, 0, 160);         
+    border: 1px solid rgba(255, 60, 80, 150);    
     border-radius: 8px;
     padding: 4px;
-    icon-size: 32px;                                /* tamaño del ícono */
+    icon-size: 32px;                              
 }
 
-/* Hover: más brillo */
 QToolButton:hover {
     background-color: rgba(255, 60, 80, 40);
     border: 1px solid rgb(255, 60, 80);
 }
 
-/* Cuando la tool está seleccionada */
 QToolButton:checked {
     background-color: rgba(255, 60, 80, 120);
     border: 2px solid rgb(255, 255, 255);
 }
 
-/* Texto debajo del ícono, en rojo neón */
 QToolButton {
     color: rgb(255, 60, 80);
     font: 700 10pt &quot;Ubuntu Sans&quot;;
@@ -930,26 +912,23 @@ QToolButton {
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QToolButton {
-    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
-    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+    background-color: rgba(0, 0, 0, 160);         
+    border: 1px solid rgba(255, 60, 80, 150);    
     border-radius: 8px;
     padding: 4px;
-    icon-size: 32px;                                /* tamaño del ícono */
+    icon-size: 32px;                               
 }
 
-/* Hover: más brillo */
 QToolButton:hover {
     background-color: rgba(255, 60, 80, 40);
     border: 1px solid rgb(255, 60, 80);
 }
 
-/* Cuando la tool está seleccionada */
 QToolButton:checked {
     background-color: rgba(255, 60, 80, 120);
     border: 2px solid rgb(255, 255, 255);
 }
 
-/* Texto debajo del ícono, en rojo neón */
 QToolButton {
     color: rgb(255, 60, 80);
     font: 700 10pt &quot;Ubuntu Sans&quot;;
@@ -984,26 +963,23 @@ QToolButton {
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QToolButton {
-    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
-    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+    background-color: rgba(0, 0, 0, 160);         
+    border: 1px solid rgba(255, 60, 80, 150);       
     border-radius: 8px;
     padding: 4px;
-    icon-size: 32px;                                /* tamaño del ícono */
+    icon-size: 32px;                              
 }
 
-/* Hover: más brillo */
 QToolButton:hover {
     background-color: rgba(255, 60, 80, 40);
     border: 1px solid rgb(255, 60, 80);
 }
 
-/* Cuando la tool está seleccionada */
 QToolButton:checked {
     background-color: rgba(255, 60, 80, 120);
     border: 2px solid rgb(255, 255, 255);
 }
 
-/* Texto debajo del ícono, en rojo neón */
 QToolButton {
     color: rgb(255, 60, 80);
     font: 700 10pt &quot;Ubuntu Sans&quot;;
@@ -1058,7 +1034,7 @@ QToolButton {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>945</width>
+     <width>1280</width>
      <height>23</height>
     </rect>
    </property>
