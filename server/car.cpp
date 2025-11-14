@@ -9,7 +9,9 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
          const float& drivability, const float& car_long, const float& car_width,
          const int& car_type):
         input_state(),
-        state({id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, false, static_cast<uint16_t>(car_type), static_cast<uint16_t>(health)}),
+        state({id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, false,
+               static_cast<uint16_t>(car_type), static_cast<uint16_t>(health)}),
+        bridge_layer(BridgeLayer::NONE),
         car_name(name),
         max_speed(max_speed),
         acceleration(acceleration),
@@ -88,6 +90,17 @@ void Car::update_physics() {
 void Car::update_position() { physics->update_position(); }
 
 void Car::handle_hits() { physics->handle_hits(); }
+
+// lo dejo comentado por ahora por como se maneja el choque
+void Car::interact_with_bridge(b2ShapeId /*sensor_shape*/, BridgeLayer sensor_layer) {
+    if (bridge_layer == BridgeLayer::NONE) {
+        bridge_layer = sensor_layer;
+    } else if (bridge_layer == sensor_layer) {
+        bridge_layer = BridgeLayer::NONE;
+    } else {
+        physics->handle_crash_with_bridge();
+    }
+}
 
 CarInfo Car::get_state_info() const { return state; }
 

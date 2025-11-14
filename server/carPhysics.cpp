@@ -180,6 +180,12 @@ void CarPhysics::handle_hit_event(const b2ContactHitEvent& event) {
     handle_crash(new_normal, impact_force);
 }
 
+void CarPhysics::handle_crash_with_bridge() {
+    // por ahora si choca con un puente estando arriba frena y listo
+    b2Body_SetLinearVelocity(body, {0.0f, 0.0f});
+    b2Body_SetAngularVelocity(body, 0.0f);
+}
+
 void CarPhysics::handle_crash(const b2Vec2& normal, const float impact_force) {
     float rad = car_state.angle * M_PI / 180.0f;
     b2Vec2 forward = {cosf(rad), sinf(rad)};
@@ -238,7 +244,7 @@ float CarPhysics::get_mass_from_shape(b2ShapeId shapeId) {
     if (b2Body_GetType(bodyId) != b2_dynamicBody)
         return 0.0f;
 
-    const CarPhysics* other = reinterpret_cast<CarPhysics*>(b2Body_GetUserData(bodyId));
+    const CarPhysics* other = static_cast<CarPhysics*>(b2Body_GetUserData(bodyId));
 
     if (!other)
         return 0.0f;

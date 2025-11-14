@@ -43,5 +43,6 @@ target_sources(taller_server
         carBuilder.h
         corner.h
         npc.h
+        bridge.h
         ${EVENTS_SRC}
     )

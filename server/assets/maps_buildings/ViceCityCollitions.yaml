@@ -1,6 +1,7 @@
 compressionlevel: -1
 height: 146
 infinite: false
+bridges_amount: 0
 layers:
 - height: 146
   id: 1

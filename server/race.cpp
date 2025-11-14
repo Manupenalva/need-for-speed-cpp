@@ -9,7 +9,7 @@
 #include "hint.h"
 #include "mapCollisionBuilder.h"
 
-#define MAX_TIME 600.0f  // esto es 10', quizas debería ir en el yaml y recibirlo en el constructor
+#define MAX_TIME 600.0f
 
 Race::Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_width,
            const float& celd_height, const std::vector<Position>& start_positions,
@@ -20,6 +20,7 @@ Race::Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_wi
         celd_width(celd_width),
         celd_height(celd_height),
         corners(),
+        bridges(),
         start_positions(start_positions),
         checkpoints(checkpoints),
         hints(hints),
@@ -34,8 +35,9 @@ b2WorldId Race::start_race() {
     worldDef.gravity = {0.0f, 0.0f};
     world = b2CreateWorld(&worldDef);
 
-    NpcsData npcs_data = MapCollisionBuilder::initialize_map_buildings(map_collisions_path, world);
-    corners = npcs_data.corners;
+    MapData map_data = MapCollisionBuilder::initialize_map_buildings(map_collisions_path, world);
+    corners = map_data.corners;
+    bridges = map_data.bridges;
 
     int i = 0;
     for (auto& [id, car]: players_cars) {
@@ -44,11 +46,10 @@ b2WorldId Race::start_race() {
         i++;
     }
 
-    for (const auto& spawn_position: npcs_data.spawn_positions) {
-        std::cout << "Creando npc en la posicion " << spawn_position.x << ", " << spawn_position.y
-                  << std::endl;
-        npcs.emplace_back(std::make_unique<Npc>(spawn_position, corners, world));
-    }
+    std::transform(map_data.spawn_positions.begin(), map_data.spawn_positions.end(),
+                   std::back_inserter(npcs), [&](const Position& spawn_position) {
+                       return std::make_unique<Npc>(spawn_position, corners, world);
+                   });
 
     return world;
 }
@@ -88,6 +89,8 @@ void Race::update_state() {
     if (current_time > MAX_TIME) {
         finish_race();
     }
+
+    handle_sensors();
 
     for (auto& [id, car]: players_cars) {
         if (!players_status[id].has_finished)
@@ -172,4 +175,32 @@ bool Race::is_finished() {
         }
     }
     return true;
+}
+
+void Race::handle_sensors() {
+    b2SensorEvents events = b2World_GetSensorEvents(world);
+
+    for (int i = 0; i < events.beginCount; i++) {
+        b2ShapeId sensor_shape = events.beginEvents[i].sensorShapeId;
+        const Bridge* bridge = static_cast<Bridge*>(b2Shape_GetUserData(sensor_shape));
+
+        b2ShapeId other_shape = events.beginEvents[i].visitorShapeId;
+        b2BodyId other_body = b2Shape_GetBody(other_shape);
+        Car* car = static_cast<Car*>(b2Body_GetUserData(other_body));
+
+        handle_bridge_interactions(sensor_shape, bridge, car);
+    }
+}
+
+void Race::handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* bridge, Car* car) {
+    if (!bridge || !car)
+        return;
+
+    if (sensor_shape.index1 == bridge->sensor1_up.index1 ||
+        sensor_shape.index1 == bridge->sensor2_up.index1) {
+        car->interact_with_bridge(sensor_shape, BridgeLayer::TOP);
+    } else if (sensor_shape.index1 == bridge->sensor1_down.index1 ||
+               sensor_shape.index1 == bridge->sensor2_down.index1) {
+        car->interact_with_bridge(sensor_shape, BridgeLayer::BOTTOM);
+    }
 }

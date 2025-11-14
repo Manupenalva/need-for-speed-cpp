@@ -27,6 +27,7 @@ public:
     void turn_right();
     void update_position();
     void handle_hits();
+    void handle_crash_with_bridge();
 
 private:
     void handle_hit_event(const b2ContactHitEvent& event);
