@@ -9,6 +9,7 @@
 #include "lobbyinfo.h"
 #include "msgType.h"
 #include "state.h"
+#include "cheatcodes.h"
 
 // Mensaje que manda el cliente al servidor
 struct ClientMessageDTO {
@@ -16,8 +17,9 @@ struct ClientMessageDTO {
     std::vector<uint8_t> events;
     uint16_t lobby_id;
     uint16_t car_id;
+    CheatCode cheat_code;
 
-    ClientMessageDTO(): type(MsgType::INVALID), events(), lobby_id(-1), car_id(0) {}
+    ClientMessageDTO(): type(MsgType::INVALID), events(), lobby_id(-1), car_id(0), cheat_code(CheatCode::INVALID_CHEAT) {}
 };
 
 

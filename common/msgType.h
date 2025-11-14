@@ -15,6 +15,7 @@ enum class MsgType : uint8_t {
     GET_CAR_CATALOG,
     SELECT_CAR,
     SET_READY,
+    CHEAT_CODE,
 
     // Servidor → Cliente
     GAME_START,

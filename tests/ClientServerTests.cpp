@@ -74,3 +74,17 @@ TEST_F(ProtocolTestClient, CodeMessages) {
         EXPECT_EQ(recv_msg.type, msg_type);
     }
 }
+
+TEST_F(ProtocolTestClient, CheatCode) {
+
+    ClientMessageDTO send_msg;
+    send_msg.type = MsgType::CHEAT_CODE;
+    send_msg.cheat_code = CheatCode::INFINITE_HEALTH;
+
+    sender.send_message(send_msg);
+
+    ClientMessageDTO recv_msg = receiver.recv_client_message();
+
+    EXPECT_EQ(recv_msg.type, MsgType::CHEAT_CODE);
+    EXPECT_EQ(recv_msg.cheat_code, CheatCode::INFINITE_HEALTH);
+}

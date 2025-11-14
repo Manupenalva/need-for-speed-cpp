@@ -56,6 +56,9 @@ void MessageSender::send_message(const ClientMessageDTO& msg) {
         case MsgType::SELECT_CAR:
             serialize_car_number(msg.car_id);
             break;
+        case MsgType::CHEAT_CODE:
+            serialize_cheat_code(msg.cheat_code);
+            break;
         default:
             buffer.resize(CODE_BYTES);
             offset = 0;
@@ -150,6 +153,14 @@ void MessageSender::serialize_car_number(const uint16_t car_id) {
     append_uint16(car_id);
 }
 
+void MessageSender::serialize_cheat_code(const CheatCode cheat_code) {
+    buffer.resize(CODE_BYTES * 2);
+    offset = 0;
+    MsgType type = MsgType::CHEAT_CODE;
+    append_bytes(&type, CODE_BYTES);
+    uint8_t cheat_code_byte = static_cast<uint8_t>(cheat_code);
+    append_bytes(&cheat_code_byte, 1);
+}
 
 // void MessageSender::serialize_lobbies(const std::vector<LobbyInfo>& lobbies) {
 
