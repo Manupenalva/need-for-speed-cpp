@@ -1,7 +1,7 @@
 #include "sounds_eventsHandler.h"
 
 SoundsEventsHandler::SoundsEventsHandler(SoundsManager& manager, int client_id):
-        soundsManager(manager), client_car_id(client_id) {}
+        sounds_manager(manager), client_car_id(client_id) {}
 
 
 void SoundsEventsHandler::process_message(const ServerMessageDTO& msg) {
@@ -27,19 +27,19 @@ void SoundsEventsHandler::process_car_state(const CarState& car, float client_x,
     float volume = compute_volume(client_x, client_y, car.x, car.y);
 
     if (car.crashed && !prev_crash_states[car.id] && can_play_sound(CAR_CRASH)) {
-        soundsManager.play_effect(CAR_CRASH, WITHOUT_LOOPS, volume);
+        sounds_manager.play_effect(CAR_CRASH, WITHOUT_LOOPS, volume);
     }
     prev_crash_states[car.id] = car.crashed;
 
     // Sonido de frenado (asumiendo que hay un atributo 'braking' en CarState)
     if (car.braking && !prev_brake_states[car.id] && can_play_sound(CAR_BRAKE)) {
-        soundsManager.play_effect(CAR_BRAKE, WITHOUT_LOOPS, volume);
+        sounds_manager.play_effect(CAR_BRAKE, WITHOUT_LOOPS, volume);
     }
     prev_brake_states[car.id] = car.braking;
 
     // Sonido de explosión
     if (car.exploded && !prev_burst_states[car.id] && can_play_sound(CAR_BURST)) {
-        soundsManager.play_effect(CAR_BURST, WITHOUT_LOOPS, volume);
+        sounds_manager.play_effect(CAR_BURST, WITHOUT_LOOPS, volume);
     }
     prev_burst_states[car.id] = car.exploded;
 }
@@ -75,4 +75,9 @@ bool SoundsEventsHandler::can_play_sound(EffectID id) {
     }
 
     return false;
+}
+
+void SoundsEventsHandler::final_game_sound() {
+    sounds_manager.play_effect(RACE_FINISH, WITHOUT_LOOPS,
+                               ConfigReader::get_instance().get_music_volume());
 }

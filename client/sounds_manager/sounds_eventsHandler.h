@@ -18,7 +18,7 @@
 
 class SoundsEventsHandler {
 private:
-    SoundsManager& soundsManager;
+    SoundsManager& sounds_manager;
     int client_car_id;
     std::map<int, bool> prev_crash_states;  // Mapa para rastrear estados previos de choque
     std::map<int, bool> prev_brake_states;  // Mapa para rastrear estados previos de frenado
@@ -35,6 +35,8 @@ public:
     SoundsEventsHandler(SoundsManager& manager, int client_id);
 
     void process_message(const ServerMessageDTO& msg);
+
+    void final_game_sound();
 };
 
 #endif

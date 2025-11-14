@@ -32,12 +32,13 @@ enum MusicID { MAIN_MUSIC = 0 };
 
 #define MUSIC_PATH "../client/resources/sounds/Need For Speed Music.mp3"
 
-enum EffectID { CAR_CRASH = 0, CAR_BRAKE = 1, CAR_BURST = 2 };
+enum EffectID { CAR_CRASH = 0, CAR_BRAKE = 1, CAR_BURST = 2, RACE_FINISH = 3 };
 
 const std::map<EffectID, std::string> EFFECTS_PATH = {
         {CAR_CRASH, "../client/resources/sounds/Car Crash Sound.wav"},
         {CAR_BRAKE, "../client/resources/sounds/Car Braking Sound.wav"},
-        {CAR_BURST, "../client/resources/sounds/Car Burst Sound.wav"}};
+        {CAR_BURST, "../client/resources/sounds/Car Burst Sound.wav"},
+        {RACE_FINISH, "../client/resources/sounds/Win Sound.wav"}};
 
 // Map constants
 #define MAP_MIN_X 0

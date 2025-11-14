@@ -81,6 +81,7 @@ void Client::update_state_from_server() {
         }
         if (server_msg.type == MsgType::RACE_FINISHED) {
             is_in_race = false;
+            sounds_events_handler.final_game_sound();
         }
     }
 }
