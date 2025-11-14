@@ -241,6 +241,8 @@ void MessageSender::append_npc_state(const NpcState& npc) {
     append_float(npc.y);
     append_float(npc.angle);
     append_uint16(npc.car_type);
+    uint8_t under_bridge_byte = npc.under_bridge ? 0x01 : 0x00;
+    append_bytes(&under_bridge_byte, BOOL_BYTES);
 }
 
 void MessageSender::append_checkpoint_info(const CheckpointInfo& checkpoint) {

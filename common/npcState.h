@@ -8,5 +8,6 @@ struct NpcState {
     float y;
     float angle;
     uint16_t car_type;
+    bool under_bridge;
 };
 #endif
