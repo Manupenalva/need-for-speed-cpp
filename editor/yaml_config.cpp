@@ -112,18 +112,22 @@ void YamlConfig::addElements(const YAML::Node& config, const QString& elementTyp
             int x = elem["x"].as<int>();
             int y = elem["y"].as<int>();
             int rotationDeg = 0;
+            int id = -1;
             if (elementType == "hint" && elem["rotation"]) {
                 QString rotationStr = QString::fromStdString(elem["rotation"].as<std::string>());
                 if (rotationStr == "left")
-                    rotationDeg = 270;
+                    rotationDeg = 0;
                 else if (rotationStr == "right")
                     rotationDeg = 180;
                 else if (rotationStr == "up")
                     rotationDeg = 90;
                 else
-                    rotationDeg = 0;
+                    rotationDeg = 270;
             }
-            items.emplace_back(DragInfo(elementType, rotationDeg, QString{}), QPoint(x, y));
+            if (elementType == "checkpoint" || elementType == "hint") {
+                id = elem["id"].as<int>();
+            }
+            items.emplace_back(DragInfo(elementType, rotationDeg, QString{}, id), QPoint(x, y));
         }
     }
 }

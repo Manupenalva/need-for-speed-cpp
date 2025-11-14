@@ -14,8 +14,18 @@ void SceneController::handleDropEvent(const DragInfo& dragInfo, int x, int y) {
 
     item->setPos(x, y);
     if (dragInfo.getType().contains("checkpoint", Qt::CaseInsensitive)) {
-        ++id;
-        item->setData(2, id);
+        if (dragInfo.getId() > 0) {
+            item->setData(2, dragInfo.getId());
+            id = std::max(id, dragInfo.getId());
+        } else {
+            ++id;
+            item->setData(2, id);
+        }
+    }
+    if (dragInfo.getType().contains("hint", Qt::CaseInsensitive)) {
+        if (dragInfo.getId() > 0) {
+            item->setData(2, dragInfo.getId());
+        } 
     }
     scene->addItem(item);
 }

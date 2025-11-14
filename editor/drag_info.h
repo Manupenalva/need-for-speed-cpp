@@ -9,10 +9,11 @@ private:
     QString type;
     int rotation = 0;
     QString iconPath;
+    int id = -1;
 
 public:
     DragInfo() = default;
-    DragInfo(const QString& type, int rotation, const QString& iconPath);
+    DragInfo(const QString& type, int rotation, const QString& iconPath, int id = -1);
 
     QByteArray pack() const;
     bool unpack(const QByteArray& data);
@@ -20,5 +21,6 @@ public:
     QString getType() const;
     int getRotation() const;
     QString getIconPath() const;
+    int getId() const;
 };
 #endif
