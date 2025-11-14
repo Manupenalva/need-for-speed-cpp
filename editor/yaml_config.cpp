@@ -76,11 +76,11 @@ void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene,
         }
         if (elementType == START_TYPE){
             int rotation = item->data(ROTATION).toInt();
-            if (rotation == 90) {
+            if (rotation == START_LEFT)
                 element["rotation"] = "left";
-            } else if (rotation == 270) {
+            } else if (rotation == START_RIGHT) {
                 element["rotation"] = "right";
-            } else if (rotation == 0) {
+            } else if (rotation == START_UP) {
                 element["rotation"] = "up";
             } else {
                 element["rotation"] = "down";
@@ -153,13 +153,13 @@ void YamlConfig::addElements(const YAML::Node& config, const QString& elementTyp
             if (elementType == START_TYPE && elem["rotation"]) {
                 QString rotationStr = QString::fromStdString(elem["rotation"].as<std::string>());
                 if (rotationStr == "left")
-                    rotationDeg = 90;
+                    rotationDeg = START_LEFT;
                 else if (rotationStr == "right")
-                    rotationDeg = 270;
+                    rotationDeg = START_RIGHT;
                 else if (rotationStr == "up")
-                    rotationDeg = 0;
+                    rotationDeg = STRAT_UP;
                 else
-                    rotationDeg = 180;
+                    rotationDeg = START_DOWN;
             }
             if (elementType == CHECKPOINT_TYPE || elementType == HINT_TYPE) {
                 id = elem["id"].as<int>();

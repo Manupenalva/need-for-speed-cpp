@@ -27,6 +27,10 @@
 #define START_TYPE "start"
 #define FINISH_TYPE "finish"
 #define HINT_TYPE "hint"
+#define START_LEFT 90
+#define START_RIGHT 270
+#define START_DOWN 180
+#define START_UP 0
 
 #endif
 
