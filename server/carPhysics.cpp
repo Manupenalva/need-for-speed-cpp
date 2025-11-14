@@ -5,7 +5,7 @@
 
 #define BASE_MAX_SPEED 250.0f
 #define BASE_ACCELERATION 500000.0f
-#define BASE_ANGLE_ROTATION 4
+#define BASE_ANGLE_ROTATION 3
 #define BASE_FRICTION 5.0f
 #define MIN_SPEED 100.0f
 #define LIGHT_CRASH_DAMAGE 1
@@ -108,7 +108,7 @@ void CarPhysics::turn_left() {
     if (speed < MIN_GAME_SPEED) {
         return;
     }
-    car_state.angle -= (BASE_ANGLE_ROTATION / drivability_factor);
+    car_state.angle -= (BASE_ANGLE_ROTATION * drivability_factor);
 
     if (car_state.angle < 0.0f) {
         car_state.angle += 360.0f;
@@ -129,7 +129,7 @@ void CarPhysics::turn_right() {
     if (speed < MIN_GAME_SPEED) {
         return;
     }
-    car_state.angle += (BASE_ANGLE_ROTATION / drivability_factor);
+    car_state.angle += (BASE_ANGLE_ROTATION * drivability_factor);
 
     if (car_state.angle >= 360.f) {
         car_state.angle -= 360.0f;
