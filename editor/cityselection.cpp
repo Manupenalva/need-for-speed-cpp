@@ -4,8 +4,7 @@
 #include <QIcon>
 #include <QPixmap>
 #include <vector>
-
-#define BACKGROUNDS "../client/assets/cities/"
+#include "editor_constants.h"
 
 CitySelection::CitySelection(QWidget* parent): QWidget(parent) {
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
@@ -18,7 +17,7 @@ CitySelection::CitySelection(QWidget* parent): QWidget(parent) {
     mainLayout->addSpacing(20);
 
     auto* citiesLayout = new QHBoxLayout();
-    QDir citiesDir(BACKGROUNDS);
+    QDir citiesDir(CITY_ASSETS_PATH);
 
     QStringList nameFilters;
     nameFilters << "*.png";

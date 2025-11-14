@@ -16,10 +16,7 @@
 #include <QVBoxLayout>
 
 #include "yaml_config.h"
-
-#define GRID_SIZE 50
-#define MAX_PLAYERS 8
-#define MAX_FINISH 1
+#include "editor_constants.h"
 
 MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -166,8 +163,8 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
                 QPointF scenePos = view->mapToScene(mouseEvent->pos());
                 const auto items = scene->items(scenePos);
                 for (auto* i: items) {
-                    const auto t = i->data(0).toString();
-                    if (t.contains("checkpoint", Qt::CaseInsensitive)) {
+                    const auto t = i->data(TYPE).toString();
+                    if (t.contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
                         controller->placeHint(info, hintPos, i);
                         selecting = false;
                         return true;
@@ -178,11 +175,11 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
             if (mouseEvent->button() == Qt::RightButton && !selecting) {
                 QGraphicsItem* item =
                         scene->itemAt(view->mapToScene(mouseEvent->pos()), QTransform());
-                if (item->data(0).toString().contains("checkpoint", Qt::CaseInsensitive)) {
+                if (item->data(TYPE).toString().contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
                     controller->deleteHints(item);
                     return true;
                 }
-                if (item && item->data(0).isValid()) {
+                if (item && item->data(TYPE).isValid()) {
                     scene->removeItem(item);
                     delete item;
                     return true;
@@ -214,7 +211,7 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
 void MapCanvas::importFromYaml(const QString& filePath) {
     YamlConfig yaml;
     yaml.load(filePath);
-    loadCityMap(QString("../client/assets/cities/%1.png").arg(yaml.getCity()));
+    loadCityMap(QString(CITY_ASSETS_PATH + yaml.getCity() + ".png"));
     for (const auto& [i, pos]: yaml.getItems()) {
         controller->handleDropEvent(i, pos.x(), pos.y());
     }

@@ -4,6 +4,7 @@
 #include <QGraphicsItem>
 #include <string>
 #include <vector>
+#include "editor_constants.h"
 
 bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int gridSize,
                       const QString& path) {
@@ -17,11 +18,11 @@ bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int grid
         out << YAML::Key << "celdWidth" << YAML::Value << gridSize;
         out << YAML::Key << "celdHeight" << YAML::Value << gridSize;
 
-        writeElements(out, scene, "start");
-        writeElements(out, scene, "finish");
-        writeElements(out, scene, "road");
-        writeElements(out, scene, "checkpoint");
-        writeElements(out, scene, "hint");
+        writeElements(out, scene, START_TYPE);
+        writeElements(out, scene, FINISH_TYPE);
+        writeElements(out, scene, ROAD_TYPE);
+        writeElements(out, scene, CHECKPOINT_TYPE);
+        writeElements(out, scene, HINT_TYPE);
 
         out << YAML::EndMap;
 
@@ -42,7 +43,7 @@ void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene,
                                const QString& elementType) {
     std::vector<YAML::Node> elements;
     for (QGraphicsItem* item: scene->items(Qt::AscendingOrder)) {
-        if (!item->data(0).isValid())
+        if (!item->data(TYPE).isValid())
             continue;
         QString type = item->data(0).toString();
         if (!type.contains(elementType, Qt::CaseInsensitive))
@@ -51,27 +52,27 @@ void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene,
         QPointF pos = item->pos();
         element["x"] = static_cast<int>(pos.x());
         element["y"] = static_cast<int>(pos.y());
-        if (elementType == "hint") {
-            int rotation = item->data(1).toInt();
-            if (rotation == 0) {
+        if (elementType == HINT_TYPE) {
+            int rotation = item->data(ROTATION).toInt();
+            if (rotation == LEFT_ROTATION) {
                 element["rotation"] = "left";
-            } else if (rotation == 180) {
+            } else if (rotation == RIGHT_ROTATION) {
                 element["rotation"] = "right";
-            } else if (rotation == 90) {
+            } else if (rotation == UP_ROTATION) {
                 element["rotation"] = "up";
             } else {
                 element["rotation"] = "down";
             }
-            element["id"] = item->data(2).toInt();
+            element["id"] = item->data(ID).toInt();
         }
-        if (elementType == "checkpoint") {
-            int rotation = item->data(1).toInt();
-            if (rotation == 0) {
+        if (elementType == CHECKPOINT_TYPE) {
+            int rotation = item->data(ROTATION).toInt();
+            if (rotation == VERTICAL_ROTATION) {
                 element["rotation"] = "vertical";
             } else {
                 element["rotation"] = "horizontal";
             }
-            element["id"] = item->data(2).toInt();
+            element["id"] = item->data(ID).toInt();
         }
         elements.push_back(element);
     }
@@ -100,11 +101,11 @@ bool YamlConfig::load(const QString& path) {
 
         selectedCity = QString::fromStdString(config["city"].as<std::string>());
         items.clear();
-        addElements(config, "start");
-        addElements(config, "finish");
-        addElements(config, "road");
-        addElements(config, "checkpoint");
-        addElements(config, "hint");
+        addElements(config, START_TYPE);
+        addElements(config, FINISH_TYPE);
+        addElements(config, ROAD_TYPE);
+        addElements(config, CHECKPOINT_TYPE);
+        addElements(config, HINT_TYPE);
         return true;
     } catch (const YAML::Exception& e) {
         qWarning("Error al leer el YAML: %s", e.what());
@@ -119,25 +120,25 @@ void YamlConfig::addElements(const YAML::Node& config, const QString& elementTyp
             int y = elem["y"].as<int>();
             int rotationDeg = 0;
             int id = -1;
-            if (elementType == "hint" && elem["rotation"]) {
+            if (elementType == HINT_TYPE&& elem["rotation"]) {
                 QString rotationStr = QString::fromStdString(elem["rotation"].as<std::string>());
                 if (rotationStr == "left")
-                    rotationDeg = 0;
+                    rotationDeg = LEFT_ROTATION;
                 else if (rotationStr == "right")
-                    rotationDeg = 180;
+                    rotationDeg = RIGHT_ROTATION;
                 else if (rotationStr == "up")
-                    rotationDeg = 90;
+                    rotationDeg = UP_ROTATION;
                 else
-                    rotationDeg = 270;
+                    rotationDeg = DOWN_ROTATION;
             }
-            if (elementType == "checkpoint" && elem["rotation"]) {
+            if (elementType == CHECKPOINT_TYPE && elem["rotation"]) {
                 QString rotationStr = QString::fromStdString(elem["rotation"].as<std::string>());
                 if (rotationStr == "vertical")
-                    rotationDeg = 0;
+                    rotationDeg = VERTICAL_ROTATION;
                 else
-                    rotationDeg = 90;
+                    rotationDeg = HORIZONTAL_ROTATION;
             }
-            if (elementType == "checkpoint" || elementType == "hint") {
+            if (elementType == CHECKPOINT_TYPE || elementType == HINT_TYPE) {
                 id = elem["id"].as<int>();
             }
             items.emplace_back(DragInfo(elementType, rotationDeg, QString{}, id), QPoint(x, y));

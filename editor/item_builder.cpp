@@ -2,6 +2,7 @@
 
 #include <QPixmap>
 #include <QTransform>
+#include "editor_constants.h"
 
 QGraphicsPixmapItem* ItemBuilder::buildItem(const DragInfo& info, const QSize& size) {
     QString iconPath;
@@ -24,8 +25,8 @@ QGraphicsPixmapItem* ItemBuilder::buildItem(const DragInfo& info, const QSize& s
 
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(
             pixmap.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    item->setData(0, info.getType());
-    item->setData(1, info.getRotation());
+    item->setData(TYPE, info.getType());
+    item->setData(ROTATION, info.getRotation());
 
     item->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable |
                    QGraphicsItem::ItemSendsGeometryChanges);
@@ -33,18 +34,16 @@ QGraphicsPixmapItem* ItemBuilder::buildItem(const DragInfo& info, const QSize& s
 }
 
 QString ItemBuilder::getIcon(const QString& type) const {
-    if (type.contains("road", Qt::CaseInsensitive)) {
-        return "../editor/imgs/road.png";
-    } else if (type.contains("checkpoint", Qt::CaseInsensitive)) {
-        return "../editor/imgs/checkpoint.png";
-    } else if (type.contains("start", Qt::CaseInsensitive)) {
-        return "../editor/imgs/start.png";
-    } else if (type.contains("finish", Qt::CaseInsensitive)) {
-        return "../editor/imgs/finish.png";
-    } else if (type.contains("hint", Qt::CaseInsensitive)) {
-        return "../editor/imgs/hint.png";
-    } else if (type.contains("NPC", Qt::CaseInsensitive)) {
-        return "../editor/imgs/npc.png";
+    if (type.contains(ROAD_TYPE, Qt::CaseInsensitive)) {
+        return ROAD_PATH_1;
+    } else if (type.contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
+        return CHECKPOINT_PATH;
+    } else if (type.contains(START_TYPE, Qt::CaseInsensitive)) {
+        return START_PATH_1;
+    } else if (type.contains(FINISH_TYPE, Qt::CaseInsensitive)) {
+        return FINISH_PATH;
+    } else if (type.contains(HINT_TYPE, Qt::CaseInsensitive)) {
+        return HINT_PATH;
     } else {
         return "";
     }

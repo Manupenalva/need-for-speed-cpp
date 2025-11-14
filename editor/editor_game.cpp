@@ -11,6 +11,7 @@
 #include "drag_info.h"
 #include "mapcanvas.h"
 #include "ui_EditorGame.h"
+#include "editor_constants.h"
 
 EditorGame::EditorGame(QWidget* parent): QMainWindow(parent), ui(new Ui::EditorGame) {
     ui->setupUi(this);
@@ -46,28 +47,27 @@ void EditorGame::setUpLoad() {
 }
 
 void EditorGame::setUpTools() {
-    rotateIcon(ui->toolHintLeft, "../editor/imgs/hint.png", 0);
-    rotateIcon(ui->toolHintDown, "../editor/imgs/hint.png", 270);
-    rotateIcon(ui->toolHintUp, "../editor/imgs/hint.png", 90);
-    rotateIcon(ui->toolHintRight, "../editor/imgs/hint.png", 180);
-    rotateIcon(ui->toolCheckpointHorizontal, "../editor/imgs/checkpoint.png", 90);
+    rotateIcon(ui->toolHintDown, HINT_PATH, DOWN_ROTATION);
+    rotateIcon(ui->toolHintUp, HINT_PATH, UP_ROTATION);
+    rotateIcon(ui->toolHintRight, HINT_PATH, RIGHT_ROTATION);
+    rotateIcon(ui->toolCheckpointHorizontal, CHECKPOINT_PATH, HORIZONTAL_ROTATION);
 
-    dragMovement(ui->toolRoad, "road", 0, "../editor/imgs/road.png");
-    dragMovement(ui->toolRoad1, "road1", 0, "../editor/imgs/road1.png");
-    dragMovement(ui->toolRoad2, "road2", 0, "../editor/imgs/road2.png");
-    dragMovement(ui->toolCheckpointVertical, "checkpoint", 0, "../editor/imgs/checkpoint.png");
-    dragMovement(ui->toolCheckpointHorizontal, "checkpoint", 90, "../editor/imgs/checkpoint.png");
-    dragMovement(ui->toolStart, "start", 0, "../editor/imgs/start.png");
-    dragMovement(ui->toolStart2, "start2", 0, "../editor/imgs/start2.png");
-    dragMovement(ui->toolFinish, "finish", 0, "../editor/imgs/finish.png");
-    dragMovement(ui->toolHintLeft, "hint", 0, "../editor/imgs/hint.png");
-    dragMovement(ui->toolHintDown, "hint", 270, "../editor/imgs/hint.png");
-    dragMovement(ui->toolHintUp, "hint", 90, "../editor/imgs/hint.png");
-    dragMovement(ui->toolHintRight, "hint", 180, "../editor/imgs/hint.png");
+    dragMovement(ui->toolRoad, ROAD_TYPE, ROAD_PATH_1);
+    dragMovement(ui->toolRoad1, ROAD_TYPE, ROAD_PATH_2);
+    dragMovement(ui->toolRoad2, ROAD_TYPE, ROAD_PATH_3);
+    dragMovement(ui->toolCheckpointVertical, CHECKPOINT_TYPE, CHECKPOINT_PATH);
+    dragMovement(ui->toolCheckpointHorizontal, CHECKPOINT_TYPE, CHECKPOINT_PATH, HORIZONTAL_ROTATION);
+    dragMovement(ui->toolStart, START_TYPE, START_PATH_1);
+    dragMovement(ui->toolStart2, START_TYPE, START_PATH_2);
+    dragMovement(ui->toolFinish, FINISH_TYPE, FINISH_PATH);
+    dragMovement(ui->toolHintLeft, HINT_TYPE, HINT_PATH);
+    dragMovement(ui->toolHintDown, HINT_TYPE, HINT_PATH, DOWN_ROTATION);
+    dragMovement(ui->toolHintUp, HINT_TYPE, HINT_PATH, UP_ROTATION);
+    dragMovement(ui->toolHintRight, HINT_TYPE, HINT_PATH, RIGHT_ROTATION);
 }
 
-void EditorGame::dragMovement(QToolButton* btn, const QString& type, int rotDeg,
-                              const QString& iconPath) {
+void EditorGame::dragMovement(QToolButton* btn, const QString& type,
+                              const QString& iconPath, int rotDeg) {
     if (!btn)
         return;
     QObject::connect(btn, &QToolButton::pressed, btn, [=] {
