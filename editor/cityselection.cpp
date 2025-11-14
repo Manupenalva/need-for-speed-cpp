@@ -11,7 +11,6 @@ CitySelection::CitySelection(QWidget* parent): QWidget(parent) {
 
     QLabel* titleLabel = new QLabel("Select a City");
     titleLabel->setAlignment(Qt::AlignCenter);
-    titleLabel->setStyleSheet("font-size: 20px; font-weight: bold;");
 
     mainLayout->addWidget(titleLabel);
     mainLayout->addSpacing(20);
@@ -37,7 +36,6 @@ CitySelection::CitySelection(QWidget* parent): QWidget(parent) {
                          [this, filePath]() { emit citySelected(filePath); });
         QLabel* nameLabel = new QLabel(cityName);
         nameLabel->setAlignment(Qt::AlignCenter);
-        nameLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
         cityLayout->addWidget(cityButton);
         cityLayout->addWidget(nameLabel);
         citiesLayout->addLayout(cityLayout);

@@ -115,7 +115,38 @@ QPushButton:pressed {
       <widget class="QWidget" name="pageCitySelection">
        <layout class="QVBoxLayout" name="vboxCitySel">
         <item>
-         <widget class="CitySelection" name="citySelection" native="true"/>
+         <widget class="CitySelection" name="citySelection" native="true">
+          <property name="styleSheet">
+           <string notr="true">#citySelection {
+    background-color: rgba(0, 0, 0, 200);
+    border: 2px solid rgba(255, 60, 80, 200);
+    border-radius: 15px;
+}
+
+#citySelection QLabel:first-child {
+    font: 800 20pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80); 
+    qproperty-alignment: AlignCenter;
+}
+
+#citySelection QLabel {
+    font: 600 11pt &quot;Ubuntu Sans&quot;;
+    color: rgb(230, 230, 230);
+}
+
+#citySelection QPushButton {
+    background-color: rgba(0, 0, 0, 160);
+    border: 2px solid rgba(255, 60, 80, 150);
+    border-radius: 12px;
+}
+
+#citySelection QPushButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 2px solid rgb(255, 60, 80);
+}
+</string>
+          </property>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="hCityNav">
@@ -176,7 +207,7 @@ QScrollArea &gt; QWidget &gt; QWidget {
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>-401</y>
+               <y>0</y>
                <width>106</width>
                <height>1171</height>
               </rect>
