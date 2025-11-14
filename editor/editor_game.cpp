@@ -6,6 +6,8 @@
 #include <QPixmap>
 #include <QToolButton>
 #include <QTransform>
+#include <QGraphicsDropShadowEffect>
+#include <QPropertyAnimation>
 
 #include "cityselection.h"
 #include "drag_info.h"
@@ -15,6 +17,20 @@
 
 EditorGame::EditorGame(QWidget* parent): QMainWindow(parent), ui(new Ui::EditorGame) {
     ui->setupUi(this);
+
+    auto* glow = new QGraphicsDropShadowEffect(this);
+    glow->setBlurRadius(40);
+    glow->setColor(QColor(255, 40, 40));
+    glow->setOffset(0, 0);               
+    ui->titleLabelMenu->setGraphicsEffect(glow);
+
+    auto* anim = new QPropertyAnimation(glow, "blurRadius", this);
+    anim->setDuration(1500);
+    anim->setStartValue(20);
+    anim->setEndValue(60);
+    anim->setEasingCurve(QEasingCurve::InOutSine);
+    anim->setLoopCount(-1);
+    anim->start();
 
     setUpNav();
     setUpTools();

@@ -13,7 +13,16 @@
   <property name="windowTitle">
    <string>Editor Game</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">color: rgb(0, 0, 0);</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="styleSheet">
+    <string notr="true">#centralWidget {
+    border-image: url(&quot;../editor/imgs/background.jpg&quot;) 0 0 0 0 stretch stretch;
+}
+</string>
+   </property>
    <layout class="QVBoxLayout" name="vboxCentral">
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
@@ -22,7 +31,10 @@
         <item>
          <widget class="QLabel" name="titleLabelMenu">
           <property name="styleSheet">
-           <string>font-size:24px; font-weight:bold;</string>
+           <string notr="true">font-size: 32px;
+font-weight: bold;
+color: rgb(255, 40, 40); 
+</string>
           </property>
           <property name="text">
            <string>Editor Main Menu</string>
@@ -40,6 +52,26 @@
             <height>48</height>
            </size>
           </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+    font: 800 14pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80); 
+    background-color: rgba(0, 0, 0, 160);  
+    border: 2px solid rgb(255, 60, 80);
+    border-radius: 10px;
+    padding: 6px 24px;
+}
+
+QPushButton:hover {
+    background-color: rgba(255, 60, 80, 60);  
+}
+
+QPushButton:pressed {
+    background-color: rgb(255, 60, 80);
+    color: black;                      
+}
+</string>
+          </property>
           <property name="text">
            <string>Select Map</string>
           </property>
@@ -52,6 +84,26 @@
             <width>0</width>
             <height>48</height>
            </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+    font: 800 14pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);                    
+    background-color: rgba(0, 0, 0, 160);       
+    border: 2px solid rgb(255, 60, 80);
+    border-radius: 10px;
+    padding: 6px 24px;
+}
+
+QPushButton:hover {
+    background-color: rgba(255, 60, 80, 60);     
+}
+
+QPushButton:pressed {
+    background-color: rgb(255, 60, 80);
+    color: black;                               
+}
+</string>
           </property>
           <property name="text">
            <string>Load YAML</string>
@@ -69,6 +121,26 @@
          <layout class="QHBoxLayout" name="hCityNav">
           <item>
            <widget class="QPushButton" name="btnBackFromCity">
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    font: 800 14pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);                      /* rojo neón */
+    background-color: rgba(0, 0, 0, 160);         /* negro semi-transparente */
+    border: 2px solid rgb(255, 60, 80);
+    border-radius: 10px;
+    padding: 6px 24px;
+}
+
+QPushButton:hover {
+    background-color: rgba(255, 60, 80, 60);      /* brillo al pasar el mouse */
+}
+
+QPushButton:pressed {
+    background-color: rgb(255, 60, 80);
+    color: black;                                 /* efecto “botón hundido” */
+}
+</string>
+            </property>
             <property name="text">
              <string>Back</string>
             </property>
@@ -87,6 +159,16 @@
          <layout class="QHBoxLayout" name="hMid">
           <item alignment="Qt::AlignLeft">
            <widget class="QScrollArea" name="scrollTools">
+            <property name="styleSheet">
+             <string notr="true">QScrollArea {
+    background: transparent;
+    border: none;
+}
+QScrollArea &gt; QWidget &gt; QWidget {
+    background: transparent;
+}
+</string>
+            </property>
             <property name="widgetResizable">
              <bool>true</bool>
             </property>
@@ -99,12 +181,43 @@
                <height>1076</height>
               </rect>
              </property>
+             <property name="styleSheet">
+              <string notr="true"> background-color: rgba(0, 0, 0, 180); 
+    border: 2px solid rgba(255, 60, 80, 200);
+    border-radius: 12px;
+    margin: 4px;</string>
+             </property>
              <layout class="QVBoxLayout" name="vboxTools">
               <property name="spacing">
                <number>4</number>
               </property>
               <item>
+               <widget class="QLabel" name="label_6">
+                <property name="styleSheet">
+                 <string notr="true">
+    font: 700 14pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);            
+    background-color: rgba(0, 0, 0, 180);  
+    padding: 4px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 60, 80, 180);
+</string>
+                </property>
+                <property name="text">
+                 <string>Tools</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QLabel" name="label">
+                <property name="styleSheet">
+                 <string notr="true">font: 700 10pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);
+    background-color: transparent;
+    qproperty-alignment: AlignCenter;
+    margin-top: 6px;
+    margin-bottom: 2px;</string>
+                </property>
                 <property name="text">
                  <string>Routes</string>
                 </property>
@@ -117,6 +230,31 @@
                   <width>64</width>
                   <height>64</height>
                  </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+    background-color: rgba(0, 0, 0, 160); 
+    border: 1px solid rgba(255, 60, 80, 150);  
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;
+}
+
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+QToolButton {
+    color: rgb(255, 60, 80);
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
                 </property>
                 <property name="text">
                  <string>Road</string>
@@ -144,6 +282,34 @@
                   <height>64</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+    background-color: rgba(0, 0, 0, 160);           
+    border: 1px solid rgba(255, 60, 80, 150);     
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;                              
+}
+
+/* Hover: más brillo */
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+/* Cuando la tool está seleccionada */
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+/* Texto debajo del ícono, en rojo neón */
+QToolButton {
+    color: rgb(255, 60, 80);
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
+                </property>
                 <property name="text">
                  <string>Road Alt 1</string>
                 </property>
@@ -170,6 +336,34 @@
                   <height>64</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+    background-color: rgba(0, 0, 0, 160);          
+    border: 1px solid rgba(255, 60, 80, 150);    
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;                               
+}
+
+/* Hover: más brillo */
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+/* Cuando la tool está seleccionada */
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+/* Texto debajo del ícono, en rojo neón */
+QToolButton {
+    color: rgb(255, 60, 80);
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
+                </property>
                 <property name="text">
                  <string>Road Alt 2</string>
                 </property>
@@ -190,6 +384,15 @@
               </item>
               <item>
                <widget class="QLabel" name="label_2">
+                <property name="styleSheet">
+                 <string notr="true">font: 700 10pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);
+    background-color: transparent;
+    qproperty-alignment: AlignCenter;
+    margin-top: 6px;
+    margin-bottom: 2px;
+</string>
+                </property>
                 <property name="text">
                  <string>Checkpoints</string>
                 </property>
@@ -202,6 +405,31 @@
                   <width>64</width>
                   <height>64</height>
                  </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+    background-color: rgba(0, 0, 0, 160);         
+    border: 1px solid rgba(255, 60, 80, 150);       
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;                               
+}
+
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+QToolButton {
+    color: rgb(255, 60, 80);
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
                 </property>
                 <property name="text">
                  <string>Checkpoint</string>
@@ -229,6 +457,31 @@
                   <height>64</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+    background-color: rgba(0, 0, 0, 160);          
+    border: 1px solid rgba(255, 60, 80, 150);     
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;                                
+}
+
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+QToolButton {
+    color: rgb(255, 60, 80);
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
+                </property>
                 <property name="text">
                  <string>Checkpoint</string>
                 </property>
@@ -249,6 +502,14 @@
               </item>
               <item>
                <widget class="QLabel" name="label_3">
+                <property name="styleSheet">
+                 <string notr="true">font: 700 10pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);
+    background-color: transparent;
+    qproperty-alignment: AlignCenter;
+    margin-top: 6px;
+    margin-bottom: 2px;</string>
+                </property>
                 <property name="text">
                  <string>Starts</string>
                 </property>
@@ -261,6 +522,34 @@
                   <width>64</width>
                   <height>64</height>
                  </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
+    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;                                /* tamaño del ícono */
+}
+
+/* Hover: más brillo */
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+/* Cuando la tool está seleccionada */
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+/* Texto debajo del ícono, en rojo neón */
+QToolButton {
+    color: rgb(255, 60, 80);
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
                 </property>
                 <property name="text">
                  <string>Start Line</string>
@@ -284,6 +573,34 @@
                   <width>64</width>
                   <height>64</height>
                  </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
+    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;                                /* tamaño del ícono */
+}
+
+/* Hover: más brillo */
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+/* Cuando la tool está seleccionada */
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+/* Texto debajo del ícono, en rojo neón */
+QToolButton {
+    color: rgb(255, 60, 80);
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
                 </property>
                 <property name="text">
                  <string>Start Line</string>
@@ -311,6 +628,34 @@
                   <height>64</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
+    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;                                /* tamaño del ícono */
+}
+
+/* Hover: más brillo */
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+/* Cuando la tool está seleccionada */
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+/* Texto debajo del ícono, en rojo neón */
+QToolButton {
+    color: rgb(255, 60, 80);
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
+                </property>
                 <property name="text">
                  <string>Start Line Alt</string>
                 </property>
@@ -337,6 +682,34 @@
                   <height>64</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
+    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;                                /* tamaño del ícono */
+}
+
+/* Hover: más brillo */
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+/* Cuando la tool está seleccionada */
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+/* Texto debajo del ícono, en rojo neón */
+QToolButton {
+    color: rgb(255, 60, 80);
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
+                </property>
                 <property name="text">
                  <string>Start Line</string>
                 </property>
@@ -357,6 +730,14 @@
               </item>
               <item>
                <widget class="QLabel" name="label_4">
+                <property name="styleSheet">
+                 <string notr="true">font: 700 10pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);
+    background-color: transparent;
+    qproperty-alignment: AlignCenter;
+    margin-top: 6px;
+    margin-bottom: 2px;</string>
+                </property>
                 <property name="text">
                  <string>Finish Line</string>
                 </property>
@@ -369,6 +750,34 @@
                   <width>64</width>
                   <height>64</height>
                  </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
+    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;                                /* tamaño del ícono */
+}
+
+/* Hover: más brillo */
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+/* Cuando la tool está seleccionada */
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+/* Texto debajo del ícono, en rojo neón */
+QToolButton {
+    color: rgb(255, 60, 80);
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
                 </property>
                 <property name="text">
                  <string>Finish Line</string>
@@ -390,6 +799,14 @@
               </item>
               <item>
                <widget class="QLabel" name="label_5">
+                <property name="styleSheet">
+                 <string notr="true">font: 700 10pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);
+    background-color: transparent;
+    qproperty-alignment: AlignCenter;
+    margin-top: 6px;
+    margin-bottom: 2px;</string>
+                </property>
                 <property name="text">
                  <string>Hints</string>
                 </property>
@@ -402,6 +819,34 @@
                   <width>64</width>
                   <height>64</height>
                  </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
+    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;                                /* tamaño del ícono */
+}
+
+/* Hover: más brillo */
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+/* Cuando la tool está seleccionada */
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+/* Texto debajo del ícono, en rojo neón */
+QToolButton {
+    color: rgb(255, 60, 80);
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
                 </property>
                 <property name="text">
                  <string>Hint Left</string>
@@ -429,6 +874,34 @@
                   <height>64</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
+    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;                                /* tamaño del ícono */
+}
+
+/* Hover: más brillo */
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+/* Cuando la tool está seleccionada */
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+/* Texto debajo del ícono, en rojo neón */
+QToolButton {
+    color: rgb(255, 60, 80);
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
+                </property>
                 <property name="text">
                  <string>Hint Down</string>
                 </property>
@@ -455,6 +928,34 @@
                   <height>64</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
+    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;                                /* tamaño del ícono */
+}
+
+/* Hover: más brillo */
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+/* Cuando la tool está seleccionada */
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+/* Texto debajo del ícono, en rojo neón */
+QToolButton {
+    color: rgb(255, 60, 80);
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
+                </property>
                 <property name="text">
                  <string>Hint Up</string>
                 </property>
@@ -480,6 +981,34 @@
                   <width>64</width>
                   <height>64</height>
                  </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+    background-color: rgba(0, 0, 0, 160);           /* fondo oscuro semi-transparente */
+    border: 1px solid rgba(255, 60, 80, 150);       /* rojo neón suave */
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;                                /* tamaño del ícono */
+}
+
+/* Hover: más brillo */
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+/* Cuando la tool está seleccionada */
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+/* Texto debajo del ícono, en rojo neón */
+QToolButton {
+    color: rgb(255, 60, 80);
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
                 </property>
                 <property name="text">
                  <string>Hint Right</string>
@@ -529,12 +1058,23 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1280</width>
+     <width>945</width>
      <height>23</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>
