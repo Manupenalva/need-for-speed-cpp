@@ -94,9 +94,9 @@
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>-132</y>
+               <y>0</y>
                <width>101</width>
-               <height>940</height>
+               <height>1076</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="vboxTools">
@@ -123,7 +123,7 @@
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>../editor/imgs/road.png</normaloff>../editor/imgs/road.png</iconset>
+                  <normaloff>:/imgs/road.png</normaloff>:/imgs/road.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -149,7 +149,7 @@
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>../editor/imgs/road1.png</normaloff>../editor/imgs/road1.png</iconset>
+                  <normaloff>:/imgs/road1.png</normaloff>:/imgs/road1.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -175,7 +175,7 @@
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>../editor/imgs/road2.png</normaloff>../editor/imgs/road2.png</iconset>
+                  <normaloff>:/imgs/road2.png</normaloff>:/imgs/road2.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -208,7 +208,7 @@
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>../editor/imgs/checkpoint.png</normaloff>../editor/imgs/checkpoint.png</iconset>
+                  <normaloff>:/imgs/checkpoint.png</normaloff>:/imgs/checkpoint.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -234,7 +234,7 @@
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>../editor/imgs/checkpoint.png</normaloff>../editor/imgs/checkpoint.png</iconset>
+                  <normaloff>:/imgs/checkpoint.png</normaloff>:/imgs/checkpoint.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -255,7 +255,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QToolButton" name="toolStart">
+               <widget class="QToolButton" name="toolStartDown">
                 <property name="minimumSize">
                  <size>
                   <width>64</width>
@@ -267,7 +267,30 @@
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>../editor/imgs/start.png</normaloff>../editor/imgs/start.png</iconset>
+                  <normaloff>:/imgs/start.png</normaloff>:/imgs/start.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>48</width>
+                  <height>48</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QToolButton" name="toolStartUp">
+                <property name="minimumSize">
+                 <size>
+                  <width>64</width>
+                  <height>64</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Start Line</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>:/imgs/start.png</normaloff>:/imgs/start.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -281,7 +304,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QToolButton" name="toolStart2">
+               <widget class="QToolButton" name="toolStartLeft">
                 <property name="minimumSize">
                  <size>
                   <width>64</width>
@@ -293,7 +316,7 @@
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>../editor/imgs/start2.png</normaloff>../editor/imgs/start2.png</iconset>
+                  <normaloff>:/imgs/start2.png</normaloff>:/imgs/start2.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -303,6 +326,32 @@
                 </property>
                 <property name="toolButtonStyle">
                  <enum>Qt::ToolButtonIconOnly</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QToolButton" name="toolStartRight">
+                <property name="minimumSize">
+                 <size>
+                  <width>64</width>
+                  <height>64</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Start Line</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>:/imgs/start2.png</normaloff>:/imgs/start2.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>48</width>
+                  <height>48</height>
+                 </size>
+                </property>
+                <property name="autoRaise">
+                 <bool>false</bool>
                 </property>
                </widget>
               </item>
@@ -326,7 +375,7 @@
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>../editor/imgs/finish.png</normaloff>../editor/imgs/finish.png</iconset>
+                  <normaloff>:/imgs/finish.png</normaloff>:/imgs/finish.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -359,7 +408,7 @@
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>imgs/hint.png</normaloff>imgs/hint.png</iconset>
+                  <normaloff>:/imgs/hint.png</normaloff>:/imgs/hint.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -385,7 +434,7 @@
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>imgs/hint.png</normaloff>imgs/hint.png</iconset>
+                  <normaloff>:/imgs/hint.png</normaloff>:/imgs/hint.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -411,7 +460,7 @@
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>imgs/hint.png</normaloff>imgs/hint.png</iconset>
+                  <normaloff>:/imgs/hint.png</normaloff>:/imgs/hint.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -437,7 +486,7 @@
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>imgs/hint.png</normaloff>imgs/hint.png</iconset>
+                  <normaloff>:/imgs/hint.png</normaloff>:/imgs/hint.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>

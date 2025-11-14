@@ -74,6 +74,18 @@ void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene,
             }
             element["id"] = item->data(ID).toInt();
         }
+        if (elementType == START_TYPE){
+            int rotation = item->data(ROTATION).toInt();
+            if (rotation == 90) {
+                element["rotation"] = "left";
+            } else if (rotation == 270) {
+                element["rotation"] = "right";
+            } else if (rotation == 0) {
+                element["rotation"] = "up";
+            } else {
+                element["rotation"] = "down";
+            }
+        }
         elements.push_back(element);
     }
 
@@ -120,7 +132,7 @@ void YamlConfig::addElements(const YAML::Node& config, const QString& elementTyp
             int y = elem["y"].as<int>();
             int rotationDeg = 0;
             int id = -1;
-            if (elementType == HINT_TYPE&& elem["rotation"]) {
+            if (elementType == HINT_TYPE && elem["rotation"]) {
                 QString rotationStr = QString::fromStdString(elem["rotation"].as<std::string>());
                 if (rotationStr == "left")
                     rotationDeg = LEFT_ROTATION;
@@ -137,6 +149,17 @@ void YamlConfig::addElements(const YAML::Node& config, const QString& elementTyp
                     rotationDeg = VERTICAL_ROTATION;
                 else
                     rotationDeg = HORIZONTAL_ROTATION;
+            }
+            if (elementType == START_TYPE && elem["rotation"]) {
+                QString rotationStr = QString::fromStdString(elem["rotation"].as<std::string>());
+                if (rotationStr == "left")
+                    rotationDeg = 90;
+                else if (rotationStr == "right")
+                    rotationDeg = 270;
+                else if (rotationStr == "up")
+                    rotationDeg = 0;
+                else
+                    rotationDeg = 180;
             }
             if (elementType == CHECKPOINT_TYPE || elementType == HINT_TYPE) {
                 id = elem["id"].as<int>();

@@ -51,14 +51,19 @@ void EditorGame::setUpTools() {
     rotateIcon(ui->toolHintUp, HINT_PATH, UP_ROTATION);
     rotateIcon(ui->toolHintRight, HINT_PATH, RIGHT_ROTATION);
     rotateIcon(ui->toolCheckpointHorizontal, CHECKPOINT_PATH, HORIZONTAL_ROTATION);
+    rotateIcon(ui->toolStartLeft, START_PATH_2, 90);
+    rotateIcon(ui->toolStartRight, START_PATH_2, 270);
+    rotateIcon(ui->toolStartDown, START_PATH_1, 180);
 
     dragMovement(ui->toolRoad, ROAD_TYPE, ROAD_PATH_1);
     dragMovement(ui->toolRoad1, ROAD_TYPE, ROAD_PATH_2);
     dragMovement(ui->toolRoad2, ROAD_TYPE, ROAD_PATH_3);
     dragMovement(ui->toolCheckpointVertical, CHECKPOINT_TYPE, CHECKPOINT_PATH);
     dragMovement(ui->toolCheckpointHorizontal, CHECKPOINT_TYPE, CHECKPOINT_PATH, HORIZONTAL_ROTATION);
-    dragMovement(ui->toolStart, START_TYPE, START_PATH_1);
-    dragMovement(ui->toolStart2, START_TYPE, START_PATH_2);
+    dragMovement(ui->toolStartUp, START_TYPE, START_PATH_1);
+    dragMovement(ui->toolStartLeft, START_TYPE, START_PATH_2, 90);
+    dragMovement(ui->toolStartDown, START_TYPE, START_PATH_1, 180);
+    dragMovement(ui->toolStartRight, START_TYPE, START_PATH_2, 270);
     dragMovement(ui->toolFinish, FINISH_TYPE, FINISH_PATH);
     dragMovement(ui->toolHintLeft, HINT_TYPE, HINT_PATH);
     dragMovement(ui->toolHintDown, HINT_TYPE, HINT_PATH, DOWN_ROTATION);
