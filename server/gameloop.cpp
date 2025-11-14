@@ -31,7 +31,7 @@ void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action
 }
 
 void Gameloop::upgrade_car_stats(const uint16_t& player_id, const uint8_t& action) {
-    float penalization = players_cars[player_id].upgrade_stats(action);
+    players_cars[player_id].upgrade_stats(action);
 }
 
 void Gameloop::broadcast_players(const int& race_index) {
