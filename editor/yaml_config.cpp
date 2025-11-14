@@ -76,7 +76,7 @@ void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene,
         }
         if (elementType == START_TYPE){
             int rotation = item->data(ROTATION).toInt();
-            if (rotation == START_LEFT)
+            if (rotation == START_LEFT) {
                 element["rotation"] = "left";
             } else if (rotation == START_RIGHT) {
                 element["rotation"] = "right";
@@ -157,7 +157,7 @@ void YamlConfig::addElements(const YAML::Node& config, const QString& elementTyp
                 else if (rotationStr == "right")
                     rotationDeg = START_RIGHT;
                 else if (rotationStr == "up")
-                    rotationDeg = STRAT_UP;
+                    rotationDeg = START_UP;
                 else
                     rotationDeg = START_DOWN;
             }
