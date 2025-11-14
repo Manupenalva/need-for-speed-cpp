@@ -3,107 +3,54 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QVBoxLayout>
+#include "ui_lobby.h"
 
-Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), protocol(protocol) {
+Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), 
+ui(new Ui::Lobby), 
+protocol(protocol) {
 
-    stack = new QStackedWidget(this);
+    ui->setupUi(this);
 
-    menu = new QWidget(this);
-    auto* layoutMenu = new QVBoxLayout(menu);
+    stack = ui->stackedWidget;
     timer = new QTimer(this);
+    
+    ui->carTitleLabel->setAlignment(Qt::AlignCenter);
+    ui->startTitleLabel->setAlignment(Qt::AlignCenter);
+    ui->carPreviewLabel->setAlignment(Qt::AlignCenter);
+    ui->playersLabel->setAlignment(Qt::AlignCenter);
+    ui->gameCodeLabel->setAlignment(Qt::AlignCenter);
 
-    QLabel* title = new QLabel("Need for Speed - 2D");
-    title->setAlignment(Qt::AlignCenter);
-    title->setStyleSheet("font-size: 24px; font-weight: bold;");
+    ui->carListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 
-    createGameButton = new QPushButton("New Game");
-    joinGameButton = new QPushButton("Join Game");
+    ui->startButton->setEnabled(false);
 
-    layoutMenu->addWidget(title);
-    layoutMenu->addSpacing(20);
-    layoutMenu->addWidget(createGameButton);
-    layoutMenu->addWidget(joinGameButton);
-    menu->setLayout(layoutMenu);
+    connect(ui->createGameButton, &QPushButton::clicked, this, &Lobby::createGame);
+    connect(ui->joinGameButton, &QPushButton::clicked, this, &Lobby::showConnectScreen);
+    connect(ui->connectButton, &QPushButton::clicked, this, &Lobby::connectServer);
+    
+    connect(ui->backConnectButton, &QPushButton::clicked,this, &Lobby::menuScreen);
+    connect(ui->backCarButton, &QPushButton::clicked,this, &Lobby::menuScreen);
+    connect(ui->backStartButton, &QPushButton::clicked,this, &Lobby::menuScreen);
 
-    connectScreen = new QWidget(this);
-    auto* layoutConnection = new QVBoxLayout(connectScreen);
-
-    QLabel* servnameLabel = new QLabel("Race code:");
-    servname = new QLineEdit();
-
-    connectButton = new QPushButton("Connect");
-    backButton = new QPushButton("Back");
-
-    layoutConnection->addWidget(servnameLabel);
-    layoutConnection->addWidget(servname);
-    layoutConnection->addWidget(connectButton);
-    layoutConnection->addWidget(backButton);
-    connectScreen->setLayout(layoutConnection);
-
-    carSelectionScreen = new QWidget(this);
-    auto* carLayout = new QVBoxLayout(carSelectionScreen);
-    QLabel* carTitle = new QLabel("Choose your car");
-    carTitle->setAlignment(Qt::AlignCenter);
-    carTitle->setStyleSheet("font-size: 24px; font-weight: bold;");
-    carList = new QListWidget();
-    carList->setSelectionMode(QAbstractItemView::SingleSelection);
-    carPreview = new QLabel("Select a car to see details");
-    carPreview->setAlignment(Qt::AlignCenter);
-    carPreview->setStyleSheet("font-size: 14px;");
-    confirmButton = new QPushButton("Confirm");
-    carLayout->addWidget(carTitle);
-    carLayout->addWidget(carList); 
-    carLayout->addWidget(carPreview);
-    carLayout->addWidget(confirmButton);
-    carLayout->addWidget(backButton);
-    carSelectionScreen->setLayout(carLayout);
-
-    startScreen = new QWidget(this);
-    auto* startLayout = new QVBoxLayout(startScreen);
-    QLabel* startTitle = new QLabel("Lobby Start");
-    startTitle->setAlignment(Qt::AlignCenter);
-    startTitle->setStyleSheet("font-size: 24px; font-weight: bold;");
-    startButton = new QPushButton("Start");
-    startButton->setEnabled(false);
-    playerLabel = new QLabel("Players: 1 / ?");
-    codeLabel = new QLabel("Game code: ?");
-    playerLabel->setAlignment(Qt::AlignCenter);
-    playerLabel->setStyleSheet("font-size: 16px;");
-    codeLabel->setAlignment(Qt::AlignCenter);
-    codeLabel->setStyleSheet("font-size: 16px;");
-
-    startLayout->addWidget(startTitle);
-    startLayout->addWidget(playerLabel);
-    startLayout->addWidget(codeLabel);
-    startLayout->addWidget(startButton);
-    startLayout->addWidget(backButton);
-    startScreen->setLayout(startLayout);
-
-    stack->addWidget(menu);
-    stack->addWidget(connectScreen);
-    stack->addWidget(carSelectionScreen);
-    stack->addWidget(startScreen);
-    setCentralWidget(stack);
-
-    connect(createGameButton, &QPushButton::clicked, this, &Lobby::createGame);
-    connect(joinGameButton, &QPushButton::clicked, this, &Lobby::showConnectScreen);
-    connect(connectButton, &QPushButton::clicked, this, &Lobby::connectServer);
-    connect(backButton, &QPushButton::clicked, this, &Lobby::menuScreen);
-    connect(startButton, &QPushButton::clicked, this, &Lobby::startGame);
-    connect(carList, &QListWidget::currentRowChanged, this, [this](int row){
+    connect(ui->startButton, &QPushButton::clicked, this, &Lobby::startGame);
+    connect(ui->carListWidget, &QListWidget::currentRowChanged, this, [this](int row){
         if (row < 0) {
-            carPreview->setText("Select a car to see details");
+            ui->carPreviewLabel->setText("Select a car to see details");
             return;
         }
-        auto* it = carList->item(row);
-        carPreview->setText(it ? it->toolTip() : "");
+        auto* it = ui->carListWidget->item(row);
+        ui->carPreviewLabel->setText(it ? it->toolTip() : "");
     });
-    connect(confirmButton, &QPushButton::clicked, this, &Lobby::confirmCar);
+    connect(ui->confirmButton, &QPushButton::clicked, this, &Lobby::confirmCar);
     connect(timer, &QTimer::timeout, this, &Lobby::updateLobby);
 
     setWindowTitle("Need for Speed 2D - Lobby");
     resize(400, 300);
     stack->setCurrentIndex(0);
+}
+
+Lobby::~Lobby() {
+    delete ui;
 }
 
 void Lobby::menuScreen() {
@@ -129,12 +76,12 @@ void Lobby::createGame() {
     host = true;
     QMessageBox::information(this, "New Game", QString("Race code: %1").arg(response.id));
     raceC = response.id;
-    codeLabel->setText(QString("Game Code: %1").arg(raceC));
+    ui->gameCodeLabel->setText(QString("Game Code: %1").arg(raceC));
     showCarSelection();
 }
 
 void Lobby::connectServer() {
-    QString raceCode = servname->text();
+    QString raceCode = ui->raceCodeLineEdit->text();
 
     if (raceCode.isEmpty()) {
         QMessageBox::warning(this, "Error", "You must insert text a race code");
@@ -165,7 +112,7 @@ void Lobby::connectServer() {
     host = false;
     raceC = msg.lobby_id;
     QMessageBox::information(this, "Connecting", QString("Connectin to.. %1").arg(raceCode));
-    codeLabel->setText(QString("Game Code: %1").arg(raceC));
+    ui->gameCodeLabel->setText(QString("Game Code: %1").arg(raceC));
     showCarSelection();
 }
 
@@ -178,8 +125,6 @@ void Lobby::startGame() {
     msg.type = MsgType::START_RACE;
     msg.lobby_id = raceC;
     protocol.send_client_message(msg);
-    // timer->stop();
-    // this->close();
 }
 
 void Lobby::updateLobby() {
@@ -191,8 +136,8 @@ void Lobby::updateLobby() {
         auto& lobbyInfo = response.lobby_info;
         int count = static_cast<int>(lobbyInfo.player_amount);
         int max = static_cast<int>(lobbyInfo.max_players);
-        playerLabel->setText(QString("Players: %1 / %2").arg(count).arg(max));
-        startButton->setEnabled(host && count >= 2);
+        ui->playersLabel->setText(QString("Players: %1 / %2").arg(count).arg(max));
+        ui->startButton->setEnabled(host && count >= 2);
     } else if (response.type == MsgType::GAME_START) {
         timer->stop();
         ClientMessageDTO msg;
@@ -220,7 +165,7 @@ void Lobby::showCatalog() {
         return;
     }
 
-    carList->clear();
+    ui->carListWidget->clear();
 
     for (const auto& car : resp.car_catalog) {
         auto* item = new QListWidgetItem(QString("Car %1").arg(car.car_id));
@@ -228,14 +173,14 @@ void Lobby::showCatalog() {
         item->setToolTip(QString("Max speed: %1\nAcceleration: %2\nHealth: %3\nMass: %4\nControl: %5")
                         .arg(car.max_speed).arg(car.acceleration).arg(car.max_health)
                         .arg(car.mass).arg(car.control));
-        carList->addItem(item);
+        ui->carListWidget->addItem(item);
     }
 
-    if (carList->count() > 0) carList->setCurrentRow(0);
+    if (ui->carListWidget->count() > 0) ui->carListWidget->setCurrentRow(0);
 }
 
 void Lobby::confirmCar() {
-    auto* item = carList->currentItem();
+    auto* item = ui->carListWidget->currentItem();
     if (!item) {
         QMessageBox::information(this, "Select car", "Please choose a car.");
         return;

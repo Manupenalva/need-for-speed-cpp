@@ -12,12 +12,18 @@
 
 #include "../../common/protocol.h"
 
+QT_BEGIN_NAMESPACE
+namespace Ui {
+    class Lobby;
+}
+QT_END_NAMESPACE
+
 class Lobby: public QMainWindow {
     Q_OBJECT
-    Protocol& protocol;
 
 public:
     explicit Lobby(Protocol& protocol, QWidget* parent = nullptr);
+    ~Lobby();
 
     // cppcheck-suppress unknownMacro
 private slots:
@@ -32,27 +38,14 @@ private slots:
     void confirmCar();
 
 private:
-    QStackedWidget* stack;
-    QWidget* menu;
-    QPushButton* createGameButton;
-    QPushButton* joinGameButton;
-    QTimer* timer;
+    Ui::Lobby* ui;
+    Protocol& protocol;
 
-    QWidget* connectScreen;
-    QLineEdit* servname;
-    QPushButton* connectButton;
-    QPushButton* backButton;
-    QPushButton* startButton;
-    QWidget* startScreen;
-    QLabel* playerLabel;
-    QLabel* codeLabel;
+    QStackedWidget* stack = nullptr;
+    QTimer* timer = nullptr;
+
     bool host;
     int raceC;
-
-    QWidget* carSelectionScreen;
-    QListWidget* carList;
-    QPushButton* confirmButton;
-    QLabel* carPreview;
     uint16_t chosenCar = 0;
 };
 
