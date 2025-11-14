@@ -1047,6 +1047,36 @@ QToolButton {
               <height>600</height>
              </size>
             </property>
+            <property name="styleSheet">
+             <string notr="true">#mapCanvas {
+    background-color: transparent;
+}
+
+#mapCanvas QGraphicsView {
+    background-color: rgba(0, 0, 0, 200);
+    border: 2px solid rgba(255, 60, 80, 200);
+    border-radius: 12px;
+}
+
+#mapCanvas QPushButton {
+    font: 800 12pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);
+    background-color: rgba(0, 0, 0, 180);
+    border: 2px solid rgba(255, 60, 80, 200);
+    border-radius: 10px;
+    padding: 6px 20px;
+}
+
+#mapCanvas QPushButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+}
+
+#mapCanvas QPushButton:pressed {
+    background-color: rgb(255, 60, 80);
+    color: black;
+}
+</string>
+            </property>
            </widget>
           </item>
          </layout>
