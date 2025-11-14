@@ -6,8 +6,10 @@
 #include <QGraphicsView>
 #include <QPushButton>
 #include <QWidget>
+#include <QPointF>
 
 #include "scene_controller.h"
+#include "drag_info.h"
 
 class MapCanvas: public QWidget {
     Q_OBJECT
@@ -32,6 +34,9 @@ private:
     QPushButton* saveButton;
 
     SceneController* controller;
+    bool selecting = false;
+    DragInfo info;
+    QPointF hintPos;
 };
 
 #endif

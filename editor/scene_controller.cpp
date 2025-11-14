@@ -37,3 +37,28 @@ void SceneController::countCheckpointsIds() {
         }
     }
 }
+
+void SceneController::placeHint(const DragInfo& info, const QPointF& hintPos, QGraphicsItem* checkpointItem) {
+    QGraphicsPixmapItem* hint = itemBuilder.buildItem(info, QSize(GRID_SIZE, GRID_SIZE));
+    hint->setPos(hintPos.x(), hintPos.y());
+    hint->setData(2, checkpointItem->data(2).toInt());
+    scene->addItem(hint);
+}
+
+void SceneController::deleteHints(QGraphicsItem* checkpointItem) {
+    int idCheckpoint = checkpointItem->data(2).toInt();
+    scene->removeItem(checkpointItem);
+    delete checkpointItem;
+    QList<QGraphicsItem*> hintToDelete;
+    for (auto* it: scene->items()) {
+        const auto type = it->data(0).toString();
+        if (type.contains("hint", Qt::CaseInsensitive) && it->data(2).toInt() == idCheckpoint) {
+            hintToDelete.append(it);
+        }
+    }
+
+    for (auto* hint: hintToDelete) {
+        scene->removeItem(hint);
+        delete hint;
+    }
+}

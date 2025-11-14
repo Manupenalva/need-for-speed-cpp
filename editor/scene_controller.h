@@ -17,6 +17,9 @@ public:
 
     void countCheckpointsIds();
 
+    void placeHint(const DragInfo& info, const QPointF& hintPos, QGraphicsItem* checkpointItem);
+    void deleteHints(QGraphicsItem* checkpointItem);
+
 private:
     QGraphicsScene* scene;
     ItemBuilder itemBuilder;

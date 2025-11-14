@@ -62,6 +62,7 @@ void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene,
             } else {
                 element["rotation"] = "down";
             }
+            element["id"] = item->data(2).toInt();
         }
         if (elementType == "checkpoint") {
             element["id"] = item->data(2).toInt();
