@@ -46,6 +46,11 @@ void Gameloop::broadcast_event(const MsgType msg_type) {
     race_monitor->broadcast(msg);
 }
 
+void Gameloop::broadcast_interval(const int& race_index) {
+    ServerMessageDTO msg = races[race_index]->get_interval_message();
+    race_monitor->broadcast(msg);
+}
+
 void Gameloop::initialize_races() {
     for (const auto& entry: std::filesystem::directory_iterator("../server/assets/race_configs")) {
         if (entry.is_regular_file() && entry.path().extension() == ".yaml") {
@@ -79,7 +84,7 @@ void Gameloop::receive_selected_cars() {
     }
 }
 
-void Gameloop::handle_upgrades_phase() {
+void Gameloop::handle_upgrades_phase(const int& race_index) {
     GameLoopTimer timer(TARGET_FPS);
     int frames_interval = 0;
     uint32_t iterations_behind = 1;
@@ -94,6 +99,7 @@ void Gameloop::handle_upgrades_phase() {
                 upgrade_car_stats(msg->get_client_id(), action);
             }
         }
+        broadcast_interval(race_index);
         frames_interval++;
         timer.sleep_and_calc_next_it(iterations_behind);
     }
@@ -133,7 +139,7 @@ void Gameloop::handle_race(const int& race_index) {
 
     broadcast_event(MsgType::RACE_FINISHED);
 
-    handle_upgrades_phase();
+    handle_upgrades_phase(race_index);
 }
 
 void Gameloop::run() {

@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <vector>
 
@@ -32,6 +33,7 @@ private:
     std::string map_collisions_path;
     float current_time;
     b2WorldId world;
+    std::vector<std::tuple<uint16_t, float>> race_results;
 
 public:
     Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_width,
@@ -44,6 +46,8 @@ public:
     ServerMessageDTO get_broadcast_message(float frames);
     CheckpointInfo get_next_checkpoint_info(const uint16_t car_id);
     CheckpointArrow get_next_checkpoint_arrow(const uint16_t car_id);
+    const std::vector<std::tuple<uint16_t, float>>& get_race_results();
+    ServerMessageDTO get_interval_message();
 
 private:
     void handle_sensors();

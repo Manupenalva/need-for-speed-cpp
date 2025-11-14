@@ -66,7 +66,8 @@ void Race::update_state() {
             status.current_checkpoint_index++;
             if (status.current_checkpoint_index >= checkpoints.size()) {
                 status.has_finished = true;
-                car.finish_race(current_time);
+                car.finish_race(current_time, race_results.size() + 1);
+                race_results.emplace_back(id, current_time);
             }
         }
 
@@ -155,11 +156,32 @@ ServerMessageDTO Race::get_broadcast_message(float frames) {
     return msg;
 }
 
+ServerMessageDTO Race::get_interval_message() {
+    ServerMessageDTO msg;
+
+    IntervalState interval_state;
+    interval_state.players_ready = 0;
+    interval_state.total_players = static_cast<uint8_t>(players_cars.size());
+    for (const auto& [id, car]: players_cars) {
+        PlayerRaceStatus status = players_status[id];
+        interval_state.player_states.push_back(car.get_player_state());
+        if (status.has_finished) {
+            interval_state.players_ready++;
+        }
+    }
+
+    msg.type = MsgType::INTERVAL_UPDATE;
+    msg.interval_state = interval_state;
+
+    return msg;
+}
+
 void Race::finish_race() {
     for (auto& [id, status]: players_status) {
         if (!status.has_finished) {
+            players_cars[id].finish_race(MAX_TIME, MAX_PLAYERS_RACE);
+            race_results.emplace_back(id, MAX_TIME);
             status.has_finished = true;
-            players_cars[id].finish_race(MAX_TIME);
         }
     }
 }
