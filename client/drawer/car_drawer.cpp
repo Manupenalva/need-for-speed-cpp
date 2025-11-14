@@ -27,9 +27,18 @@ CarState CarDrawer::calculate_position(const CarState& car, const int iterations
 void CarDrawer::draw_car(const CarState& car, float screen_x, float screen_y) {
     // Lógica para dibujar el coche
     Sprite car_sprite = texture_manager.get_car_sprite(car.car_type, car.angle);
+
+    if (car.under_bridge) {
+        car_sprite.texture.SetAlphaMod(UNDER_BRIDGE_OPACITY);  // Hacer el coche semitransparente
+    }
+
     SDL2pp::Rect dst_rect(static_cast<int>(screen_x), static_cast<int>(screen_y),
                           car_sprite.src_rect.w, car_sprite.src_rect.h);
     renderer.Copy(car_sprite.texture, car_sprite.src_rect, dst_rect);
+
+    if (car.under_bridge) {
+        car_sprite.texture.SetAlphaMod(NORMAL_OPACITY);  // Restaurar opacidad completa
+    }
 }
 
 void CarDrawer::draw_npcs(const RenderedState& rendered_state) {

@@ -7,6 +7,9 @@
 
 #include "drawer.h"
 
+#define NORMAL_OPACITY 255
+#define UNDER_BRIDGE_OPACITY 128
+
 class CarDrawer: public Drawer {
 private:
     CarState calculate_position(const CarState& car, const int iterations_ahead);

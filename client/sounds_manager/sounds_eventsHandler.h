@@ -14,7 +14,7 @@
 #define MIN_VOLUME 0.0f
 #define MAX_VOLUME 1.0f
 #define WITHOUT_LOOPS 0
-#define SOUND_COOLDOWN_MS 200
+#define SOUND_COOLDOWN_MS 500
 
 class SoundsEventsHandler {
 private:
