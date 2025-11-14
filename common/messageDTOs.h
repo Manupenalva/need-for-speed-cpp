@@ -10,6 +10,7 @@
 #include "msgType.h"
 #include "state.h"
 #include "cheatcodes.h"
+#include "minimapInfo.h"
 
 // Mensaje que manda el cliente al servidor
 struct ClientMessageDTO {
@@ -34,6 +35,7 @@ struct ServerMessageDTO {
     uint8_t map_number;
     std::vector<CarProperties> car_catalog;
     IntervalState interval_state;
+    MinimapInfo minimap_info;
 
     ServerMessageDTO():
             type(MsgType::INVALID),

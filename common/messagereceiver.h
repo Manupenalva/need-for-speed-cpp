@@ -13,6 +13,7 @@
 #include "messageDTOs.h"
 #include "npcState.h"
 #include "socket.h"
+#include "minimapInfo.h"
 
 class MessageReceiver {
 public:
@@ -48,5 +49,6 @@ private:
     std::vector<CarProperties> recv_car_catalog();
     IntervalState recv_interval_state();
     CheatCode recv_cheat_code();
+    MinimapInfo recv_minimap_info();
 };
 #endif

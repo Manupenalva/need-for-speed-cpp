@@ -30,6 +30,7 @@ enum class MsgType : uint8_t {
     INTERVAL_UPDATE,
     SEND_CAR_CATALOG,
     SEND_MAP_NUMBER,
+    SEND_MINIMAP_INFO,
 
     INVALID = 255
 
