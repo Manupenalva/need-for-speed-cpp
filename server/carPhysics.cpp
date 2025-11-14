@@ -4,9 +4,9 @@
 #include <iostream>
 
 #define BASE_MAX_SPEED 250.0f
-#define BASE_ACCELERATION 1000000.0f
+#define BASE_ACCELERATION 500000.0f
 #define BASE_ANGLE_ROTATION 4
-#define BASE_FRICTION 10.0f
+#define BASE_FRICTION 5.0f
 #define MIN_SPEED 100.0f
 #define LIGHT_CRASH_DAMAGE 1
 #define MEDIUM_CRASH_DAMAGE 3
@@ -51,10 +51,21 @@ void CarPhysics::accelerate() {
     float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
     // std::cout << "Mi velocidad es " << speed << std::endl;
 
-    if (speed < (BASE_MAX_SPEED * max_speed_factor)) {
+    float max_speed = BASE_MAX_SPEED * max_speed_factor;
+    float speedRatio = max_speed / speed;
+    if (speed < MIN_SPEED) {
+        speedRatio = 0.0f;
+    } else if (speed >= max_speed) {
+        speedRatio = 0.0f;
+    } else {
+        speedRatio = (max_speed - speed) / max_speed;
+    }
+    //Aceleracion basada en la masa y velocidad actual
+    float scaledAcceleration = (1.0f + speedRatio) * BASE_ACCELERATION * acceleration_factor * (1.0f + mass_factor);
+    if (speed < max_speed) {
         b2Body_ApplyForceToCenter(body,
-                                  {direction.x * (BASE_ACCELERATION * acceleration_factor),
-                                   direction.y * (BASE_ACCELERATION * acceleration_factor)},
+                                  {direction.x * scaledAcceleration,
+                                   direction.y * scaledAcceleration},
                                   true);
     }
 }
@@ -68,7 +79,7 @@ void CarPhysics::deaccelerate() {
         b2Body_SetLinearVelocity(body, {velocity.x * 0.95f, velocity.y * 0.95f});
         car_state.braking = true;
     } else {
-        b2Vec2 reverseDirection = {-cosf(rad), -sinf(rad)};  // 'angle' es la orientación del auto
+        b2Vec2 reverseDirection = {-cosf(rad), -sinf(rad)};
         float maxReverseSpeed = (BASE_MAX_SPEED * max_speed_factor) * REVERSE_SPEED_FACTOR;
         float reverseSpeed = std::abs(velocity.x * reverseDirection.x + velocity.y * reverseDirection.y);
 
