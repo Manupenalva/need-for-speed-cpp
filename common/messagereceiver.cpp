@@ -23,6 +23,9 @@ ClientMessageDTO MessageReceiver::recv_client_message() {
         case MsgType::SELECT_CAR:
             client_msg.car_id = obtain_uint16();
             break;
+        case MsgType::CHEAT_CODE:
+            client_msg.cheat_code = recv_cheat_code();
+            break;    
         default:
             break;
     }
@@ -61,6 +64,9 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
         case MsgType::SEND_MAP_NUMBER:
             server_msg.map_number = obtain_byte();
             break;
+        case MsgType::SEND_MINIMAP_INFO:
+            server_msg.minimap_info = recv_minimap_info();
+            break;
         default:
             break;
     }
@@ -77,6 +83,22 @@ std::vector<LobbyInfo> MessageReceiver::recv_lobbies_info() {
     return lobbies;
 }
 
+MinimapInfo MessageReceiver::recv_minimap_info() {
+    MinimapInfo minimap_info;
+    uint16_t num_checkpoints = obtain_uint16();
+    minimap_info.checkpoints.resize(num_checkpoints);
+
+    std::generate(minimap_info.checkpoints.begin(), minimap_info.checkpoints.end(),
+                  [this]() { return recv_checkpoint_info(); });
+
+    uint16_t num_arrows = obtain_uint16();
+    minimap_info.arrows.resize(num_arrows);
+
+    std::generate(minimap_info.arrows.begin(), minimap_info.arrows.end(),
+                  [this]() { return recv_checkpoint_arrow(); });
+
+    return minimap_info;
+}
 
 State MessageReceiver::recv_state_update() {
     State state;
@@ -210,6 +232,11 @@ PlayerState MessageReceiver::recv_player_state() {
     player_state.next_penalization_time = obtain_uint32();
     player_state.car_properties = recv_car_properties();
     return player_state;
+}
+
+CheatCode MessageReceiver::recv_cheat_code() {
+    uint8_t cheat_code_byte = obtain_byte();
+    return static_cast<CheatCode>(cheat_code_byte);
 }
 
 uint32_t MessageReceiver::obtain_uint32() {

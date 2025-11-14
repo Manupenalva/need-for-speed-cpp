@@ -31,4 +31,5 @@ target_sources(taller_common
         carProperties.h
         intervalState.h
         playerState.h
+        minimapInfo.h
     )

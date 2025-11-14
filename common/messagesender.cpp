@@ -34,6 +34,9 @@ void MessageSender::send_message(const ServerMessageDTO& msg) {
         case MsgType::SEND_MAP_NUMBER:
             serialize_map_number(msg.map_number);
             break;
+        case MsgType::SEND_MINIMAP_INFO:
+            serialize_minimap_info(msg.minimap_info);
+            break;
         default:
             buffer.resize(CODE_BYTES);
             offset = 0;
@@ -55,6 +58,9 @@ void MessageSender::send_message(const ClientMessageDTO& msg) {
             break;
         case MsgType::SELECT_CAR:
             serialize_car_number(msg.car_id);
+            break;
+        case MsgType::CHEAT_CODE:
+            serialize_cheat_code(msg.cheat_code);
             break;
         default:
             buffer.resize(CODE_BYTES);
@@ -150,6 +156,14 @@ void MessageSender::serialize_car_number(const uint16_t car_id) {
     append_uint16(car_id);
 }
 
+void MessageSender::serialize_cheat_code(const CheatCode cheat_code) {
+    buffer.resize(CODE_BYTES * 2);
+    offset = 0;
+    MsgType type = MsgType::CHEAT_CODE;
+    append_bytes(&type, CODE_BYTES);
+    uint8_t cheat_code_byte = static_cast<uint8_t>(cheat_code);
+    append_bytes(&cheat_code_byte, 1);
+}
 
 // void MessageSender::serialize_lobbies(const std::vector<LobbyInfo>& lobbies) {
 
@@ -182,6 +196,23 @@ void MessageSender::serialize_client_id(int id) {
     MsgType type = MsgType::SEND_CLIENT_ID;
     append_bytes(&type, CODE_BYTES);
     append_uint16(static_cast<uint16_t>(id));
+}
+
+void MessageSender::serialize_minimap_info(const MinimapInfo& minimap_info) {
+    buffer.resize(CODE_BYTES + 2 * LENGTH_BYTES + 
+                  minimap_info.checkpoints.size() * CHECKPOINT_INFO_BYTES +
+                  minimap_info.arrows.size() * CHECKPOINT_ARROW_BYTES);
+    offset = 0;
+    MsgType type = MsgType::SEND_MINIMAP_INFO;
+    append_bytes(&type, CODE_BYTES);
+    append_uint16(static_cast<uint16_t>(minimap_info.checkpoints.size()));
+    for (const auto& checkpoint : minimap_info.checkpoints) {
+        append_checkpoint_info(checkpoint);
+    }
+    append_uint16(static_cast<uint16_t>(minimap_info.arrows.size()));
+    for (const auto& arrow : minimap_info.arrows) {
+        append_checkpoint_arrow(arrow);
+    }
 }
 
 void MessageSender::append_car_state(const CarState& car) {
