@@ -22,7 +22,6 @@ bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int grid
         writeElements(out, scene, "road");
         writeElements(out, scene, "checkpoint");
         writeElements(out, scene, "hint");
-        writeElements(out, scene, "NPC");
 
         out << YAML::EndMap;
 
@@ -99,7 +98,6 @@ bool YamlConfig::load(const QString& path) {
         addElements(config, "road");
         addElements(config, "checkpoint");
         addElements(config, "hint");
-        addElements(config, "NPC");
         return true;
     } catch (const YAML::Exception& e) {
         qWarning("Error al leer el YAML: %s", e.what());

@@ -55,7 +55,8 @@ void EditorGame::setUpTools() {
     dragMovement(ui->toolRoad, "road", 0, "../editor/imgs/road.png");
     dragMovement(ui->toolRoad1, "road1", 0, "../editor/imgs/road1.png");
     dragMovement(ui->toolRoad2, "road2", 0, "../editor/imgs/road2.png");
-    dragMovement(ui->toolCheckpoint, "checkpoint", 0, "../editor/imgs/checkpoint.png");
+    dragMovement(ui->toolCheckpointVertical, "checkpoint", 0, "../editor/imgs/checkpoint.png");
+    dragMovement(ui->toolCheckpointHorizontal, "checkpoint", 0, "../editor/imgs/checkpoint.png");
     dragMovement(ui->toolStart, "start", 0, "../editor/imgs/start.png");
     dragMovement(ui->toolStart2, "start2", 0, "../editor/imgs/start2.png");
     dragMovement(ui->toolFinish, "finish", 0, "../editor/imgs/finish.png");
@@ -63,7 +64,6 @@ void EditorGame::setUpTools() {
     dragMovement(ui->toolHintDown, "hint", 270, "../editor/imgs/hint.png");
     dragMovement(ui->toolHintUp, "hint", 90, "../editor/imgs/hint.png");
     dragMovement(ui->toolHintRight, "hint", 180, "../editor/imgs/hint.png");
-    dragMovement(ui->toolNPC, "npc", 0, "../editor/imgs/npc.png");
 }
 
 void EditorGame::dragMovement(QToolButton* btn, const QString& type, int rotDeg,
