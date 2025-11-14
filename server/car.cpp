@@ -9,7 +9,9 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
          const float& drivability, const float& car_long, const float& car_width,
          const int& car_type):
         input_state(),
-        state(id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, car_type, health),
+        state({id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, false,
+               static_cast<uint16_t>(car_type), static_cast<uint16_t>(health)}),
+        bridge_layer(BridgeLayer::NONE),
         car_name(name),
         max_speed(max_speed),
         acceleration(acceleration),
@@ -26,7 +28,6 @@ void Car::add_to_world(b2WorldId world, Position start_position) {
 
     physics = std::make_unique<CarPhysics>(world, state, max_speed, acceleration, mass, drivability,
                                            car_long, car_width);
-    std::cout << "Me agregaron a la carrera, mi velocidad punta es " << max_speed << std::endl;
 }
 
 void Car::update_input(const uint8_t& action) {
@@ -57,6 +58,7 @@ void Car::upgrade_stats(const uint8_t& action) {
     } else if (action == ACT_IMPROVE_ACCELERATION) {
         acceleration += 5;
         current_penalization += 2.0f;
+        std::cout << "Mejoré la aceleración" << std::endl;
     } else if (action == ACT_IMPROVE_HEALTH) {
         state.health += 5;
         current_penalization += 2.0f;
@@ -70,11 +72,12 @@ void Car::upgrade_stats(const uint8_t& action) {
 }
 
 void Car::update_physics() {
+    state.braking = false;
     if (input_state.accelerating) {
         physics->accelerate();
     }
     if (input_state.braking) {
-        physics->brake();
+        physics->deaccelerate();
     }
     if (input_state.turning_left) {
         physics->turn_left();
@@ -87,6 +90,17 @@ void Car::update_physics() {
 void Car::update_position() { physics->update_position(); }
 
 void Car::handle_hits() { physics->handle_hits(); }
+
+// lo dejo comentado por ahora por como se maneja el choque
+void Car::interact_with_bridge(b2ShapeId /*sensor_shape*/, BridgeLayer sensor_layer) {
+    if (bridge_layer == BridgeLayer::NONE) {
+        bridge_layer = sensor_layer;
+    } else if (bridge_layer == sensor_layer) {
+        bridge_layer = BridgeLayer::NONE;
+    } else {
+        physics->handle_crash_with_bridge();
+    }
+}
 
 CarInfo Car::get_state_info() const { return state; }
 
@@ -108,4 +122,12 @@ bool Car::reached_checkpoint(Position next_checkpoint, float celd_width, float c
 void Car::finish_race(float race_time) {
     race_times.push_back(race_time + current_penalization);
     current_penalization = 0.0f;
+    reset_inputs();
+}
+
+void Car::reset_inputs() {
+    input_state.accelerating = false;
+    input_state.braking = false;
+    input_state.turning_left = false;
+    input_state.turning_right = false;
 }

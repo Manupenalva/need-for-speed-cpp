@@ -1,12 +1,13 @@
 #ifndef SOCKET_H
 #define SOCKET_H
+#include "SocketInterface.h"
 
 /*
  * TDA Socket.
  * Por simplificación este TDA se enfocará solamente
  * en sockets IPv4 para TCP.
  * */
-class Socket {
+class Socket: public ISocket {
 private:
     int skt;
     bool closed;
@@ -140,8 +141,8 @@ public:
      * para envio/recibo, lease `sz`.
      *
      * */
-    int sendall(const void* data, unsigned int sz);
-    int recvall(void* data, unsigned int sz);
+    int sendall(const void* data, unsigned int sz) override;
+    int recvall(void* data, unsigned int sz) override;
 
     /*
      * Acepta una conexión entrante y retorna un nuevo socket
@@ -155,15 +156,15 @@ public:
      * Cierra la conexión ya sea parcial o completamente.
      * Lease manpage de `shutdown`
      * */
-    void shutdown(int how);
+    void shutdown(int how) override;
 
     /*
      * Determina si el stream de envio (send) o de recepción (recv)
      * están cerrado (sea por que se hizo un shutdown o por que el
      * otro endpoint hizo un shutdown).
      * */
-    bool is_stream_send_closed() const;
-    bool is_stream_recv_closed() const;
+    bool is_stream_send_closed() const override;
+    bool is_stream_recv_closed() const override;
 
     /*
      * Cierra el socket. El cierre no implica un `shutdown`

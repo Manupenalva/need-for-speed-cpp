@@ -11,6 +11,7 @@
 
 #include "../common/carState.h"
 
+#include "bridge.h"
 #include "carPhysics.h"
 
 
@@ -20,6 +21,8 @@ private:
     CarInfo state;
     std::vector<float> race_times;
     std::unique_ptr<CarPhysics> physics;
+
+    BridgeLayer bridge_layer;
 
     std::string car_name;
     float max_speed;
@@ -45,12 +48,15 @@ public:
     CarInfo get_state_info() const;
     bool reached_checkpoint(Position next_checkpoint, float celd_width, float celd_height);
     void finish_race(float race_time);
+    void reset_inputs();
+    void interact_with_bridge(b2ShapeId sensor_shape, BridgeLayer sensor_layer);
 
     Car(Car&& other) = default;
     Car& operator=(Car&& other) = default;
     Car():
             input_state(false, false, false, false),
-            state(0, 0, 0, 0, 0, 0, false, 0, 0),
+            state(0, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, false, 0, 0),
+            bridge_layer(BridgeLayer::NONE),
             car_name("default"),
             max_speed(0),
             acceleration(0),

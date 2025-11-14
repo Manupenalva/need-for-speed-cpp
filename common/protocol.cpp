@@ -5,14 +5,14 @@
 #include <vector>
 
 Protocol::Protocol(Socket socket):
-        socket(std::move(socket)),
-        sender(MessageSender(this->socket)),
-        receiver(MessageReceiver(this->socket)) {}
+        socket(std::make_unique<Socket>(std::move(socket))),
+        sender(MessageSender(*this->socket)),
+        receiver(MessageReceiver(*this->socket)) {}
 
 Protocol::Protocol(const char* port, const char* ip_address):
-        socket(Socket(ip_address, port)),
-        sender(MessageSender(this->socket)),
-        receiver(MessageReceiver(this->socket)) {}
+        socket(std::make_unique<Socket>(ip_address, port)),
+        sender(MessageSender(*this->socket)),
+        receiver(MessageReceiver(*this->socket)) {}
 
 void Protocol::send_client_message(const ClientMessageDTO& msg) { sender.send_message(msg); }
 
@@ -23,7 +23,7 @@ ClientMessageDTO Protocol::recv_client_message() { return receiver.recv_client_m
 ServerMessageDTO Protocol::recv_server_message() { return receiver.recv_server_message(); }
 
 bool Protocol::socket_alive() {
-    return (!socket.is_stream_send_closed() && !socket.is_stream_recv_closed());
+    return (!socket->is_stream_send_closed() && !socket->is_stream_recv_closed());
 }
 
-void Protocol::shutdown_receive() { socket.shutdown(SHUT_RD); }
+void Protocol::shutdown_receive() { socket->shutdown(SHUT_RD); }

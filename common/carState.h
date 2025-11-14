@@ -18,7 +18,7 @@ struct CarState {
     CheckpointInfo checkpoint{};
     CheckpointArrow checkpoint_arrow{};
     bool crashed = false;
-    bool exploded = false;  // Contra pared
+    bool exploded = false;
     bool under_bridge = false;
     bool braking = false;
     uint16_t car_type = 0;
@@ -44,7 +44,25 @@ struct CarState {
             checkpoint(checkpoint),
             checkpoint_arrow(checkpoint_arrow),
             crashed(crashed),
+            car_type(car_type),
+            health(health) {}
 
+    CarState(uint16_t id, float x, float y, float angle, float speed, uint16_t lap,
+             const CheckpointInfo& checkpoint, const CheckpointArrow& checkpoint_arrow,
+             bool crashed, bool exploded, bool under_bridge, bool braking, uint16_t car_type,
+             uint16_t health):
+            id(id),
+            x(x),
+            y(y),
+            angle(angle),
+            speed(speed),
+            lap(lap),
+            checkpoint(checkpoint),
+            checkpoint_arrow(checkpoint_arrow),
+            crashed(crashed),
+            exploded(exploded),
+            under_bridge(under_bridge),
+            braking(braking),
             car_type(car_type),
             health(health) {}
 };
@@ -58,8 +76,40 @@ struct CarInfo {
     float speed;
     uint16_t lap;
     bool crashed;
+    bool under_bridge;
+    bool braking;
+    bool exploded;
     uint16_t car_type;
     uint16_t health;
+
+    CarInfo(uint16_t id, float x, float y, float angle, float speed, uint16_t lap, bool crashed,
+            bool under_bridge, bool braking, bool exploded, uint16_t car_type, uint16_t health):
+            id(id),
+            x(x),
+            y(y),
+            angle(angle),
+            speed(speed),
+            lap(lap),
+            crashed(crashed),
+            under_bridge(under_bridge),
+            braking(braking),
+            exploded(exploded),
+            car_type(car_type),
+            health(health) {}
+
+    CarInfo(uint16_t id, uint16_t car_type, uint16_t health):
+            id(id),
+            x(0.0f),
+            y(0.0f),
+            angle(0.0f),
+            speed(0.0f),
+            lap(0),
+            crashed(false),
+            under_bridge(false),
+            braking(false),
+            exploded(false),
+            car_type(car_type),
+            health(health) {}
 };
 
 struct CarInputState {
@@ -67,6 +117,15 @@ struct CarInputState {
     bool braking;
     bool turning_right;
     bool turning_left;
+
+    CarInputState(bool accelerating, bool braking, bool turning_right, bool turning_left):
+            accelerating(accelerating),
+            braking(braking),
+            turning_right(turning_right),
+            turning_left(turning_left) {}
+
+    CarInputState():
+            accelerating(false), braking(false), turning_right(false), turning_left(false) {}
 };
 
 struct Position {

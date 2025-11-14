@@ -14,15 +14,18 @@
 #include "car.h"
 #include "corner.h"
 #include "hint.h"
+#include "npc.h"
 #include "playerRaceStatus.h"
 
 class Race {
 private:
     std::unordered_map<uint16_t, Car>& players_cars;
+    std::vector<std::unique_ptr<Npc>> npcs;
     std::unordered_map<uint16_t, PlayerRaceStatus> players_status;
     float celd_width;
     float celd_height;
     std::vector<Corner> corners;
+    std::vector<Bridge> bridges;
     std::vector<Position> start_positions;
     std::vector<Position> checkpoints;
     std::vector<Hint> hints;
@@ -43,8 +46,13 @@ public:
     CheckpointArrow get_next_checkpoint_arrow(const uint16_t car_id);
 
 private:
+    void handle_sensors();
+    void handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* bridge, Car* car);
+
     Race(const Race& other) = delete;
     Race& operator=(const Race& other) = delete;
+
+    void finish_race();
 };
 
 #endif

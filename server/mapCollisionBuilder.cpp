@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#define MAX_CORNER_DISTANCE 500.0f
+#define MAX_CORNER_DISTANCE 600.0f
 
 YAML::Node MapCollisionBuilder::open_file(const std::string& path) {
     try {
@@ -46,8 +46,28 @@ void MapCollisionBuilder::connect_corners(std::vector<Corner>& corners, b2WorldI
     }
 }
 
-std::vector<Corner> MapCollisionBuilder::initialize_map_buildings(const std::string& path,
-                                                                  b2WorldId world) {
+b2ShapeId MapCollisionBuilder::create_body(bool is_sensor, float x, float y, float width,
+                                           float height, b2WorldId world) {
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    bodyDef.type = b2_staticBody;
+    bodyDef.position = {x + (width / 2.0f), y + (height / 2.0f)};
+    b2BodyId body = b2CreateBody(world, &bodyDef);
+    b2Body_EnableContactEvents(body, true);
+    if (!is_sensor)
+        b2Body_EnableContactEvents(body, true);
+
+    b2ShapeDef shapeDef = b2DefaultShapeDef();
+    b2Polygon box = b2MakeBox((width / 2.0f), (height / 2.0f));
+    if (is_sensor)
+        shapeDef.isSensor = true;
+    b2ShapeId shape = b2CreatePolygonShape(body, &shapeDef, &box);
+    b2Shape_EnableContactEvents(shape, true);
+    b2Shape_EnableHitEvents(shape, true);
+
+    return shape;
+}
+
+MapData MapCollisionBuilder::initialize_map_buildings(const std::string& path, b2WorldId world) {
     try {
         YAML::Node map_collisions = open_file(path);
         if (!map_collisions) {
@@ -55,7 +75,10 @@ std::vector<Corner> MapCollisionBuilder::initialize_map_buildings(const std::str
             return {};
         }
 
-        std::vector<Corner> corners;
+        int bridges_amount = map_collisions["bridges_amount"].as<int>();
+
+        std::vector<Bridge> bridges(bridges_amount);
+        MapData map_data;
 
         for (const auto& layer: map_collisions["layers"]) {
             if (layer["name"].as<std::string>() == "Colisiones") {
@@ -80,6 +103,30 @@ std::vector<Corner> MapCollisionBuilder::initialize_map_buildings(const std::str
                 }
             }
 
+            if (layer["name"].as<std::string>() == "Puentes") {
+                for (const auto& object: layer["objects"]) {
+
+                    int bridge_id = object["type"].as<int>();
+                    std::string side = object["name"].as<std::string>();
+
+                    float x = object["x"].as<float>() - 25.0f;
+                    float y = object["y"].as<float>() - 25.0f;
+                    float width = object["width"].as<float>();
+                    float height = object["height"].as<float>();
+
+                    b2ShapeId sensor = create_body(true, x, y, width, height, world);
+
+                    if (side == "up 1")
+                        bridges[bridge_id].sensor1_up = sensor;
+                    else if (side == "up 2")
+                        bridges[bridge_id].sensor2_up = sensor;
+                    else if (side == "down 1")
+                        bridges[bridge_id].sensor1_down = sensor;
+                    else if (side == "down 2")
+                        bridges[bridge_id].sensor2_down = sensor;
+                }
+            }
+
 
             if (layer["name"].as<std::string>() == "Esquinas") {
                 int current_corner_id = 0;
@@ -88,14 +135,30 @@ std::vector<Corner> MapCollisionBuilder::initialize_map_buildings(const std::str
                     corner.id = current_corner_id;
                     corner.position.x = object["x"].as<float>() - 25.0f;
                     corner.position.y = object["y"].as<float>() - 25.0f;
-                    corners.push_back(corner);
-                    corner.id = current_corner_id++;
+                    map_data.corners.push_back(corner);
+                    current_corner_id++;
                 }
-                connect_corners(corners, world);
+                connect_corners(map_data.corners, world);
+            }
+
+            if (layer["name"].as<std::string>() == "Npcs") {
+                for (const auto& object: layer["objects"]) {
+                    Position position;
+                    position.x = object["x"].as<float>() - 25.0f;
+                    position.y = object["y"].as<float>() - 25.0f;
+                    map_data.spawn_positions.push_back(position);
+                }
             }
         }
 
-        return corners;
+        for (auto& bridge: bridges) {
+            b2Shape_SetUserData(bridge.sensor1_up, &bridge);
+            b2Shape_SetUserData(bridge.sensor2_up, &bridge);
+            b2Shape_SetUserData(bridge.sensor1_down, &bridge);
+            b2Shape_SetUserData(bridge.sensor2_down, &bridge);
+        }
+        map_data.bridges = bridges;
+        return map_data;
     } catch (const std::exception& e) {
         std::cerr << "Error building the map with box2d: " << e.what() << std::endl;
         throw;

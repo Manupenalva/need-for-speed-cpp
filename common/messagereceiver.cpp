@@ -5,7 +5,7 @@
 
 #include <netinet/in.h>
 
-MessageReceiver::MessageReceiver(Socket& socket): socket(socket) {}
+MessageReceiver::MessageReceiver(ISocket& socket): socket(socket) {}
 
 ClientMessageDTO MessageReceiver::recv_client_message() {
     MsgType type;
@@ -120,6 +120,8 @@ CarState MessageReceiver::recv_car_state() {
     car.checkpoint_arrow = recv_checkpoint_arrow();
     uint8_t crashed_byte = obtain_byte();
     car.crashed = (crashed_byte != 0);
+    uint8_t exploded_byte = obtain_byte();
+    car.exploded = (exploded_byte != 0);
     uint8_t under_bridge_byte = obtain_byte();
     car.under_bridge = (under_bridge_byte != 0);
     uint8_t braking_byte = obtain_byte();
@@ -201,7 +203,7 @@ CarProperties MessageReceiver::recv_car_properties() {
 
 PlayerState MessageReceiver::recv_player_state() {
     PlayerState player_state;
-    player_state.player_id = obtain_byte();
+    player_state.player_id = obtain_uint16();
     player_state.ready = obtain_byte() != 0;
     player_state.previous_position = obtain_byte();
     player_state.result_time = obtain_uint32();

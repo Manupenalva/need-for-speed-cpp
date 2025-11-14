@@ -17,6 +17,9 @@
 #include "mapCollisionBuilder.h"
 #include "raceBuilder.h"
 #define TARGET_FPS 60
+#define TARGET_FPS_INTERVAL 30
+#define FRAME_INTERVAL_TO_CLOSE 300
+#define CLOSED_INTERVAL_TIME 10  // segundos
 
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
@@ -73,23 +76,29 @@ void Gameloop::receive_selected_cars() {
                 return;
             }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 }
 
 void Gameloop::handle_upgrades_phase() {
-    std::this_thread::sleep_for(std::chrono::seconds(10));
-
-    std::shared_ptr<ClientHandlerMessage> base_msg;
-    while (user_commands_queue->try_pop(base_msg) && should_keep_running()) {
-        if (base_msg->get_msg_type() != MsgType::DRIVING_EVENT) {
-            continue;
+    GameLoopTimer timer(TARGET_FPS);
+    int frames_interval = 0;
+    uint32_t iterations_behind = 1;
+    while (should_keep_running() && frames_interval < FRAME_INTERVAL_TO_CLOSE) {
+        std::shared_ptr<ClientHandlerMessage> base_msg;
+        while (user_commands_queue->try_pop(base_msg) && should_keep_running()) {
+            if (base_msg->get_msg_type() != MsgType::DRIVING_EVENT) {
+                continue;
+            }
+            std::shared_ptr<ActionMessage> msg = std::static_pointer_cast<ActionMessage>(base_msg);
+            for (const auto& action: msg->get_actions()) {
+                upgrade_car_stats(msg->get_client_id(), action);
+            }
         }
-        std::shared_ptr<ActionMessage> msg = std::static_pointer_cast<ActionMessage>(base_msg);
-        for (const auto& action: msg->get_actions()) {
-            upgrade_car_stats(msg->get_client_id(), action);
-        }
+        frames_interval++;
+        timer.sleep_and_calc_next_it(iterations_behind);
     }
+
+    // broadcast_event(MsgType::INTERVAL_CLOSED);
 }
 
 void Gameloop::handle_race(const int& race_index) {
@@ -136,6 +145,7 @@ void Gameloop::run() {
         handle_race(i);
         if (!should_keep_running())
             return;
+        std::this_thread::sleep_for(std::chrono::seconds(CLOSED_INTERVAL_TIME));
     }
     broadcast_event(MsgType::GAME_END);
 }
