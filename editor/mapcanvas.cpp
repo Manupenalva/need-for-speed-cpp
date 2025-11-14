@@ -42,15 +42,15 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
         bool ok;
         QString fileName = QInputDialog::getText(
                 this, "Save Map", "Enter map name:", QLineEdit::Normal, currentCityName, &ok);
+        if (!ok || fileName.isEmpty()) {
+            return;
+        }
         if (controller->countItemsOfType("start") != MAX_PLAYERS) {
             QMessageBox::warning(this, "Starts missing", "It is neccessary to be 8 starts points.");
             return;
         }
         if (controller->countItemsOfType("finish") != MAX_FINISH) {
             QMessageBox::warning(this, "Finish missing", "It is neccessary to be 1 finish line.");
-            return;
-        }
-        if (!ok || fileName.isEmpty()) {
             return;
         }
         QString filePath = QString("../maps/%1.yaml").arg(fileName);
