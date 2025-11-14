@@ -16,7 +16,6 @@
 #include <QVBoxLayout>
 
 #include "yaml_config.h"
-#include "editor_constants.h"
 
 MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -201,6 +200,30 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
             QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
             if (selecting && keyEvent->key() == Qt::Key_Escape) {
                 selecting = false;
+                return true;
+            }
+            if (keyEvent->key() == Qt::Key_Plus) {       
+                double newZoom = currentZoom + ZOOM_SCALE;
+                if (newZoom > MAX_ZOOM)
+                    newZoom = MAX_ZOOM;
+
+                double factor = newZoom / currentZoom;
+                if (factor != 1.0) {
+                    view->scale(factor, factor);
+                    currentZoom = newZoom;
+                }
+                return true;
+            }
+            if (keyEvent->key() == Qt::Key_Minus) { 
+                double newZoom = currentZoom - ZOOM_SCALE;
+                if (newZoom < MIN_ZOOM)
+                    newZoom = MIN_ZOOM;
+
+                double factor = newZoom / currentZoom;
+                if (factor != 1.0) {
+                    view->scale(factor, factor);
+                    currentZoom = newZoom;
+                }
                 return true;
             }
         }

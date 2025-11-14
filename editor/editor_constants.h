@@ -31,6 +31,10 @@
 #define START_RIGHT 270
 #define START_DOWN 180
 #define START_UP 0
+#define MIN_ZOOM 0.3
+#define MAX_ZOOM 3.0
+#define ZOOM_SCALE 0.1
+#define INITIAL_ZOOM 1.0
 
 #endif
 
