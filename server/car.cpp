@@ -9,7 +9,7 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
          const float& drivability, const float& car_long, const float& car_width,
          const int& car_type):
         input_state(),
-        state(id, static_cast<uint16_t>(health), static_cast<uint16_t>(car_type)),
+        state({id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, false, static_cast<uint16_t>(car_type), static_cast<uint16_t>(health)}),
         car_name(name),
         max_speed(max_speed),
         acceleration(acceleration),
@@ -26,7 +26,6 @@ void Car::add_to_world(b2WorldId world, Position start_position) {
 
     physics = std::make_unique<CarPhysics>(world, state, max_speed, acceleration, mass, drivability,
                                            car_long, car_width);
-    std::cout << "Me agregaron a la carrera, mi velocidad punta es " << max_speed << std::endl;
 }
 
 void Car::update_input(const uint8_t& action) {
@@ -57,6 +56,7 @@ void Car::upgrade_stats(const uint8_t& action) {
     } else if (action == ACT_IMPROVE_ACCELERATION) {
         acceleration += 5;
         current_penalization += 2.0f;
+        std::cout << "Mejoré la aceleración" << std::endl;
     } else if (action == ACT_IMPROVE_HEALTH) {
         state.health += 5;
         current_penalization += 2.0f;
