@@ -175,7 +175,7 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
                 }
                 return true;
             }
-            if (mouseEvent->button() == Qt::RightButton) {
+            if (mouseEvent->button() == Qt::RightButton && !selecting) {
                 QGraphicsItem* item =
                         scene->itemAt(view->mapToScene(mouseEvent->pos()), QTransform());
                 if (item->data(0).toString().contains("checkpoint", Qt::CaseInsensitive)) {
