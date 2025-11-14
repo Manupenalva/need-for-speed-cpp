@@ -5,12 +5,12 @@
 #include <vector>
 
 #include "carProperties.h"
+#include "cheatcodes.h"
 #include "intervalState.h"
 #include "lobbyinfo.h"
+#include "minimapInfo.h"
 #include "msgType.h"
 #include "state.h"
-#include "cheatcodes.h"
-#include "minimapInfo.h"
 
 // Mensaje que manda el cliente al servidor
 struct ClientMessageDTO {
@@ -20,7 +20,12 @@ struct ClientMessageDTO {
     uint16_t car_id;
     CheatCode cheat_code;
 
-    ClientMessageDTO(): type(MsgType::INVALID), events(), lobby_id(-1), car_id(0), cheat_code(CheatCode::INVALID_CHEAT) {}
+    ClientMessageDTO():
+            type(MsgType::INVALID),
+            events(),
+            lobby_id(-1),
+            car_id(0),
+            cheat_code(CheatCode::INVALID_CHEAT) {}
 };
 
 

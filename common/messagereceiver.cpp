@@ -25,7 +25,7 @@ ClientMessageDTO MessageReceiver::recv_client_message() {
             break;
         case MsgType::CHEAT_CODE:
             client_msg.cheat_code = recv_cheat_code();
-            break;    
+            break;
         default:
             break;
     }

@@ -22,4 +22,6 @@ int ConfigReader::get_window_height() { return config["window"]["height"].as<int
 
 int ConfigReader::get_map_id() { return config["map"]["id"].as<int>(); }
 
+int ConfigReader::get_map_wide() { return config["map"]["wide"].as<int>(); }
+
 int ConfigReader::get_music_volume() { return config["music"]["volume"].as<int>(); }

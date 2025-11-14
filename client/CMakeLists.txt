@@ -20,6 +20,7 @@ target_sources(taller_client
     drawer/checkpoint_drawer.cpp
     drawer/upgradeScreen_drawer.cpp
     drawer/animations/animations_drawer.cpp
+    drawer/minimap/minimap_drawer.cpp
     lobby/lobby.cpp
     events/keyDown_handler.cpp
     events/keyUp_handler.cpp
@@ -59,6 +60,8 @@ target_sources(taller_client
     drawer/animations/fire_drawer.h
     drawer/animations/burst_drawer.h
     drawer/animations/animations_drawer.h
+    drawer/minimap/minimap_drawer.h
+    drawer/minimap/mapInfoDTO.h
     lobby/lobby.h
     config/config_reader.h
     config/constants.h
