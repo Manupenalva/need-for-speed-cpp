@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Lobby</class>
+ <widget class="QMainWindow" name="Lobby">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>586</width>
+    <height>422</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Need for Speed 2D - Lobby</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">#centralwidget {
+    border-image: url(&quot;../client/lobby/lobby.png&quot;) 0 0 0 0 stretch stretch;
+}
+
+#centralwidget &gt; * {
+    background: transparent;
+}
+
+QStackedWidget#stackedWidget {
+    background: transparent;
+}
+</string>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_central">
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="pageMenu">
+       <layout class="QVBoxLayout" name="verticalLayout_menu">
+        <item>
+         <spacer name="verticalSpacer_menu_top">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_menu_mid">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="createGameButton">
+          <property name="cursor">
+           <cursorShape>ArrowCursor</cursorShape>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton#createGameButton {
+    font: 800 16pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);                 
+    background-color: rgba(0, 0, 0, 190);  
+    border: 2px solid rgba(255, 60, 80, 220);
+    border-radius: 18px;
+    padding: 8px 30px;
+}
+
+QPushButton#createGameButton:hover {
+    background-color: rgba(255, 60, 80, 50);
+    border: 2px solid rgb(255, 60, 80);
+}
+
+QPushButton#createGameButton:pressed{
+    background-color: rgb(255, 60, 80);
+    color: black;
+}
+</string>
+          </property>
+          <property name="text">
+           <string>New Game</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="joinGameButton">
+          <property name="styleSheet">
+           <string notr="true">QPushButton#joinGameButton {
+    font: 800 16pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);                 
+    background-color: rgba(0, 0, 0, 190);  
+    border: 2px solid rgba(255, 60, 80, 220);
+    border-radius: 18px;
+    padding: 8px 30px;
+}
+
+QPushButton#joinGameButton:hover {
+    background-color: rgba(255, 60, 80, 50);
+    border: 2px solid rgb(255, 60, 80);
+}
+
+QPushButton#joinGameButton:pressed{
+    background-color: rgb(255, 60, 80);
+    color: black;
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Join Game</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pageConnect">
+       <layout class="QVBoxLayout" name="verticalLayout_connect">
+        <item>
+         <spacer name="verticalSpacer_connect_top">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="raceCodeLabel">
+          <property name="styleSheet">
+           <string notr="true">QLabel#raceCodeLabel {
+    font: 700 12pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);  
+    background-color: rgba(0, 0, 0, 200);
+    border: 1px solid rgba(255, 60, 80, 180);
+    border-radius: 10px;
+    padding: 4px 10px;
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Race code:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="raceCodeLineEdit">
+          <property name="styleSheet">
+           <string notr="true">QLineEdit#raceCodeLineEdit {
+    background-color: rgba(0, 0, 0, 200);
+    border: 2px solid rgba(255, 60, 80, 220);
+    border-radius: 12px;
+    padding: 6px 10px;
+    color: rgb(230, 230, 230);
+    font: 600 11pt &quot;Ubuntu Sans&quot;;
+}
+
+QLineEdit#raceCodeLineEdit:focus {
+    border: 2px solid rgb(255, 60, 80);
+}
+</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="connectButton">
+          <property name="styleSheet">
+           <string notr="true">QPushButton#connectButton {
+    font: 800 13pt &quot;Ubuntu Sans&quot;;
+    color: black;
+    background-color: rgb(0, 230, 120);   
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 14px;
+    padding: 6px 24px;
+}
+
+QPushButton#connectButton:hover {
+    background-color: rgb(0, 255, 140);
+}
+
+QPushButton#connectButton:pressed {
+    background-color: rgb(0, 200, 100);
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Connect</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="backConnectButton">
+          <property name="styleSheet">
+           <string notr="true">QPushButton#backConnectButton {
+    font: 700 12pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);
+    background-color: rgba(0, 0, 0, 190);
+    border: 2px solid rgba(255, 60, 80, 220);
+    border-radius: 14px;
+    padding: 6px 20px;
+}
+
+QPushButton#backConnectButton:hover {
+    background-color: rgba(255, 60, 80, 50);
+}
+
+QPushButton#backConnectButton:pressed {
+    background-color: rgb(255, 60, 80);
+    color: black;
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Back</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_connect_bottom">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pageCarSelection">
+       <layout class="QVBoxLayout" name="verticalLayout_car">
+        <item>
+         <widget class="QLabel" name="carTitleLabel">
+          <property name="styleSheet">
+           <string notr="true">QLabel#carTitleLabel {
+    font: 800 20pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80); 
+    background-color: rgba(0, 0, 0, 200);   
+    border: 2px solid rgba(255, 60, 80, 220);
+    border-radius: 14px;
+    padding: 6px 18px;
+    qproperty-alignment: AlignCenter;
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Choose your car</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListWidget" name="carListWidget">
+          <property name="styleSheet">
+           <string notr="true">QListWidget#carListWidget {
+    background-color: rgba(0, 0, 0, 180);
+    border: 2px solid rgba(255, 60, 80, 220);
+    border-radius: 12px;
+    padding: 6px;
+    color: rgb(230, 230, 230);
+    font: 600 11pt &quot;Ubuntu Sans&quot;;
+}
+
+QListWidget#carListWidget::item {
+    padding: 6px;
+}
+
+QListWidget#carListWidget::item:selected {
+    background-color: rgba(255, 60, 80, 160);
+    color: white;
+}
+
+QListWidget#carListWidget::item:focus {
+    outline: none;
+}
+</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="carPreviewLabel">
+          <property name="styleSheet">
+           <string notr="true">QLabel#carPreviewLabel {
+    background-color: rgba(0, 0, 0, 200);
+    border: 2px solid rgba(255, 60, 80, 220);
+    border-radius: 12px;
+    padding: 8px 12px;
+    color: rgb(230, 230, 230);
+    font: 500 10pt &quot;Ubuntu Sans&quot;;
+}</string>
+          </property>
+          <property name="text">
+           <string>Select a car to see details</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="confirmButton">
+          <property name="styleSheet">
+           <string notr="true">QPushButton#confirmButton {
+    font: 700 12pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);
+    background-color: rgba(0, 0, 0, 190);
+    border: 2px solid rgba(255, 60, 80, 220);
+    border-radius: 14px;
+    padding: 6px 20px;
+}
+
+QPushButton#confirmButton:hover{
+    background-color: rgba(255, 60, 80, 50);
+}
+
+QPushButton#confirmButton:pressed{
+    background-color: rgb(255, 60, 80);
+    color: black;
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Confirm</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="backCarButton">
+          <property name="styleSheet">
+           <string notr="true">QPushButton#backCarButton {
+    font: 700 12pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);
+    background-color: rgba(0, 0, 0, 190);
+    border: 2px solid rgba(255, 60, 80, 220);
+    border-radius: 14px;
+    padding: 6px 20px;
+}
+
+QPushButton#backCarButton:hover {
+    background-color: rgba(255, 60, 80, 50);
+}
+
+QPushButton#backCarButton:pressed {
+    background-color: rgb(255, 60, 80);
+    color: black;
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Back</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pageStart">
+       <layout class="QVBoxLayout" name="verticalLayout_start">
+        <item>
+         <widget class="QLabel" name="startTitleLabel">
+          <property name="styleSheet">
+           <string notr="true">QLabel#startTitleLabel {
+    font: 800 20pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);   
+    background-color: rgba(0, 0, 0, 200); 
+    border: 2px solid rgba(255, 60, 80, 220);
+    border-radius: 14px;
+    padding: 6px 18px;
+    qproperty-alignment: AlignCenter;
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Lobby Start</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="playersLabel">
+          <property name="styleSheet">
+           <string notr="true">QLabel#playersLabel {
+    background-color: rgba(0, 0, 0, 200);
+    border: 1px solid rgba(255, 60, 80, 160);
+    border-radius: 10px;
+    padding: 4px 10px;
+    color: rgb(230, 230, 230);
+    font: 600 11pt &quot;Ubuntu Sans&quot;;
+    qproperty-alignment: AlignCenter;
+}</string>
+          </property>
+          <property name="text">
+           <string>Players: 1 / ?</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="gameCodeLabel">
+          <property name="styleSheet">
+           <string notr="true">QLabel#gameCodeLabel {
+    background-color: rgba(0, 0, 0, 200);
+    border: 1px solid rgba(255, 60, 80, 160);
+    border-radius: 10px;
+    padding: 4px 10px;
+    color: rgb(230, 230, 230);
+    font: 600 11pt &quot;Ubuntu Sans&quot;;
+    qproperty-alignment: AlignCenter;
+}</string>
+          </property>
+          <property name="text">
+           <string>Game code: ?</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="startButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton#startButton {
+    font: 800 14pt &quot;Ubuntu Sans&quot;;
+    color: black;
+    background-color: rgb(0, 230, 120);  
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 16px;
+    padding: 6px 26px;
+}
+
+QPushButton#startButton:disabled {
+    background-color: rgba(0, 230, 120, 80);
+    border: 2px solid rgba(255, 255, 255, 80);
+    color: rgba(0, 0, 0, 120);
+}
+
+QPushButton#startButton:hover:!disabled {
+    background-color: rgb(0, 255, 140);
+}
+
+QPushButton#startButton:pressed:!disabled {
+    background-color: rgb(0, 200, 100);
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Start</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="backStartButton">
+          <property name="styleSheet">
+           <string notr="true">QPushButton#backStartButton {
+    font: 700 12pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);
+    background-color: rgba(0, 0, 0, 190);
+    border: 2px solid rgba(255, 60, 80, 220);
+    border-radius: 14px;
+    padding: 6px 20px;
+}
+
+QPushButton#backStartButton:hover {
+    background-color: rgba(255, 60, 80, 50);
+}
+
+QPushButton#backStartButton:pressed {
+    background-color: rgb(255, 60, 80);
+    color: black;
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Back</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>586</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

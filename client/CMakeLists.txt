@@ -19,6 +19,7 @@ target_sources(taller_client
     drawer/checkpoint_drawer.cpp
     drawer/upgradeScreen_drawer.cpp
     lobby/lobby.cpp
+    lobby/lobby.ui
     events/keyDown_handler.cpp
     events/keyUp_handler.cpp
     events/quit_handler.cpp
