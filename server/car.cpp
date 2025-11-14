@@ -9,7 +9,7 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
          const float& drivability, const float& car_long, const float& car_width,
          const int& car_type):
         input_state(),
-        state({id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, false, static_cast<uint16_t>(car_type), static_cast<uint16_t>(health)}),
+        state(id, static_cast<uint16_t>(health), static_cast<uint16_t>(car_type)),
         car_name(name),
         max_speed(max_speed),
         acceleration(acceleration),

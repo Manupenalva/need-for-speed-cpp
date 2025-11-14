@@ -64,6 +64,7 @@ struct CarState {
             braking(braking),
             car_type(car_type),
             health(health) {}
+
 };
 
 // esto podría ir dentro de CarState para no repetir.
@@ -95,6 +96,21 @@ struct CarInfo {
             exploded(exploded),
             car_type(car_type),
             health(health) {}
+
+        CarInfo(uint16_t id, uint16_t car_type, uint16_t health):
+                id(id),
+                x(0.0f),
+                y(0.0f),
+                angle(0.0f),
+                speed(0.0f),
+                lap(0),
+                crashed(false),
+                under_bridge(false),
+                braking(false),
+                exploded(false),
+                car_type(car_type),
+                health(health) {}
+
 };
 
 struct CarInputState {

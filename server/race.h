@@ -47,6 +47,8 @@ public:
 private:
     Race(const Race& other) = delete;
     Race& operator=(const Race& other) = delete;
+
+    void finish_race();
 };
 
 #endif

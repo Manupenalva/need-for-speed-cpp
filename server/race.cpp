@@ -85,6 +85,9 @@ void Race::update_state() {
     float timeStep = 1.0f / 60.0f;
     b2World_Step(world, timeStep, 3);
     current_time += timeStep;
+    if (current_time > MAX_TIME) {
+        finish_race();
+    }
 
     for (auto& [id, car]: players_cars) {
         if (!players_status[id].has_finished)
@@ -126,17 +129,9 @@ ServerMessageDTO Race::get_broadcast_message(float frames) {
         CheckpointInfo checkpoint_info = get_next_checkpoint_info(id);
         CheckpointArrow checkpoint_arrow = get_next_checkpoint_arrow(id);
 
-        CarState state = {id,
-                          car_info.x,
-                          car_info.y,
-                          car_info.angle,
-                          car_info.speed,
-                          car_info.lap,
-                          checkpoint_info,
-                          checkpoint_arrow,
-                          car_info.crashed,
-                          car_info.car_type,
-                          car_info.health};
+        CarState state(id, car_info.x, car_info.y, car_info.angle, car_info.speed, car_info.lap,
+                       checkpoint_info, checkpoint_arrow, car_info.crashed, car_info.exploded,
+                       car_info.under_bridge, car_info.braking, car_info.car_type, car_info.health);
 
         cars.push_back(state);
         num_cars++;
@@ -155,6 +150,15 @@ ServerMessageDTO Race::get_broadcast_message(float frames) {
     msg.state = game_state;
 
     return msg;
+}
+
+void Race::finish_race() {
+    for (auto& [id, status]: players_status) {
+        if (!status.has_finished) {
+            status.has_finished = true;
+            players_cars[id].finish_race(MAX_TIME);
+        }
+    }
 }
 
 bool Race::is_finished() {

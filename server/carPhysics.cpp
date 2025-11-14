@@ -52,21 +52,16 @@ void CarPhysics::accelerate() {
     // std::cout << "Mi velocidad es " << speed << std::endl;
 
     float max_speed = BASE_MAX_SPEED * max_speed_factor;
-    float speedRatio = max_speed / speed;
-    if (speed < MIN_SPEED) {
-        speedRatio = 0.0f;
-    } else if (speed >= max_speed) {
-        speedRatio = 0.0f;
-    } else {
-        speedRatio = (max_speed - speed) / max_speed;
+    float speedRatio = 0.0f;
+    if (speed >= MIN_SPEED) {
+        speedRatio = max_speed / speed;
     }
-    //Aceleracion basada en la masa y velocidad actual
-    float scaledAcceleration = (1.0f + speedRatio) * BASE_ACCELERATION * acceleration_factor * (1.0f + mass_factor);
+    // Aceleracion basada en la masa y velocidad actual
+    float scaledAcceleration =
+            (1.0f + speedRatio) * BASE_ACCELERATION * acceleration_factor * (1.0f + mass_factor);
     if (speed < max_speed) {
-        b2Body_ApplyForceToCenter(body,
-                                  {direction.x * scaledAcceleration,
-                                   direction.y * scaledAcceleration},
-                                  true);
+        b2Body_ApplyForceToCenter(
+                body, {direction.x * scaledAcceleration, direction.y * scaledAcceleration}, true);
     }
 }
 
@@ -81,13 +76,16 @@ void CarPhysics::deaccelerate() {
     } else {
         b2Vec2 reverseDirection = {-cosf(rad), -sinf(rad)};
         float maxReverseSpeed = (BASE_MAX_SPEED * max_speed_factor) * REVERSE_SPEED_FACTOR;
-        float reverseSpeed = std::abs(velocity.x * reverseDirection.x + velocity.y * reverseDirection.y);
+        float reverseSpeed =
+                std::abs(velocity.x * reverseDirection.x + velocity.y * reverseDirection.y);
 
         if (reverseSpeed < maxReverseSpeed) {
             b2Body_ApplyForceToCenter(
                     body,
-                    {reverseDirection.x * (BASE_ACCELERATION * acceleration_factor * REVERSE_ACCELERATION_FACTOR),
-                     reverseDirection.y * (BASE_ACCELERATION * acceleration_factor * REVERSE_ACCELERATION_FACTOR)},
+                    {reverseDirection.x * (BASE_ACCELERATION * acceleration_factor *
+                                           REVERSE_ACCELERATION_FACTOR),
+                     reverseDirection.y * (BASE_ACCELERATION * acceleration_factor *
+                                           REVERSE_ACCELERATION_FACTOR)},
                     true);
         }
     }
