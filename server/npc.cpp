@@ -12,7 +12,7 @@ struct RaycastContext {
 };
 
 Npc::Npc(const Position& position, std::vector<Corner>& corners, b2WorldId world):
-        state(position.x, position.y, 0.0f, 1),
+        state(position.x, position.y, 0.0f, 1, false),
         world(world),
         corners(corners),
         current_corner_id(0),
