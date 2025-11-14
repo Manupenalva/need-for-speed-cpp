@@ -65,6 +65,12 @@ void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene,
             element["id"] = item->data(2).toInt();
         }
         if (elementType == "checkpoint") {
+            int rotation = item->data(1).toInt();
+            if (rotation == 0) {
+                element["rotation"] = "vertical";
+            } else {
+                element["rotation"] = "horizontal";
+            }
             element["id"] = item->data(2).toInt();
         }
         elements.push_back(element);
@@ -123,6 +129,13 @@ void YamlConfig::addElements(const YAML::Node& config, const QString& elementTyp
                     rotationDeg = 90;
                 else
                     rotationDeg = 270;
+            }
+            if (elementType == "checkpoint" && elem["rotation"]) {
+                QString rotationStr = QString::fromStdString(elem["rotation"].as<std::string>());
+                if (rotationStr == "vertical")
+                    rotationDeg = 0;
+                else
+                    rotationDeg = 90;
             }
             if (elementType == "checkpoint" || elementType == "hint") {
                 id = elem["id"].as<int>();

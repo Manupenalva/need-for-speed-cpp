@@ -230,11 +230,11 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>NPC</string>
+                 <string>Checkpoint</string>
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>../editor/imgs/npc.png</normaloff>../editor/imgs/npc.png</iconset>
+                  <normaloff>../editor/imgs/checkpoint.png</normaloff>../editor/imgs/checkpoint.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
