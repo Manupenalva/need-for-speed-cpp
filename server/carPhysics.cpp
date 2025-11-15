@@ -190,9 +190,10 @@ void CarPhysics::handle_hit_event(const b2ContactHitEvent& event) {
 }
 
 void CarPhysics::handle_crash_with_bridge() {
-    // por ahora si choca con un puente estando arriba frena y listo
-    b2Body_SetLinearVelocity(body, {0.0f, 0.0f});
-    b2Body_SetAngularVelocity(body, 0.0f);
+    b2Vec2 velocity = b2Body_GetLinearVelocity(body);
+
+    b2Vec2 impact_velocity = {-velocity.x, -velocity.y};
+    b2Body_SetLinearVelocity(body, impact_velocity);
 }
 
 void CarPhysics::handle_crash(const b2Vec2& normal, const float impact_force) {
