@@ -171,7 +171,6 @@ void Gameloop::run() {
     broadcast_event(MsgType::GAME_START);
     receive_selected_cars();
     initialize_races();
-    std::cout << "Arrancando la carrera" << std::endl;
     for (size_t i = 0; i < races.size(); i++) {
         handle_race(i);
         if (!should_keep_running())

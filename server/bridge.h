@@ -3,7 +3,7 @@
 
 #include "../libs/box2d/include/box2d/box2d.h"
 
-enum class BridgeLayer { NONE, TOP, BOTTOM };
+enum BridgeLayer { NONE, TOP, BOTTOM };
 
 struct Bridge {
     b2ShapeId sensor1_up;

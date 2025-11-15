@@ -35,8 +35,10 @@ void Car::add_to_world(b2WorldId world, Position start_position) {
     state.angle = 0.0f;
     state.health = static_cast<uint16_t>(max_health);
 
+    bridge_layer = BridgeLayer::NONE;
+
     physics = std::make_unique<CarPhysics>(world, state, max_speed, acceleration, mass, drivability,
-                                           car_long, car_width);
+                                           car_long, car_width, this);
     curr_world = world;
 }
 
@@ -112,7 +114,13 @@ void Car::interact_with_bridge(b2ShapeId /*sensor_shape*/, BridgeLayer sensor_la
     }
 }
 
-CarInfo Car::get_state_info() const { return state; }
+CarInfo Car::get_state_info() const {
+    if (bridge_layer == BridgeLayer::TOP)
+        std::cout << "Estoy arriba de un puente" << std::endl;
+    else if (bridge_layer == BridgeLayer::BOTTOM)
+        std::cout << "Estoy abajo de un puente" << std::endl;
+    return state;
+}
 
 bool Car::reached_checkpoint(Position next_checkpoint, float celd_width, float celd_height) {
     if (state.x > (next_checkpoint.x + celd_width / 2.0f))
