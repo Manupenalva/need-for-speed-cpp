@@ -1,0 +1,12 @@
+<RCC>
+  <qresource prefix="/">
+    <file>imgs/checkpoint.png</file>
+    <file>imgs/finish.png</file>
+    <file>imgs/hint.png</file>
+    <file>imgs/road.png</file>
+    <file>imgs/road1.png</file>
+    <file>imgs/road2.png</file>
+    <file>imgs/start.png</file>
+    <file>imgs/start2.png</file>
+  </qresource>
+</RCC>

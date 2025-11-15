@@ -1,8 +1,7 @@
 #include "scene_controller.h"
 
 #include <algorithm>
-
-#define GRID_SIZE 50
+#include "editor_constants.h"
 
 SceneController::SceneController(QGraphicsScene* scene): scene(scene) {}
 
@@ -13,9 +12,19 @@ void SceneController::handleDropEvent(const DragInfo& dragInfo, int x, int y) {
     }
 
     item->setPos(x, y);
-    if (dragInfo.getType().contains("checkpoint", Qt::CaseInsensitive)) {
-        ++id;
-        item->setData(2, id);
+    if (dragInfo.getType().contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
+        if (dragInfo.getId() > 0) {
+            item->setData(ID, dragInfo.getId());
+            id = std::max(id, dragInfo.getId());
+        } else {
+            ++id;
+            item->setData(ID, id);
+        }
+    }
+    if (dragInfo.getType().contains(HINT_TYPE, Qt::CaseInsensitive)) {
+        if (dragInfo.getId() > 0) {
+            item->setData(ID, dragInfo.getId());
+        }
     }
     scene->addItem(item);
 }
@@ -23,17 +32,33 @@ void SceneController::handleDropEvent(const DragInfo& dragInfo, int x, int y) {
 int SceneController::countItemsOfType(const QString& type) const {
     const auto all = scene->items();
     return static_cast<int>(std::count_if(all.cbegin(), all.cend(), [&](QGraphicsItem* item) {
-        return item->data(0).isValid() &&
-               item->data(0).toString().contains(type, Qt::CaseInsensitive);
+        return item->data(TYPE).isValid() &&
+               item->data(TYPE).toString().contains(type, Qt::CaseInsensitive);
     }));
 }
 
-void SceneController::countCheckpointsIds() {
-    id = 0;
+void SceneController::placeHint(const DragInfo& info, const QPointF& hintPos,
+                                QGraphicsItem* checkpointItem) {
+    QGraphicsPixmapItem* hint = itemBuilder.buildItem(info, QSize(GRID_SIZE, GRID_SIZE));
+    hint->setPos(hintPos.x(), hintPos.y());
+    hint->setData(ID, checkpointItem->data(ID).toInt());
+    scene->addItem(hint);
+}
+
+void SceneController::deleteHints(QGraphicsItem* checkpointItem) {
+    int idCheckpoint = checkpointItem->data(ID).toInt();
+    scene->removeItem(checkpointItem);
+    delete checkpointItem;
+    QList<QGraphicsItem*> hintToDelete;
     for (auto* it: scene->items()) {
-        const auto t = it->data(0).toString();
-        if (t.contains("checkpoint", Qt::CaseInsensitive)) {
-            id = std::max(id, it->data(2).toInt());
+        const auto type = it->data(TYPE).toString();
+        if (type.contains(HINT_TYPE, Qt::CaseInsensitive) && it->data(ID).toInt() == idCheckpoint) {
+            hintToDelete.append(it);
         }
+    }
+
+    for (auto* hint: hintToDelete) {
+        scene->removeItem(hint);
+        delete hint;
     }
 }

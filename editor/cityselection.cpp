@@ -4,21 +4,19 @@
 #include <QIcon>
 #include <QPixmap>
 #include <vector>
-
-#define BACKGROUNDS "../client/assets/cities/"
+#include "editor_constants.h"
 
 CitySelection::CitySelection(QWidget* parent): QWidget(parent) {
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
 
     QLabel* titleLabel = new QLabel("Select a City");
     titleLabel->setAlignment(Qt::AlignCenter);
-    titleLabel->setStyleSheet("font-size: 20px; font-weight: bold;");
 
     mainLayout->addWidget(titleLabel);
     mainLayout->addSpacing(20);
 
     auto* citiesLayout = new QHBoxLayout();
-    QDir citiesDir(BACKGROUNDS);
+    QDir citiesDir(CITY_ASSETS_PATH);
 
     QStringList nameFilters;
     nameFilters << "*.png";
@@ -38,7 +36,6 @@ CitySelection::CitySelection(QWidget* parent): QWidget(parent) {
                          [this, filePath]() { emit citySelected(filePath); });
         QLabel* nameLabel = new QLabel(cityName);
         nameLabel->setAlignment(Qt::AlignCenter);
-        nameLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
         cityLayout->addWidget(cityButton);
         cityLayout->addWidget(nameLabel);
         citiesLayout->addLayout(cityLayout);

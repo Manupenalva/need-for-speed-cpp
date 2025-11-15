@@ -4,10 +4,13 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QPointF>
 #include <QPushButton>
 #include <QWidget>
 
+#include "drag_info.h"
 #include "scene_controller.h"
+#include "editor_constants.h"
 
 class MapCanvas: public QWidget {
     Q_OBJECT
@@ -32,6 +35,10 @@ private:
     QPushButton* saveButton;
 
     SceneController* controller;
+    bool selecting = false;
+    DragInfo info;
+    QPointF hintPos;
+    double currentZoom = INITIAL_ZOOM;
 };
 
 #endif
