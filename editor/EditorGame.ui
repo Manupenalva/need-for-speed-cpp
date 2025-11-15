@@ -19,7 +19,7 @@
   <widget class="QWidget" name="centralWidget">
    <property name="styleSheet">
     <string notr="true">#centralWidget {
-    border-image: url(&quot;../editor/imgs/background.jpg&quot;) 0 0 0 0 stretch stretch;
+    border-image: url(&quot;../editor/imgs/background.png&quot;) 0 0 0 0 stretch stretch;
 }
 </string>
    </property>
