@@ -19,7 +19,7 @@ public:
 
 private:
     static YAML::Node open_file(const std::string& path);
-    static std::string get_map_collitions_path(const std::string& city_name);
+    static std::string get_map_data(const std::string& city_name, uint8_t& city_code);
     static float get_hint_angle(const std::string& rotation);
 
     RaceBuilder() = delete;
