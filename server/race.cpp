@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <string>
+#include <utility>
 
 #include "../common/carState.h"
 #include "events/actionmessage.h"
@@ -37,8 +38,16 @@ b2WorldId Race::start_race() {
     world = b2CreateWorld(&worldDef);
 
     MapData map_data = MapCollisionBuilder::initialize_map_buildings(map_collisions_path, world);
+    bridges = std::move(map_data.bridges);
+
+    for (auto& bridge: bridges) {
+        b2Shape_SetUserData(bridge.sensor1_up, &bridge);
+        b2Shape_SetUserData(bridge.sensor2_up, &bridge);
+        b2Shape_SetUserData(bridge.sensor1_down, &bridge);
+        b2Shape_SetUserData(bridge.sensor2_down, &bridge);
+    }
+
     corners = map_data.corners;
-    bridges = map_data.bridges;
 
     int i = 0;
     for (auto& [id, car]: players_cars) {
@@ -206,6 +215,7 @@ bool Race::is_finished() {
             return false;
         }
     }
+
     return true;
 }
 
@@ -228,13 +238,21 @@ void Race::handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* brid
     if (!bridge || !car)
         return;
 
+    std::cout << "El sensor tiene index1: " << sensor_shape.index1 << std::endl;
+    std::cout << bridge->sensor1_up.index1 << std::endl;
+    std::cout << bridge->sensor2_up.index1 << std::endl;
+    std::cout << bridge->sensor1_down.index1 << std::endl;
+    std::cout << bridge->sensor2_down.index1 << std::endl;
     if (sensor_shape.index1 == bridge->sensor1_up.index1 ||
         sensor_shape.index1 == bridge->sensor2_up.index1) {
+        std::cout << "Son iguales" << std::endl;
         car->interact_with_bridge(sensor_shape, BridgeLayer::TOP);
     } else if (sensor_shape.index1 == bridge->sensor1_down.index1 ||
                sensor_shape.index1 == bridge->sensor2_down.index1) {
+        std::cout << "Son iguales" << std::endl;
         car->interact_with_bridge(sensor_shape, BridgeLayer::BOTTOM);
     }
+    std::cout << "interactue con los bridge" << std::endl;
 }
 
 void Race::force_finish_race(const uint16_t& player_id) {

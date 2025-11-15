@@ -1,7 +1,6 @@
 compressionlevel: -1
 height: 146
 infinite: false
-bridges_amount: 0
 layers:
 - height: 146
   id: 1
@@ -5587,8 +5586,8 @@ layers:
     type: ''
     visible: true
     width: 25.6657
-    x: 124.66715
-    y: 2499.667
+    x: 124.667
+    y: 2499.67
   opacity: 1
   type: objectgroup
   visible: true
@@ -7400,7 +7399,7 @@ layers:
     y: 3727.27
   opacity: 1
   type: objectgroup
-  visible: false
+  visible: true
   x: 0
   y: 0
 - draworder: topdown
@@ -7555,8 +7554,8 @@ layers:
     type: ''
     visible: true
     width: 0
-    x: 3569.69696969697
-    y: 3618.18181818182
+    x: 3569.7
+    y: 3618.18
   - height: 0
     id: 898
     name: ''
@@ -7575,8 +7574,8 @@ layers:
     type: ''
     visible: true
     width: 0
-    x: 4090.90909090909
-    y: 2506.06060606061
+    x: 4090.91
+    y: 2506.06
   - height: 0
     id: 900
     name: ''
@@ -7592,9 +7591,58 @@ layers:
   visible: true
   x: 0
   y: 0
-nextlayerid: 8
-nextobjectid: 901
+- draworder: topdown
+  id: 8
+  name: Puentes
+  objects:
+  - height: 78.666666666667
+    id: 901
+    name: up 1
+    rotation: 0
+    type: '0'
+    visible: true
+    width: 14.6666666666667
+    x: 218.666666666667
+    y: 2384
+  - height: 78.6667
+    id: 902
+    name: up 2
+    rotation: 0
+    type: '0'
+    visible: true
+    width: 13.3333666666666
+    x: 530.66665
+    y: 2383.33331666667
+  - height: 15.0000333333332
+    id: 903
+    name: down 1
+    rotation: 0
+    type: '0'
+    visible: true
+    width: 272.333366666667
+    x: 247.333316666667
+    y: 2372.33331666667
+  - height: 10.6666666666665
+    id: 904
+    name: down 2
+    rotation: 0
+    type: '0'
+    visible: true
+    width: 210.999666666667
+    x: 238.3335
+    y: 2462.33333333333
+  opacity: 1
+  type: objectgroup
+  visible: true
+  x: 0
+  y: 0
+nextlayerid: 9
+nextobjectid: 905
 orientation: orthogonal
+properties:
+- name: bridges_amount
+  type: int
+  value: 1
 renderorder: right-down
 tiledversion: 1.11.2
 tileheight: 32

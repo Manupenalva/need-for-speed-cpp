@@ -3,6 +3,8 @@
 #include <cmath>
 #include <iostream>
 
+#include "car.h"
+
 #define BASE_MAX_SPEED 250.0f
 #define BASE_ACCELERATION 500000.0f
 #define BASE_ANGLE_ROTATION 3
@@ -19,7 +21,7 @@
 
 CarPhysics::CarPhysics(b2WorldId world, CarInfo& car_state, const float& max_speed,
                        const float& acceleration, const float& mass, const float& drivability,
-                       const float& car_long, const float& car_width):
+                       const float& car_long, const float& car_width, Car* car):
         world(world),
         car_state(car_state),
         max_speed_factor(max_speed / 100.0f),
@@ -38,9 +40,10 @@ CarPhysics::CarPhysics(b2WorldId world, CarInfo& car_state, const float& max_spe
     b2ShapeDef shapeDef = b2DefaultShapeDef();
     b2Polygon box = b2MakeBox((car_long / 2.0f), (car_width / 2.0f));
     shape = b2CreatePolygonShape(body, &shapeDef, &box);
+    b2Shape_EnableSensorEvents(shape, true);
     b2Shape_EnableContactEvents(shape, true);
     b2Shape_EnableHitEvents(shape, true);
-    b2Body_SetUserData(body, this);
+    b2Body_SetUserData(body, car);
 }
 
 void CarPhysics::accelerate() {
@@ -151,6 +154,12 @@ void CarPhysics::handle_hits() {
     b2ContactEvents events = b2World_GetContactEvents(world);
     car_state.crashed = false;
     for (int i = 0; i < events.beginCount; i++) {
+
+        if (b2Shape_IsSensor(events.hitEvents[i].shapeIdA))
+            std::cout << "ES un sensor" << std::endl;
+        if (b2Shape_IsSensor(events.hitEvents[i].shapeIdB))
+            std::cout << "ES un sensor" << std::endl;
+
         if ((events.hitEvents[i].shapeIdA.index1 == shape.index1) ||
             (events.hitEvents[i].shapeIdB.index1 == shape.index1)) {
             handle_hit_event(events.hitEvents[i]);

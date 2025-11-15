@@ -46,21 +46,20 @@ void MapCollisionBuilder::connect_corners(std::vector<Corner>& corners, b2WorldI
     }
 }
 
-b2ShapeId MapCollisionBuilder::create_body(bool is_sensor, float x, float y, float width,
+b2ShapeId MapCollisionBuilder::create_body(bool /*is_sensor*/, float x, float y, float width,
                                            float height, b2WorldId world) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_staticBody;
     bodyDef.position = {x + (width / 2.0f), y + (height / 2.0f)};
     b2BodyId body = b2CreateBody(world, &bodyDef);
     b2Body_EnableContactEvents(body, true);
-    if (!is_sensor)
-        b2Body_EnableContactEvents(body, true);
+    b2Body_EnableHitEvents(body, true);
 
     b2ShapeDef shapeDef = b2DefaultShapeDef();
+    shapeDef.isSensor = true;
     b2Polygon box = b2MakeBox((width / 2.0f), (height / 2.0f));
-    if (is_sensor)
-        shapeDef.isSensor = true;
     b2ShapeId shape = b2CreatePolygonShape(body, &shapeDef, &box);
+    b2Shape_EnableSensorEvents(shape, true);
     b2Shape_EnableContactEvents(shape, true);
     b2Shape_EnableHitEvents(shape, true);
 
@@ -75,7 +74,14 @@ MapData MapCollisionBuilder::initialize_map_buildings(const std::string& path, b
             return {};
         }
 
-        int bridges_amount = map_collisions["bridges_amount"].as<int>();
+        int bridges_amount = 0;
+        for (const auto& properties: map_collisions["properties"]) {
+            if (properties["name"].as<std::string>() == "bridges_amount") {
+                bridges_amount =                        // cppcheck-suppress useStlAlgorithm
+                        properties["value"].as<int>();  // cppcheck-suppress useStlAlgorithm
+            }
+        }
+        std::cout << bridges_amount << std::endl;
 
         std::vector<Bridge> bridges(bridges_amount);
         MapData map_data;
@@ -115,6 +121,7 @@ MapData MapCollisionBuilder::initialize_map_buildings(const std::string& path, b
                     float height = object["height"].as<float>();
 
                     b2ShapeId sensor = create_body(true, x, y, width, height, world);
+                    std::cout << "cree el primer shape" << std::endl;
 
                     if (side == "up 1")
                         bridges[bridge_id].sensor1_up = sensor;
@@ -124,6 +131,7 @@ MapData MapCollisionBuilder::initialize_map_buildings(const std::string& path, b
                         bridges[bridge_id].sensor1_down = sensor;
                     else if (side == "down 2")
                         bridges[bridge_id].sensor2_down = sensor;
+                    std::cout << "lo agregé" << std::endl;
                 }
             }
 
@@ -151,13 +159,8 @@ MapData MapCollisionBuilder::initialize_map_buildings(const std::string& path, b
             }
         }
 
-        for (auto& bridge: bridges) {
-            b2Shape_SetUserData(bridge.sensor1_up, &bridge);
-            b2Shape_SetUserData(bridge.sensor2_up, &bridge);
-            b2Shape_SetUserData(bridge.sensor1_down, &bridge);
-            b2Shape_SetUserData(bridge.sensor2_down, &bridge);
-        }
         map_data.bridges = bridges;
+
         return map_data;
     } catch (const std::exception& e) {
         std::cerr << "Error building the map with box2d: " << e.what() << std::endl;
