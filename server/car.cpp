@@ -99,7 +99,14 @@ void Car::update_physics() {
     }
 }
 
-void Car::update_position() { physics->update_position(); }
+void Car::update_position() {
+    physics->update_position();
+    if (bridge_layer == BridgeLayer::BOTTOM) {
+        state.under_bridge = true;
+    } else {
+        state.under_bridge = false;
+    }
+}
 
 void Car::handle_hits() { physics->handle_hits(); }
 
@@ -114,13 +121,7 @@ void Car::interact_with_bridge(b2ShapeId /*sensor_shape*/, BridgeLayer sensor_la
     }
 }
 
-CarInfo Car::get_state_info() const {
-    if (bridge_layer == BridgeLayer::TOP)
-        std::cout << "Estoy arriba de un puente" << std::endl;
-    else if (bridge_layer == BridgeLayer::BOTTOM)
-        std::cout << "Estoy abajo de un puente" << std::endl;
-    return state;
-}
+CarInfo Car::get_state_info() const { return state; }
 
 bool Car::reached_checkpoint(Position next_checkpoint, float celd_width, float celd_height) {
     if (state.x > (next_checkpoint.x + celd_width / 2.0f))
