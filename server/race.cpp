@@ -251,3 +251,25 @@ void Race::force_lose_race(const uint16_t& player_id) {
 }
 
 uint8_t Race::get_city_code() { return city_code; }
+
+std::vector<CheckpointInfo> Race::get_checkpoints_info() {
+    std::vector<CheckpointInfo> checkpoints_info;
+    checkpoints_info.reserve(checkpoints.size());
+    for (size_t i = 0; i < checkpoints.size(); i++) {
+        Position checkpoint = checkpoints[i];
+        checkpoints_info.push_back({static_cast<uint16_t>(i), static_cast<float>(checkpoint.x),
+                                    static_cast<float>(checkpoint.y), 0.0f, celd_width,
+                                    COMMON_CHECKPOINT});  // Angulo y tipo hardcodeado para compilar
+    }
+    return checkpoints_info;
+}
+
+std::vector<CheckpointArrow> Race::get_checkpoints_arrows() {
+    std::vector<CheckpointArrow> arrows;
+    arrows.reserve(hints.size());
+    std::transform(hints.begin(), hints.end(), std::back_inserter(arrows), [](const Hint& hint) {
+        return CheckpointArrow{static_cast<float>(hint.position.x),
+                               static_cast<float>(hint.position.y), hint.angle};
+    });
+    return arrows;
+}

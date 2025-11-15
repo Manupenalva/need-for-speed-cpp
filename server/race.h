@@ -52,6 +52,8 @@ public:
     void force_finish_race(const uint16_t& player_id);
     void force_lose_race(const uint16_t& player_id);
     uint8_t get_city_code();
+    std::vector<CheckpointInfo> get_checkpoints_info();
+    std::vector<CheckpointArrow> get_checkpoints_arrows();
 
 private:
     void handle_sensors();

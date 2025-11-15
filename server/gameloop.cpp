@@ -59,6 +59,17 @@ void Gameloop::broadcast_map_data(const uint8_t& city_code) {
     race_monitor->broadcast(msg);
 }
 
+void Gameloop::broadcast_minimap_info(int race_index) {
+    ServerMessageDTO msg;
+    msg.type = MsgType::SEND_MINIMAP_INFO;
+
+    MinimapInfo minimap_info;
+    minimap_info.checkpoints = races[race_index]->get_checkpoints_info();
+    minimap_info.arrows = races[race_index]->get_checkpoints_arrows();
+    msg.minimap_info = minimap_info;
+    race_monitor->broadcast(msg);
+}
+
 void Gameloop::initialize_races() {
     for (const auto& entry: std::filesystem::directory_iterator("../server/assets/race_configs")) {
         if (entry.is_regular_file() && entry.path().extension() == ".yaml") {
