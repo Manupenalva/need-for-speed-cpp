@@ -124,7 +124,7 @@ void Gameloop::handle_upgrades_phase(const int& race_index) {
         timer.sleep_and_calc_next_it(iterations_behind);
     }
 
-    // broadcast_event(MsgType::INTERVAL_CLOSED);
+    broadcast_event(MsgType::INTERVAL_CLOSED);
 }
 
 void Gameloop::handle_race(const int& race_index) {
