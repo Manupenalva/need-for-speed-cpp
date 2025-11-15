@@ -52,6 +52,13 @@ void Gameloop::broadcast_interval(const int& race_index) {
     race_monitor->broadcast(msg);
 }
 
+void Gameloop::broadcast_map_data(const uint8_t& city_code) {
+    ServerMessageDTO msg;
+    msg.type = MsgType::SEND_MAP_NUMBER;
+    msg.map_number = city_code;
+    race_monitor->broadcast(msg);
+}
+
 void Gameloop::initialize_races() {
     for (const auto& entry: std::filesystem::directory_iterator("../server/assets/race_configs")) {
         if (entry.is_regular_file() && entry.path().extension() == ".yaml") {
@@ -110,7 +117,9 @@ void Gameloop::handle_upgrades_phase(const int& race_index) {
 
 void Gameloop::handle_race(const int& race_index) {
     broadcast_event(MsgType::RACE_STARTED);
-
+    uint8_t city_code = races[race_index]->get_city_code();
+    broadcast_map_data(city_code);
+    std::cout << "Ciudad codigo: " << static_cast<int>(city_code) << std::endl;
     frames = 0;
     GameLoopTimer timer(TARGET_FPS);
     uint32_t iterations_behind = 1;

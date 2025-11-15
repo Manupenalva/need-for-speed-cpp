@@ -15,7 +15,7 @@
 Race::Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_width,
            const float& celd_height, const std::vector<Position>& start_positions,
            const Position& finish, const std::vector<Position>& checkpoints,
-           const std::vector<Hint>& hints, const std::string& map_path):
+           const std::vector<Hint>& hints, const std::string& map_path, uint8_t city_code):
         players_cars(players_cars),
         players_status(),
         celd_width(celd_width),
@@ -27,7 +27,8 @@ Race::Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_wi
         hints(hints),
         map_collisions_path(map_path),
         current_time(0.0f),
-        world() {
+        world(),
+        city_code(city_code) {
     this->checkpoints.push_back(finish);
 }
 
@@ -85,13 +86,13 @@ void Race::update_state() {
                 race_results.emplace_back(id, current_time);
             }
         }
-
-        Hint next_hint = hints[status.current_hint_index];
-        if (car.reached_checkpoint(next_hint.position, celd_width, celd_height)) {
-            if ((status.current_hint_index + 1) < hints.size())
-                status.current_hint_index++;
+        if (status.current_hint_index < hints.size()) {
+            Hint next_hint = hints[status.current_hint_index];
+            if (car.reached_checkpoint(next_hint.position, celd_width, celd_height)) {
+                if ((status.current_hint_index + 1) < hints.size())
+                    status.current_hint_index++;
+            }
         }
-
         car.update_physics();
     }
 
@@ -132,9 +133,12 @@ CheckpointInfo Race::get_next_checkpoint_info(const uint16_t car_id) {
 
 CheckpointArrow Race::get_next_checkpoint_arrow(const uint16_t car_id) {
     const PlayerRaceStatus& status = players_status[car_id];
-    Hint hint = hints[status.current_hint_index];
-
-    return {static_cast<float>(hint.position.x), static_cast<float>(hint.position.y), hint.angle};
+    if (status.current_hint_index < hints.size()) {
+        Hint hint = hints[status.current_hint_index];
+        return {static_cast<float>(hint.position.x), static_cast<float>(hint.position.y),
+                hint.angle};
+    }
+    return {0.0f, 0.0f, 0.0f};
 }
 
 ServerMessageDTO Race::get_broadcast_message(float frames) {
@@ -207,7 +211,7 @@ bool Race::is_finished() {
     }
 
     for (auto& [id, car]: players_cars) {
-        if (!players_status[id].has_finished && !car.get_state_info().exploded) {
+        if (!players_status[id].has_finished) {
             return false;
         }
     }
@@ -263,3 +267,5 @@ void Race::force_lose_race(const uint16_t& player_id) {
     car.explode();
     race_results.emplace_back(player_id, MAX_TIME);
 }
+
+uint8_t Race::get_city_code() { return city_code; }
