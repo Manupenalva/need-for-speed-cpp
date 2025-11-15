@@ -1,6 +1,7 @@
 #include "receiver.h"
 
 #include "events/actionmessage.h"
+#include "events/cheatmessage.h"
 #include "events/clienthandlermessage.h"
 #include "events/createlobbymessage.h"
 #include "events/getcatalogmessage.h"
@@ -11,7 +12,6 @@
 #include "events/selectcarmessage.h"
 #include "events/setreadymessage.h"
 #include "events/startracemessage.h"
-#include "events/cheatmessage.h"
 
 Receiver::Receiver(Protocol& protocol,
                    std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue, int id):

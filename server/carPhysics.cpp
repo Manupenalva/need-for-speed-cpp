@@ -252,8 +252,8 @@ float CarPhysics::get_mass_from_shape(b2ShapeId shapeId) {
     return other->mass_factor;
 }
 
-void CarPhysics::set_stats(const float& max_speed,
-                           const float& acceleration, const float& mass, const float& drivability) {
+void CarPhysics::set_stats(const float& max_speed, const float& acceleration, const float& mass,
+                           const float& drivability) {
     max_speed_factor = max_speed / 100.0f;
     acceleration_factor = acceleration / 100.0f;
     mass_factor = mass / 100.0f;

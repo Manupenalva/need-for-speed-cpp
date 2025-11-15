@@ -60,6 +60,7 @@ public:
     void activate_infinite_health();
     void explode();
     void maximize_stats();
+    bool exploded();
 
     Car(Car&& other) = default;
     Car& operator=(Car&& other) = default;
@@ -75,7 +76,8 @@ public:
             car_long(0),
             car_width(0),
             max_health(0),
-            current_penalization(0) {}
+            current_penalization(0),
+            curr_world() {}
 
 private:
     Car(const Car& other) = delete;

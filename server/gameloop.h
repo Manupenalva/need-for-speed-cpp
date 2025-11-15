@@ -9,10 +9,10 @@
 #include <box2d/box2d.h>
 
 #include "../common/carState.h"
+#include "../common/cheatcodes.h"
 #include "../common/queue.h"
 #include "../common/thread.h"
 #include "events/clienthandlermessage.h"
-#include "../common/cheatcodes.h"
 
 #include "car.h"
 #include "race.h"

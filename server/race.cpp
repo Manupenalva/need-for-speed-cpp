@@ -60,6 +60,12 @@ void Race::update_state() {
 
         if (status.has_finished)
             continue;
+        if (car.exploded()) {
+            status.has_finished = true;
+            car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
+            race_results.emplace_back(id, MAX_TIME);
+            continue;
+        }
 
         Position next_checkpoint = checkpoints[status.current_checkpoint_index];
         if (car.reached_checkpoint(next_checkpoint, celd_width, celd_height)) {
@@ -192,7 +198,7 @@ bool Race::is_finished() {
     }
 
     for (auto& [id, car]: players_cars) {
-        if (!players_status[id].has_finished) {
+        if (!players_status[id].has_finished && car.get_state_info().exploded) {
             return false;
         }
     }
@@ -237,4 +243,5 @@ void Race::force_lose_race(const uint16_t& player_id) {
     players_status[player_id].has_finished = true;
     car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
     car.explode();
+    race_results.emplace_back(player_id, MAX_TIME);
 }

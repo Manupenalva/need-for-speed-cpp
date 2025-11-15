@@ -26,7 +26,8 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
         car_long(car_long),
         car_width(car_width),
         max_health(health),
-        current_penalization(0.0f) {}
+        current_penalization(0.0f),
+        curr_world() {}
 
 void Car::add_to_world(b2WorldId world, Position start_position) {
     state.x = start_position.x;
@@ -173,9 +174,7 @@ CarProperties Car::get_properties() const {
                          static_cast<uint16_t>(mass),          static_cast<uint16_t>(drivability)};
 }
 
-void Car::activate_infinite_health() {
-    state.health = static_cast<uint16_t>(UINT16_MAX);
-}
+void Car::activate_infinite_health() { state.health = static_cast<uint16_t>(UINT16_MAX); }
 
 void Car::explode() {
     state.exploded = true;
@@ -192,4 +191,4 @@ void Car::maximize_stats() {
     physics->set_stats(max_speed, acceleration, mass, drivability);
 }
 
-
+bool Car::exploded() { return state.exploded; }
