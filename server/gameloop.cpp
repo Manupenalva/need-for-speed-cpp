@@ -134,6 +134,7 @@ void Gameloop::handle_race(const int& race_index) {
     broadcast_event(MsgType::RACE_STARTED);
     uint8_t city_code = races[race_index]->get_city_code();
     broadcast_map_data(city_code);
+    broadcast_minimap_info(race_index);
     frames = 0;
     GameLoopTimer timer(TARGET_FPS);
     uint32_t iterations_behind = 1;
