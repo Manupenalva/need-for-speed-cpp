@@ -48,6 +48,8 @@
 #define COMMON_CHECKPOINT 1
 #define SPECIAL_CHECKPOINT 2
 
+#define COUNTDOWN_TIME 10         // segundos
+
 #define UPDATE_STATE 0x0D
 
 #endif

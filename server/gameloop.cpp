@@ -12,6 +12,7 @@
 #include "events/actionmessage.h"
 #include "events/cheatmessage.h"
 #include "events/selectcarmessage.h"
+#include "../common/constants.h"
 
 #include "carBuilder.h"
 #include "carPhysics.h"
@@ -19,8 +20,8 @@
 #include "raceBuilder.h"
 #define TARGET_FPS 60
 #define TARGET_FPS_INTERVAL 30
-#define FRAME_INTERVAL_TO_CLOSE 300
-#define CLOSED_INTERVAL_TIME 10  // segundos
+#define INTERVAL_WAIT_TIME 10  // segundos
+#define FRAME_INTERVAL_TO_CLOSE 300  // segundos
 
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
@@ -127,18 +128,31 @@ void Gameloop::handle_upgrades_phase(const int& race_index) {
 }
 
 void Gameloop::handle_race(const int& race_index) {
+    if (race_index != 0) {
+        std::this_thread::sleep_for(std::chrono::seconds(INTERVAL_WAIT_TIME));
+    }
     broadcast_event(MsgType::RACE_STARTED);
     uint8_t city_code = races[race_index]->get_city_code();
     broadcast_map_data(city_code);
-    std::cout << "Ciudad codigo: " << static_cast<int>(city_code) << std::endl;
     frames = 0;
     GameLoopTimer timer(TARGET_FPS);
     uint32_t iterations_behind = 1;
     races[race_index]->start_race();
-
+    broadcast_players(race_index); //Posiciones iniciales
+    broadcast_event(MsgType::RACE_COUNTDOWN);
+    bool accepting_inputs = false;
+    std::chrono::steady_clock::time_point countdown_start_time = std::chrono::steady_clock::now();
+    
     while (!races[race_index]->is_finished() && should_keep_running()) {
+        if (std::chrono::steady_clock::now() - countdown_start_time >= std::chrono::seconds(COUNTDOWN_TIME) && !accepting_inputs) {
+            broadcast_event(MsgType::COUNTDOWN_FINISHED);
+            accepting_inputs = true;
+        }
         std::shared_ptr<ClientHandlerMessage> base_msg;
         while (user_commands_queue->try_pop(base_msg)) {
+            if (!accepting_inputs) {
+                continue;
+            }
             if (base_msg->get_msg_type() == MsgType::DRIVING_EVENT) {
                 std::shared_ptr<ActionMessage> msg =
                         std::static_pointer_cast<ActionMessage>(base_msg);
@@ -152,18 +166,19 @@ void Gameloop::handle_race(const int& race_index) {
             }
         }
 
-        for (uint32_t i = 0; i < iterations_behind; i++) {
-            races[race_index]->update_state();
+        if (accepting_inputs){
+            for (uint32_t i = 0; i < iterations_behind; i++) {
+                races[race_index]->update_state();
+            }
         }
-
         broadcast_players(race_index);
         frames++;
-
         timer.sleep_and_calc_next_it(iterations_behind);
     }
 
     broadcast_event(MsgType::RACE_FINISHED);
-
+    if (race_index == static_cast<int>(races.size()) - 1)
+        return;
     handle_upgrades_phase(race_index);
 }
 
@@ -195,7 +210,6 @@ void Gameloop::run() {
         handle_race(i);
         if (!should_keep_running())
             return;
-        std::this_thread::sleep_for(std::chrono::seconds(CLOSED_INTERVAL_TIME));
     }
     broadcast_event(MsgType::GAME_END);
 }

@@ -193,7 +193,9 @@ TEST_F(ProtocolTestServer, StateUpdate) {
 
 TEST_F(ProtocolTestServer, CodeMessages) {
     std::vector<MsgType> msg_types = {MsgType::GAME_START, MsgType::GAME_END,
-                                      MsgType::RACE_FINISHED, MsgType::RACE_STARTED};
+                                      MsgType::RACE_FINISHED, MsgType::RACE_STARTED,
+                                      MsgType::COUNTDOWN_FINISHED, MsgType::RACE_COUNTDOWN,
+                                      MsgType::INTERVAL_CLOSED};
     for (const auto& msg_type: msg_types) {
         ServerMessageDTO send_msg;
         send_msg.type = msg_type;
