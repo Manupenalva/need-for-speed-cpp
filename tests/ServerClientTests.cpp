@@ -164,6 +164,7 @@ TEST_F(ProtocolTestServer, StateUpdate) {
     ServerMessageDTO send_msg;
     send_msg.type = MsgType::STATE_UPDATE;
     State state;
+    state.countdown_time = 5;
     state.frame = 100;
     state.num_cars = 2;
     CheckpointInfo cp1{1, 120.0f, 60.0f, 0.0f, 5.0f, 0};
@@ -182,6 +183,7 @@ TEST_F(ProtocolTestServer, StateUpdate) {
     ServerMessageDTO recv_msg = receiver.recv_server_message();
 
     EXPECT_EQ(recv_msg.type, MsgType::STATE_UPDATE);
+    EXPECT_EQ(recv_msg.state.countdown_time, 5);
     EXPECT_EQ(recv_msg.state.frame, 100);
     EXPECT_EQ(recv_msg.state.num_cars, 2);
     ASSERT_EQ(recv_msg.state.cars.size(), 2);
@@ -194,7 +196,6 @@ TEST_F(ProtocolTestServer, StateUpdate) {
 TEST_F(ProtocolTestServer, CodeMessages) {
     std::vector<MsgType> msg_types = {MsgType::GAME_START, MsgType::GAME_END,
                                       MsgType::RACE_FINISHED, MsgType::RACE_STARTED,
-                                      MsgType::COUNTDOWN_FINISHED, MsgType::RACE_COUNTDOWN,
                                       MsgType::INTERVAL_CLOSED};
     for (const auto& msg_type: msg_types) {
         ServerMessageDTO send_msg;
