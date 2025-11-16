@@ -22,6 +22,7 @@ target_sources(taller_client
     drawer/screen/upgradeScreen_drawer.cpp
     drawer/animations/animations_drawer.cpp
     drawer/minimap/minimap_drawer.cpp
+    drawer/countdown/countdown_drawer.cpp
     lobby/lobby.cpp
     events/keyDown_handler.cpp
     events/keyUp_handler.cpp
@@ -65,6 +66,7 @@ target_sources(taller_client
     drawer/animations/animations_drawer.h
     drawer/minimap/minimap_drawer.h
     drawer/minimap/mapInfoDTO.h
+    drawer/countdown/countdown_drawer.h
     lobby/lobby.h
     config/config_reader.h
     config/constants.h

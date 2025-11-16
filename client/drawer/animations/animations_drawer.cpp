@@ -37,7 +37,7 @@ void AnimationsDrawer::check_new_instances(const RenderedState& rendered_state) 
 void AnimationsDrawer::update_instances(const RenderedState& rendered_state) {
     for (auto& instance: animation_instances) {
         if (instance.active) {
-            instance.tick_count++;
+            instance.tick_count += rendered_state.it_ahead;
             if (instance.tick_count >= frame_duration) {
                 instance.tick_count = 0;
                 instance.current_frame++;

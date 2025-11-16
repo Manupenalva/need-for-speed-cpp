@@ -10,9 +10,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "../config/constants.h"
-
-#include "sprite.h"
+#include "../../config/constants.h"
+#include "../sprite.h"
 
 
 enum RaceElement {

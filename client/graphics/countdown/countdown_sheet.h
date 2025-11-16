@@ -13,8 +13,8 @@
 
 #define COUNTDOWN_TYPES_PER_ROW 5
 #define COUNTDOWN_TYPES_PER_COL 2
-#define COUNTDOWN_WIDTH_IMAGE 625
-#define COUNTDOWN_HEIGHT_IMAGE 340
+#define COUNTDOWN_WIDTH_IMAGE 305
+#define COUNTDOWN_HEIGHT_IMAGE 164
 
 class CountdownSheet: public BaseSheet {
 public:

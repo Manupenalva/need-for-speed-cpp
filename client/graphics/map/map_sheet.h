@@ -10,10 +10,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "../config/config_reader.h"
-#include "../config/constants.h"
-
-#include "sprite.h"
+#include "../../config/config_reader.h"
+#include "../../config/constants.h"
+#include "../sprite.h"
 
 class MapSheet {
 private:

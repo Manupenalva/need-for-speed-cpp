@@ -15,6 +15,7 @@
 #include "animations/burst_drawer.h"
 #include "animations/fire_drawer.h"
 #include "car/car_drawer.h"
+#include "countdown/countdown_drawer.h"
 #include "map/map_drawer.h"
 #include "minimap/minimap_drawer.h"
 #include "race/arrow_drawer.h"

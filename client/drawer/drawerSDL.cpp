@@ -12,14 +12,11 @@ DrawerSDL::DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager
     drawers.push_back(std::make_unique<FireDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<BurstDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<MinimapDrawer>(renderer, texture_manager));
+    drawers.push_back(std::make_unique<CountdownDrawer>(renderer, texture_manager));
 }
 
 void DrawerSDL::update_game_state(const ServerMessageDTO& msg, int iterations_ahead,
                                   MapType map_id) {
-    if (msg.type != MsgType::STATE_UPDATE) {
-        return;
-    }
-
     const State& state = msg.state;
 
     auto it = std::find_if(state.cars.begin(), state.cars.end(),

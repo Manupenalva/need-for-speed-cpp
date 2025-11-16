@@ -1,6 +1,6 @@
 #include "base_sheet.h"
 
-AnimationSheet::AnimationSheet(SDL2pp::Renderer& renderer, const std::string& path):
+BaseSheet::BaseSheet(SDL2pp::Renderer& renderer, const std::string& path):
         texture(renderer, [&path]() {
             SDL2pp::Surface surface(path);
 
@@ -15,7 +15,7 @@ AnimationSheet::AnimationSheet(SDL2pp::Renderer& renderer, const std::string& pa
     }
 }
 
-void AnimationSheet::load_sprites() {
+void BaseSheet::load_sprites() {
     int w = width_image / types_per_row;
     int h = height_image / types_per_col;
 
@@ -29,7 +29,7 @@ void AnimationSheet::load_sprites() {
     }
 }
 
-Sprite AnimationSheet::get_sprite(int animation_type) {
+Sprite BaseSheet::get_sprite(int animation_type) {
     auto it = animation_sprites.find(animation_type);
     if (it != animation_sprites.end()) {
         return it->second;

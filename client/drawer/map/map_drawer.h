@@ -3,7 +3,7 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
-#include "../config/constants.h"
+#include "../../config/constants.h"
 #include "../drawer.h"
 
 class MapDrawer: public Drawer {

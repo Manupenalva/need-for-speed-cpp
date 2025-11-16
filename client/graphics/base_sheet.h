@@ -7,7 +7,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "../sprite.h"
+#include "sprite.h"
 
 class BaseSheet {
 private:
