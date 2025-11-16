@@ -3,6 +3,7 @@
 
 #define LENGTH_BYTES 2
 #define ID_BYTES 2
+#define COUNTDOWN_BYTES 2
 #define AMOUNT_BYTES 4
 #define FRAME_BYTES 4
 #define TIME_BYTES 4

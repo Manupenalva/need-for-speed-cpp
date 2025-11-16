@@ -26,7 +26,7 @@ private:
     std::unordered_map<uint16_t, Car> players_cars;
     std::vector<std::unique_ptr<Race>> races;
     uint32_t frames;
-
+    int countdown_remaining;
 
 public:
     Gameloop(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
@@ -47,6 +47,7 @@ private:
     void handle_cheat_code(const uint16_t& player_id, const CheatCode& cheat_code, int race_index);
     void broadcast_map_data(const uint8_t& city_code);
     void broadcast_minimap_info(int race_index);
+    void handle_countdown(int race_index);
 
     Gameloop(const Gameloop& other) = delete;
     Gameloop& operator=(const Gameloop& other) = delete;
