@@ -20,6 +20,9 @@ public:
     void placeHint(const DragInfo& info, const QPointF& hintPos, QGraphicsItem* checkpointItem);
     void deleteHints(QGraphicsItem* checkpointItem);
 
+    bool checkStartLine() const;
+    bool checkFinishLine() const;
+
 private:
     QGraphicsScene* scene;
     ItemBuilder itemBuilder;

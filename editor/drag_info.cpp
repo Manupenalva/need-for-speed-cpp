@@ -26,6 +26,8 @@ bool DragInfo::unpack(const QByteArray& data) {
     type = jsonData.value("type").toString();
     rotation = jsonData.value("rotation").toInt();
     iconPath = jsonData.value("iconPath").toString();
+    id = jsonData.value("id").toInt();
+
     return true;
 }
 

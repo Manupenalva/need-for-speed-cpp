@@ -62,3 +62,13 @@ void SceneController::deleteHints(QGraphicsItem* checkpointItem) {
         delete hint;
     }
 }
+
+bool SceneController::checkStartLine() const {
+    int startLines = countItemsOfType(START_TYPE);
+    return startLines <= 8;
+}
+
+bool SceneController::checkFinishLine() const {
+    int finishLines = countItemsOfType(FINISH_TYPE);
+    return finishLines <= 1;
+}

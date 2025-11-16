@@ -14,6 +14,7 @@
 #include <QPen>
 #include <QPixmap>
 #include <QVBoxLayout>
+#include <QRectF>
 
 #include "yaml_config.h"
 
@@ -101,26 +102,28 @@ void MapCanvas::dragEnterEvent(QDragEnterEvent* event) {
 }
 
 void MapCanvas::dropEvent(QDropEvent* event) {
+    DragInfo dragInfo;
+    if (!dragInfo.unpack(event->mimeData()->data(dragInfo.mimeType()))) {
+        event->ignore();
+        return;
+    }
+
     if (selecting) {
         event->ignore();
         QMessageBox::warning(this, "No checkpoint selecting",
                              "You must click a checkpoint first o press ESC to cancel.");
         return;
     }
-    DragInfo dragInfo;
-    if (!dragInfo.unpack(event->mimeData()->data(dragInfo.mimeType()))) {
-        return;
-    }
 
     if (dragInfo.getType().contains("start", Qt::CaseInsensitive) &&
-        controller->countItemsOfType("start") >= MAX_PLAYERS) {
+        !controller->checkStartLine()) {
         QMessageBox::warning(this, "Limit reach",
                              "There are 8 starting points in the map. Please remove one.");
         return;
     }
 
     if (dragInfo.getType().contains("finish", Qt::CaseInsensitive) &&
-        controller->countItemsOfType("finish") >= MAX_FINISH) {
+        !controller->checkFinishLine()) {
         QMessageBox::warning(
                 this, "Limit reach",
                 "There is a finish line in the map. Please remove to drop the new one.");
@@ -130,16 +133,19 @@ void MapCanvas::dropEvent(QDropEvent* event) {
     QPointF scenePos = view->mapToScene(event->position().toPoint());
     int x = static_cast<int>(scenePos.x() / GRID_SIZE) * GRID_SIZE;
     int y = static_cast<int>(scenePos.y() / GRID_SIZE) * GRID_SIZE;
-    if (!dragInfo.getType().contains("hint", Qt::CaseInsensitive)) {
+    if (!dragInfo.getType().contains(HINT_TYPE, Qt::CaseInsensitive)) {
         controller->handleDropEvent(dragInfo, x, y);
         event->acceptProposedAction();
         return;
     }
+
     if (controller->countItemsOfType("checkpoint") == 0) {
         QMessageBox::warning(this, "No checkpoint",
                              "You must place at least one checkpoint before placing hints");
+        event->ignore();
         return;
     }
+    
     QMessageBox::information(this, "Select checkpoint",
                              "Select the checkpoint to associate this new hint. ESC to exit.");
     event->acceptProposedAction();
@@ -160,7 +166,8 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
             QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
             if (selecting && mouseEvent->button() == Qt::LeftButton) {
                 QPointF scenePos = view->mapToScene(mouseEvent->pos());
-                const auto items = scene->items(scenePos);
+                QRectF pickArea(scenePos.x() - GRID_SIZE/2.0, scenePos.y() - GRID_SIZE/2.0, GRID_SIZE, GRID_SIZE);
+                const auto items = scene->items(pickArea);
                 for (auto* i: items) {
                     const auto t = i->data(TYPE).toString();
                     if (t.contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
@@ -172,17 +179,21 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
                 return true;
             }
             if (mouseEvent->button() == Qt::RightButton && !selecting) {
-                QGraphicsItem* item =
-                        scene->itemAt(view->mapToScene(mouseEvent->pos()), QTransform());
-                if (item->data(TYPE).toString().contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
-                    controller->deleteHints(item);
+                QPointF scenePos = view->mapToScene(mouseEvent->pos());
+                QRectF pickArea(scenePos.x() - GRID_SIZE/2.0, scenePos.y() - GRID_SIZE/2.0, GRID_SIZE, GRID_SIZE);
+                const auto items = scene->items(pickArea);
+
+                QGraphicsItem* item = items.first();
+                if (!item->data(TYPE).isValid())
                     return true;
-                }
-                if (item && item->data(TYPE).isValid()) {
+                const auto t = item->data(TYPE).toString();
+                if (t.contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
+                    controller->deleteHints(item); 
+                } else {
                     scene->removeItem(item);
                     delete item;
-                    return true;
                 }
+                return true;
             }
         }
         if (event->type() == QEvent::DragEnter || event->type() == QEvent::DragMove) {
