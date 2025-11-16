@@ -14,7 +14,9 @@ Client::Client(Protocol& protocol, const int id):
         kb_reader(events_queue),
         last_state(),
         has_last_state(false),
-        is_in_race(true) {}
+        is_in_race(true) {
+    init_game_handlers();
+}
 
 
 void Client::run() {
@@ -72,16 +74,9 @@ void Client::update_state_from_server() {
     // enviada.
     ServerMessageDTO server_msg;
     while (server_queue.try_pop(server_msg)) {
-        if (server_msg.type == MsgType::STATE_UPDATE) {
-            last_state = server_msg;
-            has_last_state = true;
-        }
-        if (server_msg.type == MsgType::RACE_STARTED) {
-            is_in_race = true;
-        }
-        if (server_msg.type == MsgType::RACE_FINISHED) {
-            is_in_race = false;
-            sounds_events_handler.final_game_sound();
+        auto handler_it = msg_handlers.find(server_msg.type);
+        if (handler_it != msg_handlers.end()) {
+            handler_it->second(server_msg);
         }
     }
 }
@@ -91,7 +86,7 @@ void Client::update_animation_frames(int iterations_ahead) {
     if (has_last_state && is_in_race) {
         // Limpiar la pantalla antes de dibujar (solo cuando hay un nuevo estado)
         clear_display();
-        drawer.update_game_state(last_state, iterations_ahead);
+        drawer.update_game_state(last_state, iterations_ahead, map_id);
         window.present();
 
         sounds_events_handler.process_message(last_state);
@@ -103,4 +98,38 @@ void Client::update_animation_frames(int iterations_ahead) {
         drawer.show_upgrade_screen();
         window.present();
     }
+}
+
+void Client::init_game_handlers() {
+    msg_handlers[MsgType::STATE_UPDATE] = [this](const ServerMessageDTO& server_msg) {
+        last_state = server_msg;
+        has_last_state = true;
+    };
+    msg_handlers[MsgType::RACE_STARTED] = [this](const ServerMessageDTO& server_msg) {
+        is_in_race = true;
+        last_state = server_msg;
+    };
+    msg_handlers[MsgType::RACE_FINISHED] = [this](const ServerMessageDTO& server_msg) {
+        is_in_race = false;
+        sounds_events_handler.final_game_sound();
+        last_state = server_msg;
+    };
+    msg_handlers[MsgType::SEND_MAP_NUMBER] = [this](const ServerMessageDTO& server_msg) {
+        map_id = static_cast<MapType>(server_msg.map_number);
+    };
+    msg_handlers[MsgType::SEND_MINIMAP_INFO] = [this](const ServerMessageDTO& server_msg) {
+        texture_manager.load_minimap_info(server_msg.minimap_info, map_id);
+    };
+    msg_handlers[MsgType::RACE_COUNTDOWN] = [this](const ServerMessageDTO& server_msg) {
+        // Iniciar cuenta regresiva antes de empezar la carrera
+        last_state = server_msg;
+    };
+    msg_handlers[MsgType::INTERVAL_UPDATE] = [this](const ServerMessageDTO& server_msg) {
+        // Actualizar estado de intervalo
+        last_state = server_msg;
+    };
+    msg_handlers[MsgType::GAME_END] = [this](const ServerMessageDTO& server_msg) {
+        last_state = server_msg;
+        _keep_running = false;
+    };
 }

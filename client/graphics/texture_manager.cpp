@@ -7,7 +7,8 @@ TextureManager::TextureManager(SDL2pp::Renderer& renderer):
         race_sheet(renderer),
         upgrade_screen_sheet(renderer),
         fire_sheet(renderer),
-        burst_sheet(renderer) {}
+        burst_sheet(renderer),
+        minimap_sheet(renderer, race_sheet) {}
 
 
 void TextureManager::load_resources() {
@@ -42,4 +43,13 @@ Sprite TextureManager::get_fire_sprite(int fire_type) { return fire_sheet.get_sp
 
 Sprite TextureManager::get_burst_sprite(int burst_type) {
     return burst_sheet.get_sprite(burst_type);
+}
+
+SDL2pp::Texture& TextureManager::get_minimap_texture() {
+    return minimap_sheet.get_minimap_texture();
+}
+
+void TextureManager::load_minimap_info(const MinimapInfo& info, const MapType map_type) {
+    minimap_sheet.load_texture(map_type);
+    minimap_sheet.load_minimap_info(info);
 }

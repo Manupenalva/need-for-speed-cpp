@@ -5,13 +5,11 @@ MinimapDrawer::MinimapDrawer(SDL2pp::Renderer& renderer, TextureManager& texture
 
 
 void MinimapDrawer::draw(const RenderedState& rendered_state) {
-    SDL2pp::Texture& tex = texture_manager.get_map_sprite(rendered_state.map_number, 0, 0).texture;
+    SDL2pp::Texture& tex = texture_manager.get_minimap_texture();
     MapResources map_info = calculate_map_rects(rendered_state, tex);
     draw_map(map_info, tex);
     draw_car(map_info, rendered_state.client_car);
     draw_border(map_info);
-    draw_arrows(map_info, rendered_state.minimap_info);
-    draw_checkpoints(map_info, rendered_state.minimap_info);
 }
 
 MapResources MinimapDrawer::calculate_map_rects(const RenderedState& rendered_state,
@@ -70,51 +68,5 @@ void MinimapDrawer::draw_border(const MapResources& map_info) {
         SDL2pp::Rect border_rect(map_info.dst_rect.x - i, map_info.dst_rect.y - i,
                                  map_info.dst_rect.w + 2 * i, map_info.dst_rect.h + 2 * i);
         renderer.DrawRect(border_rect);
-    }
-}
-
-void MinimapDrawer::draw_arrows(const MapResources& map_info, const MinimapInfo& minimap_info) {
-    for (const auto& arrow_info: minimap_info.arrows) {
-        Sprite_rotation arrow_sprite =
-                texture_manager.get_race_sprite(RACE_ARROW, arrow_info.angle);
-
-        float scale_x = static_cast<float>(map_info.dst_rect.w) / map_info.src_rect.w;
-        float scale_y = static_cast<float>(map_info.dst_rect.h) / map_info.src_rect.h;
-
-        int arrow_minimap_x = static_cast<int>((arrow_info.x - map_info.src_rect.x) * scale_x);
-        int arrow_minimap_y = static_cast<int>((arrow_info.y - map_info.src_rect.y) * scale_y);
-
-        SDL2pp::Rect arrow_dst_rect(
-                arrow_minimap_x - arrow_sprite.sprite.src_rect.w / RESOURCE_DIVISOR,
-                arrow_minimap_y - arrow_sprite.sprite.src_rect.h / RESOURCE_DIVISOR,
-                HALF(arrow_sprite.sprite.src_rect.w), HALF(arrow_sprite.sprite.src_rect.h));
-
-        renderer.Copy(arrow_sprite.sprite.texture, arrow_sprite.sprite.src_rect, arrow_dst_rect,
-                      arrow_sprite.rotation);
-    }
-}
-
-void MinimapDrawer::draw_checkpoints(const MapResources& map_info,
-                                     const MinimapInfo& minimap_info) {
-    for (const auto& checkpoint_info: minimap_info.checkpoints) {
-        Sprite_rotation checkpoint_sprite =
-                texture_manager.get_race_sprite(checkpoint_info.type, checkpoint_info.angle);
-
-        float scale_x = static_cast<float>(map_info.dst_rect.w) / map_info.src_rect.w;
-        float scale_y = static_cast<float>(map_info.dst_rect.h) / map_info.src_rect.h;
-
-        int checkpoint_minimap_x =
-                static_cast<int>((checkpoint_info.x - map_info.src_rect.x) * scale_x);
-        int checkpoint_minimap_y =
-                static_cast<int>((checkpoint_info.y - map_info.src_rect.y) * scale_y);
-
-        SDL2pp::Rect checkpoint_dst_rect(
-                checkpoint_minimap_x - checkpoint_sprite.sprite.src_rect.w / RESOURCE_DIVISOR,
-                checkpoint_minimap_y - checkpoint_sprite.sprite.src_rect.h / RESOURCE_DIVISOR,
-                HALF(checkpoint_sprite.sprite.src_rect.w),
-                HALF(checkpoint_sprite.sprite.src_rect.h));
-
-        renderer.Copy(checkpoint_sprite.sprite.texture, checkpoint_sprite.sprite.src_rect,
-                      checkpoint_dst_rect, checkpoint_sprite.rotation);
     }
 }

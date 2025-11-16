@@ -8,6 +8,7 @@
 
 #include "animations/burst_sheet.h"
 #include "animations/fire_sheet.h"
+#include "minimap/minimap_sheet.h"
 
 #include "car_sheet.h"
 #include "map_sheet.h"
@@ -24,6 +25,7 @@ private:
     UpgradeScreenSheet upgrade_screen_sheet;
     FireSheet fire_sheet;
     BurstSheet burst_sheet;
+    MinimapSheet minimap_sheet;
 
 public:
     explicit TextureManager(SDL2pp::Renderer& renderer);
@@ -48,6 +50,10 @@ public:
 
     // Metodo para obtener el sprite de explosión
     Sprite get_burst_sprite(int burst_type);
+
+    SDL2pp::Texture& get_minimap_texture();
+
+    void load_minimap_info(const MinimapInfo& info, const MapType map_type);
 };
 
 #endif

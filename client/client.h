@@ -1,6 +1,8 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include <unordered_map>
+
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
@@ -33,6 +35,8 @@ private:
     SoundsEventsHandler sounds_events_handler;
     DrawerSDL drawer;
     KeyboardReader kb_reader;
+    std::unordered_map<MsgType, std::function<void(const ServerMessageDTO&)>> msg_handlers;
+    MapType map_id;
 
     // Último estado recibido del servidor para dibujar
     ServerMessageDTO last_state;
@@ -43,6 +47,8 @@ private:
     void update_state_from_server();
     void clear_display();
     void update_animation_frames(int iterations_ahead);
+
+    void init_game_handlers();
 
 public:
     Client(Protocol& protocol, const int id);

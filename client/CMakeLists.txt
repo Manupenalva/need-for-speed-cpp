@@ -13,6 +13,7 @@ target_sources(taller_client
     graphics/race_sheet.cpp
     graphics/upgradeScreen_sheet.cpp
     graphics/animations/animation_sheet.cpp
+    graphics/minimap/minimap_sheet.cpp
     drawer/drawerSDL.cpp
     drawer/car_drawer.cpp
     drawer/map_drawer.cpp
@@ -46,6 +47,7 @@ target_sources(taller_client
     graphics/animations/animation_sheet.h
     graphics/animations/fire_sheet.h
     graphics/animations/burst_sheet.h
+    graphics/minimap/minimap_sheet.h
     events/event_handler.h
     events/keyDown_handler.h
     events/keyUp_handler.h

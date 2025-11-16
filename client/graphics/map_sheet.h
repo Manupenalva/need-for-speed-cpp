@@ -15,12 +15,6 @@
 
 #include "sprite.h"
 
-enum MapType {
-    LIBERTY_CITY = 1,
-    SAN_ANDREAS = 2,
-    VICE_CITY = 3,
-};
-
 class MapSheet {
 private:
     // Cargara los mapas completos y get_map_sprite se encargara de devolver la sección correcta que

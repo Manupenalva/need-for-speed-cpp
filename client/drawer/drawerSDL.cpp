@@ -14,7 +14,8 @@ DrawerSDL::DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager
     drawers.push_back(std::make_unique<MinimapDrawer>(renderer, texture_manager));
 }
 
-void DrawerSDL::update_game_state(const ServerMessageDTO& msg, int iterations_ahead) {
+void DrawerSDL::update_game_state(const ServerMessageDTO& msg, int iterations_ahead,
+                                  MapType map_id) {
     if (msg.type != MsgType::STATE_UPDATE) {
         return;
     }
@@ -31,19 +32,9 @@ void DrawerSDL::update_game_state(const ServerMessageDTO& msg, int iterations_ah
     const CarState& client_car = *it;
 
     // Obtener el sprite del mapa centrado en el auto del cliente
-    /*
-    Sprite map_sprite = texture_manager.get_map_sprite(msg.map_number,
-                                                       client_car.x, client_car.y); */
+    Sprite map_sprite = texture_manager.get_map_sprite(map_id, client_car.x, client_car.y);
 
-
-    Sprite map_sprite = texture_manager.get_map_sprite(ConfigReader::get_instance().get_map_id(),
-                                                       client_car.x, client_car.y);
-    RenderedState rendered_state{iterations_ahead,
-                                 client_car,
-                                 map_sprite,
-                                 state,
-                                 static_cast<uint8_t>(ConfigReader::get_instance().get_map_id()),
-                                 msg.minimap_info};
+    RenderedState rendered_state{iterations_ahead, client_car, map_sprite, state};
 
 
     for (const auto& drawer: drawers) {

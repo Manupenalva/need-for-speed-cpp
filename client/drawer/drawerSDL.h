@@ -36,7 +36,7 @@ public:
     explicit DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager, int client_id);
 
     // Actualiza la vista según el estado recibido de la carrera
-    void update_game_state(const ServerMessageDTO& msg, int iterations_ahead);
+    void update_game_state(const ServerMessageDTO& msg, int iterations_ahead, MapType map_id);
 
     // Muestra en pantalla la screen para mejorar el auto
     void show_upgrade_screen();

@@ -17,13 +17,13 @@
 
 class MinimapDrawer: public Drawer {
 private:
+    MinimapInfo minimap_info;
+
     MapResources calculate_map_rects(const RenderedState& rendered_state,
                                      const SDL2pp::Texture& tex);
     void draw_map(const MapResources& map_info, SDL2pp::Texture& texture);
     void draw_car(const MapResources& map_info, const CarState& client_car);
     void draw_border(const MapResources& map_info);
-    void draw_arrows(const MapResources& map_info, const MinimapInfo& minimap_info);
-    void draw_checkpoints(const MapResources& map_info, const MinimapInfo& minimap_info);
 
 public:
     explicit MinimapDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager);

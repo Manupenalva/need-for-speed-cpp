@@ -15,9 +15,17 @@
 // Paths de imagenes
 #define CAR_PATH "../client/resources/assets/cars/Cars.png"
 
-#define LIBERTY_CITY_PATH "../client/resources/assets/cities/Backgrounds - Liberty City.png"
-#define SAN_ANDREAS_PATH "../client/resources/assets/cities/Backgrounds - San Andreas.png"
-#define VICE_CITY_PATH "../client/resources/assets/cities/Backgrounds - Vice City.png"
+enum MapType {
+    LIBERTY_CITY = 1,
+    SAN_ANDREAS = 2,
+    VICE_CITY = 3,
+};
+
+const std::map<MapType, std::string> MAP_PATHS = {
+        {LIBERTY_CITY, "../client/resources/assets/cities/Backgrounds - Liberty City.png"},
+        {SAN_ANDREAS, "../client/resources/assets/cities/Backgrounds - San Andreas.png"},
+        {VICE_CITY, "../client/resources/assets/cities/Backgrounds - Vice City.png"}};
+
 
 #define ARROW_PATH "../client/resources/assets/race/Flecha.png"
 #define CHECKPOINT_PATH "../client/resources/assets/race/Checkpoint.png"

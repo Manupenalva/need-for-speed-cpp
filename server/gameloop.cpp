@@ -7,12 +7,12 @@
 #include <ostream>
 #include <thread>
 
+#include "../common/constants.h"
 #include "../common/gameLoop_timer.h"
 #include "../libs/box2d/include/box2d/box2d.h"
 #include "events/actionmessage.h"
 #include "events/cheatmessage.h"
 #include "events/selectcarmessage.h"
-#include "../common/constants.h"
 
 #include "carBuilder.h"
 #include "carPhysics.h"
@@ -20,7 +20,7 @@
 #include "raceBuilder.h"
 #define TARGET_FPS 60
 #define TARGET_FPS_INTERVAL 30
-#define INTERVAL_WAIT_TIME 10  // segundos
+#define INTERVAL_WAIT_TIME 10        // segundos
 #define FRAME_INTERVAL_TO_CLOSE 300  // segundos
 
 Gameloop::Gameloop(
@@ -139,13 +139,15 @@ void Gameloop::handle_race(const int& race_index) {
     GameLoopTimer timer(TARGET_FPS);
     uint32_t iterations_behind = 1;
     races[race_index]->start_race();
-    broadcast_players(race_index); //Posiciones iniciales
+    broadcast_players(race_index);  // Posiciones iniciales
     broadcast_event(MsgType::RACE_COUNTDOWN);
     bool accepting_inputs = false;
     std::chrono::steady_clock::time_point countdown_start_time = std::chrono::steady_clock::now();
-    
+
     while (!races[race_index]->is_finished() && should_keep_running()) {
-        if (std::chrono::steady_clock::now() - countdown_start_time >= std::chrono::seconds(COUNTDOWN_TIME) && !accepting_inputs) {
+        if (std::chrono::steady_clock::now() - countdown_start_time >=
+                    std::chrono::seconds(COUNTDOWN_TIME) &&
+            !accepting_inputs) {
             broadcast_event(MsgType::COUNTDOWN_FINISHED);
             accepting_inputs = true;
         }
@@ -167,7 +169,7 @@ void Gameloop::handle_race(const int& race_index) {
             }
         }
 
-        if (accepting_inputs){
+        if (accepting_inputs) {
             for (uint32_t i = 0; i < iterations_behind; i++) {
                 races[race_index]->update_state();
             }

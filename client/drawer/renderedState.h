@@ -10,8 +10,6 @@ struct RenderedState {
     CarState client_car;
     Sprite map_sprite;
     State state;
-    uint8_t map_number;
-    MinimapInfo minimap_info;
 };
 
 #endif

@@ -4,10 +4,7 @@ MapSheet::MapSheet(SDL2pp::Renderer& renderer): renderer(renderer), map_textures
 
 void MapSheet::load_sprites() {
     // Cargar texturas de mapas
-    std::vector<std::pair<MapType, std::string>> map_files = {{LIBERTY_CITY, LIBERTY_CITY_PATH},
-                                                              {SAN_ANDREAS, SAN_ANDREAS_PATH},
-                                                              {VICE_CITY, VICE_CITY_PATH}};
-    for (const auto& [map_type, file_path]: map_files) {
+    for (const auto& [map_type, file_path]: MAP_PATHS) {
         auto texture = std::make_unique<SDL2pp::Texture>(renderer, SDL2pp::Surface(file_path));
         if (texture->Get() == nullptr) {
             throw std::runtime_error("Error al cargar textura de mapa: " + file_path);
