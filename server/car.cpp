@@ -4,12 +4,20 @@
 
 #include "../common/constants.h"
 
+#define CAR_MAX_SPEED 100.0f
+#define CAR_MAX_ACCELERATION 100.0f
+#define CAR_MAX_HEALTH 100.0f
+#define CAR_MAX_MASS 1000.0f
+#define CAR_MAX_DRIVABILITY 100.0f
+
 Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
          const float& acceleration, const float& health, const float& mass,
          const float& drivability, const float& car_long, const float& car_width,
          const int& car_type):
         input_state(),
-        state(id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, car_type, health),
+        state({id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, false,
+               static_cast<uint16_t>(car_type), static_cast<uint16_t>(health)}),
+        bridge_layer(BridgeLayer::NONE),
         car_name(name),
         max_speed(max_speed),
         acceleration(acceleration),
@@ -17,16 +25,21 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
         drivability(drivability),
         car_long(car_long),
         car_width(car_width),
-        current_penalization(0.0f) {}
+        max_health(health),
+        current_penalization(0.0f),
+        curr_world() {}
 
 void Car::add_to_world(b2WorldId world, Position start_position) {
     state.x = start_position.x;
     state.y = start_position.y;
     state.angle = 0.0f;
+    state.health = static_cast<uint16_t>(max_health);
+
+    bridge_layer = BridgeLayer::NONE;
 
     physics = std::make_unique<CarPhysics>(world, state, max_speed, acceleration, mass, drivability,
-                                           car_long, car_width);
-    std::cout << "Me agregaron a la carrera, mi velocidad punta es " << max_speed << std::endl;
+                                           car_long, car_width, this);
+    curr_world = world;
 }
 
 void Car::update_input(const uint8_t& action) {
@@ -57,8 +70,9 @@ void Car::upgrade_stats(const uint8_t& action) {
     } else if (action == ACT_IMPROVE_ACCELERATION) {
         acceleration += 5;
         current_penalization += 2.0f;
+        std::cout << "Mejoré la aceleración" << std::endl;
     } else if (action == ACT_IMPROVE_HEALTH) {
-        state.health += 5;
+        max_health += 5;
         current_penalization += 2.0f;
     } else if (action == ACT_IMPROVE_MASS) {
         mass += 5;
@@ -70,11 +84,12 @@ void Car::upgrade_stats(const uint8_t& action) {
 }
 
 void Car::update_physics() {
+    state.braking = false;
     if (input_state.accelerating) {
         physics->accelerate();
     }
     if (input_state.braking) {
-        physics->brake();
+        physics->deaccelerate();
     }
     if (input_state.turning_left) {
         physics->turn_left();
@@ -84,9 +99,28 @@ void Car::update_physics() {
     }
 }
 
-void Car::update_position() { physics->update_position(); }
+void Car::update_position() {
+    physics->update_position();
+    if (bridge_layer == BridgeLayer::BOTTOM) {
+        std::cout << "Estoy abajo de un puente" << std::endl;
+        state.under_bridge = true;
+    } else {
+        state.under_bridge = false;
+    }
+}
 
 void Car::handle_hits() { physics->handle_hits(); }
+
+// lo dejo comentado por ahora por como se maneja el choque
+void Car::interact_with_bridge(b2ShapeId /*sensor_shape*/, BridgeLayer sensor_layer) {
+    if (bridge_layer == BridgeLayer::NONE) {
+        bridge_layer = sensor_layer;
+    } else if (bridge_layer == sensor_layer) {
+        bridge_layer = BridgeLayer::NONE;
+    } else {
+        physics->handle_crash_with_bridge();
+    }
+}
 
 CarInfo Car::get_state_info() const { return state; }
 
@@ -105,7 +139,66 @@ bool Car::reached_checkpoint(Position next_checkpoint, float celd_width, float c
     return true;
 }
 
-void Car::finish_race(float race_time) {
+void Car::finish_race(float race_time, int position) {
     race_times.push_back(race_time + current_penalization);
+    positions.push_back(position);
     current_penalization = 0.0f;
+    reset_inputs();
 }
+
+void Car::reset_inputs() {
+    input_state.accelerating = false;
+    input_state.braking = false;
+    input_state.turning_left = false;
+    input_state.turning_right = false;
+}
+
+PlayerState Car::get_player_state() const {
+    return PlayerState{state.id,
+                       true,
+                       static_cast<uint8_t>(get_last_position()),
+                       static_cast<uint32_t>(get_result_time() * 1000),
+                       static_cast<uint32_t>(get_current_penalization() * 1000),
+                       get_properties()};
+}
+
+int Car::get_last_position() const {
+    if (positions.empty()) {
+        return 0;
+    }
+    return positions.back();
+}
+
+float Car::get_result_time() const {
+    if (race_times.empty()) {
+        return 0.0f;
+    }
+    return race_times.back();
+}
+
+float Car::get_current_penalization() const { return current_penalization; }
+
+CarProperties Car::get_properties() const {
+    return CarProperties{static_cast<uint8_t>(state.car_type), static_cast<uint16_t>(max_speed),
+                         static_cast<uint16_t>(acceleration),  static_cast<uint16_t>(max_health),
+                         static_cast<uint16_t>(mass),          static_cast<uint16_t>(drivability)};
+}
+
+void Car::activate_infinite_health() { state.health = static_cast<uint16_t>(UINT16_MAX); }
+
+void Car::explode() {
+    state.exploded = true;
+    state.crashed = true;
+    state.health = 0;
+}
+
+void Car::maximize_stats() {
+    max_speed = CAR_MAX_SPEED;
+    acceleration = CAR_MAX_ACCELERATION;
+    max_health = CAR_MAX_HEALTH;
+    mass = CAR_MAX_MASS;
+    drivability = CAR_MAX_DRIVABILITY;
+    physics->set_stats(max_speed, acceleration, mass, drivability);
+}
+
+bool Car::exploded() { return state.exploded; }

@@ -3,6 +3,7 @@
 
 #define LENGTH_BYTES 2
 #define ID_BYTES 2
+#define COUNTDOWN_BYTES 2
 #define AMOUNT_BYTES 4
 #define FRAME_BYTES 4
 #define TIME_BYTES 4
@@ -47,6 +48,8 @@
 
 #define COMMON_CHECKPOINT 1
 #define SPECIAL_CHECKPOINT 2
+
+#define COUNTDOWN_TIME 10         // segundos
 
 #define UPDATE_STATE 0x0D
 

@@ -102,6 +102,7 @@ MinimapInfo MessageReceiver::recv_minimap_info() {
 
 State MessageReceiver::recv_state_update() {
     State state;
+    state.countdown_time = static_cast<int>(obtain_uint16());
     state.frame = obtain_uint32();
     state.num_cars = obtain_uint16();
     state.cars.resize(state.num_cars);
