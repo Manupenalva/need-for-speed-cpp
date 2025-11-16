@@ -33,7 +33,7 @@ Car CarBuilder::create_car(const int& id, const int& car_type) {
         float car_width = car_parameters["width"].as<float>();
 
         return Car(id, name, max_speed, acceleration, health, mass, drivability, car_long,
-                   car_width, car_type);
+                   car_width, selected_car_type);
     } catch (const std::exception& e) {
         std::cerr << "Error building the car: " << e.what() << std::endl;
         throw;
