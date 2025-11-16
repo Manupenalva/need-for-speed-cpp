@@ -28,6 +28,7 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
     view->viewport()->installEventFilter(this);
     view->installEventFilter(this);
     controller = new SceneController(scene);
+    setActions();
 
     view->setAcceptDrops(false);
     setAcceptDrops(true);
@@ -45,11 +46,11 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
         if (!ok || fileName.isEmpty()) {
             return;
         }
-        if (controller->countItemsOfType("start") != MAX_PLAYERS) {
+        if (controller->countItemsOfType(START_TYPE) != MAX_PLAYERS) {
             QMessageBox::warning(this, "Starts missing", "It is neccessary to be 8 starts points.");
             return;
         }
-        if (controller->countItemsOfType("finish") != MAX_FINISH) {
+        if (controller->countItemsOfType(FINISH_TYPE) != MAX_FINISH) {
             QMessageBox::warning(this, "Finish missing", "It is neccessary to be 1 finish line.");
             return;
         }
@@ -115,44 +116,27 @@ void MapCanvas::dropEvent(QDropEvent* event) {
         return;
     }
 
-    if (dragInfo.getType().contains("start", Qt::CaseInsensitive) &&
-        !controller->checkStartLine()) {
-        QMessageBox::warning(this, "Limit reach",
-                             "There are 8 starting points in the map. Please remove one.");
-        return;
-    }
-
-    if (dragInfo.getType().contains("finish", Qt::CaseInsensitive) &&
-        !controller->checkFinishLine()) {
-        QMessageBox::warning(
-                this, "Limit reach",
-                "There is a finish line in the map. Please remove to drop the new one.");
-        return;
-    }
-
     QPointF scenePos = view->mapToScene(event->position().toPoint());
     int x = static_cast<int>(scenePos.x() / GRID_SIZE) * GRID_SIZE;
     int y = static_cast<int>(scenePos.y() / GRID_SIZE) * GRID_SIZE;
-    if (!dragInfo.getType().contains(HINT_TYPE, Qt::CaseInsensitive)) {
-        controller->handleDropEvent(dragInfo, x, y);
-        event->acceptProposedAction();
-        return;
-    }
 
-    if (controller->countItemsOfType("checkpoint") == 0) {
-        QMessageBox::warning(this, "No checkpoint",
-                             "You must place at least one checkpoint before placing hints");
+    auto it = actions.find(dragInfo.getType());
+    ActionResult actionResult = it->second->execute(*controller, dragInfo, x, y);
+    if (!actionResult.success) {
+        QMessageBox::warning(this, actionResult.errorTitle, actionResult.errorMessage);
         event->ignore();
         return;
     }
     
-    QMessageBox::information(this, "Select checkpoint",
+    if (actionResult.selecting) {
+        selecting = true;
+        info = actionResult.pending;
+        hintPos = actionResult.pos;
+        QMessageBox::information(this, "Select checkpoint",
                              "Select the checkpoint to associate this new hint. ESC to exit.");
+        view->setFocus();
+    }
     event->acceptProposedAction();
-    selecting = true;
-    info = dragInfo;
-    hintPos = QPointF(x, y);
-    view->setFocus();
 }
 
 void MapCanvas::exportToYaml(const QString& filePath) {
@@ -167,9 +151,9 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
             if (selecting && mouseEvent->button() == Qt::LeftButton) {
                 QPointF scenePos = view->mapToScene(mouseEvent->pos());
                 QRectF pickArea(scenePos.x() - GRID_SIZE/2.0, scenePos.y() - GRID_SIZE/2.0, GRID_SIZE, GRID_SIZE);
-                const auto items = scene->items(pickArea);
+                auto items = scene->items(pickArea);
                 for (auto* i: items) {
-                    const auto t = i->data(TYPE).toString();
+                    auto t = i->data(TYPE).toString();
                     if (t.contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
                         controller->placeHint(info, hintPos, i);
                         selecting = false;
@@ -181,18 +165,12 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
             if (mouseEvent->button() == Qt::RightButton && !selecting) {
                 QPointF scenePos = view->mapToScene(mouseEvent->pos());
                 QRectF pickArea(scenePos.x() - GRID_SIZE/2.0, scenePos.y() - GRID_SIZE/2.0, GRID_SIZE, GRID_SIZE);
-                const auto items = scene->items(pickArea);
+                auto items = scene->items(pickArea);
 
                 QGraphicsItem* item = items.first();
                 if (!item->data(TYPE).isValid())
                     return true;
-                const auto t = item->data(TYPE).toString();
-                if (t.contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
-                    controller->deleteHints(item); 
-                } else {
-                    scene->removeItem(item);
-                    delete item;
-                }
+                controller->deleteItem(item);
                 return true;
             }
         }
@@ -251,3 +229,10 @@ void MapCanvas::importFromYaml(const QString& filePath) {
     }
 }
 
+void MapCanvas::setActions() {
+    actions.emplace(QStringLiteral(ROAD_TYPE), std::make_unique<ActionRoad>());
+    actions.emplace(QStringLiteral(CHECKPOINT_TYPE), std::make_unique<ActionCheckpoint>());
+    actions.emplace(QStringLiteral(START_TYPE), std::make_unique<ActionStart>());
+    actions.emplace(QStringLiteral(FINISH_TYPE), std::make_unique<ActionFinish>());
+    actions.emplace(QStringLiteral(HINT_TYPE), std::make_unique<ActionHint>());
+}

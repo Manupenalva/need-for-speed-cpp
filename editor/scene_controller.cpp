@@ -58,17 +58,16 @@ void SceneController::deleteHints(QGraphicsItem* checkpointItem) {
     }
 
     for (auto* hint: hintToDelete) {
-        scene->removeItem(hint);
-        delete hint;
+        deleteItem(hint);
     }
 }
 
-bool SceneController::checkStartLine() const {
-    int startLines = countItemsOfType(START_TYPE);
-    return startLines <= 8;
-}
-
-bool SceneController::checkFinishLine() const {
-    int finishLines = countItemsOfType(FINISH_TYPE);
-    return finishLines <= 1;
+void SceneController::deleteItem(QGraphicsItem* item) {
+    auto type = item->data(TYPE).toString();
+    if (type.contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
+        deleteHints(item);
+        return;
+    }
+    scene->removeItem(item);
+    delete item;
 }
