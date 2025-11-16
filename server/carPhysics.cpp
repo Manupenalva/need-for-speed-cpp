@@ -52,7 +52,6 @@ void CarPhysics::accelerate() {
 
     b2Vec2 velocity = b2Body_GetLinearVelocity(body);
     float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
-    // std::cout << "Mi velocidad es " << speed << std::endl;
 
     float max_speed = BASE_MAX_SPEED * max_speed_factor;
     float speedRatio = 0.0f;
