@@ -38,6 +38,8 @@ private:
 
     float current_penalization;
 
+    b2WorldId curr_world;
+
 public:
     Car(const uint16_t& id, const std::string& name, const float& max_speed,
         const float& acceleration, const float& health, const float& mass, const float& drivability,
@@ -55,6 +57,10 @@ public:
     void reset_inputs();
     void interact_with_bridge(b2ShapeId sensor_shape, BridgeLayer sensor_layer);
     PlayerState get_player_state() const;
+    void activate_infinite_health();
+    void explode();
+    void maximize_stats();
+    bool exploded();
 
     Car(Car&& other) = default;
     Car& operator=(Car&& other) = default;
@@ -70,7 +76,8 @@ public:
             car_long(0),
             car_width(0),
             max_health(0),
-            current_penalization(0) {}
+            current_penalization(0),
+            curr_world() {}
 
 private:
     Car(const Car& other) = delete;

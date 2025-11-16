@@ -156,7 +156,7 @@ bool verify_car_state(const CarState& car1, const CarState& car2) {
 
 bool verify_npc_state(const NpcState& npc1, const NpcState& npc2) {
     return (npc1.x == npc2.x) && (npc1.y == npc2.y) && (npc1.angle == npc2.angle) &&
-           (npc1.car_type == npc2.car_type);
+           (npc1.car_type == npc2.car_type) && (npc1.under_bridge == npc2.under_bridge);
 }
 
 TEST_F(ProtocolTestServer, StateUpdate) {
@@ -173,7 +173,7 @@ TEST_F(ProtocolTestServer, StateUpdate) {
     CarState car1(1, 150.0f, 75.0f, 0.0f, 0.0f, 2, cp1, ca1, false, false, true, true, 1, 200);
     CarState car2(2, 140.0f, 70.0f, 10.0f, 5.0f, 90.0f, cp2, ca2, false, true, true, true, 1, 200);
     state.cars = {car1, car2};
-    NpcState npc1{130.0f, 65.0f, 50.0f, 1};
+    NpcState npc1{130.0f, 65.0f, 50.0f, 1, true};
     state.npcs = {npc1};
     send_msg.state = state;
 
@@ -193,7 +193,9 @@ TEST_F(ProtocolTestServer, StateUpdate) {
 
 TEST_F(ProtocolTestServer, CodeMessages) {
     std::vector<MsgType> msg_types = {MsgType::GAME_START, MsgType::GAME_END,
-                                      MsgType::RACE_FINISHED, MsgType::RACE_STARTED};
+                                      MsgType::RACE_FINISHED, MsgType::RACE_STARTED,
+                                      MsgType::COUNTDOWN_FINISHED, MsgType::RACE_COUNTDOWN,
+                                      MsgType::INTERVAL_CLOSED};
     for (const auto& msg_type: msg_types) {
         ServerMessageDTO send_msg;
         send_msg.type = msg_type;

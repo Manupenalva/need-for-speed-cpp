@@ -159,6 +159,8 @@ NpcState MessageReceiver::recv_npc_state() {
     npc.y = obtain_float();
     npc.angle = obtain_float();
     npc.car_type = obtain_uint16();
+    uint8_t under_bridge_byte = obtain_byte();
+    npc.under_bridge = (under_bridge_byte != 0);
     return npc;
 }
 

@@ -34,12 +34,13 @@ private:
     float current_time;
     b2WorldId world;
     std::vector<std::tuple<uint16_t, float>> race_results;
+    uint8_t city_code;
 
 public:
     Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_width,
          const float& celd_height, const std::vector<Position>& start_positions,
          const Position& finish, const std::vector<Position>& checkpoints,
-         const std::vector<Hint>& hints, const std::string& map_path);
+         const std::vector<Hint>& hints, const std::string& map_path, const uint8_t city_code);
     b2WorldId start_race();
     void update_state();
     bool is_finished();
@@ -48,6 +49,11 @@ public:
     CheckpointArrow get_next_checkpoint_arrow(const uint16_t car_id);
     const std::vector<std::tuple<uint16_t, float>>& get_race_results();
     ServerMessageDTO get_interval_message();
+    void force_finish_race(const uint16_t& player_id);
+    void force_lose_race(const uint16_t& player_id);
+    uint8_t get_city_code();
+    std::vector<CheckpointInfo> get_checkpoints_info();
+    std::vector<CheckpointArrow> get_checkpoints_arrows();
 
 private:
     void handle_sensors();

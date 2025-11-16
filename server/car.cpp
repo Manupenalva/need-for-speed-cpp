@@ -4,6 +4,12 @@
 
 #include "../common/constants.h"
 
+#define CAR_MAX_SPEED 100.0f
+#define CAR_MAX_ACCELERATION 100.0f
+#define CAR_MAX_HEALTH 100.0f
+#define CAR_MAX_MASS 1000.0f
+#define CAR_MAX_DRIVABILITY 100.0f
+
 Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
          const float& acceleration, const float& health, const float& mass,
          const float& drivability, const float& car_long, const float& car_width,
@@ -20,7 +26,8 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
         car_long(car_long),
         car_width(car_width),
         max_health(health),
-        current_penalization(0.0f) {}
+        current_penalization(0.0f),
+        curr_world() {}
 
 void Car::add_to_world(b2WorldId world, Position start_position) {
     state.x = start_position.x;
@@ -28,8 +35,11 @@ void Car::add_to_world(b2WorldId world, Position start_position) {
     state.angle = 0.0f;
     state.health = static_cast<uint16_t>(max_health);
 
+    bridge_layer = BridgeLayer::NONE;
+
     physics = std::make_unique<CarPhysics>(world, state, max_speed, acceleration, mass, drivability,
-                                           car_long, car_width);
+                                           car_long, car_width, this);
+    curr_world = world;
 }
 
 void Car::update_input(const uint8_t& action) {
@@ -89,7 +99,15 @@ void Car::update_physics() {
     }
 }
 
-void Car::update_position() { physics->update_position(); }
+void Car::update_position() {
+    physics->update_position();
+    if (bridge_layer == BridgeLayer::BOTTOM) {
+        std::cout << "Estoy abajo de un puente" << std::endl;
+        state.under_bridge = true;
+    } else {
+        state.under_bridge = false;
+    }
+}
 
 void Car::handle_hits() { physics->handle_hits(); }
 
@@ -165,3 +183,22 @@ CarProperties Car::get_properties() const {
                          static_cast<uint16_t>(acceleration),  static_cast<uint16_t>(max_health),
                          static_cast<uint16_t>(mass),          static_cast<uint16_t>(drivability)};
 }
+
+void Car::activate_infinite_health() { state.health = static_cast<uint16_t>(UINT16_MAX); }
+
+void Car::explode() {
+    state.exploded = true;
+    state.crashed = true;
+    state.health = 0;
+}
+
+void Car::maximize_stats() {
+    max_speed = CAR_MAX_SPEED;
+    acceleration = CAR_MAX_ACCELERATION;
+    max_health = CAR_MAX_HEALTH;
+    mass = CAR_MAX_MASS;
+    drivability = CAR_MAX_DRIVABILITY;
+    physics->set_stats(max_speed, acceleration, mass, drivability);
+}
+
+bool Car::exploded() { return state.exploded; }
