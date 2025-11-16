@@ -458,7 +458,7 @@ layers:
     width: 90
     x: 75
     y: 2230.67
-  - height: 785.667
+  - height: 798
     id: 54
     name: ''
     rotation: 0
@@ -466,7 +466,7 @@ layers:
     visible: true
     width: 90
     x: 73
-    y: 2612.67
+    y: 2600.34
   - height: 216.667
     id: 55
     name: ''
@@ -1871,7 +1871,7 @@ layers:
     width: 137.607
     x: 3063.2
     y: 4454.58
-  - height: 23.516
+  - height: 29.516
     id: 340
     name: ''
     rotation: 0
@@ -1886,7 +1886,7 @@ layers:
     rotation: 0
     type: ''
     visible: true
-    width: 167.607
+    width: 174.607
     x: 3037.2
     y: 3967.24
   - height: 88.334
@@ -2156,8 +2156,8 @@ layers:
     rotation: 0
     type: ''
     visible: true
-    width: 266.607
-    x: 3283.36
+    width: 285.357
+    x: 3264.61
     y: 4138.58
   - height: 166.849
     id: 373
@@ -2165,8 +2165,8 @@ layers:
     rotation: 0
     type: ''
     visible: true
-    width: 58.607
-    x: 3280.03
+    width: 73.2737
+    x: 3265.36
     y: 3970.58
   - height: 26.849
     id: 374
@@ -2249,7 +2249,7 @@ layers:
     width: 61.4863
     x: 3655.92
     y: 4205.82
-  - height: 45.6977
+  - height: 56.3644
     id: 383
     name: ''
     rotation: 0
@@ -2257,7 +2257,7 @@ layers:
     visible: true
     width: 470.987
     x: 3263.09
-    y: 4431.15
+    y: 4420.48
   - height: 28.3644
     id: 384
     name: ''
@@ -6915,7 +6915,7 @@ layers:
     width: 11.3333
     x: 402.333
     y: 4159.33
-  - height: 238
+  - height: 242.909
     id: 892
     name: down 1
     rotation: 0
@@ -6923,8 +6923,8 @@ layers:
     visible: true
     width: 15.3333
     x: 3204.33
-    y: 4175.48
-  - height: 430.833
+    y: 4170.57
+  - height: 244.5
     id: 893
     name: down 2
     rotation: 0
@@ -6932,7 +6932,7 @@ layers:
     visible: true
     width: 15.3333
     x: 3260.33
-    y: 3983.67
+    y: 4170
   - height: 14
     id: 894
     name: up 1
@@ -6948,9 +6948,9 @@ layers:
     rotation: 0
     type: '2'
     visible: true
-    width: 68.3333
-    x: 3206.83
-    y: 3969.25
+    width: 47.8333
+    x: 3213.85
+    y: 4152.99
   opacity: 1
   type: objectgroup
   visible: true

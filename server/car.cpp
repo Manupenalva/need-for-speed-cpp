@@ -102,6 +102,7 @@ void Car::update_physics() {
 void Car::update_position() {
     physics->update_position();
     if (bridge_layer == BridgeLayer::BOTTOM) {
+        std::cout << "Estoy abajo de un puente" << std::endl;
         state.under_bridge = true;
     } else {
         state.under_bridge = false;
