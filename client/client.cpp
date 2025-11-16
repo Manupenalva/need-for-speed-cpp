@@ -120,10 +120,6 @@ void Client::init_game_handlers() {
     msg_handlers[MsgType::SEND_MINIMAP_INFO] = [this](const ServerMessageDTO& server_msg) {
         texture_manager.load_minimap_info(server_msg.minimap_info, map_id);
     };
-    msg_handlers[MsgType::RACE_COUNTDOWN] = [this](const ServerMessageDTO& server_msg) {
-        // Iniciar cuenta regresiva antes de empezar la carrera
-        last_state = server_msg;
-    };
     msg_handlers[MsgType::INTERVAL_UPDATE] = [this](const ServerMessageDTO& server_msg) {
         // Actualizar estado de intervalo
         last_state = server_msg;

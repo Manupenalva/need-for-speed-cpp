@@ -8,7 +8,8 @@ TextureManager::TextureManager(SDL2pp::Renderer& renderer):
         upgrade_screen_sheet(renderer),
         fire_sheet(renderer),
         burst_sheet(renderer),
-        minimap_sheet(renderer, race_sheet) {}
+        minimap_sheet(renderer, race_sheet),
+        countdown_sheet(renderer) {}
 
 
 void TextureManager::load_resources() {
@@ -18,6 +19,7 @@ void TextureManager::load_resources() {
     upgrade_screen_sheet.load_sprite();
     fire_sheet.load_sprites();
     burst_sheet.load_sprites();
+    countdown_sheet.load_sprites();
 }
 
 Sprite TextureManager::get_car_sprite(int car_id, int rotation) {
@@ -52,4 +54,8 @@ SDL2pp::Texture& TextureManager::get_minimap_texture() {
 void TextureManager::load_minimap_info(const MinimapInfo& info, const MapType map_type) {
     minimap_sheet.load_texture(map_type);
     minimap_sheet.load_minimap_info(info);
+}
+
+Sprite TextureManager::get_countdown_sprite(int countdown_type) {
+    return countdown_sheet.get_sprite(countdown_type);
 }

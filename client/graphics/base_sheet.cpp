@@ -1,4 +1,4 @@
-#include "animation_sheet.h"
+#include "base_sheet.h"
 
 AnimationSheet::AnimationSheet(SDL2pp::Renderer& renderer, const std::string& path):
         texture(renderer, [&path]() {

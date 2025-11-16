@@ -8,13 +8,14 @@
 
 #include "animations/burst_sheet.h"
 #include "animations/fire_sheet.h"
+#include "car/car_sheet.h"
+#include "countdown/countdown_sheet.h"
+#include "map/map_sheet.h"
 #include "minimap/minimap_sheet.h"
+#include "race/race_sheet.h"
+#include "screen/upgradeScreen_sheet.h"
 
-#include "car_sheet.h"
-#include "map_sheet.h"
-#include "race_sheet.h"
 #include "sprite.h"
-#include "upgradeScreen_sheet.h"
 
 class TextureManager {
 private:
@@ -26,6 +27,7 @@ private:
     FireSheet fire_sheet;
     BurstSheet burst_sheet;
     MinimapSheet minimap_sheet;
+    CountdownSheet countdown_sheet;
 
 public:
     explicit TextureManager(SDL2pp::Renderer& renderer);
@@ -54,6 +56,8 @@ public:
     SDL2pp::Texture& get_minimap_texture();
 
     void load_minimap_info(const MinimapInfo& info, const MapType map_type);
+
+    Sprite get_countdown_sprite(int countdown_type);
 };
 
 #endif

@@ -14,15 +14,15 @@
 #include "../graphics/texture_manager.h"
 #include "animations/burst_drawer.h"
 #include "animations/fire_drawer.h"
+#include "car/car_drawer.h"
+#include "map/map_drawer.h"
 #include "minimap/minimap_drawer.h"
+#include "race/arrow_drawer.h"
+#include "race/checkpoint_drawer.h"
+#include "screen/upgradeScreen_drawer.h"
 
-#include "arrow_drawer.h"
-#include "car_drawer.h"
-#include "checkpoint_drawer.h"
 #include "drawer.h"
-#include "map_drawer.h"
 #include "renderedState.h"
-#include "upgradeScreen_drawer.h"
 
 class DrawerSDL {
 private:

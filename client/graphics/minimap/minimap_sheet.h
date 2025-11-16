@@ -7,7 +7,7 @@
 
 #include "../../../common/minimapInfo.h"
 #include "../../config/constants.h"
-#include "../race_sheet.h"
+#include "../race/race_sheet.h"
 #include "../sprite.h"
 #include "SDL2pp/SDL2pp.hh"
 

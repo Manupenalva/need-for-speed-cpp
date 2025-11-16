@@ -36,6 +36,8 @@ const std::map<MapType, std::string> MAP_PATHS = {
 #define PATH_BURST "../client/resources/assets/animations/explosion.png"
 #define PATH_FIRE "../client/resources/assets/animations/fuego.png"
 
+#define PATH_COUNTDOWN "../client/resources/assets/countdown/numeros.png"
+
 enum MusicID { MAIN_MUSIC = 0 };
 
 #define MUSIC_PATH "../client/resources/sounds/Need For Speed Music.mp3"

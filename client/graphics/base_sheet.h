@@ -1,5 +1,5 @@
-#ifndef ANIMATION_SHEET_H
-#define ANIMATION_SHEET_H
+#ifndef BASE_SHEET_H
+#define BASE_SHEET_H
 
 #include <string>
 #include <unordered_map>
@@ -9,7 +9,7 @@
 
 #include "../sprite.h"
 
-class AnimationSheet {
+class BaseSheet {
 private:
     SDL2pp::Texture texture;
     std::unordered_map<int, Sprite> animation_sprites;
@@ -21,10 +21,10 @@ protected:
     int types_per_col = 0;
 
 public:
-    AnimationSheet(SDL2pp::Renderer& renderer, const std::string& path);
+    BaseSheet(SDL2pp::Renderer& renderer, const std::string& path);
 
     void load_sprites();
 
-    Sprite get_sprite(int animation_type);
+    Sprite get_sprite(int base_type);
 };
 #endif

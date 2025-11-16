@@ -3,7 +3,7 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
-#include "drawer.h"
+#include "../drawer.h"
 
 class ArrowDrawer: public Drawer {
 public:

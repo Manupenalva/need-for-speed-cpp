@@ -1,7 +1,7 @@
 #ifndef UPGRADE_SCREEN_DRAWER_H
 #define UPGRADE_SCREEN_DRAWER_H
 
-#include "drawer.h"
+#include "../drawer.h"
 
 class UpgradeScreenDrawer {
 private:
