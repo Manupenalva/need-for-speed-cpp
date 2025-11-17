@@ -23,7 +23,7 @@ https://box2d.org/documentation/index.html
 
 En el caso de SDL, se vieron algunos de los ejemplos presentes en el repositorio mostrado por la catedra.
 
-Por ultimo, para la comprension de Qt,
+Por ultimo, para la comprension de Qt, se recurrió a la documentación presente en https://doc.qt.io/qt-6, sumado al uso de la aplicación QtCreator para el diseño de las interfaces.
 
 
 ## Implementación
