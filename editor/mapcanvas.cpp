@@ -148,29 +148,13 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
     if (obj == view->viewport()) {
         if (event->type() == QEvent::MouseButtonPress) {
             QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+            QPoint pos = mouseEvent->pos();
             if (selecting && mouseEvent->button() == Qt::LeftButton) {
-                QPointF scenePos = view->mapToScene(mouseEvent->pos());
-                QRectF pickArea(scenePos.x() - GRID_SIZE/2.0, scenePos.y() - GRID_SIZE/2.0, GRID_SIZE, GRID_SIZE);
-                auto items = scene->items(pickArea);
-                for (auto* i: items) {
-                    auto t = i->data(TYPE).toString();
-                    if (t.contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
-                        controller->placeHint(info, hintPos, i);
-                        selecting = false;
-                        return true;
-                    }
-                }
+                handleSelectingHint(pos);
                 return true;
             }
             if (mouseEvent->button() == Qt::RightButton && !selecting) {
-                QPointF scenePos = view->mapToScene(mouseEvent->pos());
-                QRectF pickArea(scenePos.x() - GRID_SIZE/2.0, scenePos.y() - GRID_SIZE/2.0, GRID_SIZE, GRID_SIZE);
-                auto items = scene->items(pickArea);
-
-                QGraphicsItem* item = items.first();
-                if (!item->data(TYPE).isValid())
-                    return true;
-                controller->deleteItem(item);
+                handleDelete(pos);
                 return true;
             }
         }
@@ -192,27 +176,11 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
                 return true;
             }
             if (keyEvent->key() == Qt::Key_Plus) {       
-                double newZoom = currentZoom + ZOOM_SCALE;
-                if (newZoom > MAX_ZOOM)
-                    newZoom = MAX_ZOOM;
-
-                double factor = newZoom / currentZoom;
-                if (factor != 1.0) {
-                    view->scale(factor, factor);
-                    currentZoom = newZoom;
-                }
+                zoomIn();
                 return true;
             }
             if (keyEvent->key() == Qt::Key_Minus) { 
-                double newZoom = currentZoom - ZOOM_SCALE;
-                if (newZoom < MIN_ZOOM)
-                    newZoom = MIN_ZOOM;
-
-                double factor = newZoom / currentZoom;
-                if (factor != 1.0) {
-                    view->scale(factor, factor);
-                    currentZoom = newZoom;
-                }
+                zoomOut();
                 return true;
             }
         }
@@ -235,4 +203,53 @@ void MapCanvas::setActions() {
     actions.emplace(QStringLiteral(START_TYPE), std::make_unique<ActionStart>());
     actions.emplace(QStringLiteral(FINISH_TYPE), std::make_unique<ActionFinish>());
     actions.emplace(QStringLiteral(HINT_TYPE), std::make_unique<ActionHint>());
+}
+
+void MapCanvas::handleSelectingHint(const QPoint pos&){
+    QPointF scenePos = view->mapToScene(mouseEvent->pos());
+    QRectF pickArea(scenePos.x() - GRID_SIZE/2.0, scenePos.y() - GRID_SIZE/2.0, GRID_SIZE, GRID_SIZE);
+    auto items = scene->items(pickArea);
+    for (auto* i: items) {
+        auto t = i->data(TYPE).toString();
+        if (t.contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
+            controller->placeHint(info, hintPos, i);
+            selecting = false;
+            break;
+        }
+    }
+}
+
+void MapCanvas::handleDelete(const QPoint pos&) {
+    QPointF scenePos = view->mapToScene(mouseEvent->pos());
+    QRectF pickArea(scenePos.x() - GRID_SIZE/2.0, scenePos.y() - GRID_SIZE/2.0, GRID_SIZE, GRID_SIZE);
+    auto items = scene->items(pickArea);
+
+    QGraphicsItem* item = items.first();
+    if (!item->data(TYPE).isValid())
+        return;
+    controller->deleteItem(item);
+}
+
+void MapCanvas::zoomIn(){
+    double newZoom = currentZoom + ZOOM_SCALE;
+    if (newZoom > MAX_ZOOM)
+        newZoom = MAX_ZOOM;
+
+    double factor = newZoom / currentZoom;
+    if (factor != 1.0) {
+        view->scale(factor, factor);
+        currentZoom = newZoom;
+    }
+}
+
+void MapCanvas::zoomOut() {
+    double newZoom = currentZoom - ZOOM_SCALE;
+    if (newZoom < MIN_ZOOM)
+        newZoom = MIN_ZOOM;
+
+    double factor = newZoom / currentZoom;
+    if (factor != 1.0) {
+        view->scale(factor, factor);
+        currentZoom = newZoom;
+    }
 }

@@ -50,6 +50,11 @@ private:
     DragInfo info;
     QPointF hintPos;
     double currentZoom = INITIAL_ZOOM;
+
+    void handleSelectingHint(const QPoint pos&);
+    void handleDelete(const QPoint pos&);
+    void zoomIn();
+    void zoomOut();
 };
 
 #endif
