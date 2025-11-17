@@ -3,11 +3,11 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QVBoxLayout>
+
 #include "ui_lobby.h"
 
-Lobby::Lobby(Protocol& protocol, QWidget* parent): QMainWindow(parent), 
-ui(new Ui::Lobby), 
-protocol(protocol) {
+Lobby::Lobby(Protocol& protocol, QWidget* parent):
+        QMainWindow(parent), ui(new Ui::Lobby), protocol(protocol) {
 
     ui->setupUi(this);
 
@@ -21,13 +21,13 @@ protocol(protocol) {
     connect(ui->createGameButton, &QPushButton::clicked, this, &Lobby::createGame);
     connect(ui->joinGameButton, &QPushButton::clicked, this, &Lobby::showConnectScreen);
     connect(ui->connectButton, &QPushButton::clicked, this, &Lobby::connectServer);
-    
-    connect(ui->backConnectButton, &QPushButton::clicked,this, &Lobby::menuScreen);
-    connect(ui->backCarButton, &QPushButton::clicked,this, &Lobby::menuScreen);
-    connect(ui->backStartButton, &QPushButton::clicked,this, &Lobby::menuScreen);
+
+    connect(ui->backConnectButton, &QPushButton::clicked, this, &Lobby::menuScreen);
+    connect(ui->backCarButton, &QPushButton::clicked, this, &Lobby::menuScreen);
+    connect(ui->backStartButton, &QPushButton::clicked, this, &Lobby::menuScreen);
 
     connect(ui->startButton, &QPushButton::clicked, this, &Lobby::startGame);
-    connect(ui->carListWidget, &QListWidget::currentRowChanged, this, [this](int row){
+    connect(ui->carListWidget, &QListWidget::currentRowChanged, this, [this](int row) {
         if (row < 0) {
             ui->carPreviewLabel->setText("Select a car to see details");
             return;
@@ -43,9 +43,7 @@ protocol(protocol) {
     stack->setCurrentIndex(0);
 }
 
-Lobby::~Lobby() {
-    delete ui;
-}
+Lobby::~Lobby() { delete ui; }
 
 void Lobby::menuScreen() {
     stack->setCurrentIndex(0);
@@ -161,16 +159,21 @@ void Lobby::showCatalog() {
 
     ui->carListWidget->clear();
 
-    for (const auto& car : resp.car_catalog) {
+    for (const auto& car: resp.car_catalog) {
         auto* item = new QListWidgetItem(QString("Car %1").arg(car.car_id));
         item->setData(Qt::UserRole, static_cast<int>(car.car_id));
-        item->setToolTip(QString("Max speed: %1\nAcceleration: %2\nHealth: %3\nMass: %4\nControl: %5")
-                        .arg(car.max_speed).arg(car.acceleration).arg(car.max_health)
-                        .arg(car.mass).arg(car.control));
+        item->setToolTip(
+                QString("Max speed: %1\nAcceleration: %2\nHealth: %3\nMass: %4\nControl: %5")
+                        .arg(car.max_speed)
+                        .arg(car.acceleration)
+                        .arg(car.max_health)
+                        .arg(car.mass)
+                        .arg(car.control));
         ui->carListWidget->addItem(item);
     }
 
-    if (ui->carListWidget->count() > 0) ui->carListWidget->setCurrentRow(0);
+    if (ui->carListWidget->count() > 0)
+        ui->carListWidget->setCurrentRow(0);
 }
 
 void Lobby::confirmCar() {

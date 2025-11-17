@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <vector>
+
 #include "checkpointArrow.h"
 #include "checkpointInfo.h"
 

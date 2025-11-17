@@ -2,9 +2,13 @@
 
 #include <QFile>
 #include <QGraphicsItem>
+#include <memory>
 #include <string>
 #include <vector>
+
 #include "editor_constants.h"
+
+YamlConfig::YamlConfig() { setActions(); }
 
 bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int gridSize,
                       const QString& path) {
@@ -13,8 +17,6 @@ bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int grid
         out << YAML::BeginMap;
 
         out << YAML::Key << "city" << YAML::Value << city.toStdString();
-        out << YAML::Key << "width" << YAML::Value << static_cast<int>(scene->width());
-        out << YAML::Key << "height" << YAML::Value << static_cast<int>(scene->height());
         out << YAML::Key << "celdWidth" << YAML::Value << gridSize;
         out << YAML::Key << "celdHeight" << YAML::Value << gridSize;
 
@@ -41,51 +43,19 @@ bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int grid
 
 void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene,
                                const QString& elementType) {
+    auto it = actions.find(elementType);
+    if (it == actions.end()) {
+        return;
+    }
+    const Actions* action = it->second.get();
     std::vector<YAML::Node> elements;
+
     for (QGraphicsItem* item: scene->items(Qt::AscendingOrder)) {
-        if (!item->data(TYPE).isValid())
+        if (!item->data(TYPE).isValid() ||
+            !item->data(TYPE).toString().contains(elementType, Qt::CaseInsensitive)) {
             continue;
-        QString type = item->data(0).toString();
-        if (!type.contains(elementType, Qt::CaseInsensitive))
-            continue;
-        YAML::Node element;
-        QPointF pos = item->pos();
-        element["x"] = static_cast<int>(pos.x());
-        element["y"] = static_cast<int>(pos.y());
-        if (elementType == HINT_TYPE) {
-            int rotation = item->data(ROTATION).toInt();
-            if (rotation == LEFT_ROTATION) {
-                element["rotation"] = "left";
-            } else if (rotation == RIGHT_ROTATION) {
-                element["rotation"] = "right";
-            } else if (rotation == UP_ROTATION) {
-                element["rotation"] = "up";
-            } else {
-                element["rotation"] = "down";
-            }
-            element["id"] = item->data(ID).toInt();
         }
-        if (elementType == CHECKPOINT_TYPE) {
-            int rotation = item->data(ROTATION).toInt();
-            if (rotation == VERTICAL_ROTATION) {
-                element["rotation"] = "vertical";
-            } else {
-                element["rotation"] = "horizontal";
-            }
-            element["id"] = item->data(ID).toInt();
-        }
-        if (elementType == START_TYPE){
-            int rotation = item->data(ROTATION).toInt();
-            if (rotation == START_LEFT) {
-                element["rotation"] = "left";
-            } else if (rotation == START_RIGHT) {
-                element["rotation"] = "right";
-            } else if (rotation == START_UP) {
-                element["rotation"] = "up";
-            } else {
-                element["rotation"] = "down";
-            }
-        }
+        YAML::Node element = action->writeNode(item);
         elements.push_back(element);
     }
 
@@ -126,49 +96,30 @@ bool YamlConfig::load(const QString& path) {
 }
 
 void YamlConfig::addElements(const YAML::Node& config, const QString& elementType) {
-    if (config[elementType.toStdString()]) {
-        for (const auto& elem: config[elementType.toStdString()]) {
-            int x = elem["x"].as<int>();
-            int y = elem["y"].as<int>();
-            int rotationDeg = 0;
-            int id = -1;
-            if (elementType == HINT_TYPE && elem["rotation"]) {
-                QString rotationStr = QString::fromStdString(elem["rotation"].as<std::string>());
-                if (rotationStr == "left")
-                    rotationDeg = LEFT_ROTATION;
-                else if (rotationStr == "right")
-                    rotationDeg = RIGHT_ROTATION;
-                else if (rotationStr == "up")
-                    rotationDeg = UP_ROTATION;
-                else
-                    rotationDeg = DOWN_ROTATION;
-            }
-            if (elementType == CHECKPOINT_TYPE && elem["rotation"]) {
-                QString rotationStr = QString::fromStdString(elem["rotation"].as<std::string>());
-                if (rotationStr == "vertical")
-                    rotationDeg = VERTICAL_ROTATION;
-                else
-                    rotationDeg = HORIZONTAL_ROTATION;
-            }
-            if (elementType == START_TYPE && elem["rotation"]) {
-                QString rotationStr = QString::fromStdString(elem["rotation"].as<std::string>());
-                if (rotationStr == "left")
-                    rotationDeg = START_LEFT;
-                else if (rotationStr == "right")
-                    rotationDeg = START_RIGHT;
-                else if (rotationStr == "up")
-                    rotationDeg = START_UP;
-                else
-                    rotationDeg = START_DOWN;
-            }
-            if (elementType == CHECKPOINT_TYPE || elementType == HINT_TYPE) {
-                id = elem["id"].as<int>();
-            }
-            items.emplace_back(DragInfo(elementType, rotationDeg, QString{}, id), QPoint(x, y));
-        }
+    auto it = actions.find(elementType);
+    if (it == actions.end()) {
+        return;
+    }
+    const Actions* action = it->second.get();
+    auto node = config[elementType.toStdString()];
+    if (!node) {
+        return;
+    }
+
+    for (const auto& elem: node) {
+        ItemRecord info = action->loadNode(elem);
+        items.emplace_back(info);
     }
 }
 
 QString YamlConfig::getCity() { return selectedCity; }
 
-std::vector<std::pair<DragInfo, QPoint>> YamlConfig::getItems() { return items; }
+std::vector<ItemRecord> YamlConfig::getItems() { return items; }
+
+void YamlConfig::setActions() {
+    actions.emplace(QStringLiteral(ROAD_TYPE), std::make_unique<ActionRoad>());
+    actions.emplace(QStringLiteral(CHECKPOINT_TYPE), std::make_unique<ActionCheckpoint>());
+    actions.emplace(QStringLiteral(START_TYPE), std::make_unique<ActionStart>());
+    actions.emplace(QStringLiteral(FINISH_TYPE), std::make_unique<ActionFinish>());
+    actions.emplace(QStringLiteral(HINT_TYPE), std::make_unique<ActionHint>());
+}

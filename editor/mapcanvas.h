@@ -7,10 +7,19 @@
 #include <QPointF>
 #include <QPushButton>
 #include <QWidget>
+#include <map>
+#include <memory>
+
+#include "./actions/action_checkpoint.h"
+#include "./actions/action_finish.h"
+#include "./actions/action_hint.h"
+#include "./actions/action_road.h"
+#include "./actions/action_start.h"
+#include "./actions/actions.h"
 
 #include "drag_info.h"
-#include "scene_controller.h"
 #include "editor_constants.h"
+#include "scene_controller.h"
 
 class MapCanvas: public QWidget {
     Q_OBJECT
@@ -34,11 +43,19 @@ private:
 
     QPushButton* saveButton;
 
+    std::map<QString, std::unique_ptr<Actions>> actions;
+    void setActions();
+
     SceneController* controller;
     bool selecting = false;
     DragInfo info;
     QPointF hintPos;
     double currentZoom = INITIAL_ZOOM;
+
+    void handleSelectingHint(const QPoint& pos);
+    void handleDelete(const QPoint& pos);
+    void zoomIn();
+    void zoomOut();
 };
 
 #endif

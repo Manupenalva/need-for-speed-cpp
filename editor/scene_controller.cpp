@@ -1,6 +1,7 @@
 #include "scene_controller.h"
 
 #include <algorithm>
+
 #include "editor_constants.h"
 
 SceneController::SceneController(QGraphicsScene* scene): scene(scene) {}
@@ -58,7 +59,16 @@ void SceneController::deleteHints(QGraphicsItem* checkpointItem) {
     }
 
     for (auto* hint: hintToDelete) {
-        scene->removeItem(hint);
-        delete hint;
+        deleteItem(hint);
     }
+}
+
+void SceneController::deleteItem(QGraphicsItem* item) {
+    auto type = item->data(TYPE).toString();
+    if (type.contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
+        deleteHints(item);
+        return;
+    }
+    scene->removeItem(item);
+    delete item;
 }

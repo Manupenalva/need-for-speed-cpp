@@ -49,7 +49,8 @@ struct CarState {
 
     CarState(uint16_t id, float x, float y, float angle, float speed, uint16_t lap,
              const CheckpointInfo& checkpoint, const CheckpointArrow& checkpoint_arrow,
-             bool crashed, bool exploded, bool under_bridge, bool braking, uint16_t car_type, uint16_t health):
+             bool crashed, bool exploded, bool under_bridge, bool braking, uint16_t car_type,
+             uint16_t health):
             id(id),
             x(x),
             y(y),

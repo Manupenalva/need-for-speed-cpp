@@ -11,9 +11,9 @@
 #include "constants.h"
 #include "lobbyinfo.h"
 #include "messageDTOs.h"
+#include "minimapInfo.h"
 #include "npcState.h"
 #include "socket.h"
-#include "minimapInfo.h"
 
 class MessageReceiver {
 public:
