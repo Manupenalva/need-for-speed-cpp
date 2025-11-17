@@ -15,6 +15,12 @@ YAML::Node ActionFinish::writeNode(const QGraphicsItem* item) const {
     QPointF pos = item->pos();
     node["x"] = static_cast<int>(pos.x());
     node["y"] = static_cast<int>(pos.y());
+    int rotation = item->data(ROTATION).toInt();
+    if (rotation == VERTICAL_ROTATION) {
+        node["rotation"] = "vertical";
+    } else {
+        node["rotation"] = "horizontal";
+    }
     return node;
 }
 
@@ -23,5 +29,12 @@ ItemRecord ActionFinish::loadNode(const YAML::Node& node) const {
     int y = node["y"].as<int>();
     int rotationDeg = 0;
     int id = -1;
+    if (node["rotation"]) {
+        QString rotationStr = QString::fromStdString(node["rotation"].as<std::string>());
+        if (rotationStr == "vertical")
+            rotationDeg = VERTICAL_ROTATION;
+        else
+            rotationDeg = HORIZONTAL_ROTATION;
+    }
     return ItemRecord{DragInfo(FINISH_TYPE, rotationDeg, QString{}, id), QPoint(x, y)};
 }

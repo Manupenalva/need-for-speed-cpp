@@ -56,6 +56,7 @@ void EditorGame::setUpTools() {
     rotateIcon(ui->toolStartLeft, START_PATH_2, START_LEFT);
     rotateIcon(ui->toolStartRight, START_PATH_2, START_RIGHT);
     rotateIcon(ui->toolStartDown, START_PATH_1, START_DOWN);
+    rotateIcon(ui->toolFinishHorizontal, FINISH_PATH, HORIZONTAL_ROTATION);
 
     dragMovement(ui->toolRoad, ROAD_TYPE, ROAD_PATH_1);
     dragMovement(ui->toolRoad1, ROAD_TYPE, ROAD_PATH_2);
@@ -67,6 +68,7 @@ void EditorGame::setUpTools() {
     dragMovement(ui->toolStartDown, START_TYPE, START_PATH_1, START_DOWN);
     dragMovement(ui->toolStartRight, START_TYPE, START_PATH_2, START_RIGHT);
     dragMovement(ui->toolFinish, FINISH_TYPE, FINISH_PATH);
+    dragMovement(ui->toolFinishHorizontal, FINISH_TYPE, FINISH_PATH, HORIZONTAL_ROTATION);
     dragMovement(ui->toolHintLeft, HINT_TYPE, HINT_PATH);
     dragMovement(ui->toolHintDown, HINT_TYPE, HINT_PATH, DOWN_ROTATION);
     dragMovement(ui->toolHintUp, HINT_TYPE, HINT_PATH, UP_ROTATION);

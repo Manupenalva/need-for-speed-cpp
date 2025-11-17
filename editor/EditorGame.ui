@@ -207,9 +207,9 @@ QScrollArea &gt; QWidget &gt; QWidget {
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>0</y>
+               <y>-582</y>
                <width>106</width>
-               <height>1171</height>
+               <height>1239</height>
               </rect>
              </property>
              <property name="styleSheet">
@@ -813,6 +813,54 @@ QToolButton {
                 </property>
                 <property name="toolButtonStyle">
                  <enum>Qt::ToolButtonIconOnly</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QToolButton" name="toolFinishHorizontal">
+                <property name="minimumSize">
+                 <size>
+                  <width>64</width>
+                  <height>64</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QToolButton {
+	background-color: rgba(255, 60, 80, 230);
+    border: 1px solid white;    
+    border-radius: 8px;
+    padding: 4px;
+    icon-size: 32px;                               
+}
+
+QToolButton:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 1px solid rgb(255, 60, 80);
+}
+
+QToolButton:checked {
+    background-color: rgba(255, 60, 80, 120);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+QToolButton {
+    color: black;
+    font: 700 10pt &quot;Ubuntu Sans&quot;;
+}
+</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>:/imgs/finish.png</normaloff>:/imgs/finish.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>48</width>
+                  <height>48</height>
+                 </size>
                 </property>
                </widget>
               </item>
