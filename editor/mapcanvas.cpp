@@ -224,8 +224,8 @@ void MapCanvas::importFromYaml(const QString& filePath) {
     YamlConfig yaml;
     yaml.load(filePath);
     loadCityMap(QString(CITY_ASSETS_PATH + yaml.getCity() + ".png"));
-    for (const auto& [i, pos]: yaml.getItems()) {
-        controller->handleDropEvent(i, pos.x(), pos.y());
+    for (const auto& info: yaml.getItems()) {
+        controller->handleDropEvent(info.info, info.pos.x(), info.pos.y());
     }
 }
 

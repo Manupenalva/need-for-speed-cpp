@@ -9,20 +9,29 @@
 #include <yaml-cpp/yaml.h>
 
 #include "drag_info.h"
+#include "./actions/actions.h"
+#include "./actions/action_checkpoint.h"
+#include "./actions/action_start.h"
+#include "./actions/action_finish.h"
+#include "./actions/action_road.h"
+#include "./actions/action_hint.h"
 
 class YamlConfig {
 private:
     void writeElements(YAML::Emitter& out, const QGraphicsScene* scene, const QString& elementType);
     void addElements(const YAML::Node& out, const QString& elementType);
     QString selectedCity;
-    std::vector<std::pair<DragInfo, QPoint>> items;
+    std::vector<ItemRecord> items;
+    std::map<QString, std::unique_ptr<Actions>> actions;
+
+    void setActions();
 
 public:
-    YamlConfig() = default;
+    YamlConfig();
 
     bool save(const QGraphicsScene* scene, const QString& city, int gridSize, const QString& path);
     bool load(const QString& path);
     QString getCity();
-    std::vector<std::pair<DragInfo, QPoint>> getItems();
+    std::vector<ItemRecord> getItems();
 };
 #endif
