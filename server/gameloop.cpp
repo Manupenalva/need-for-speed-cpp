@@ -22,6 +22,7 @@
 #define TARGET_FPS_INTERVAL 30
 #define INTERVAL_WAIT_TIME 10        // segundos
 #define FRAME_INTERVAL_TO_CLOSE 300  // segundos
+#define POSITIONS_WAIT_TIME 10
 
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
@@ -51,9 +52,11 @@ void Gameloop::broadcast_positions(int race_index) {
     msg.type = MsgType::RACE_POSITIONS;
     msg.positions = races[race_index]->get_race_results();
     race_monitor->broadcast(msg);
+    std::this_thread::sleep_for(std::chrono::seconds(POSITIONS_WAIT_TIME));
     msg.type = MsgType::ACCUMULATED_POSITIONS;
     msg.positions = get_acumullated_times();
     race_monitor->broadcast(msg);
+    std::this_thread::sleep_for(std::chrono::seconds(POSITIONS_WAIT_TIME));
 }
 
 void Gameloop::broadcast_event(const MsgType msg_type) {
