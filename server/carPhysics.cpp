@@ -18,6 +18,8 @@
 #define REVERSE_ACCELERATION_FACTOR 0.5f
 #define REVERSE_SPEED_FACTOR 0.25f
 #define MIN_GAME_SPEED 5.0f
+#define NITRO_USE 0.5f
+#define NITRO_ACCELERATION_FACTOR 1.2f
 
 CarPhysics::CarPhysics(b2WorldId world, CarInfo& car_state, const float& max_speed,
                        const float& acceleration, const float& mass, const float& drivability,
@@ -27,7 +29,8 @@ CarPhysics::CarPhysics(b2WorldId world, CarInfo& car_state, const float& max_spe
         max_speed_factor(max_speed / 100.0f),
         acceleration_factor(acceleration / 100.0f),
         mass_factor(mass / 100.0f),
-        drivability_factor(drivability / 100.0f) {
+        drivability_factor(drivability / 100.0f),
+        nitro_remaining(100.0f) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;
     bodyDef.linearDamping = BASE_FRICTION * mass_factor;
@@ -143,6 +146,24 @@ void CarPhysics::turn_right() {
     b2Body_SetLinearVelocity(body, new_velocity);
 }
 
+void CarPhysics::handle_nitro() {
+    if (nitro_remaining - NITRO_USE < 0.0f) {
+        return;
+    }
+
+    nitro_remaining -= NITRO_USE;
+
+
+    float rad = car_state.angle * M_PI / 180.0f;
+    b2Vec2 direction = {cosf(rad), sinf(rad)};
+
+    b2Body_ApplyForceToCenter(
+            body,
+            {direction.x * (BASE_ACCELERATION * acceleration_factor * NITRO_ACCELERATION_FACTOR),
+             direction.y * (BASE_ACCELERATION * acceleration_factor * NITRO_ACCELERATION_FACTOR)},
+            true);
+}
+
 void CarPhysics::update_position() {
     b2Vec2 pos = b2Body_GetPosition(body);
     car_state.x = pos.x;
@@ -153,12 +174,6 @@ void CarPhysics::handle_hits() {
     b2ContactEvents events = b2World_GetContactEvents(world);
     car_state.crashed = false;
     for (int i = 0; i < events.beginCount; i++) {
-
-        if (b2Shape_IsSensor(events.hitEvents[i].shapeIdA))
-            std::cout << "ES un sensor" << std::endl;
-        if (b2Shape_IsSensor(events.hitEvents[i].shapeIdB))
-            std::cout << "ES un sensor" << std::endl;
-
         if ((events.hitEvents[i].shapeIdA.index1 == shape.index1) ||
             (events.hitEvents[i].shapeIdB.index1 == shape.index1)) {
             handle_hit_event(events.hitEvents[i]);

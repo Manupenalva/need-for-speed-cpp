@@ -60,6 +60,10 @@ void Car::update_input(const uint8_t& action) {
         input_state.turning_right = true;
     } else if (action == ACT_RIGHT_RELEASE) {
         input_state.turning_right = false;
+    } else if (action == ACT_NITRO_PRESS) {
+        input_state.nitro_activated = true;
+    } else if (action == ACT_NITRO_RELEASE) {
+        input_state.nitro_activated = false;
     }
 }
 
@@ -74,8 +78,10 @@ void Car::upgrade_stats(const uint8_t& action) {
         max_health += 5;
         current_penalization += 2.0f;
     } else if (action == ACT_IMPROVE_MASS) {
-        mass += 5;
-        current_penalization += 2.0f;
+        if (mass > 5) {
+            mass -= 5;
+            current_penalization += 2.0f;
+        }
     } else if (action == ACT_IMPROVE_HANDLING) {
         drivability += 5;
         current_penalization += 2.0f;
@@ -96,12 +102,15 @@ void Car::update_physics() {
     if (input_state.turning_right) {
         physics->turn_right();
     }
+    if (input_state.nitro_activated) {
+        std::cout << "Nitro activado" << std::endl;
+        physics->handle_nitro();
+    }
 }
 
 void Car::update_position() {
     physics->update_position();
     if (bridge_layer == BridgeLayer::BOTTOM) {
-        std::cout << "Estoy abajo de un puente" << std::endl;
         state.under_bridge = true;
     } else {
         state.under_bridge = false;

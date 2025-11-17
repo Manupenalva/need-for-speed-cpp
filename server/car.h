@@ -67,7 +67,7 @@ public:
     Car(Car&& other) = default;
     Car& operator=(Car&& other) = default;
     Car():
-            input_state(false, false, false, false),
+            input_state(false, false, false, false, false),
             state(0, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, false, 0, 0),
             bridge_layer(BridgeLayer::NONE),
             car_name("default"),

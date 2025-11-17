@@ -17,6 +17,7 @@ private:
     float acceleration_factor;
     float mass_factor;
     float drivability_factor;
+    float nitro_remaining;
 
 public:
     CarPhysics(b2WorldId world, CarInfo& car_state, const float& max_speed,
@@ -27,6 +28,7 @@ public:
     void brake();
     void turn_left();
     void turn_right();
+    void handle_nitro();
     void update_position();
     void handle_hits();
     void handle_crash_with_bridge();

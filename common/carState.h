@@ -117,15 +117,22 @@ struct CarInputState {
     bool braking;
     bool turning_right;
     bool turning_left;
+    bool nitro_activated;
 
-    CarInputState(bool accelerating, bool braking, bool turning_right, bool turning_left):
+    CarInputState(bool accelerating, bool braking, bool turning_right, bool turning_left,
+                  bool nitro_activated):
             accelerating(accelerating),
             braking(braking),
             turning_right(turning_right),
-            turning_left(turning_left) {}
+            turning_left(turning_left),
+            nitro_activated(nitro_activated) {}
 
     CarInputState():
-            accelerating(false), braking(false), turning_right(false), turning_left(false) {}
+            accelerating(false),
+            braking(false),
+            turning_right(false),
+            turning_left(false),
+            nitro_activated(false) {}
 };
 
 struct Position {
