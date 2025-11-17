@@ -103,7 +103,7 @@ bool verify_car_props(const CarProperties& car1, const CarProperties& car2) {
 }
 bool verify_player_state(const PlayerState& ps1, const PlayerState& ps2) {
     return (ps1.player_id == ps2.player_id) && (ps1.ready == ps2.ready) &&
-           (ps1.ready == ps2.ready) && (ps1.previous_position == ps2.previous_position) &&
+           (ps1.previous_position == ps2.previous_position) &&
            (ps1.result_time == ps2.result_time) &&
            (ps1.next_penalization_time == ps2.next_penalization_time) &&
            verify_car_props(ps1.car_properties, ps2.car_properties);
