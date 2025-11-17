@@ -208,3 +208,5 @@ float Car::get_total_time() const {
     float accumulated_time = std::accumulate(race_times.begin(), race_times.end(), 0.0f);
     return accumulated_time;
 }
+
+float Car::get_penalization_time() const { return current_penalization; }

@@ -62,6 +62,7 @@ public:
     void maximize_stats();
     bool exploded();
     float get_total_time() const;
+    float get_penalization_time() const;
 
     Car(Car&& other) = default;
     Car& operator=(Car&& other) = default;

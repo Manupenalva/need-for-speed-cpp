@@ -46,6 +46,16 @@ void Gameloop::broadcast_players(const int& race_index) {
     race_monitor->broadcast(msg);
 }
 
+void Gameloop::broadcast_positions(int race_index) {
+    ServerMessageDTO msg;
+    msg.type = MsgType::RACE_POSITIONS;
+    msg.positions = races[race_index]->get_race_results();
+    race_monitor->broadcast(msg);
+    msg.type = MsgType::ACCUMULATED_POSITIONS;
+    msg.positions = get_acumullated_times();
+    race_monitor->broadcast(msg);
+}
+
 void Gameloop::broadcast_event(const MsgType msg_type) {
     ServerMessageDTO msg;
     msg.type = msg_type;
@@ -191,6 +201,7 @@ void Gameloop::handle_race(const int& race_index) {
     }
 
     broadcast_event(MsgType::RACE_FINISHED);
+    broadcast_positions(race_index);
     if (race_index == static_cast<int>(races.size()) - 1)
         return;
     handle_upgrades_phase(race_index);
@@ -234,6 +245,6 @@ std::vector<std::pair<uint16_t, float>> Gameloop::get_acumullated_times() {
         times_vector.emplace_back(car, players_cars[car].get_total_time());
     }
     std::sort(times_vector.begin(), times_vector.end(),
-              [](const auto& a, const auto& b) { return a.second > b.second; });
+              [](const auto& a, const auto& b) { return a.second < b.second; });
     return times_vector;
 }

@@ -49,6 +49,7 @@ private:
     void handle_cheat_code(const uint16_t& player_id, const CheatCode& cheat_code, int race_index);
     void broadcast_map_data(const uint8_t& city_code);
     void broadcast_minimap_info(int race_index);
+    void broadcast_positions(int race_index);
     void handle_countdown(int race_index);
     std::vector<std::pair<uint16_t, float>> get_acumullated_times();
 

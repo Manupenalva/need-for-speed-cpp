@@ -163,7 +163,6 @@ void Lobby::clean_games() {
 
     for (auto it = active_games.begin(); it != active_games.end();) {
         if (!(*it)->is_running()) {
-            (*it)->stop();
             games_monitor.remove_race((*it)->get_id());
             it = active_games.erase(it);
         } else {
