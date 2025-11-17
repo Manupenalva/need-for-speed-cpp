@@ -72,8 +72,8 @@ void Race::update_state() {
             continue;
         if (car.exploded()) {
             status.has_finished = true;
-            car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
             race_results.emplace_back(id, MAX_TIME + car.get_penalization_time());
+            car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
             continue;
         }
 
@@ -82,8 +82,8 @@ void Race::update_state() {
             status.current_checkpoint_index++;
             if (status.current_checkpoint_index >= checkpoints.size()) {
                 status.has_finished = true;
-                car.finish_race(current_time, race_results.size() + 1);
                 race_results.emplace_back(id, current_time + car.get_penalization_time());
+                car.finish_race(current_time, race_results.size() + 1);
             }
         }
         if (status.current_hint_index < hints.size()) {
@@ -198,8 +198,8 @@ ServerMessageDTO Race::get_interval_message() {
 void Race::finish_race() {
     for (auto& [id, status]: players_status) {
         if (!status.has_finished) {
-            players_cars[id].finish_race(MAX_TIME, MAX_PLAYERS_RACE);
             race_results.emplace_back(id, MAX_TIME + players_cars[id].get_penalization_time());
+            players_cars[id].finish_race(MAX_TIME, MAX_PLAYERS_RACE);
             status.has_finished = true;
         }
     }
@@ -257,15 +257,17 @@ void Race::handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* brid
 
 void Race::force_finish_race(const uint16_t& player_id) {
     players_status[player_id].has_finished = true;
+    race_results.emplace_back(player_id,
+                              current_time + players_cars[player_id].get_penalization_time());
     players_cars[player_id].finish_race(current_time, race_results.size() + 1);
 }
 
 void Race::force_lose_race(const uint16_t& player_id) {
     Car& car = players_cars[player_id];
     players_status[player_id].has_finished = true;
+    race_results.emplace_back(player_id, MAX_TIME + car.get_penalization_time());
     car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
     car.explode();
-    race_results.emplace_back(player_id, MAX_TIME + car.get_penalization_time());
 }
 
 uint8_t Race::get_city_code() { return city_code; }
