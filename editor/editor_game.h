@@ -23,7 +23,8 @@ private:
     void setUpNav();
     void setUpLoad();
     void setUpTools();
-    void dragMovement(QToolButton* btn, const QString& type, const QString& iconPath, int rotDeg = 0);
+    void dragMovement(QToolButton* btn, const QString& type, const QString& iconPath,
+                      int rotDeg = 0);
     void rotateIcon(QToolButton* btn, const QString& iconPath, int rotDeg);
 };
 #endif

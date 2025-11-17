@@ -3,7 +3,7 @@
 
 #include "actions.h"
 
-class ActionFinish : public Actions {
+class ActionFinish: public Actions {
 public:
     ActionResult execute(SceneController& controller, const DragInfo& info, int x, int y) override;
 

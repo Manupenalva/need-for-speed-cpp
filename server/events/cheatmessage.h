@@ -1,21 +1,20 @@
 #ifndef SERVER_EVENTS_CHEATMESSAGE_H
 #define SERVER_EVENTS_CHEATMESSAGE_H
 
-#include "clienthandlermessage.h"
-#include "../../common/msgType.h"
 #include "../../common/cheatcodes.h"
+#include "../../common/msgType.h"
 
-class CheatMessage : public ClientHandlerMessage {
+#include "clienthandlermessage.h"
 
-   public:
-    CheatMessage(int client_id, const CheatCode cheat_code)
-        : ClientHandlerMessage(client_id, MsgType::CHEAT_CODE), cheat_code(cheat_code) {}
+class CheatMessage: public ClientHandlerMessage {
 
-    CheatCode get_cheat_code() const {
-        return cheat_code;
-    }
+public:
+    CheatMessage(int client_id, const CheatCode cheat_code):
+            ClientHandlerMessage(client_id, MsgType::CHEAT_CODE), cheat_code(cheat_code) {}
 
-   private:
+    CheatCode get_cheat_code() const { return cheat_code; }
+
+private:
     CheatCode cheat_code;
 };
 #endif

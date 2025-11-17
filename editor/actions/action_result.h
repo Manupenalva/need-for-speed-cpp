@@ -1,11 +1,11 @@
 #ifndef ACTION_RESULT_H
 #define ACTION_RESULT_H
 
-#include "../drag_info.h"
 #include <QPointF>
 
-struct ActionResult
-{
+#include "../drag_info.h"
+
+struct ActionResult {
     bool success = false;
     bool selecting = false;
     DragInfo pending;

@@ -4,6 +4,7 @@
 #include <QIcon>
 #include <QPixmap>
 #include <vector>
+
 #include "editor_constants.h"
 
 CitySelection::CitySelection(QWidget* parent): QWidget(parent) {

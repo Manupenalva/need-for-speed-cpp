@@ -2,6 +2,7 @@
 
 #include <QPixmap>
 #include <QTransform>
+
 #include "editor_constants.h"
 
 QGraphicsPixmapItem* ItemBuilder::buildItem(const DragInfo& info, const QSize& size) {

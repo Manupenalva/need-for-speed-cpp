@@ -28,9 +28,7 @@ public:
         // No hace nada en este socket de memoria
     }
 
-    bool is_empty() const {
-        return buffer.empty();
-    }
+    bool is_empty() const { return buffer.empty(); }
 
     bool is_stream_send_closed() const override { return false; }
 

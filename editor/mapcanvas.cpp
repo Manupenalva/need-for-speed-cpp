@@ -13,8 +13,8 @@
 #include <QMouseEvent>
 #include <QPen>
 #include <QPixmap>
-#include <QVBoxLayout>
 #include <QRectF>
+#include <QVBoxLayout>
 
 #include "yaml_config.h"
 
@@ -127,13 +127,13 @@ void MapCanvas::dropEvent(QDropEvent* event) {
         event->ignore();
         return;
     }
-    
+
     if (actionResult.selecting) {
         selecting = true;
         info = actionResult.pending;
         hintPos = actionResult.pos;
         QMessageBox::information(this, "Select checkpoint",
-                             "Select the checkpoint to associate this new hint. ESC to exit.");
+                                 "Select the checkpoint to associate this new hint. ESC to exit.");
         view->setFocus();
     }
     event->acceptProposedAction();
@@ -175,11 +175,11 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
                 selecting = false;
                 return true;
             }
-            if (keyEvent->key() == Qt::Key_Plus) {       
+            if (keyEvent->key() == Qt::Key_Plus) {
                 zoomIn();
                 return true;
             }
-            if (keyEvent->key() == Qt::Key_Minus) { 
+            if (keyEvent->key() == Qt::Key_Minus) {
                 zoomOut();
                 return true;
             }
@@ -192,8 +192,8 @@ void MapCanvas::importFromYaml(const QString& filePath) {
     YamlConfig yaml;
     yaml.load(filePath);
     loadCityMap(QString(CITY_ASSETS_PATH + yaml.getCity() + ".png"));
-    for (const auto& info: yaml.getItems()) {
-        controller->handleDropEvent(info.info, info.pos.x(), info.pos.y());
+    for (const auto& i: yaml.getItems()) {
+        controller->handleDropEvent(i.info, i.pos.x(), i.pos.y());
     }
 }
 
@@ -205,9 +205,10 @@ void MapCanvas::setActions() {
     actions.emplace(QStringLiteral(HINT_TYPE), std::make_unique<ActionHint>());
 }
 
-void MapCanvas::handleSelectingHint(const QPoint& pos){
+void MapCanvas::handleSelectingHint(const QPoint& pos) {
     QPointF scenePos = view->mapToScene(pos);
-    QRectF pickArea(scenePos.x() - GRID_SIZE/2.0, scenePos.y() - GRID_SIZE/2.0, GRID_SIZE, GRID_SIZE);
+    QRectF pickArea(scenePos.x() - GRID_SIZE / 2.0, scenePos.y() - GRID_SIZE / 2.0, GRID_SIZE,
+                    GRID_SIZE);
     auto items = scene->items(pickArea);
     for (auto* i: items) {
         auto t = i->data(TYPE).toString();
@@ -221,7 +222,8 @@ void MapCanvas::handleSelectingHint(const QPoint& pos){
 
 void MapCanvas::handleDelete(const QPoint& pos) {
     QPointF scenePos = view->mapToScene(pos);
-    QRectF pickArea(scenePos.x() - GRID_SIZE/2.0, scenePos.y() - GRID_SIZE/2.0, GRID_SIZE, GRID_SIZE);
+    QRectF pickArea(scenePos.x() - GRID_SIZE / 2.0, scenePos.y() - GRID_SIZE / 2.0, GRID_SIZE,
+                    GRID_SIZE);
     auto items = scene->items(pickArea);
 
     QGraphicsItem* item = items.first();
@@ -230,7 +232,7 @@ void MapCanvas::handleDelete(const QPoint& pos) {
     controller->deleteItem(item);
 }
 
-void MapCanvas::zoomIn(){
+void MapCanvas::zoomIn() {
     double newZoom = currentZoom + ZOOM_SCALE;
     if (newZoom > MAX_ZOOM)
         newZoom = MAX_ZOOM;

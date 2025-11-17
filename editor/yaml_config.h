@@ -3,18 +3,21 @@
 
 #include <QGraphicsScene>
 #include <QString>
+#include <map>
+#include <memory>
 #include <utility>
 #include <vector>
 
 #include <yaml-cpp/yaml.h>
 
-#include "drag_info.h"
-#include "./actions/actions.h"
 #include "./actions/action_checkpoint.h"
-#include "./actions/action_start.h"
 #include "./actions/action_finish.h"
-#include "./actions/action_road.h"
 #include "./actions/action_hint.h"
+#include "./actions/action_road.h"
+#include "./actions/action_start.h"
+#include "./actions/actions.h"
+
+#include "drag_info.h"
 
 class YamlConfig {
 private:

@@ -2,18 +2,18 @@
 
 #include <QDrag>
 #include <QFileDialog>
+#include <QGraphicsDropShadowEffect>
 #include <QMimeData>
 #include <QPixmap>
+#include <QPropertyAnimation>
 #include <QToolButton>
 #include <QTransform>
-#include <QGraphicsDropShadowEffect>
-#include <QPropertyAnimation>
 
 #include "cityselection.h"
 #include "drag_info.h"
+#include "editor_constants.h"
 #include "mapcanvas.h"
 #include "ui_EditorGame.h"
-#include "editor_constants.h"
 
 EditorGame::EditorGame(QWidget* parent): QMainWindow(parent), ui(new Ui::EditorGame) {
     ui->setupUi(this);
@@ -62,7 +62,8 @@ void EditorGame::setUpTools() {
     dragMovement(ui->toolRoad1, ROAD_TYPE, ROAD_PATH_2);
     dragMovement(ui->toolRoad2, ROAD_TYPE, ROAD_PATH_3);
     dragMovement(ui->toolCheckpointVertical, CHECKPOINT_TYPE, CHECKPOINT_PATH);
-    dragMovement(ui->toolCheckpointHorizontal, CHECKPOINT_TYPE, CHECKPOINT_PATH, HORIZONTAL_ROTATION);
+    dragMovement(ui->toolCheckpointHorizontal, CHECKPOINT_TYPE, CHECKPOINT_PATH,
+                 HORIZONTAL_ROTATION);
     dragMovement(ui->toolStartUp, START_TYPE, START_PATH_1);
     dragMovement(ui->toolStartLeft, START_TYPE, START_PATH_2, START_LEFT);
     dragMovement(ui->toolStartDown, START_TYPE, START_PATH_1, START_DOWN);
@@ -75,8 +76,8 @@ void EditorGame::setUpTools() {
     dragMovement(ui->toolHintRight, HINT_TYPE, HINT_PATH, RIGHT_ROTATION);
 }
 
-void EditorGame::dragMovement(QToolButton* btn, const QString& type,
-                              const QString& iconPath, int rotDeg) {
+void EditorGame::dragMovement(QToolButton* btn, const QString& type, const QString& iconPath,
+                              int rotDeg) {
     if (!btn)
         return;
     QObject::connect(btn, &QToolButton::pressed, btn, [=] {

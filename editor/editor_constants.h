@@ -37,4 +37,3 @@
 #define INITIAL_ZOOM 1.0
 
 #endif
-

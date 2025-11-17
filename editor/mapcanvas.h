@@ -10,15 +10,16 @@
 #include <map>
 #include <memory>
 
-#include "drag_info.h"
-#include "scene_controller.h"
-#include "editor_constants.h"
-#include "./actions/actions.h"
 #include "./actions/action_checkpoint.h"
-#include "./actions/action_start.h"
 #include "./actions/action_finish.h"
-#include "./actions/action_road.h"
 #include "./actions/action_hint.h"
+#include "./actions/action_road.h"
+#include "./actions/action_start.h"
+#include "./actions/actions.h"
+
+#include "drag_info.h"
+#include "editor_constants.h"
+#include "scene_controller.h"
 
 class MapCanvas: public QWidget {
     Q_OBJECT

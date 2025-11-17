@@ -2,13 +2,13 @@
 
 #include <QFile>
 #include <QGraphicsItem>
+#include <memory>
 #include <string>
 #include <vector>
+
 #include "editor_constants.h"
 
-YamlConfig::YamlConfig() {
-    setActions();
-}
+YamlConfig::YamlConfig() { setActions(); }
 
 bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int gridSize,
                       const QString& path) {
@@ -47,7 +47,7 @@ void YamlConfig::writeElements(YAML::Emitter& out, const QGraphicsScene* scene,
     if (it == actions.end()) {
         return;
     }
-    Actions* action = it->second.get();
+    const Actions* action = it->second.get();
     std::vector<YAML::Node> elements;
 
     for (QGraphicsItem* item: scene->items(Qt::AscendingOrder)) {
@@ -100,7 +100,7 @@ void YamlConfig::addElements(const YAML::Node& config, const QString& elementTyp
     if (it == actions.end()) {
         return;
     }
-    Actions* action = it->second.get();
+    const Actions* action = it->second.get();
     auto node = config[elementType.toStdString()];
     if (!node) {
         return;
@@ -110,7 +110,6 @@ void YamlConfig::addElements(const YAML::Node& config, const QString& elementTyp
         ItemRecord info = action->loadNode(elem);
         items.emplace_back(info);
     }
-    
 }
 
 QString YamlConfig::getCity() { return selectedCity; }

@@ -1,6 +1,7 @@
 #include "scene_controller.h"
 
 #include <algorithm>
+
 #include "editor_constants.h"
 
 SceneController::SceneController(QGraphicsScene* scene): scene(scene) {}
