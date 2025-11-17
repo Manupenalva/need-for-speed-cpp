@@ -17,9 +17,9 @@
 #include "events/clienthandlermessage.h"
 
 #include "car.h"
+#include "carConstants.h"
 #include "race.h"
 #include "racemonitor.h"
-#include "carConstants.h"
 
 
 class Gameloop: public Thread {

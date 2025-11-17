@@ -8,7 +8,8 @@
 
 CarPhysics::CarPhysics(b2WorldId world, CarInfo& car_state, const float& max_speed,
                        const float& acceleration, const float& mass, const float& drivability,
-                       const float& car_long, const float& car_width, Car* car, CarConstants::Physics& physic_constants) : 
+                       const float& car_long, const float& car_width, Car* car,
+                       CarConstants::Physics& physic_constants):
         phy_const(physic_constants),
         world(world),
         car_state(car_state),
@@ -48,8 +49,8 @@ void CarPhysics::accelerate() {
         speedRatio = max_speed / speed;
     }
     // Aceleracion basada en la masa y velocidad actual
-    float scaledAcceleration =
-            (1.0f + speedRatio) * phy_const.BASE_ACCELERATION * acceleration_factor * (1.0f + mass_factor);
+    float scaledAcceleration = (1.0f + speedRatio) * phy_const.BASE_ACCELERATION *
+                               acceleration_factor * (1.0f + mass_factor);
     if (speed < max_speed) {
         b2Body_ApplyForceToCenter(
                 body, {direction.x * scaledAcceleration, direction.y * scaledAcceleration}, true);
@@ -66,7 +67,8 @@ void CarPhysics::deaccelerate() {
         car_state.braking = true;
     } else {
         b2Vec2 reverseDirection = {-cosf(rad), -sinf(rad)};
-        float maxReverseSpeed = (phy_const.BASE_MAX_SPEED * max_speed_factor) * phy_const.REVERSE_SPEED_FACTOR;
+        float maxReverseSpeed =
+                (phy_const.BASE_MAX_SPEED * max_speed_factor) * phy_const.REVERSE_SPEED_FACTOR;
         float reverseSpeed =
                 std::abs(velocity.x * reverseDirection.x + velocity.y * reverseDirection.y);
 
@@ -143,11 +145,12 @@ void CarPhysics::handle_nitro() {
     float rad = car_state.angle * M_PI / 180.0f;
     b2Vec2 direction = {cosf(rad), sinf(rad)};
 
-    b2Body_ApplyForceToCenter(
-            body,
-            {direction.x * (phy_const.BASE_ACCELERATION * acceleration_factor * phy_const.NITRO_ACCELERATION_FACTOR),
-             direction.y * (phy_const.BASE_ACCELERATION * acceleration_factor * phy_const.NITRO_ACCELERATION_FACTOR)},
-            true);
+    b2Body_ApplyForceToCenter(body,
+                              {direction.x * (phy_const.BASE_ACCELERATION * acceleration_factor *
+                                              phy_const.NITRO_ACCELERATION_FACTOR),
+                               direction.y * (phy_const.BASE_ACCELERATION * acceleration_factor *
+                                              phy_const.NITRO_ACCELERATION_FACTOR)},
+                              true);
 }
 
 void CarPhysics::update_position() {

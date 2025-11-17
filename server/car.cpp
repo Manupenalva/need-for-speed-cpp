@@ -8,7 +8,7 @@
 Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
          const float& acceleration, const float& health, const float& mass,
          const float& drivability, const float& car_long, const float& car_width,
-         const int& car_type, std::shared_ptr<CarConstants> car_constants) :
+         const int& car_type, std::shared_ptr<CarConstants> car_constants):
         input_state(),
         state({id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, false,
                static_cast<uint16_t>(car_type), static_cast<uint16_t>(health)}),

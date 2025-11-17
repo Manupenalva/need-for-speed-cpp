@@ -11,8 +11,8 @@ CarBuilder::CarBuilder(const std::string& path) {
     }
 }
 
-CarBuilder::CarBuilder(const std::string& path, std::shared_ptr<CarConstants> constants)
-    : car_constants(constants) {
+CarBuilder::CarBuilder(const std::string& path, std::shared_ptr<CarConstants> constants):
+        car_constants(constants) {
     try {
         cars_data = YAML::LoadFile(path);
         load_constants();
@@ -101,19 +101,24 @@ void CarBuilder::load_constants() {
 
         car_constants->physics.BASE_MAX_SPEED = physics_node["BASE_MAX_SPEED"].as<float>();
         car_constants->physics.BASE_ACCELERATION = physics_node["BASE_ACCELERATION"].as<float>();
-        car_constants->physics.BASE_ANGLE_ROTATION = physics_node["BASE_ANGLE_ROTATION"].as<float>();
+        car_constants->physics.BASE_ANGLE_ROTATION =
+                physics_node["BASE_ANGLE_ROTATION"].as<float>();
         car_constants->physics.BASE_FRICTION = physics_node["BASE_FRICTION"].as<float>();
         car_constants->physics.MIN_SPEED = physics_node["MIN_SPEED"].as<float>();
         car_constants->physics.LIGHT_CRASH_DAMAGE = physics_node["LIGHT_CRASH_DAMAGE"].as<float>();
-        car_constants->physics.MEDIUM_CRASH_DAMAGE = physics_node["MEDIUM_CRASH_DAMAGE"].as<float>();
+        car_constants->physics.MEDIUM_CRASH_DAMAGE =
+                physics_node["MEDIUM_CRASH_DAMAGE"].as<float>();
         car_constants->physics.HEAVY_CRASH_DAMAGE = physics_node["HEAVY_CRASH_DAMAGE"].as<float>();
         car_constants->physics.MEDIUM_CRASH_LIMIT = physics_node["MEDIUM_CRASH_LIMIT"].as<float>();
         car_constants->physics.HEAVY_CRASH_LIMIT = physics_node["HEAVY_CRASH_LIMIT"].as<float>();
-        car_constants->physics.REVERSE_ACCELERATION_FACTOR = physics_node["REVERSE_ACCELERATION_FACTOR"].as<float>();
-        car_constants->physics.REVERSE_SPEED_FACTOR = physics_node["REVERSE_SPEED_FACTOR"].as<float>();
+        car_constants->physics.REVERSE_ACCELERATION_FACTOR =
+                physics_node["REVERSE_ACCELERATION_FACTOR"].as<float>();
+        car_constants->physics.REVERSE_SPEED_FACTOR =
+                physics_node["REVERSE_SPEED_FACTOR"].as<float>();
         car_constants->physics.MIN_GAME_SPEED = physics_node["MIN_GAME_SPEED"].as<float>();
         car_constants->physics.NITRO_USE = physics_node["NITRO_USE"].as<float>();
-        car_constants->physics.NITRO_ACCELERATION_FACTOR = physics_node["NITRO_ACCELERATION_FACTOR"].as<float>();
+        car_constants->physics.NITRO_ACCELERATION_FACTOR =
+                physics_node["NITRO_ACCELERATION_FACTOR"].as<float>();
     } catch (const std::exception& e) {
         std::cerr << "Error loading constants: " << e.what() << std::endl;
         throw;

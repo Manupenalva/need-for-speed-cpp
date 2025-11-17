@@ -122,13 +122,17 @@ void Race::update_state() {
 CheckpointInfo Race::get_next_checkpoint_info(const uint16_t car_id) {
     const PlayerRaceStatus& status = players_status[car_id];
     Position checkpoint = checkpoints[status.current_checkpoint_index];
+    uint8_t type = COMMON_CHECKPOINT;
+    if (status.current_checkpoint_index == checkpoints.size() - 1) {
+        type = SPECIAL_CHECKPOINT;
+    }
 
     return {static_cast<uint16_t>(status.current_checkpoint_index),
             static_cast<float>(checkpoint.x),
             static_cast<float>(checkpoint.y),
-            0.0f,
+            static_cast<float>(checkpoint.angle),
             celd_width,
-            COMMON_CHECKPOINT};  // Angulo y tipo hardcodeado para compilar
+            type};
 }
 
 CheckpointArrow Race::get_next_checkpoint_arrow(const uint16_t car_id) {
@@ -136,7 +140,7 @@ CheckpointArrow Race::get_next_checkpoint_arrow(const uint16_t car_id) {
     if (status.current_hint_index < hints.size()) {
         Hint hint = hints[status.current_hint_index];
         return {static_cast<float>(hint.position.x), static_cast<float>(hint.position.y),
-                hint.angle};
+                hint.position.angle};
     }
     return {0.0f, 0.0f, 0.0f};
 }
@@ -269,9 +273,13 @@ std::vector<CheckpointInfo> Race::get_checkpoints_info() {
     checkpoints_info.reserve(checkpoints.size());
     for (size_t i = 0; i < checkpoints.size(); i++) {
         Position checkpoint = checkpoints[i];
+        uint8_t type = COMMON_CHECKPOINT;
+        if (i == checkpoints.size() - 1) {
+            type = SPECIAL_CHECKPOINT;
+        }
         checkpoints_info.push_back({static_cast<uint16_t>(i), static_cast<float>(checkpoint.x),
-                                    static_cast<float>(checkpoint.y), 0.0f, celd_width,
-                                    COMMON_CHECKPOINT});  // Angulo y tipo hardcodeado para compilar
+                                    static_cast<float>(checkpoint.y),
+                                    static_cast<float>(checkpoint.angle), celd_width, type});
     }
     return checkpoints_info;
 }
@@ -281,7 +289,7 @@ std::vector<CheckpointArrow> Race::get_checkpoints_arrows() {
     arrows.reserve(hints.size());
     std::transform(hints.begin(), hints.end(), std::back_inserter(arrows), [](const Hint& hint) {
         return CheckpointArrow{static_cast<float>(hint.position.x),
-                               static_cast<float>(hint.position.y), hint.angle};
+                               static_cast<float>(hint.position.y), hint.position.angle};
     });
     return arrows;
 }

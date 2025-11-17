@@ -2,16 +2,16 @@
 #define CARBUILDER_H
 
 
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
 #include <yaml-cpp/yaml.h>
 
 #include "../common/carProperties.h"
 
 #include "car.h"
-#include  "carConstants.h"
+#include "carConstants.h"
 
 
 class CarBuilder {

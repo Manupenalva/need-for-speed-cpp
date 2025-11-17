@@ -146,6 +146,7 @@ MapData MapCollisionBuilder::initialize_map_buildings(const std::string& path, b
                     Position position;
                     position.x = object["x"].as<float>() - 25.0f;
                     position.y = object["y"].as<float>() - 25.0f;
+                    position.angle = 0.0f;
                     map_data.spawn_positions.push_back(position);
                 }
             }

@@ -22,6 +22,8 @@
 #define DOWN_ROTATION "down"
 #define RIGHT_ROTATION "right"
 #define LEFT_ROTATION "left"
+#define HORIZONTAL_ROTATION "horizontal"
+#define VERTICAL_ROTATION "vertical"
 
 
 YAML::Node RaceBuilder::open_file(const std::string& path) {
@@ -58,6 +60,14 @@ float RaceBuilder::get_hint_angle(const std::string& rotation) {
     }
 }
 
+float RaceBuilder::get_checkpoint_angle(const std::string& rotation) {
+    if (rotation == HORIZONTAL_ROTATION) {
+        return 0.0f;
+    } else {
+        return 90.0f;
+    }
+}
+
 std::unique_ptr<Race> RaceBuilder::create_race(const std::string& path,
                                                std::unordered_map<uint16_t, Car>& players_cars) {
     try {
@@ -77,19 +87,23 @@ std::unique_ptr<Race> RaceBuilder::create_race(const std::string& path,
         Position finish;
         finish.x = finish_node["x"].as<float>();
         finish.y = finish_node["y"].as<float>();
+        // finish.angle = get_checkpoint_angle(finish_node["rotation"].as<std::string>());
+        finish.angle = 0.0f;  // Angulo hardcodeado para compilar
 
         std::vector<Position> start_positions;
         for (const auto& position: race_data["start"]) {
             int x = position["x"].as<int>();
             int y = position["y"].as<int>();
-            start_positions.push_back({x, y});
+            std::string rotation = position["rotation"].as<std::string>();
+            start_positions.push_back({x, y, get_hint_angle(rotation)});
         }
 
         std::vector<Position> checkpoints;
         for (const auto& position: race_data["checkpoint"]) {
             int x = position["x"].as<int>();
             int y = position["y"].as<int>();
-            checkpoints.push_back({x, y});
+            std::string rotation = position["rotation"].as<std::string>();
+            checkpoints.push_back({x, y, get_checkpoint_angle(rotation)});
         }
 
         std::vector<Hint> hints;
@@ -98,7 +112,10 @@ std::unique_ptr<Race> RaceBuilder::create_race(const std::string& path,
             int y = hint["y"].as<int>();
             std::string rotation = hint["rotation"].as<std::string>();
             float angle = get_hint_angle(rotation);
-            hints.push_back({x, y, angle});
+            int checkpoint_id = hint["id"].as<int>();
+            Position pos = {x, y, angle};
+            Hint hint_info = {pos, checkpoint_id};
+            hints.push_back(hint_info);
         }
 
         return std::make_unique<Race>(players_cars, celd_width, celd_height, start_positions,
