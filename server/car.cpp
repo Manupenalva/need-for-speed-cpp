@@ -1,9 +1,9 @@
 #include "car.h"
 
 #include <iostream>
+#include <numeric>
 
 #include "../common/constants.h"
-#include <numeric>
 
 #define CAR_MAX_SPEED 100.0f
 #define CAR_MAX_ACCELERATION 100.0f

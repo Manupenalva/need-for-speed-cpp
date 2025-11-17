@@ -2,6 +2,7 @@
 #define MESSAGE_DTO_H
 
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "carProperties.h"

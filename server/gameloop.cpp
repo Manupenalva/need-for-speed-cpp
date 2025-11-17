@@ -230,12 +230,10 @@ void Gameloop::run() {
 
 std::vector<std::pair<uint16_t, float>> Gameloop::get_acumullated_times() {
     std::vector<std::pair<uint16_t, float>> times_vector;
-    for (const auto& [car, id] : players_cars) {
+    for (const auto& [car, id]: players_cars) {
         times_vector.emplace_back(car, players_cars[car].get_total_time());
     }
     std::sort(times_vector.begin(), times_vector.end(),
-              [](const auto& a, const auto& b) {
-                  return a.second > b.second;
-              });
+              [](const auto& a, const auto& b) { return a.second > b.second; });
     return times_vector;
 }

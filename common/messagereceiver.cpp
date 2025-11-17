@@ -83,7 +83,7 @@ std::vector<std::pair<uint16_t, float>> MessageReceiver::recv_positions() {
     std::vector<std::pair<uint16_t, float>> positions;
     positions.resize(positions_size);
 
-    for (auto& pos : positions) {
+    for (auto& pos: positions) {
         pos.first = obtain_uint16();
         pos.second = obtain_float();
     }

@@ -85,7 +85,8 @@ void MessageSender::serialize_map_number(const uint8_t map_number) {
     append_bytes(&map_number, MAP_NUMBER_BYTES);
 }
 
-void MessageSender::serialize_race_positions(const std::vector<std::pair<uint16_t, float>>& positions) {
+void MessageSender::serialize_race_positions(
+        const std::vector<std::pair<uint16_t, float>>& positions) {
     buffer.resize(CODE_BYTES + LENGTH_BYTES + positions.size() * POSITION_BYTES);
     offset = 0;
     MsgType type = MsgType::RACE_POSITIONS;
@@ -93,7 +94,8 @@ void MessageSender::serialize_race_positions(const std::vector<std::pair<uint16_
     append_positions(positions);
 }
 
-void MessageSender::serialize_accumulated_positions(const std::vector<std::pair<uint16_t, float>>& positions) {
+void MessageSender::serialize_accumulated_positions(
+        const std::vector<std::pair<uint16_t, float>>& positions) {
     buffer.resize(CODE_BYTES + LENGTH_BYTES + positions.size() * POSITION_BYTES);
     offset = 0;
     MsgType type = MsgType::ACCUMULATED_POSITIONS;
@@ -304,7 +306,7 @@ void MessageSender::append_player_state(const PlayerState& player_state) {
 
 void MessageSender::append_positions(const std::vector<std::pair<uint16_t, float>>& positions) {
     append_uint16(static_cast<uint16_t>(positions.size()));
-    for (const auto& pos : positions) {
+    for (const auto& pos: positions) {
         append_uint16(pos.first);
         append_float(pos.second);
     }
