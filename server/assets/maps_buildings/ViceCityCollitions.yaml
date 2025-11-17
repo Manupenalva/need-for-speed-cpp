@@ -6327,7 +6327,7 @@ layers:
     y: 2676.92
   - height: 222.833
     id: 694
-    name: down 1
+    name: down 2
     rotation: 0
     type: '3'
     visible: true
@@ -6363,7 +6363,7 @@ layers:
     y: 2432.25
   - height: 12.4997
     id: 711
-    name: up 1
+    name: up 2
     rotation: 0
     type: '4'
     visible: true

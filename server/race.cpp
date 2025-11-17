@@ -238,21 +238,13 @@ void Race::handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* brid
     if (!bridge || !car)
         return;
 
-    std::cout << "El sensor tiene index1: " << sensor_shape.index1 << std::endl;
-    std::cout << bridge->sensor1_up.index1 << std::endl;
-    std::cout << bridge->sensor2_up.index1 << std::endl;
-    std::cout << bridge->sensor1_down.index1 << std::endl;
-    std::cout << bridge->sensor2_down.index1 << std::endl;
     if (sensor_shape.index1 == bridge->sensor1_up.index1 ||
         sensor_shape.index1 == bridge->sensor2_up.index1) {
-        std::cout << "Son iguales" << std::endl;
-        car->interact_with_bridge(sensor_shape, BridgeLayer::TOP);
+        car->interact_with_bridge(BridgeLayer::TOP);
     } else if (sensor_shape.index1 == bridge->sensor1_down.index1 ||
                sensor_shape.index1 == bridge->sensor2_down.index1) {
-        std::cout << "Son iguales" << std::endl;
-        car->interact_with_bridge(sensor_shape, BridgeLayer::BOTTOM);
+        car->interact_with_bridge(BridgeLayer::BOTTOM);
     }
-    std::cout << "interactue con los bridge" << std::endl;
 }
 
 void Race::force_finish_race(const uint16_t& player_id) {

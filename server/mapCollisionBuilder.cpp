@@ -46,18 +46,23 @@ void MapCollisionBuilder::connect_corners(std::vector<Corner>& corners, b2WorldI
     }
 }
 
-b2ShapeId MapCollisionBuilder::create_body(bool /*is_sensor*/, float x, float y, float width,
+b2ShapeId MapCollisionBuilder::create_body(bool is_sensor, float x, float y, float width,
                                            float height, b2WorldId world) {
+    float new_width = width;
+    if (is_sensor)
+        new_width = width - 5.0f;
+
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_staticBody;
-    bodyDef.position = {x + (width / 2.0f), y + (height / 2.0f)};
+    bodyDef.position = {x + (new_width / 2.0f), y + (height / 2.0f)};
     b2BodyId body = b2CreateBody(world, &bodyDef);
     b2Body_EnableContactEvents(body, true);
     b2Body_EnableHitEvents(body, true);
 
     b2ShapeDef shapeDef = b2DefaultShapeDef();
-    shapeDef.isSensor = true;
-    b2Polygon box = b2MakeBox((width / 2.0f), (height / 2.0f));
+    if (is_sensor)
+        shapeDef.isSensor = true;
+    b2Polygon box = b2MakeBox((new_width / 2.0f), (height / 2.0f));
     b2ShapeId shape = b2CreatePolygonShape(body, &shapeDef, &box);
     b2Shape_EnableSensorEvents(shape, true);
     b2Shape_EnableContactEvents(shape, true);
@@ -94,18 +99,7 @@ MapData MapCollisionBuilder::initialize_map_buildings(const std::string& path, b
                     float width = object["width"].as<float>();
                     float height = object["height"].as<float>();
 
-                    b2BodyDef bodyDef = b2DefaultBodyDef();
-                    bodyDef.type = b2_staticBody;
-                    bodyDef.position = {x + (width / 2.0f), y + (height / 2.0f)};
-                    b2BodyId body = b2CreateBody(world, &bodyDef);
-                    b2Body_EnableContactEvents(body, true);
-                    b2Body_EnableHitEvents(body, true);
-
-                    b2ShapeDef shapeDef = b2DefaultShapeDef();
-                    b2Polygon box = b2MakeBox((width / 2.0f), (height / 2.0f));
-                    b2ShapeId shape = b2CreatePolygonShape(body, &shapeDef, &box);
-                    b2Shape_EnableContactEvents(shape, true);
-                    b2Shape_EnableHitEvents(shape, true);
+                    create_body(false, x, y, width, height, world);
                 }
             }
 
@@ -121,7 +115,6 @@ MapData MapCollisionBuilder::initialize_map_buildings(const std::string& path, b
                     float height = object["height"].as<float>();
 
                     b2ShapeId sensor = create_body(true, x, y, width, height, world);
-                    std::cout << "cree el primer shape" << std::endl;
 
                     if (side == "up 1")
                         bridges[bridge_id].sensor1_up = sensor;
@@ -131,7 +124,6 @@ MapData MapCollisionBuilder::initialize_map_buildings(const std::string& path, b
                         bridges[bridge_id].sensor1_down = sensor;
                     else if (side == "down 2")
                         bridges[bridge_id].sensor2_down = sensor;
-                    std::cout << "lo agregé" << std::endl;
                 }
             }
 
@@ -158,7 +150,6 @@ MapData MapCollisionBuilder::initialize_map_buildings(const std::string& path, b
                 }
             }
         }
-
         map_data.bridges = bridges;
 
         return map_data;

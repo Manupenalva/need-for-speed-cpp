@@ -67,11 +67,9 @@ void Car::upgrade_stats(const uint8_t& action) {
     if (action == ACT_IMPROVE_SPEED) {
         max_speed += 5;
         current_penalization += 2.0f;
-        std::cout << "Mejoré la velocidad" << std::endl;
     } else if (action == ACT_IMPROVE_ACCELERATION) {
         acceleration += 5;
         current_penalization += 2.0f;
-        std::cout << "Mejoré la aceleración" << std::endl;
     } else if (action == ACT_IMPROVE_HEALTH) {
         max_health += 5;
         current_penalization += 2.0f;
@@ -112,8 +110,7 @@ void Car::update_position() {
 
 void Car::handle_hits() { physics->handle_hits(); }
 
-// lo dejo comentado por ahora por como se maneja el choque
-void Car::interact_with_bridge(b2ShapeId /*sensor_shape*/, BridgeLayer sensor_layer) {
+void Car::interact_with_bridge(BridgeLayer sensor_layer) {
     if (bridge_layer == BridgeLayer::NONE) {
         bridge_layer = sensor_layer;
     } else if (bridge_layer == sensor_layer) {

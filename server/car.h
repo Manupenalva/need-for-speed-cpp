@@ -55,7 +55,7 @@ public:
     bool reached_checkpoint(Position next_checkpoint, float celd_width, float celd_height);
     void finish_race(float race_time, int position);
     void reset_inputs();
-    void interact_with_bridge(b2ShapeId sensor_shape, BridgeLayer sensor_layer);
+    void interact_with_bridge(BridgeLayer sensor_layer);
     PlayerState get_player_state() const;
     void activate_infinite_health();
     void explode();
