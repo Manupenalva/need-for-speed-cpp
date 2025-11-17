@@ -299,8 +299,8 @@ void MessageSender::append_player_state(const PlayerState& player_state) {
     uint8_t ready_byte = player_state.ready ? 0x01 : 0x00;
     append_bytes(&ready_byte, 1);
     append_bytes(&player_state.previous_position, 1);
-    append_uint32(player_state.result_time);
-    append_uint32(player_state.next_penalization_time);
+    append_float(player_state.result_time);
+    append_float(player_state.next_penalization_time);
     append_car_properties(player_state.car_properties);
 }
 

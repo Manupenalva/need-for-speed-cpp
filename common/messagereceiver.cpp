@@ -43,9 +43,6 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
         case MsgType::STATE_UPDATE:
             server_msg.state = recv_state_update();
             break;
-        // case MsgType::SEND_LOBBIES_INFO:
-        //     server_msg.lobbies = recv_lobbies_info();
-        // break;
         case MsgType::JOIN_RESULT:
             server_msg.joined = recv_join_result();
             break;
@@ -248,8 +245,8 @@ PlayerState MessageReceiver::recv_player_state() {
     player_state.player_id = obtain_uint16();
     player_state.ready = obtain_byte() != 0;
     player_state.previous_position = obtain_byte();
-    player_state.result_time = obtain_uint32();
-    player_state.next_penalization_time = obtain_uint32();
+    player_state.result_time = obtain_float();
+    player_state.next_penalization_time = obtain_float();
     player_state.car_properties = recv_car_properties();
     return player_state;
 }
@@ -290,8 +287,3 @@ float MessageReceiver::obtain_float() {
     uint32_t n = obtain_uint32();
     return uint32_to_float(n);
 }
-
-// std::string MessageReceiver::obtain_lobby_name() {
-//     uint16_t name_size = obtain_uint16();
-//     return obtain_string(name_size);
-// }

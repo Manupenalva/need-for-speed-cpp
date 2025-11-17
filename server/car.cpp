@@ -159,8 +159,8 @@ PlayerState Car::get_player_state() const {
     return PlayerState{state.id,
                        true,
                        static_cast<uint8_t>(get_last_position()),
-                       static_cast<uint32_t>(get_result_time() * 1000),
-                       static_cast<uint32_t>(get_current_penalization() * 1000),
+                       get_result_time(),
+                       get_current_penalization(),
                        get_properties()};
 }
 
