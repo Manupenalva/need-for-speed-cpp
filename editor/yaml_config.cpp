@@ -17,8 +17,6 @@ bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int grid
         out << YAML::BeginMap;
 
         out << YAML::Key << "city" << YAML::Value << city.toStdString();
-        out << YAML::Key << "width" << YAML::Value << static_cast<int>(scene->width());
-        out << YAML::Key << "height" << YAML::Value << static_cast<int>(scene->height());
         out << YAML::Key << "celdWidth" << YAML::Value << gridSize;
         out << YAML::Key << "celdHeight" << YAML::Value << gridSize;
 
