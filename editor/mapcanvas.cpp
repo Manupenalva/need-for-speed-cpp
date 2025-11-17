@@ -205,8 +205,8 @@ void MapCanvas::setActions() {
     actions.emplace(QStringLiteral(HINT_TYPE), std::make_unique<ActionHint>());
 }
 
-void MapCanvas::handleSelectingHint(const QPoint pos&){
-    QPointF scenePos = view->mapToScene(mouseEvent->pos());
+void MapCanvas::handleSelectingHint(const QPoint& pos){
+    QPointF scenePos = view->mapToScene(pos);
     QRectF pickArea(scenePos.x() - GRID_SIZE/2.0, scenePos.y() - GRID_SIZE/2.0, GRID_SIZE, GRID_SIZE);
     auto items = scene->items(pickArea);
     for (auto* i: items) {
@@ -219,8 +219,8 @@ void MapCanvas::handleSelectingHint(const QPoint pos&){
     }
 }
 
-void MapCanvas::handleDelete(const QPoint pos&) {
-    QPointF scenePos = view->mapToScene(mouseEvent->pos());
+void MapCanvas::handleDelete(const QPoint& pos) {
+    QPointF scenePos = view->mapToScene(pos);
     QRectF pickArea(scenePos.x() - GRID_SIZE/2.0, scenePos.y() - GRID_SIZE/2.0, GRID_SIZE, GRID_SIZE);
     auto items = scene->items(pickArea);
 
