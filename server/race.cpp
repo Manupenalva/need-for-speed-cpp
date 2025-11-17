@@ -291,3 +291,13 @@ std::vector<CheckpointArrow> Race::get_checkpoints_arrows() {
     });
     return arrows;
 }
+
+const std::vector<std::pair<uint16_t, float>> Race::get_race_results() {
+    std::vector<std::pair<uint16_t, float>> results = race_results;
+    std::sort(results.begin(), results.end(),
+              [](const auto& a, const auto& b) {
+                  return a.second < b.second;
+              });
+
+   return results;
+}
