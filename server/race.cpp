@@ -73,7 +73,7 @@ void Race::update_state() {
         if (car.exploded()) {
             status.has_finished = true;
             car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
-            race_results.emplace_back(id, MAX_TIME);
+            race_results.emplace_back(id, MAX_TIME + car.get_penalization_time());
             continue;
         }
 
@@ -83,7 +83,7 @@ void Race::update_state() {
             if (status.current_checkpoint_index >= checkpoints.size()) {
                 status.has_finished = true;
                 car.finish_race(current_time, race_results.size() + 1);
-                race_results.emplace_back(id, current_time);
+                race_results.emplace_back(id, current_time + car.get_penalization_time());
             }
         }
         if (status.current_hint_index < hints.size()) {
@@ -199,7 +199,7 @@ void Race::finish_race() {
     for (auto& [id, status]: players_status) {
         if (!status.has_finished) {
             players_cars[id].finish_race(MAX_TIME, MAX_PLAYERS_RACE);
-            race_results.emplace_back(id, MAX_TIME);
+            race_results.emplace_back(id, MAX_TIME + players_cars[id].get_penalization_time());
             status.has_finished = true;
         }
     }
@@ -265,7 +265,7 @@ void Race::force_lose_race(const uint16_t& player_id) {
     players_status[player_id].has_finished = true;
     car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
     car.explode();
-    race_results.emplace_back(player_id, MAX_TIME);
+    race_results.emplace_back(player_id, MAX_TIME + car.get_penalization_time());
 }
 
 uint8_t Race::get_city_code() { return city_code; }
