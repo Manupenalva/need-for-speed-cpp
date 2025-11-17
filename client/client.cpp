@@ -1,5 +1,7 @@
 #include "client.h"
 
+#include <iostream>
+
 Client::Client(Protocol& protocol, const int id):
         protocol(protocol),
         events_queue(),
@@ -12,9 +14,7 @@ Client::Client(Protocol& protocol, const int id):
         sounds_events_handler(sounds_manager, id),
         drawer(window.get_renderer(), texture_manager, id),
         kb_reader(events_queue),
-        last_state(),
-        has_last_state(false),
-        is_in_race(true) {
+        actual_state() {
     init_game_handlers();
 }
 
@@ -31,7 +31,8 @@ void Client::run() {
 
         while (_keep_running) {
             // Procesar todos los mensajes entrantes y actualizar el estado interno
-            kb_reader.listen_to_keyboard(_keep_running, is_in_race);
+            kb_reader.listen_to_keyboard(_keep_running, actual_state.upgrades_interval,
+                                         actual_state.is_in_race);
 
             // Ejecutar una iteración lógica (actualizaciones locales / físicas)
             update_state_from_server();
@@ -82,17 +83,24 @@ void Client::update_state_from_server() {
 }
 
 void Client::update_animation_frames(int iterations_ahead) {
-    // Si tenemos un estado para dibujar y la carrera esta en curso, pedir al drawer que lo pinte
-    if (has_last_state && is_in_race) {
-        // Limpiar la pantalla antes de dibujar (solo cuando hay un nuevo estado)
+
+    if (actual_state.has_last_state && actual_state.is_in_race) {
+        // Dibuja el ultimo estado recibido del servidor mientras esta en carrera.
         clear_display();
-        drawer.update_game_state(last_state, iterations_ahead, map_id);
+        drawer.update_game_state(actual_state.message, iterations_ahead, map_id);
         window.present();
 
-        sounds_events_handler.process_message(last_state);
-        has_last_state = false;  // Ya se dibujó este estado
+        sounds_events_handler.process_message(actual_state.message);
+        actual_state.has_last_state = false;
     }
-    if (!is_in_race) {
+    if (!actual_state.is_in_race && actual_state.has_last_state) {
+        // Dibujar estadisticas
+        clear_display();
+        drawer.update_estadistics_screen(actual_state.message);
+        window.present();
+        actual_state.has_last_state = false;
+    }
+    if (!actual_state.is_in_race && actual_state.upgrades_interval) {
         // Mostrar pantalla de mejora de auto
         clear_display();
         drawer.show_upgrade_screen();
@@ -101,31 +109,47 @@ void Client::update_animation_frames(int iterations_ahead) {
 }
 
 void Client::init_game_handlers() {
-    msg_handlers[MsgType::STATE_UPDATE] = [this](const ServerMessageDTO& server_msg) {
-        last_state = server_msg;
-        has_last_state = true;
+    auto handler_state = [this](const ServerMessageDTO& server_msg) {
+        actual_state.message = server_msg;
+        actual_state.has_last_state = true;
     };
+    msg_handlers[MsgType::STATE_UPDATE] = handler_state;
+
+    msg_handlers[MsgType::RACE_ESTADISTICS] = handler_state;
+
+    msg_handlers[MsgType::GAME_ESTADISTICS] = handler_state;
+
     msg_handlers[MsgType::RACE_STARTED] = [this](const ServerMessageDTO& server_msg) {
-        is_in_race = true;
-        last_state = server_msg;
+        actual_state.is_in_race = true;
+        actual_state.message = server_msg;
     };
+
     msg_handlers[MsgType::RACE_FINISHED] = [this](const ServerMessageDTO& server_msg) {
-        is_in_race = false;
+        actual_state.is_in_race = false;
         sounds_events_handler.final_game_sound();
-        last_state = server_msg;
+        actual_state.message = server_msg;
     };
+
     msg_handlers[MsgType::SEND_MAP_NUMBER] = [this](const ServerMessageDTO& server_msg) {
         map_id = static_cast<MapType>(server_msg.map_number);
     };
+
     msg_handlers[MsgType::SEND_MINIMAP_INFO] = [this](const ServerMessageDTO& server_msg) {
         texture_manager.load_minimap_info(server_msg.minimap_info, map_id);
     };
+
     msg_handlers[MsgType::INTERVAL_UPDATE] = [this](const ServerMessageDTO& server_msg) {
-        // Actualizar estado de intervalo
-        last_state = server_msg;
+        actual_state.upgrades_interval = true;
+        actual_state.message = server_msg;
     };
+
+    msg_handlers[MsgType::INTERVAL_CLOSED] = [this](const ServerMessageDTO& server_msg) {
+        actual_state.upgrades_interval = false;
+        actual_state.message = server_msg;
+    };
+
     msg_handlers[MsgType::GAME_END] = [this](const ServerMessageDTO& server_msg) {
-        last_state = server_msg;
+        actual_state.message = server_msg;
         _keep_running = false;
     };
 }

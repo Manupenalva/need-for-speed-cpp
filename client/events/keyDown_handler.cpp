@@ -27,7 +27,7 @@ bool KeyDownHandler::handle_event(EventDTO& event_dto) {
             uint8_t command = it->second;
 
             if ((command >= ACT_IMPROVE_SPEED && command <= ACT_IMPROVE_HANDLING &&
-                 event_dto.in_race) ||
+                 !event_dto.in_interval) ||
                 (command <= ACT_NITRO_PRESS && !event_dto.in_race)) {
                 // Solo permitir mejoras si no está en carrera, y movimientos si está en carrera
                 return true;

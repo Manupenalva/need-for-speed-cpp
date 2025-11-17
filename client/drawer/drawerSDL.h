@@ -33,11 +33,17 @@ private:
     std::vector<std::unique_ptr<Drawer>> drawers;
     UpgradeScreenDrawer upgrade_screen_drawer;
 
+    void draw_race_estadistics(const ServerMessageDTO& msg);
+    void draw_game_estadistics(const ServerMessageDTO& msg);
+
 public:
     explicit DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager, int client_id);
 
     // Actualiza la vista según el estado recibido de la carrera
     void update_game_state(const ServerMessageDTO& msg, int iterations_ahead, MapType map_id);
+
+    // Actualiza la vista de la pantalla de estadísticas
+    void update_estadistics_screen(const ServerMessageDTO& msg);
 
     // Muestra en pantalla la screen para mejorar el auto
     void show_upgrade_screen();

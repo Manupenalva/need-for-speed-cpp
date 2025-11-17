@@ -22,6 +22,13 @@
 #include "receiver.h"
 #include "sender.h"
 
+struct ActualState {
+    ServerMessageDTO message = {};
+    bool has_last_state = false;
+    bool is_in_race = false;
+    bool upgrades_interval = false;
+};
+
 class Client: public Thread {
 private:
     Protocol& protocol;
@@ -39,9 +46,7 @@ private:
     MapType map_id;
 
     // Último estado recibido del servidor para dibujar
-    ServerMessageDTO last_state;
-    bool has_last_state;
-    bool is_in_race;
+    ActualState actual_state;
 
     void init_resources();
     void update_state_from_server();

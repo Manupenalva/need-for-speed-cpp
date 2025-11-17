@@ -40,3 +40,11 @@ void DrawerSDL::update_game_state(const ServerMessageDTO& msg, int iterations_ah
 }
 
 void DrawerSDL::show_upgrade_screen() { upgrade_screen_drawer.draw(); }
+
+void DrawerSDL::update_estadistics_screen(const ServerMessageDTO& msg) {
+    if (msg.type != MsgType::RACE_ESTADISTICS) {
+        draw_race_estadistics(msg);
+    } else if (msg.type != MsgType::GAME_ESTADISTICS) {
+        draw_game_estadistics(msg);
+    }
+}
