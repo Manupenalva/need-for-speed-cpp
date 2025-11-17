@@ -1,9 +1,11 @@
 #ifndef GAMELOOP_H
 #define GAMELOOP_H
 
+#include <algorithm>
 #include <cstdint>
 #include <memory>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include <box2d/box2d.h>

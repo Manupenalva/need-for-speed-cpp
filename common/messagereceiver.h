@@ -2,6 +2,7 @@
 #define MESSAGE_RECEIVER_H
 
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "SocketInterface.h"
@@ -11,9 +12,9 @@
 #include "constants.h"
 #include "lobbyinfo.h"
 #include "messageDTOs.h"
+#include "minimapInfo.h"
 #include "npcState.h"
 #include "socket.h"
-#include "minimapInfo.h"
 
 class MessageReceiver {
 public:

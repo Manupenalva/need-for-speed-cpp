@@ -85,7 +85,8 @@ void MessageSender::serialize_map_number(const uint8_t map_number) {
     append_bytes(&map_number, MAP_NUMBER_BYTES);
 }
 
-void MessageSender::serialize_race_positions(const std::vector<std::pair<uint16_t, float>>& positions) {
+void MessageSender::serialize_race_positions(
+        const std::vector<std::pair<uint16_t, float>>& positions) {
     buffer.resize(CODE_BYTES + LENGTH_BYTES + positions.size() * POSITION_BYTES);
     offset = 0;
     MsgType type = MsgType::RACE_POSITIONS;
@@ -93,7 +94,8 @@ void MessageSender::serialize_race_positions(const std::vector<std::pair<uint16_
     append_positions(positions);
 }
 
-void MessageSender::serialize_accumulated_positions(const std::vector<std::pair<uint16_t, float>>& positions) {
+void MessageSender::serialize_accumulated_positions(
+        const std::vector<std::pair<uint16_t, float>>& positions) {
     buffer.resize(CODE_BYTES + LENGTH_BYTES + positions.size() * POSITION_BYTES);
     offset = 0;
     MsgType type = MsgType::ACCUMULATED_POSITIONS;
@@ -134,8 +136,8 @@ void MessageSender::serialize_lobby(const int lobby_id, MsgType type) {
 }
 
 void MessageSender::serialize_state(const State& state) {
-    buffer.resize(CODE_BYTES + COUNTDOWN_BYTES + 2 * LENGTH_BYTES + AMOUNT_BYTES + state.num_cars * CAR_STATE_BYTES +
-                  state.npcs.size() * NPC_STATE_BYTES);
+    buffer.resize(CODE_BYTES + COUNTDOWN_BYTES + 2 * LENGTH_BYTES + AMOUNT_BYTES +
+                  state.num_cars * CAR_STATE_BYTES + state.npcs.size() * NPC_STATE_BYTES);
     offset = 0;
     MsgType type = MsgType::STATE_UPDATE;
     append_bytes(&type, CODE_BYTES);
@@ -222,18 +224,18 @@ void MessageSender::serialize_client_id(int id) {
 }
 
 void MessageSender::serialize_minimap_info(const MinimapInfo& minimap_info) {
-    buffer.resize(CODE_BYTES + 2 * LENGTH_BYTES + 
+    buffer.resize(CODE_BYTES + 2 * LENGTH_BYTES +
                   minimap_info.checkpoints.size() * CHECKPOINT_INFO_BYTES +
                   minimap_info.arrows.size() * CHECKPOINT_ARROW_BYTES);
     offset = 0;
     MsgType type = MsgType::SEND_MINIMAP_INFO;
     append_bytes(&type, CODE_BYTES);
     append_uint16(static_cast<uint16_t>(minimap_info.checkpoints.size()));
-    for (const auto& checkpoint : minimap_info.checkpoints) {
+    for (const auto& checkpoint: minimap_info.checkpoints) {
         append_checkpoint_info(checkpoint);
     }
     append_uint16(static_cast<uint16_t>(minimap_info.arrows.size()));
-    for (const auto& arrow : minimap_info.arrows) {
+    for (const auto& arrow: minimap_info.arrows) {
         append_checkpoint_arrow(arrow);
     }
 }
@@ -304,7 +306,7 @@ void MessageSender::append_player_state(const PlayerState& player_state) {
 
 void MessageSender::append_positions(const std::vector<std::pair<uint16_t, float>>& positions) {
     append_uint16(static_cast<uint16_t>(positions.size()));
-    for (const auto& pos : positions) {
+    for (const auto& pos: positions) {
         append_uint16(pos.first);
         append_float(pos.second);
     }
