@@ -5,16 +5,10 @@
 
 #include "../common/constants.h"
 
-#define CAR_MAX_SPEED 100.0f
-#define CAR_MAX_ACCELERATION 100.0f
-#define CAR_MAX_HEALTH 100.0f
-#define CAR_MAX_MASS 1000.0f
-#define CAR_MAX_DRIVABILITY 100.0f
-
 Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
          const float& acceleration, const float& health, const float& mass,
          const float& drivability, const float& car_long, const float& car_width,
-         const int& car_type):
+         const int& car_type, std::shared_ptr<CarConstants> car_constants) :
         input_state(),
         state({id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, false,
                static_cast<uint16_t>(car_type), static_cast<uint16_t>(health)}),
@@ -28,7 +22,8 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
         car_width(car_width),
         max_health(health),
         current_penalization(0.0f),
-        curr_world() {}
+        curr_world(),
+        car_constants(car_constants) {}
 
 void Car::add_to_world(b2WorldId world, Position start_position) {
     state.x = start_position.x;
@@ -39,7 +34,7 @@ void Car::add_to_world(b2WorldId world, Position start_position) {
     bridge_layer = BridgeLayer::NONE;
 
     physics = std::make_unique<CarPhysics>(world, state, max_speed, acceleration, mass, drivability,
-                                           car_long, car_width, this);
+                                           car_long, car_width, this, car_constants->physics);
     curr_world = world;
 }
 
@@ -200,11 +195,11 @@ void Car::explode() {
 }
 
 void Car::maximize_stats() {
-    max_speed = CAR_MAX_SPEED;
-    acceleration = CAR_MAX_ACCELERATION;
-    max_health = CAR_MAX_HEALTH;
-    mass = CAR_MAX_MASS;
-    drivability = CAR_MAX_DRIVABILITY;
+    max_speed = car_constants->car.MAX_SPEED;
+    acceleration = car_constants->car.MAX_ACCELERATION;
+    max_health = car_constants->car.MAX_HEALTH;
+    mass = car_constants->car.MAX_MASS;
+    drivability = car_constants->car.MAX_DRIVABILITY;
     physics->set_stats(max_speed, acceleration, mass, drivability);
 }
 

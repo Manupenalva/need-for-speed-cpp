@@ -31,7 +31,8 @@ Gameloop::Gameloop(
         race_monitor(race_monitor),
         races(),
         frames(0),
-        countdown_remaining(0) {}
+        countdown_remaining(0),
+        car_constants(std::make_shared<CarConstants>()) {}
 
 void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action) {
     players_cars[player_id].update_input(action);
@@ -97,7 +98,7 @@ void Gameloop::initialize_races() {
 }
 
 void Gameloop::receive_selected_cars() {
-    CarBuilder builder("../server/assets/cars_configs/cars_config.yaml");
+    CarBuilder builder("../server/assets/cars_configs/cars_config.yaml", car_constants);
     while (should_keep_running()) {
         std::shared_ptr<ClientHandlerMessage> base_msg;
 

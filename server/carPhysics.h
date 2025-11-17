@@ -3,11 +3,13 @@
 
 #include "../common/carState.h"
 #include "../libs/box2d/include/box2d/box2d.h"
+#include "carConstants.h"
 
 class Car;
 
 class CarPhysics {
 private:
+    CarConstants::Physics& phy_const;
     b2BodyId body;
     b2ShapeId shape;
     b2WorldId world;
@@ -22,7 +24,7 @@ private:
 public:
     CarPhysics(b2WorldId world, CarInfo& car_state, const float& max_speed,
                const float& acceleration, const float& mass, const float& drivability,
-               const float& car_long, const float& car_width, Car* car);
+               const float& car_long, const float& car_width, Car* car, CarConstants::Physics& physic_constants);
     void accelerate();
     void deaccelerate();
     void brake();

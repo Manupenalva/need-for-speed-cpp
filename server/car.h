@@ -15,6 +15,7 @@
 
 #include "bridge.h"
 #include "carPhysics.h"
+#include "carConstants.h"
 
 
 class Car {
@@ -39,11 +40,12 @@ private:
     float current_penalization;
 
     b2WorldId curr_world;
+    std::shared_ptr<CarConstants> car_constants;
 
 public:
     Car(const uint16_t& id, const std::string& name, const float& max_speed,
         const float& acceleration, const float& health, const float& mass, const float& drivability,
-        const float& car_long, const float& car_width, const int& car_type);
+        const float& car_long, const float& car_width, const int& car_type, std::shared_ptr<CarConstants> car_constants);
 
     void add_to_world(b2WorldId world, Position start_position);
     void update_input(const uint8_t& action);

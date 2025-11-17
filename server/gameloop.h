@@ -19,6 +19,7 @@
 #include "car.h"
 #include "race.h"
 #include "racemonitor.h"
+#include "carConstants.h"
 
 
 class Gameloop: public Thread {
@@ -29,6 +30,7 @@ private:
     std::vector<std::unique_ptr<Race>> races;
     uint32_t frames;
     int countdown_remaining;
+    std::shared_ptr<CarConstants> car_constants;
 
 public:
     Gameloop(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
