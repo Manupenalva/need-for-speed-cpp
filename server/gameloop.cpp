@@ -7,12 +7,12 @@
 #include <ostream>
 #include <thread>
 
+#include "../common/constants.h"
 #include "../common/gameLoop_timer.h"
 #include "../libs/box2d/include/box2d/box2d.h"
 #include "events/actionmessage.h"
 #include "events/cheatmessage.h"
 #include "events/selectcarmessage.h"
-#include "../common/constants.h"
 
 #include "carBuilder.h"
 #include "carPhysics.h"
@@ -20,13 +20,19 @@
 #include "raceBuilder.h"
 #define TARGET_FPS 60
 #define TARGET_FPS_INTERVAL 30
-#define INTERVAL_WAIT_TIME 10  // segundos
+#define INTERVAL_WAIT_TIME 10        // segundos
 #define FRAME_INTERVAL_TO_CLOSE 300  // segundos
+#define POSITIONS_WAIT_TIME 10
 
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
         std::shared_ptr<RaceStruct> race_monitor):
-        user_commands_queue(user_commands_queue), race_monitor(race_monitor), races(), frames(0) {}
+        user_commands_queue(user_commands_queue),
+        race_monitor(race_monitor),
+        races(),
+        frames(0),
+        countdown_remaining(0),
+        car_constants(std::make_shared<CarConstants>()) {}
 
 void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action) {
     players_cars[player_id].update_input(action);
@@ -40,6 +46,18 @@ void Gameloop::broadcast_players(const int& race_index) {
     ServerMessageDTO msg = races[race_index]->get_broadcast_message(frames);
     msg.state.countdown_time = countdown_remaining;
     race_monitor->broadcast(msg);
+}
+
+void Gameloop::broadcast_positions(int race_index) {
+    ServerMessageDTO msg;
+    msg.type = MsgType::RACE_POSITIONS;
+    msg.positions = races[race_index]->get_race_results();
+    race_monitor->broadcast(msg);
+    std::this_thread::sleep_for(std::chrono::seconds(POSITIONS_WAIT_TIME));
+    msg.type = MsgType::ACCUMULATED_POSITIONS;
+    msg.positions = get_acumullated_times();
+    race_monitor->broadcast(msg);
+    std::this_thread::sleep_for(std::chrono::seconds(POSITIONS_WAIT_TIME));
 }
 
 void Gameloop::broadcast_event(const MsgType msg_type) {
@@ -80,7 +98,7 @@ void Gameloop::initialize_races() {
 }
 
 void Gameloop::receive_selected_cars() {
-    CarBuilder builder("../server/assets/cars_configs/cars_config.yaml");
+    CarBuilder builder("../server/assets/cars_configs/cars_config.yaml", car_constants);
     while (should_keep_running()) {
         std::shared_ptr<ClientHandlerMessage> base_msg;
 
@@ -145,7 +163,6 @@ void Gameloop::handle_countdown(int race_index) {
         frames++;
         timer.sleep_and_calc_next_it(iterations_behind);
     }
-
 }
 
 void Gameloop::handle_race(const int& race_index) {
@@ -161,7 +178,7 @@ void Gameloop::handle_race(const int& race_index) {
     handle_countdown(race_index);
     GameLoopTimer timer(TARGET_FPS);
     uint32_t iterations_behind = 1;
-    
+
     while (!races[race_index]->is_finished() && should_keep_running()) {
         std::shared_ptr<ClientHandlerMessage> base_msg;
         while (user_commands_queue->try_pop(base_msg)) {
@@ -188,6 +205,7 @@ void Gameloop::handle_race(const int& race_index) {
     }
 
     broadcast_event(MsgType::RACE_FINISHED);
+    broadcast_positions(race_index);
     if (race_index == static_cast<int>(races.size()) - 1)
         return;
     handle_upgrades_phase(race_index);
@@ -223,4 +241,14 @@ void Gameloop::run() {
             return;
     }
     broadcast_event(MsgType::GAME_END);
+}
+
+std::vector<std::pair<uint16_t, float>> Gameloop::get_acumullated_times() {
+    std::vector<std::pair<uint16_t, float>> times_vector;
+    for (const auto& [car, id]: players_cars) {
+        times_vector.emplace_back(car, players_cars[car].get_total_time());
+    }
+    std::sort(times_vector.begin(), times_vector.end(),
+              [](const auto& a, const auto& b) { return a.second < b.second; });
+    return times_vector;
 }

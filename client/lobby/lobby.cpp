@@ -69,6 +69,7 @@ void Lobby::createGame() {
     QMessageBox::information(this, "New Game", QString("Race code: %1").arg(response.id));
     raceC = response.id;
     ui->gameCodeLabel->setText(QString("Game Code: %1").arg(raceC));
+    timer->start(1000);
     showCarSelection();
 }
 
@@ -105,6 +106,7 @@ void Lobby::connectServer() {
     raceC = msg.lobby_id;
     QMessageBox::information(this, "Connecting", QString("Connectin to.. %1").arg(raceCode));
     ui->gameCodeLabel->setText(QString("Game Code: %1").arg(raceC));
+    timer->start(1000);
     showCarSelection();
 }
 
@@ -184,5 +186,4 @@ void Lobby::confirmCar() {
     }
     chosenCar = static_cast<uint16_t>(item->data(Qt::UserRole).toInt());
     stack->setCurrentIndex(3);
-    timer->start(1000);
 }

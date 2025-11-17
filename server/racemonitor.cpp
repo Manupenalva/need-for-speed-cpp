@@ -1,11 +1,11 @@
 #include "racemonitor.h"
 
-RaceStruct::RaceStruct(): players(), mtx() {}
+RaceStruct::RaceStruct(): players(), mtx(), started(false) {}
 
 bool RaceStruct::add_player(std::shared_ptr<ClientHandler> client) {
     std::lock_guard<std::mutex> lock(mtx);
     reap();
-    if (players.size() >= MAX_PLAYERS_RACE) {
+    if (players.size() >= MAX_PLAYERS_RACE || started) {
         return false;
     }
     players.push_back(std::move(client));
@@ -42,6 +42,7 @@ void RaceStruct::set_game_queue(
     for (auto& client: players) {
         client->set_game_queue(new_queue);
     }
+    started = true;
 }
 
 int RaceStruct::size() {

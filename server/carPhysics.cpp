@@ -5,33 +5,23 @@
 
 #include "car.h"
 
-#define BASE_MAX_SPEED 250.0f
-#define BASE_ACCELERATION 500000.0f
-#define BASE_ANGLE_ROTATION 3
-#define BASE_FRICTION 5.0f
-#define MIN_SPEED 100.0f
-#define LIGHT_CRASH_DAMAGE 1
-#define MEDIUM_CRASH_DAMAGE 3
-#define HEAVY_CRASH_DAMAGE 5
-#define MEDIUM_CRASH_LIMIT 900.0f
-#define HEAVY_CRASH_LIMIT 1500.0f
-#define REVERSE_ACCELERATION_FACTOR 0.5f
-#define REVERSE_SPEED_FACTOR 0.25f
-#define MIN_GAME_SPEED 5.0f
 
 CarPhysics::CarPhysics(b2WorldId world, CarInfo& car_state, const float& max_speed,
                        const float& acceleration, const float& mass, const float& drivability,
-                       const float& car_long, const float& car_width, Car* car):
+                       const float& car_long, const float& car_width, Car* car,
+                       CarConstants::Physics& physic_constants):
+        phy_const(physic_constants),
         world(world),
         car_state(car_state),
         max_speed_factor(max_speed / 100.0f),
         acceleration_factor(acceleration / 100.0f),
         mass_factor(mass / 100.0f),
-        drivability_factor(drivability / 100.0f) {
+        drivability_factor(drivability / 100.0f),
+        nitro_remaining(100.0f) {
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;
-    bodyDef.linearDamping = BASE_FRICTION * mass_factor;
-    bodyDef.angularDamping = BASE_FRICTION * mass_factor;
+    bodyDef.linearDamping = phy_const.BASE_FRICTION * mass_factor;
+    bodyDef.angularDamping = phy_const.BASE_FRICTION * mass_factor;
     bodyDef.position = {car_state.x, car_state.y};
     body = b2CreateBody(world, &bodyDef);
     b2Body_EnableContactEvents(body, true);
@@ -53,14 +43,14 @@ void CarPhysics::accelerate() {
     b2Vec2 velocity = b2Body_GetLinearVelocity(body);
     float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
 
-    float max_speed = BASE_MAX_SPEED * max_speed_factor;
+    float max_speed = phy_const.BASE_MAX_SPEED * max_speed_factor;
     float speedRatio = 0.0f;
-    if (speed >= MIN_SPEED) {
+    if (speed >= phy_const.MIN_SPEED) {
         speedRatio = max_speed / speed;
     }
     // Aceleracion basada en la masa y velocidad actual
-    float scaledAcceleration =
-            (1.0f + speedRatio) * BASE_ACCELERATION * acceleration_factor * (1.0f + mass_factor);
+    float scaledAcceleration = (1.0f + speedRatio) * phy_const.BASE_ACCELERATION *
+                               acceleration_factor * (1.0f + mass_factor);
     if (speed < max_speed) {
         b2Body_ApplyForceToCenter(
                 body, {direction.x * scaledAcceleration, direction.y * scaledAcceleration}, true);
@@ -72,22 +62,23 @@ void CarPhysics::deaccelerate() {
     float rad = car_state.angle * M_PI / 180.0f;
     float forward_speed = velocity.x * cosf(rad) + velocity.y * sinf(rad);
 
-    if (forward_speed > MIN_GAME_SPEED) {
+    if (forward_speed > phy_const.MIN_GAME_SPEED) {
         b2Body_SetLinearVelocity(body, {velocity.x * 0.95f, velocity.y * 0.95f});
         car_state.braking = true;
     } else {
         b2Vec2 reverseDirection = {-cosf(rad), -sinf(rad)};
-        float maxReverseSpeed = (BASE_MAX_SPEED * max_speed_factor) * REVERSE_SPEED_FACTOR;
+        float maxReverseSpeed =
+                (phy_const.BASE_MAX_SPEED * max_speed_factor) * phy_const.REVERSE_SPEED_FACTOR;
         float reverseSpeed =
                 std::abs(velocity.x * reverseDirection.x + velocity.y * reverseDirection.y);
 
         if (reverseSpeed < maxReverseSpeed) {
             b2Body_ApplyForceToCenter(
                     body,
-                    {reverseDirection.x * (BASE_ACCELERATION * acceleration_factor *
-                                           REVERSE_ACCELERATION_FACTOR),
-                     reverseDirection.y * (BASE_ACCELERATION * acceleration_factor *
-                                           REVERSE_ACCELERATION_FACTOR)},
+                    {reverseDirection.x * (phy_const.BASE_ACCELERATION * acceleration_factor *
+                                           phy_const.REVERSE_ACCELERATION_FACTOR),
+                     reverseDirection.y * (phy_const.BASE_ACCELERATION * acceleration_factor *
+                                           phy_const.REVERSE_ACCELERATION_FACTOR)},
                     true);
         }
     }
@@ -105,10 +96,10 @@ void CarPhysics::brake() {
 void CarPhysics::turn_left() {
     b2Vec2 velocity = b2Body_GetLinearVelocity(body);
     float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
-    if (speed < MIN_GAME_SPEED) {
+    if (speed < phy_const.MIN_GAME_SPEED) {
         return;
     }
-    car_state.angle -= (BASE_ANGLE_ROTATION * drivability_factor);
+    car_state.angle -= (phy_const.BASE_ANGLE_ROTATION * drivability_factor);
 
     if (car_state.angle < 0.0f) {
         car_state.angle += 360.0f;
@@ -126,10 +117,10 @@ void CarPhysics::turn_right() {
 
     b2Vec2 velocity = b2Body_GetLinearVelocity(body);
     float speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
-    if (speed < MIN_GAME_SPEED) {
+    if (speed < phy_const.MIN_GAME_SPEED) {
         return;
     }
-    car_state.angle += (BASE_ANGLE_ROTATION * drivability_factor);
+    car_state.angle += (phy_const.BASE_ANGLE_ROTATION * drivability_factor);
 
     if (car_state.angle >= 360.f) {
         car_state.angle -= 360.0f;
@@ -143,6 +134,25 @@ void CarPhysics::turn_right() {
     b2Body_SetLinearVelocity(body, new_velocity);
 }
 
+void CarPhysics::handle_nitro() {
+    if (nitro_remaining - phy_const.NITRO_USE < 0.0f) {
+        return;
+    }
+
+    nitro_remaining -= phy_const.NITRO_USE;
+
+
+    float rad = car_state.angle * M_PI / 180.0f;
+    b2Vec2 direction = {cosf(rad), sinf(rad)};
+
+    b2Body_ApplyForceToCenter(body,
+                              {direction.x * (phy_const.BASE_ACCELERATION * acceleration_factor *
+                                              phy_const.NITRO_ACCELERATION_FACTOR),
+                               direction.y * (phy_const.BASE_ACCELERATION * acceleration_factor *
+                                              phy_const.NITRO_ACCELERATION_FACTOR)},
+                              true);
+}
+
 void CarPhysics::update_position() {
     b2Vec2 pos = b2Body_GetPosition(body);
     car_state.x = pos.x;
@@ -153,12 +163,6 @@ void CarPhysics::handle_hits() {
     b2ContactEvents events = b2World_GetContactEvents(world);
     car_state.crashed = false;
     for (int i = 0; i < events.beginCount; i++) {
-
-        if (b2Shape_IsSensor(events.hitEvents[i].shapeIdA))
-            std::cout << "ES un sensor" << std::endl;
-        if (b2Shape_IsSensor(events.hitEvents[i].shapeIdB))
-            std::cout << "ES un sensor" << std::endl;
-
         if ((events.hitEvents[i].shapeIdA.index1 == shape.index1) ||
             (events.hitEvents[i].shapeIdB.index1 == shape.index1)) {
             handle_hit_event(events.hitEvents[i]);
@@ -204,27 +208,27 @@ void CarPhysics::handle_crash(const b2Vec2& normal, const float impact_force) {
 }
 
 void CarPhysics::handle_crash_damage(const float impact_force, const float crash_direction) {
-    float heavy_crash_limit = mass_factor * HEAVY_CRASH_LIMIT;
-    float medium_crash_limit = mass_factor * MEDIUM_CRASH_LIMIT;
+    float heavy_crash_limit = mass_factor * phy_const.HEAVY_CRASH_LIMIT;
+    float medium_crash_limit = mass_factor * phy_const.MEDIUM_CRASH_LIMIT;
 
     if (crash_direction > 0.7f) {  // golpe frontal
         brake();
         brake();
         if (impact_force > heavy_crash_limit) {
-            apply_damage(HEAVY_CRASH_DAMAGE);
+            apply_damage(phy_const.HEAVY_CRASH_DAMAGE);
         } else if (impact_force > medium_crash_limit) {
-            apply_damage(MEDIUM_CRASH_DAMAGE);
+            apply_damage(phy_const.MEDIUM_CRASH_DAMAGE);
         } else {
-            apply_damage(LIGHT_CRASH_DAMAGE);
+            apply_damage(phy_const.LIGHT_CRASH_DAMAGE);
         }
     } else if (crash_direction < -0.7f) {  // golpe de atras, leve
-        apply_damage(LIGHT_CRASH_DAMAGE);
+        apply_damage(phy_const.LIGHT_CRASH_DAMAGE);
     } else {  // golpe lateral
         brake();
         if (impact_force > heavy_crash_limit) {
-            apply_damage(MEDIUM_CRASH_DAMAGE);
+            apply_damage(phy_const.MEDIUM_CRASH_DAMAGE);
         } else {
-            apply_damage(LIGHT_CRASH_DAMAGE);
+            apply_damage(phy_const.LIGHT_CRASH_DAMAGE);
         }
     }
 }
@@ -235,7 +239,7 @@ void CarPhysics::apply_damage(const int dmg) {
         car_state.crashed = true;
         car_state.exploded = true;
     } else {
-        if (dmg >= MEDIUM_CRASH_DAMAGE) {
+        if (dmg >= phy_const.MEDIUM_CRASH_DAMAGE) {
             car_state.crashed = true;
         }
         car_state.health -= dmg;
@@ -267,6 +271,6 @@ void CarPhysics::set_stats(const float& max_speed, const float& acceleration, co
     acceleration_factor = acceleration / 100.0f;
     mass_factor = mass / 100.0f;
     drivability_factor = drivability / 100.0f;
-    b2Body_SetLinearDamping(body, BASE_FRICTION * mass_factor);
-    b2Body_SetAngularDamping(body, BASE_FRICTION * mass_factor);
+    b2Body_SetLinearDamping(body, phy_const.BASE_FRICTION * mass_factor);
+    b2Body_SetAngularDamping(body, phy_const.BASE_FRICTION * mass_factor);
 }

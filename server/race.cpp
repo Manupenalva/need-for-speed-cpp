@@ -72,8 +72,8 @@ void Race::update_state() {
             continue;
         if (car.exploded()) {
             status.has_finished = true;
+            race_results.emplace_back(id, MAX_TIME + car.get_penalization_time());
             car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
-            race_results.emplace_back(id, MAX_TIME);
             continue;
         }
 
@@ -82,8 +82,8 @@ void Race::update_state() {
             status.current_checkpoint_index++;
             if (status.current_checkpoint_index >= checkpoints.size()) {
                 status.has_finished = true;
+                race_results.emplace_back(id, current_time + car.get_penalization_time());
                 car.finish_race(current_time, race_results.size() + 1);
-                race_results.emplace_back(id, current_time);
             }
         }
         if (status.current_hint_index < hints.size()) {
@@ -122,13 +122,17 @@ void Race::update_state() {
 CheckpointInfo Race::get_next_checkpoint_info(const uint16_t car_id) {
     const PlayerRaceStatus& status = players_status[car_id];
     Position checkpoint = checkpoints[status.current_checkpoint_index];
+    uint8_t type = COMMON_CHECKPOINT;
+    if (status.current_checkpoint_index == checkpoints.size() - 1) {
+        type = SPECIAL_CHECKPOINT;
+    }
 
     return {static_cast<uint16_t>(status.current_checkpoint_index),
             static_cast<float>(checkpoint.x),
             static_cast<float>(checkpoint.y),
-            0.0f,
+            static_cast<float>(checkpoint.angle),
             celd_width,
-            COMMON_CHECKPOINT};  // Angulo y tipo hardcodeado para compilar
+            type};
 }
 
 CheckpointArrow Race::get_next_checkpoint_arrow(const uint16_t car_id) {
@@ -136,7 +140,7 @@ CheckpointArrow Race::get_next_checkpoint_arrow(const uint16_t car_id) {
     if (status.current_hint_index < hints.size()) {
         Hint hint = hints[status.current_hint_index];
         return {static_cast<float>(hint.position.x), static_cast<float>(hint.position.y),
-                hint.angle};
+                hint.position.angle};
     }
     return {0.0f, 0.0f, 0.0f};
 }
@@ -198,8 +202,8 @@ ServerMessageDTO Race::get_interval_message() {
 void Race::finish_race() {
     for (auto& [id, status]: players_status) {
         if (!status.has_finished) {
+            race_results.emplace_back(id, MAX_TIME + players_cars[id].get_penalization_time());
             players_cars[id].finish_race(MAX_TIME, MAX_PLAYERS_RACE);
-            race_results.emplace_back(id, MAX_TIME);
             status.has_finished = true;
         }
     }
@@ -238,34 +242,28 @@ void Race::handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* brid
     if (!bridge || !car)
         return;
 
-    std::cout << "El sensor tiene index1: " << sensor_shape.index1 << std::endl;
-    std::cout << bridge->sensor1_up.index1 << std::endl;
-    std::cout << bridge->sensor2_up.index1 << std::endl;
-    std::cout << bridge->sensor1_down.index1 << std::endl;
-    std::cout << bridge->sensor2_down.index1 << std::endl;
     if (sensor_shape.index1 == bridge->sensor1_up.index1 ||
         sensor_shape.index1 == bridge->sensor2_up.index1) {
-        std::cout << "Son iguales" << std::endl;
-        car->interact_with_bridge(sensor_shape, BridgeLayer::TOP);
+        car->interact_with_bridge(BridgeLayer::TOP);
     } else if (sensor_shape.index1 == bridge->sensor1_down.index1 ||
                sensor_shape.index1 == bridge->sensor2_down.index1) {
-        std::cout << "Son iguales" << std::endl;
-        car->interact_with_bridge(sensor_shape, BridgeLayer::BOTTOM);
+        car->interact_with_bridge(BridgeLayer::BOTTOM);
     }
-    std::cout << "interactue con los bridge" << std::endl;
 }
 
 void Race::force_finish_race(const uint16_t& player_id) {
     players_status[player_id].has_finished = true;
+    race_results.emplace_back(player_id,
+                              current_time + players_cars[player_id].get_penalization_time());
     players_cars[player_id].finish_race(current_time, race_results.size() + 1);
 }
 
 void Race::force_lose_race(const uint16_t& player_id) {
     Car& car = players_cars[player_id];
     players_status[player_id].has_finished = true;
+    race_results.emplace_back(player_id, MAX_TIME + car.get_penalization_time());
     car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
     car.explode();
-    race_results.emplace_back(player_id, MAX_TIME);
 }
 
 uint8_t Race::get_city_code() { return city_code; }
@@ -275,9 +273,13 @@ std::vector<CheckpointInfo> Race::get_checkpoints_info() {
     checkpoints_info.reserve(checkpoints.size());
     for (size_t i = 0; i < checkpoints.size(); i++) {
         Position checkpoint = checkpoints[i];
+        uint8_t type = COMMON_CHECKPOINT;
+        if (i == checkpoints.size() - 1) {
+            type = SPECIAL_CHECKPOINT;
+        }
         checkpoints_info.push_back({static_cast<uint16_t>(i), static_cast<float>(checkpoint.x),
-                                    static_cast<float>(checkpoint.y), 0.0f, celd_width,
-                                    COMMON_CHECKPOINT});  // Angulo y tipo hardcodeado para compilar
+                                    static_cast<float>(checkpoint.y),
+                                    static_cast<float>(checkpoint.angle), celd_width, type});
     }
     return checkpoints_info;
 }
@@ -287,7 +289,15 @@ std::vector<CheckpointArrow> Race::get_checkpoints_arrows() {
     arrows.reserve(hints.size());
     std::transform(hints.begin(), hints.end(), std::back_inserter(arrows), [](const Hint& hint) {
         return CheckpointArrow{static_cast<float>(hint.position.x),
-                               static_cast<float>(hint.position.y), hint.angle};
+                               static_cast<float>(hint.position.y), hint.position.angle};
     });
     return arrows;
+}
+
+const std::vector<std::pair<uint16_t, float>> Race::get_race_results() {
+    std::vector<std::pair<uint16_t, float>> results = race_results;
+    std::sort(results.begin(), results.end(),
+              [](const auto& a, const auto& b) { return a.second < b.second; });
+
+    return results;
 }

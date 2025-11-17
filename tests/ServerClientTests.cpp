@@ -116,9 +116,9 @@ TEST_F(ProtocolTestServer, IntervalState) {
     IntervalState interval_state;
     interval_state.players_ready = 2;
     interval_state.total_players = 10;
-    PlayerState player1{1, true, 1, 60000, 0, {1, 200, 10, 100, 1500, 80}};
-    PlayerState player2{2, false, 2, 62000, 5000, {2, 220, 12, 110, 1400, 85}};
-    PlayerState player3{3, true, 3, 58000, 0, {1, 200, 10, 100, 1500, 80}};
+    PlayerState player1{1, true, 1, 60.0f, 0.0f, {1, 200, 10, 100, 1500, 80}};
+    PlayerState player2{2, false, 2, 62.0f, 5.0f, {2, 220, 12, 110, 1400, 85}};
+    PlayerState player3{3, true, 3, 58.0f, 0.0f, {1, 200, 10, 100, 1500, 80}};
     interval_state.player_states = {player1, player2, player3};
     send_msg.interval_state = interval_state;
 
@@ -253,4 +253,43 @@ TEST_F(ProtocolTestServer, MinimapInfo) {
     ASSERT_EQ(recv_msg.minimap_info.checkpoints.size(), 2);
     ASSERT_EQ(recv_msg.minimap_info.arrows.size(), 2);
     EXPECT_TRUE(verify_minimap_info(recv_msg.minimap_info, minimap_info));
+}
+
+bool verify_positions(const std::vector<std::pair<uint16_t, float>>& pos1,
+                      const std::vector<std::pair<uint16_t, float>>& pos2) {
+    if (pos1.size() != pos2.size()) {
+        return false;
+    }
+    for (size_t i = 0; i < pos1.size(); ++i) {
+        if (pos1[i].first != pos2[i].first || pos1[i].second != pos2[i].second) {
+            return false;
+        }
+    }
+    return true;
+}
+
+TEST_F(ProtocolTestServer, RacePositions) {
+
+    ServerMessageDTO send_msg;
+    send_msg.type = MsgType::RACE_POSITIONS;
+    send_msg.positions = {{1, 120.5f}, {2, 130.0f}, {3, 110.75f}};
+    sender.send_message(send_msg);
+
+    ServerMessageDTO recv_msg = receiver.recv_server_message();
+    EXPECT_EQ(recv_msg.type, MsgType::RACE_POSITIONS);
+    ASSERT_EQ(recv_msg.positions.size(), 3);
+    EXPECT_TRUE(verify_positions(recv_msg.positions, send_msg.positions));
+}
+
+TEST_F(ProtocolTestServer, AccumulatedPositions) {
+
+    ServerMessageDTO send_msg;
+    send_msg.type = MsgType::ACCUMULATED_POSITIONS;
+    send_msg.positions = {{1, 300.5f}, {2, 320.0f}, {3, 280.75f}};
+    sender.send_message(send_msg);
+
+    ServerMessageDTO recv_msg = receiver.recv_server_message();
+    EXPECT_EQ(recv_msg.type, MsgType::ACCUMULATED_POSITIONS);
+    ASSERT_EQ(recv_msg.positions.size(), 3);
+    EXPECT_TRUE(verify_positions(recv_msg.positions, send_msg.positions));
 }

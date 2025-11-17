@@ -5,7 +5,7 @@
 
 struct Hint {
     Position position;
-    float angle;
+    int checkpoint_id;
 };
 
 #endif

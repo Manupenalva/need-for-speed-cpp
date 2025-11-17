@@ -43,9 +43,6 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
         case MsgType::STATE_UPDATE:
             server_msg.state = recv_state_update();
             break;
-        // case MsgType::SEND_LOBBIES_INFO:
-        //     server_msg.lobbies = recv_lobbies_info();
-        // break;
         case MsgType::JOIN_RESULT:
             server_msg.joined = recv_join_result();
             break;
@@ -67,11 +64,28 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
         case MsgType::SEND_MINIMAP_INFO:
             server_msg.minimap_info = recv_minimap_info();
             break;
+        case MsgType::RACE_POSITIONS:
+        case MsgType::ACCUMULATED_POSITIONS:
+            server_msg.positions = recv_positions();
+            break;
         default:
             break;
     }
 
     return server_msg;
+}
+
+std::vector<std::pair<uint16_t, float>> MessageReceiver::recv_positions() {
+    uint16_t positions_size = obtain_uint16();
+    std::vector<std::pair<uint16_t, float>> positions;
+    positions.resize(positions_size);
+
+    for (auto& pos: positions) {
+        pos.first = obtain_uint16();
+        pos.second = obtain_float();
+    }
+
+    return positions;
 }
 
 std::vector<LobbyInfo> MessageReceiver::recv_lobbies_info() {
@@ -231,8 +245,8 @@ PlayerState MessageReceiver::recv_player_state() {
     player_state.player_id = obtain_uint16();
     player_state.ready = obtain_byte() != 0;
     player_state.previous_position = obtain_byte();
-    player_state.result_time = obtain_uint32();
-    player_state.next_penalization_time = obtain_uint32();
+    player_state.result_time = obtain_float();
+    player_state.next_penalization_time = obtain_float();
     player_state.car_properties = recv_car_properties();
     return player_state;
 }
@@ -273,8 +287,3 @@ float MessageReceiver::obtain_float() {
     uint32_t n = obtain_uint32();
     return uint32_to_float(n);
 }
-
-// std::string MessageReceiver::obtain_lobby_name() {
-//     uint16_t name_size = obtain_uint16();
-//     return obtain_string(name_size);
-// }

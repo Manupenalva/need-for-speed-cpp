@@ -44,5 +44,6 @@ target_sources(taller_server
         corner.h
         npc.h
         bridge.h
+        carConstants.h
         ${EVENTS_SRC}
     )

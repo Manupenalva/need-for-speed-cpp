@@ -65,7 +65,6 @@ struct CarState {
             braking(braking),
             car_type(car_type),
             health(health) {}
-
 };
 
 // esto podría ir dentro de CarState para no repetir.
@@ -83,8 +82,8 @@ struct CarInfo {
     uint16_t car_type;
     uint16_t health;
 
-    CarInfo(uint16_t id, float x, float y, float angle, float speed, uint16_t lap,
-            bool crashed, bool under_bridge, bool braking, bool exploded, uint16_t car_type, uint16_t health):
+    CarInfo(uint16_t id, float x, float y, float angle, float speed, uint16_t lap, bool crashed,
+            bool under_bridge, bool braking, bool exploded, uint16_t car_type, uint16_t health):
             id(id),
             x(x),
             y(y),
@@ -98,20 +97,19 @@ struct CarInfo {
             car_type(car_type),
             health(health) {}
 
-        CarInfo(uint16_t id, uint16_t car_type, uint16_t health):
-                id(id),
-                x(0.0f),
-                y(0.0f),
-                angle(0.0f),
-                speed(0.0f),
-                lap(0),
-                crashed(false),
-                under_bridge(false),
-                braking(false),
-                exploded(false),
-                car_type(car_type),
-                health(health) {}
-
+    CarInfo(uint16_t id, uint16_t car_type, uint16_t health):
+            id(id),
+            x(0.0f),
+            y(0.0f),
+            angle(0.0f),
+            speed(0.0f),
+            lap(0),
+            crashed(false),
+            under_bridge(false),
+            braking(false),
+            exploded(false),
+            car_type(car_type),
+            health(health) {}
 };
 
 struct CarInputState {
@@ -119,23 +117,28 @@ struct CarInputState {
     bool braking;
     bool turning_right;
     bool turning_left;
+    bool nitro_activated;
 
-    CarInputState(bool accelerating, bool braking, bool turning_right, bool turning_left):
+    CarInputState(bool accelerating, bool braking, bool turning_right, bool turning_left,
+                  bool nitro_activated):
             accelerating(accelerating),
             braking(braking),
             turning_right(turning_right),
-            turning_left(turning_left) {}
+            turning_left(turning_left),
+            nitro_activated(nitro_activated) {}
 
-    CarInputState() :
+    CarInputState():
             accelerating(false),
             braking(false),
             turning_right(false),
-            turning_left(false) {}
+            turning_left(false),
+            nitro_activated(false) {}
 };
 
 struct Position {
     int x;
     int y;
+    float angle;
 };
 
 #endif
