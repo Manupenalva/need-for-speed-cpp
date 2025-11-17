@@ -48,6 +48,7 @@ private:
     void broadcast_map_data(const uint8_t& city_code);
     void broadcast_minimap_info(int race_index);
     void handle_countdown(int race_index);
+    std::vector<std::pair<uint16_t, float>> get_acumullated_times();
 
     Gameloop(const Gameloop& other) = delete;
     Gameloop& operator=(const Gameloop& other) = delete;

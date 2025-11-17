@@ -33,7 +33,7 @@ private:
     std::string map_collisions_path;
     float current_time;
     b2WorldId world;
-    std::vector<std::tuple<uint16_t, float>> race_results;
+    std::vector<std::pair<uint16_t, float>> race_results;
     uint8_t city_code;
 
 public:
@@ -47,7 +47,7 @@ public:
     ServerMessageDTO get_broadcast_message(float frames);
     CheckpointInfo get_next_checkpoint_info(const uint16_t car_id);
     CheckpointArrow get_next_checkpoint_arrow(const uint16_t car_id);
-    const std::vector<std::tuple<uint16_t, float>>& get_race_results();
+    const std::vector<std::pair<uint16_t, float>> get_race_results();
     ServerMessageDTO get_interval_message();
     void force_finish_race(const uint16_t& player_id);
     void force_lose_race(const uint16_t& player_id);

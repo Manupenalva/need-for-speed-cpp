@@ -41,6 +41,7 @@ struct ServerMessageDTO {
     std::vector<CarProperties> car_catalog;
     IntervalState interval_state;
     MinimapInfo minimap_info;
+    std::vector<std::pair<uint16_t, float>> positions;
 
     ServerMessageDTO():
             type(MsgType::INVALID),
@@ -51,6 +52,8 @@ struct ServerMessageDTO {
             id(0),
             map_number(0),
             car_catalog(),
-            interval_state() {}
+            interval_state(),
+            minimap_info(),
+            positions() {}
 };
 #endif

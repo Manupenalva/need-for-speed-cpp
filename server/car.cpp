@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "../common/constants.h"
+#include <numeric>
 
 #define CAR_MAX_SPEED 100.0f
 #define CAR_MAX_ACCELERATION 100.0f
@@ -202,3 +203,8 @@ void Car::maximize_stats() {
 }
 
 bool Car::exploded() { return state.exploded; }
+
+float Car::get_total_time() const {
+    float accumulated_time = std::accumulate(race_times.begin(), race_times.end(), 0.0f);
+    return accumulated_time;
+}

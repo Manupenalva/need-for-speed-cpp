@@ -16,8 +16,12 @@ Car CarBuilder::create_car(const int& id, const int& car_type) {
         if (!cars_data) {
             throw std::runtime_error("Invalid YAML archive");
         }
+        int selected_car_type = car_type;
+        if (car_type <= 0 || car_type > static_cast<int>(cars_data.size())) {
+            selected_car_type = 1 + (std::rand() % (cars_data.size()));
+        }
 
-        YAML::Node car_parameters = cars_data[car_type];
+        YAML::Node car_parameters = cars_data[selected_car_type];
 
         std::string name = car_parameters["name"].as<std::string>();
         float max_speed = car_parameters["max_speed"].as<float>();
@@ -29,7 +33,7 @@ Car CarBuilder::create_car(const int& id, const int& car_type) {
         float car_width = car_parameters["width"].as<float>();
 
         return Car(id, name, max_speed, acceleration, health, mass, drivability, car_long,
-                   car_width, car_type);
+                   car_width, selected_car_type);
     } catch (const std::exception& e) {
         std::cerr << "Error building the car: " << e.what() << std::endl;
         throw;
