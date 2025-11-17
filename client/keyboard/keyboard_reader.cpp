@@ -11,7 +11,6 @@ void KeyboardReader::listen_to_keyboard(std::atomic<bool>& running, const bool i
                                         const bool in_race) {
     SDL_Event event;
     ClientMessageDTO msg;
-    msg.type = MsgType::DRIVING_EVENT;
     while (SDL_PollEvent(&event)) {
         EventDTO event_dto{event, msg, in_interval, in_race, running};
         for (auto& handler: handlers) {
@@ -21,7 +20,11 @@ void KeyboardReader::listen_to_keyboard(std::atomic<bool>& running, const bool i
         }
     }
     // Si se registraron eventos, enviarlos al queue
-    if (!msg.events.empty()) {
+    if (!msg.events.empty() && msg.type != MsgType::CHEAT_CODE) {
+        msg.type = MsgType::DRIVING_EVENT;
+        message_queue.push(msg);
+    }
+    if (msg.type == MsgType::CHEAT_CODE) {
         message_queue.push(msg);
     }
 }

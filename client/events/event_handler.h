@@ -7,6 +7,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "../../common/cheatcodes.h"
 #include "../../common/constants.h"
 #include "../../common/messageDTOs.h"
 #include "../../common/queue.h"

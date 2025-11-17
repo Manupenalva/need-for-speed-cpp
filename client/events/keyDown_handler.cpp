@@ -13,6 +13,11 @@ KeyDownHandler::KeyDownHandler(Queue<ClientMessageDTO>& queue): EventHandler(que
     key_to_command[SDLK_3] = ACT_IMPROVE_HEALTH;        // Mejorar salud
     key_to_command[SDLK_4] = ACT_IMPROVE_MASS;          // Mejorar masa
     key_to_command[SDLK_5] = ACT_IMPROVE_HANDLING;      // Mejorar manejo
+
+    key_to_cheat[SDLK_i] = CheatCode::INFINITE_HEALTH;     // Cheat: salud infinita
+    key_to_cheat[SDLK_k] = CheatCode::WIN_AUTOMATICALLY;   // Cheat: ganar automáticamente
+    key_to_cheat[SDLK_j] = CheatCode::LOSE_AUTOMATICALLY;  // Cheat: perder automáticamente
+    key_to_cheat[SDLK_m] = CheatCode::MAX_STATS;           // Cheat: estadísticas máximas
 }
 
 bool KeyDownHandler::handle_event(EventDTO& event_dto) {
@@ -34,6 +39,14 @@ bool KeyDownHandler::handle_event(EventDTO& event_dto) {
             }
 
             msg.events.push_back(command);
+        }
+
+        auto cheat_it = key_to_cheat.find(key);
+        if (cheat_it != key_to_cheat.end()) {
+            ClientMessageDTO& msg = event_dto.msg;
+            CheatCode cheat = cheat_it->second;
+            msg.cheat_code = cheat;
+            msg.type = MsgType::CHEAT_CODE;
         }
     }
     return true;
