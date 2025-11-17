@@ -254,3 +254,42 @@ TEST_F(ProtocolTestServer, MinimapInfo) {
     ASSERT_EQ(recv_msg.minimap_info.arrows.size(), 2);
     EXPECT_TRUE(verify_minimap_info(recv_msg.minimap_info, minimap_info));
 }
+
+bool verify_positions(const std::vector<std::pair<uint16_t, float>>& pos1,
+                      const std::vector<std::pair<uint16_t, float>>& pos2) {
+    if (pos1.size() != pos2.size()) {
+        return false;
+    }
+    for (size_t i = 0; i < pos1.size(); ++i) {
+        if (pos1[i].first != pos2[i].first || pos1[i].second != pos2[i].second) {
+            return false;
+        }
+    }
+    return true;
+}
+
+TEST_F(ProtocolTestServer, RacePositions) {
+
+    ServerMessageDTO send_msg;
+    send_msg.type = MsgType::RACE_POSITIONS;
+    send_msg.positions = {{1, 120.5f}, {2, 130.0f}, {3, 110.75f}};
+    sender.send_message(send_msg);
+
+    ServerMessageDTO recv_msg = receiver.recv_server_message();
+    EXPECT_EQ(recv_msg.type, MsgType::RACE_POSITIONS);
+    ASSERT_EQ(recv_msg.positions.size(), 3);
+    EXPECT_TRUE(verify_positions(recv_msg.positions, send_msg.positions));
+}
+
+TEST_F(ProtocolTestServer, AccumulatedPositions) {
+
+    ServerMessageDTO send_msg;
+    send_msg.type = MsgType::ACCUMULATED_POSITIONS;
+    send_msg.positions = {{1, 300.5f}, {2, 320.0f}, {3, 280.75f}};
+    sender.send_message(send_msg);
+
+    ServerMessageDTO recv_msg = receiver.recv_server_message();
+    EXPECT_EQ(recv_msg.type, MsgType::ACCUMULATED_POSITIONS);
+    ASSERT_EQ(recv_msg.positions.size(), 3);
+    EXPECT_TRUE(verify_positions(recv_msg.positions, send_msg.positions));
+}

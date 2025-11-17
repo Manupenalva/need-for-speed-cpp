@@ -41,6 +41,8 @@ private:
     void serialize_car_number(const uint16_t car_id);
     void serialize_cheat_code(const CheatCode cheat_code);
     void serialize_minimap_info(const MinimapInfo& minimap_info);
+    void serialize_race_positions(const std::vector<std::pair<uint16_t, float>>& positions);
+    void serialize_accumulated_positions(const std::vector<std::pair<uint16_t, float>>& positions);
 
     void append_car_state(const CarState& car);
     void append_npc_state(const NpcState& npc);
@@ -48,6 +50,7 @@ private:
     void append_checkpoint_arrow(const CheckpointArrow& arrow);
     void append_car_properties(const CarProperties& car_prop);
     void append_player_state(const PlayerState& player_state);
+    void append_positions(const std::vector<std::pair<uint16_t, float>>& positions);
 
     size_t calculate_lobbies_size(const std::vector<LobbyInfo>& lobbies);
 
@@ -57,5 +60,4 @@ private:
     void append_uint16(uint16_t x);
     void append_uint32(uint32_t x);
 };
-
 #endif

@@ -67,11 +67,28 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
         case MsgType::SEND_MINIMAP_INFO:
             server_msg.minimap_info = recv_minimap_info();
             break;
+        case MsgType::RACE_POSITIONS:
+        case MsgType::ACCUMULATED_POSITIONS:
+            server_msg.positions = recv_positions();
+            break;
         default:
             break;
     }
 
     return server_msg;
+}
+
+std::vector<std::pair<uint16_t, float>> MessageReceiver::recv_positions() {
+    uint16_t positions_size = obtain_uint16();
+    std::vector<std::pair<uint16_t, float>> positions;
+    positions.resize(positions_size);
+
+    for (auto& pos : positions) {
+        pos.first = obtain_uint16();
+        pos.second = obtain_float();
+    }
+
+    return positions;
 }
 
 std::vector<LobbyInfo> MessageReceiver::recv_lobbies_info() {

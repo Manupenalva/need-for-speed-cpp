@@ -32,6 +32,8 @@ enum class MsgType : uint8_t {
     SEND_MAP_NUMBER,
     SEND_MINIMAP_INFO,
     INTERVAL_CLOSED,
+    RACE_POSITIONS,
+    ACCUMULATED_POSITIONS,
 
     INVALID = 255
 

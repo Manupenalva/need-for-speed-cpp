@@ -37,6 +37,12 @@ void MessageSender::send_message(const ServerMessageDTO& msg) {
         case MsgType::SEND_MINIMAP_INFO:
             serialize_minimap_info(msg.minimap_info);
             break;
+        case MsgType::RACE_POSITIONS:
+            serialize_race_positions(msg.positions);
+            break;
+        case MsgType::ACCUMULATED_POSITIONS:
+            serialize_accumulated_positions(msg.positions);
+            break;
         default:
             buffer.resize(CODE_BYTES);
             offset = 0;
@@ -77,6 +83,22 @@ void MessageSender::serialize_map_number(const uint8_t map_number) {
     MsgType type = MsgType::SEND_MAP_NUMBER;
     append_bytes(&type, CODE_BYTES);
     append_bytes(&map_number, MAP_NUMBER_BYTES);
+}
+
+void MessageSender::serialize_race_positions(const std::vector<std::pair<uint16_t, float>>& positions) {
+    buffer.resize(CODE_BYTES + LENGTH_BYTES + positions.size() * POSITION_BYTES);
+    offset = 0;
+    MsgType type = MsgType::RACE_POSITIONS;
+    append_bytes(&type, CODE_BYTES);
+    append_positions(positions);
+}
+
+void MessageSender::serialize_accumulated_positions(const std::vector<std::pair<uint16_t, float>>& positions) {
+    buffer.resize(CODE_BYTES + LENGTH_BYTES + positions.size() * POSITION_BYTES);
+    offset = 0;
+    MsgType type = MsgType::ACCUMULATED_POSITIONS;
+    append_bytes(&type, CODE_BYTES);
+    append_positions(positions);
 }
 
 void MessageSender::serialize_car_catalog(const std::vector<CarProperties>& catalog) {
@@ -278,6 +300,14 @@ void MessageSender::append_player_state(const PlayerState& player_state) {
     append_uint32(player_state.result_time);
     append_uint32(player_state.next_penalization_time);
     append_car_properties(player_state.car_properties);
+}
+
+void MessageSender::append_positions(const std::vector<std::pair<uint16_t, float>>& positions) {
+    append_uint16(static_cast<uint16_t>(positions.size()));
+    for (const auto& pos : positions) {
+        append_uint16(pos.first);
+        append_float(pos.second);
+    }
 }
 
 void MessageSender::append_bytes(const void* data, size_t size) {
