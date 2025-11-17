@@ -115,9 +115,9 @@ void Client::init_game_handlers() {
     };
     msg_handlers[MsgType::STATE_UPDATE] = handler_state;
 
-    msg_handlers[MsgType::RACE_ESTADISTICS] = handler_state;
+    msg_handlers[MsgType::RACE_POSITIONS] = handler_state;
 
-    msg_handlers[MsgType::GAME_ESTADISTICS] = handler_state;
+    msg_handlers[MsgType::ACCUMULATED_POSITIONS] = handler_state;
 
     msg_handlers[MsgType::RACE_STARTED] = [this](const ServerMessageDTO& server_msg) {
         actual_state.is_in_race = true;

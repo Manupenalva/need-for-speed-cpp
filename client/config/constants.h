@@ -50,6 +50,8 @@ const std::map<EffectID, std::string> EFFECTS_PATH = {
         {CAR_BURST, "../client/resources/sounds/Car Burst Sound.wav"},
         {RACE_FINISH, "../client/resources/sounds/Win Sound.wav"}};
 
+#define FONT_PATH "../client/resources/fonts/Roboto-Regular.ttf"
+
 // Map constants
 #define MAP_MIN_X 0
 #define MAP_MIN_Y 0
