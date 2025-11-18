@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
     <string notr="true">#centralwidget {
-    border-image: url(&quot;../client/lobby/lobby.png&quot;) 0 0 0 0 stretch stretch;
+    border-image: url(&quot;../client/resources/assets/lobby/lobby.png&quot;) 0 0 0 0 stretch stretch;
 }
 
 #centralwidget &gt; * {
