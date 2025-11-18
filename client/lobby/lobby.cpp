@@ -42,23 +42,18 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent):
     resize(600, 500);
     stack->setCurrentIndex(0);
 
-    audioOutput = new QAudioOutput(this);
-    musicPlayer = new QMediaPlayer(this);
-    musicPlayer->setAudioOutput(audioOutput);
-
-    QString musicPath = "../client/resources/sounds/Need For Speed Music.mp3";
-    musicPlayer->setSource(QUrl::fromLocalFile(musicPath));
-
-    audioOutput->setVolume(0.5);
-    musicPlayer->setLoops(QMediaPlayer::Infinite);
-    musicPlayer->play();
+    musicEffect = new QSoundEffect(this);
+    musicEffect->setSource(QUrl::fromLocalFile("../client/resources/sounds/need_for_speed.wav"));
+    musicEffect->setLoopCount(QSoundEffect::Infinite);
+    musicEffect->setVolume(0.5f);
+    musicEffect->play();
 }
 
-Lobby::~Lobby() { 
-    if (musicPlayer){
-        musicPlayer->stop();
+Lobby::~Lobby() {
+    if (musicEffect) {
+        musicEffect->stop();
     }
-    delete ui; 
+    delete ui;
 }
 
 void Lobby::menuScreen() {
@@ -154,7 +149,7 @@ void Lobby::updateLobby() {
         msg.type = MsgType::SELECT_CAR;
         msg.car_id = chosenCar;
         protocol.send_client_message(msg);
-        musicPlayer->stop();
+        musicEffect->stop();
         this->close();
     }
 }
