@@ -30,6 +30,7 @@ void Car::add_to_world(b2WorldId world, Position start_position) {
     state.y = start_position.y;
     state.angle = 0.0f;
     state.health = static_cast<uint16_t>(max_health);
+    state.exploded = false;
 
     bridge_layer = BridgeLayer::NONE;
 
