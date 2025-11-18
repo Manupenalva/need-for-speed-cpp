@@ -24,6 +24,7 @@ target_sources(taller_client
     drawer/minimap/minimap_drawer.cpp
     drawer/countdown/countdown_drawer.cpp
     drawer/estadistics/estadistics_drawer.cpp
+    drawer/health/health_drawer.cpp
     lobby/lobby.cpp
     lobby/lobby.ui
     events/keyDown_handler.cpp
@@ -70,6 +71,7 @@ target_sources(taller_client
     drawer/minimap/mapInfoDTO.h
     drawer/countdown/countdown_drawer.h
     drawer/estadistics/estadistics_drawer.h
+    drawer/health/health_drawer.h
     lobby/lobby.h
     config/config_reader.h
     config/constants.h
