@@ -5,7 +5,7 @@
 CarDrawer::CarDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager):
         Drawer(renderer, texture_manager) {}
 
-void CarDrawer::draw(const RenderedState& rendered_state) {
+void CarDrawer::draw(RenderedState& rendered_state) {
     draw_clients_cars(rendered_state);
     draw_npcs(rendered_state);
 }
@@ -24,7 +24,7 @@ CarState CarDrawer::calculate_position(const CarState& car, const int iterations
     return predicted_car;
 }
 
-void CarDrawer::draw_car(const CarState& car, float screen_x, float screen_y) {
+SDL2pp::Rect CarDrawer::draw_car(const CarState& car, float screen_x, float screen_y) {
     // Lógica para dibujar el coche
     Sprite car_sprite = texture_manager.get_car_sprite(car.car_type, car.angle);
 
@@ -43,6 +43,8 @@ void CarDrawer::draw_car(const CarState& car, float screen_x, float screen_y) {
     if (car.under_bridge) {
         car_sprite.texture.SetAlphaMod(NORMAL_OPACITY);  // Restaurar opacidad completa
     }
+
+    return dst_rect;
 }
 
 void CarDrawer::draw_npcs(const RenderedState& rendered_state) {
@@ -58,7 +60,7 @@ void CarDrawer::draw_npcs(const RenderedState& rendered_state) {
     }
 }
 
-void CarDrawer::draw_clients_cars(const RenderedState& rendered_state) {
+void CarDrawer::draw_clients_cars(RenderedState& rendered_state) {
     is_player = true;
     for (const auto& car: rendered_state.state.cars) {
         is_client_car = (car.id == rendered_state.client_car.id);
@@ -68,7 +70,10 @@ void CarDrawer::draw_clients_cars(const RenderedState& rendered_state) {
         // Ajusta en base al mapa
         float screen_x = predicted_car.x - rendered_state.map_sprite.src_rect.x;
         float screen_y = predicted_car.y - rendered_state.map_sprite.src_rect.y;
-        draw_car(predicted_car, screen_x, screen_y);
+        SDL2pp::Rect dst_rect = draw_car(predicted_car, screen_x, screen_y);
+        if (is_client_car) {
+            rendered_state.client_car_screen_rect = dst_rect;
+        }
     }
 }
 

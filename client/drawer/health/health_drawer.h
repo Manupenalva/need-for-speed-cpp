@@ -13,7 +13,7 @@ class HealthDrawer: public Drawer {
 public:
     explicit HealthDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager);
 
-    void draw(const RenderedState& rendered_state) override;
+    void draw(RenderedState& rendered_state) override;
 };
 
 #endif

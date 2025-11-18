@@ -44,7 +44,7 @@ public:
                               std::function<Sprite(TextureManager&, int)> get_sprite_function,
                               int amount_of_frames, int frame_duration);
 
-    void draw(const RenderedState& rendered_state) override;
+    void draw(RenderedState& rendered_state) override;
 };
 
 #endif

@@ -1,15 +1,17 @@
 #include "minimap_drawer.h"
 
 MinimapDrawer::MinimapDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager):
-        Drawer(renderer, texture_manager) {}
+        Drawer(renderer, texture_manager), car_behind(false) {}
 
 
-void MinimapDrawer::draw(const RenderedState& rendered_state) {
+void MinimapDrawer::draw(RenderedState& rendered_state) {
     SDL2pp::Texture& tex = texture_manager.get_minimap_texture();
     MapResources map_info = calculate_map_rects(rendered_state, tex);
+    is_car_behind(map_info, rendered_state, tex);
     draw_map(map_info, tex);
     draw_car(map_info, rendered_state.client_car);
     draw_border(map_info);
+    tex.SetAlphaMod(NORMAL_OPACITY);
 }
 
 MapResources MinimapDrawer::calculate_map_rects(const RenderedState& rendered_state,
@@ -40,6 +42,18 @@ MapResources MinimapDrawer::calculate_map_rects(const RenderedState& rendered_st
     return {src_rect, dst_rect};
 }
 
+void MinimapDrawer::is_car_behind(const MapResources& map_info, const RenderedState& rendered_state,
+                                  SDL2pp::Texture& texture) {
+    const SDL2pp::Rect& car = rendered_state.client_car_screen_rect;
+    const SDL2pp::Rect& minimap = map_info.dst_rect;
+
+    car_behind = car.x < minimap.x + minimap.w && car.x + car.w > minimap.x &&
+                 car.y < minimap.y + minimap.h && car.y + car.h > minimap.y;
+
+    u_int8_t alpha = car_behind ? BEHIND_MINIMAP_OPACITY : NORMAL_OPACITY;
+    texture.SetAlphaMod(alpha);
+}
+
 void MinimapDrawer::draw_map(const MapResources& map_info, SDL2pp::Texture& texture) {
     renderer.Copy(texture, map_info.src_rect, map_info.dst_rect);
 }
@@ -57,7 +71,12 @@ void MinimapDrawer::draw_car(const MapResources& map_info, const CarState& clien
                               car_minimap_y - car.src_rect.h / RESOURCE_DIVISOR,
                               HALF(car.src_rect.w), HALF(car.src_rect.h));
 
+    uint8_t prev_alpha = car.texture.GetAlphaMod();
+    uint8_t alpha = car_behind ? BEHIND_MINIMAP_OPACITY : NORMAL_OPACITY;
+    car.texture.SetAlphaMod(alpha);
+
     renderer.Copy(car.texture, car.src_rect, car_dst_rect);
+    car.texture.SetAlphaMod(prev_alpha);
 }
 
 void MinimapDrawer::draw_border(const MapResources& map_info) {

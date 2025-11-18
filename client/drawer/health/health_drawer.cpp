@@ -5,13 +5,13 @@
 HealthDrawer::HealthDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager):
         Drawer(renderer, texture_manager) {}
 
-void HealthDrawer::draw(const RenderedState& rendered_state) {
+void HealthDrawer::draw(RenderedState& rendered_state) {
     CarState client_car = rendered_state.client_car;
     ConfigReader& config = ConfigReader::get_instance();
     int y = config.get_window_height() - BAR_H - BAR_Y_OFFSET;
 
     float health_percentage =
-            static_cast<float>(client_car.health) / static_cast<float>(client_car.total_health);
+            static_cast<float>(client_car.health) / static_cast<float>(client_car.max_health);
     if (health_percentage < 0.0f) {
         health_percentage = 0.0f;
     } else if (health_percentage > 1.0f) {

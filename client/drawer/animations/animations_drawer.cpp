@@ -11,7 +11,7 @@ AnimationsDrawer::AnimationsDrawer(SDL2pp::Renderer& renderer, TextureManager& t
         frame_duration(frame_duration) {}
 
 
-void AnimationsDrawer::draw(const RenderedState& rendered_state) {
+void AnimationsDrawer::draw(RenderedState& rendered_state) {
     check_new_instances(rendered_state);
     update_instances(rendered_state);
     clear_inactive_instances();

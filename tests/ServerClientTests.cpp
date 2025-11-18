@@ -173,7 +173,8 @@ TEST_F(ProtocolTestServer, StateUpdate) {
     CheckpointInfo cp2{2, 110.0f, 55.0f, 10.0f, 5.0f, 0};
     CheckpointArrow ca2{115.0f, 57.0f, 10.0f};
     CarState car1(1, 150.0f, 75.0f, 0.0f, 0.0f, 2, cp1, ca1, false, false, true, true, 1, 200, 200);
-    CarState car2(2, 140.0f, 70.0f, 10.0f, 5.0f, 90.0f, cp2, ca2, false, true, true, true, 1, 200, 300);
+    CarState car2(2, 140.0f, 70.0f, 10.0f, 5.0f, 90.0f, cp2, ca2, false, true, true, true, 1, 200,
+                  300);
     state.cars = {car1, car2};
     NpcState npc1{130.0f, 65.0f, 50.0f, 1, true};
     state.npcs = {npc1};

@@ -3,7 +3,7 @@
 CheckpointDrawer::CheckpointDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager):
         Drawer(renderer, texture_manager) {}
 
-void CheckpointDrawer::draw(const RenderedState& rendered_state) {
+void CheckpointDrawer::draw(RenderedState& rendered_state) {
     CarState client_car = rendered_state.client_car;
 
     Sprite_rotation checkpoint_sprite = texture_manager.get_race_sprite(

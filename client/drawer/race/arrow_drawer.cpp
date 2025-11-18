@@ -3,7 +3,7 @@
 ArrowDrawer::ArrowDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager):
         Drawer(renderer, texture_manager) {}
 
-void ArrowDrawer::draw(const RenderedState& rendered_state) {
+void ArrowDrawer::draw(RenderedState& rendered_state) {
     CarState client_car = rendered_state.client_car;
     float arrow_direction = client_car.checkpoint_arrow.angle;
     Sprite_rotation arrow_sprite = texture_manager.get_race_sprite(RACE_ARROW, arrow_direction);

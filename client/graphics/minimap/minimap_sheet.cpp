@@ -17,6 +17,8 @@ void MinimapSheet::load_texture(const MapType map_type) {
                                                         SDL_TEXTUREACCESS_TARGET, tex.GetWidth(),
                                                         tex.GetHeight());
 
+    renderable->SetBlendMode(SDL_BLENDMODE_BLEND);
+
     renderer.SetTarget(*renderable);
     renderer.Copy(tex);
     renderer.SetTarget();

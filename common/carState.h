@@ -23,7 +23,7 @@ struct CarState {
     bool braking = false;
     uint16_t car_type = 0;
     uint16_t health = 100;
-        uint16_t max_health = 100;
+    uint16_t max_health = 100;
 
     // Constructor por defecto
     CarState() = default;
@@ -86,7 +86,8 @@ struct CarInfo {
     uint16_t max_health;
 
     CarInfo(uint16_t id, float x, float y, float angle, float speed, uint16_t lap, bool crashed,
-            bool under_bridge, bool braking, bool exploded, uint16_t car_type, uint16_t health, uint16_t max_health):
+            bool under_bridge, bool braking, bool exploded, uint16_t car_type, uint16_t health,
+            uint16_t max_health):
             id(id),
             x(x),
             y(y),

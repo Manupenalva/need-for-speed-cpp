@@ -3,7 +3,7 @@
 CountdownDrawer::CountdownDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager):
         Drawer(renderer, texture_manager) {}
 
-void CountdownDrawer::draw(const RenderedState& rendered_state) {
+void CountdownDrawer::draw(RenderedState& rendered_state) {
     if (rendered_state.state.countdown_time <= 0 ||
         rendered_state.state.countdown_time > MAX_NUMBER) {
         return;
