@@ -34,6 +34,7 @@ Durante el proceso de implementación del trabajo práctico, se buscó que cada 
 4. Asignación de diversos autos segun la elección del jugador y fase de mejoras
 5. Implementación de posiciones, NPCs y fisicas de puentes
 
-Al día de la fecha de entrega, se llegó con todos los requisitos presentes en el enunciado. Sin embargo, hubieron ciertos aspectos problemáticos, como la implementación de los NPCs, donde hubo una puesta en común con los correctores y nos inclinamos a mapear las esquinas de los mapas para asignarles un recorrido.
+## Analisis del trabajo
+Al día de la fecha de la primera entrega obligatoria, se llegó con todos los requisitos presentes en el enunciado. Sin embargo, hubieron ciertos aspectos problemáticos, como la implementación de los NPCs, donde hubo una puesta en común con los correctores y nos inclinamos a mapear las esquinas de los mapas para asignarles un recorrido. Por otro lado, las fisicas de los puentes no son totalmente exactas, lo que dificulta el paso de los autos, sobre todo los mas grandes
 
 Si bien, se logró implementar todos los requerimientos, la distribucion del trabajo a lo largo de las semanas resultó disparejo, ya que gran parte del trabajo fue realizado durante las ultimas dos semanas, requiriendo de mucho tiempo.

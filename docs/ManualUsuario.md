@@ -30,13 +30,9 @@ user@host:~$ ./taller_client  &lt;ipv4 host&gt; xxxx
 </pre>
 
 ### Lobby
-Una vez lanzado el cliente, te encontrarás con la siguiente pantalla
+Una vez lanzado el cliente, contarás con las siguientes posibilidades: Crear una partida o unirte a una de ellas.
 
-[LOBBY SCREEN]()
-
-Contarás con las siguientes posibilidades: Crear una partida o unirte a una partida.
-
-En caso de crear una partida, recibirás un id de partida, recordalo, deberá ser el que compartas con la persona que quieras jugar
+En caso de crear una partida, recibirás un id de partida, recordalo, deberá ser el que compartas con la persona que quieras jugar. Igualmente aparecera en la parte inferior del lobby
 
 Por otro lado, si deseas unirte a una partida ya existente, deberas hacer click en join game y escribir el numero de id de la partida a la que quieras unirte. En caso de que este llena, ya comenzada o sea inexistente dará error, en caso contrario te unirás a ella. El limite de jugadores es de máximo 8 en la misma partida.
 
@@ -80,9 +76,11 @@ Su ejecución se realiza de la siguiente manera:
 user@host:~$ ./taller_editor
 </pre>
 
-El editor permitira cargar una carrera ya realizada o crear una nueva seleccionando mapa. Para editar una carrera, debemos elegir load yaml, y elegir el archivo .yaml correspondiente a esa carrera. En cambio, si queremos crear una nuvea seleccionamos select map y elegimos en que mapa queremos que se desarrolle. Entonces, se abrira la siguiente ventana
+El editor permitira cargar una carrera ya realizada o crear una nueva seleccionando mapa. Para editar una carrera, debemos elegir load yaml, y elegir el archivo .yaml correspondiente a esa carrera. En cambio, si queremos crear una nuvea seleccionamos select map y elegimos en que mapa queremos que se desarrolle. Entonces, se abrira la siguiente ventana, que nos permitira elegir el mapa donde elaboraremos el circuito.
 
-![editor](editor.png)
+![seleccionMapa](images/eleccion_mapa.png)
+
+![editor](images/editor.png)
 
 En esta pantalla, mediante el arrastre de los elementos de la barra izquierda, podremos establecer los puntos de respawn, los checkpoints y sus hints. En caso de querer borrar un elemento, se deberá hacer click derecho sobre él.
 
@@ -90,7 +88,7 @@ El editor te pedirá obligatoriamente lo siguiente:
 - 8 puntos iniciales para los autos
 - Linea de meta
 
-Una vez finalizado, guardamos el mapa y lo llevamos a la carpeta server/assets/race_configs
+Una vez finalizado, guardamos el mapa y lo llevamos a la carpeta server/assets/race_configs (Carpeta establecida por defecto para el guardado de los archivos .yaml de carreras)
 
 
 

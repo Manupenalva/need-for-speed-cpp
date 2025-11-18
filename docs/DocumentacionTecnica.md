@@ -23,7 +23,7 @@ Por el lado del servidor, se cuenta con una mayor cantidad de hilos, que permite
 - Sender y Receiver: Cada cliente tiene asignado un hilo receiver y sender, englobados dentro de la clase ClientHandler, que al igual que del lado del cliente, son los encargados de recepcionar y enviar los mensajes vía protocolo y comunicarse con el resto de hilos mediante colas thread safe. En un principio se comunican con la cola de lobby, para una vez comenzada una sesión, pasar a encolar sus mensajes en su respectivo gameloop.
 
 ### Diagrama de hilos
-![Diagrama de hilos](threads.jpg)
+![Diagrama de hilos](./images/threads.jpg)
 
 
 ## Funcionamiento
@@ -41,10 +41,10 @@ Esos mensajes son enviados via protocolo y se utiliza la clase que cuenta con un
 De parte del cliente, calcula la iteración en la que se encuentra presente mediante la clase GameloopTimer, para redibujar los estados de cada uno de los autos corriendo, pero evitando, gracias a los sleep y saltos de iteraciones defasadas, mantener un estado desactualizado del real.
 
 ### Diagrama de secuencia
-![Diagrama de Secuencia](diagrama_secuencia_carrera.svg)
+![Diagrama de Secuencia](./images/diagrama_secuencia_carrera.svg)
 
 ### Diagrama de clases
-![Diagrama de Clases](diagrama_clases.svg)
+![Diagrama de Clases](./images/diagrama_clases.svg)
 
 ### Editor
 El proyecto cuenta con un editor visual de carreras, que permite diseñar circuitos de forma interactiva antes de iniciar una partida.
