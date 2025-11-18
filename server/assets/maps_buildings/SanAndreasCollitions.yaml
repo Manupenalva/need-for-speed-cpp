@@ -185,27 +185,9 @@ layers:
     rotation: 0
     type: ''
     visible: true
-    width: 70
+    width: 318
     x: 466
     y: 563.667
-  - height: 158.667
-    id: 20
-    name: ''
-    rotation: 0
-    type: ''
-    visible: true
-    width: 70
-    x: 713
-    y: 562.667
-  - height: 70.667
-    id: 21
-    name: ''
-    rotation: 0
-    type: ''
-    visible: true
-    width: 76
-    x: 585
-    y: 646.667
   - height: 155.334
     id: 23
     name: ''
@@ -1049,8 +1031,8 @@ layers:
     rotation: 0
     type: ''
     visible: true
-    width: 142
-    x: 1237
+    width: 164
+    x: 1215
     y: 1536.67
   - height: 61.334
     id: 182
@@ -4526,6 +4508,15 @@ layers:
     width: 21
     x: 3967.5
     y: 802.167
+  - height: 12
+    id: 898
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 165
+    x: 972
+    y: 1285
   opacity: 1
   type: objectgroup
   visible: true
@@ -6951,18 +6942,54 @@ layers:
     width: 47.8333
     x: 3213.85
     y: 4152.99
+  - height: 226
+    id: 896
+    name: down 1
+    rotation: 0
+    type: '3'
+    visible: true
+    width: 13.666666666667
+    x: 1125.33333333333
+    y: 1306.33333333333
+  - height: 94.3333333333335
+    id: 897
+    name: down 2
+    rotation: 0
+    type: '3'
+    visible: true
+    width: 11.6666666666667
+    x: 1214.33333333333
+    y: 1440
+  - height: 11.6666666666665
+    id: 899
+    name: up 1
+    rotation: 0
+    type: '3'
+    visible: true
+    width: 73.9999999999998
+    x: 1139.66666666667
+    y: 1281.33333333333
+  - height: 11
+    id: 900
+    name: up 2
+    rotation: 0
+    type: '3'
+    visible: true
+    width: 76
+    x: 1136.66666666667
+    y: 1540.66666666667
   opacity: 1
   type: objectgroup
   visible: true
   x: 0
   y: 0
 nextlayerid: 7
-nextobjectid: 896
+nextobjectid: 901
 orientation: orthogonal
 properties:
 - name: bridges_amount
   type: int
-  value: 3
+  value: 4
 renderorder: right-down
 tiledversion: 1.11.2
 tileheight: 32

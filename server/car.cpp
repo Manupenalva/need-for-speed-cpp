@@ -98,7 +98,6 @@ void Car::update_physics() {
         physics->turn_right();
     }
     if (input_state.nitro_activated) {
-        std::cout << "Nitro activado" << std::endl;
         physics->handle_nitro();
     }
 }
@@ -136,8 +135,6 @@ bool Car::reached_checkpoint(Position next_checkpoint, float celd_width, float c
     if (state.y < (next_checkpoint.y - celd_height / 2.0f))
         return false;
 
-    std::cout << "alcancé un checkpoint en la posicion: " << state.x << ", " << state.y
-              << std::endl;
     return true;
 }
 

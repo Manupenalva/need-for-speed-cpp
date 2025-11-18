@@ -87,8 +87,7 @@ std::unique_ptr<Race> RaceBuilder::create_race(const std::string& path,
         Position finish;
         finish.x = finish_node["x"].as<float>();
         finish.y = finish_node["y"].as<float>();
-        // finish.angle = get_checkpoint_angle(finish_node["rotation"].as<std::string>());
-        finish.angle = 0.0f;  // Angulo hardcodeado para compilar
+        finish.angle = get_checkpoint_angle(finish_node["rotation"].as<std::string>());
 
         std::vector<Position> start_positions;
         for (const auto& position: race_data["start"]) {
