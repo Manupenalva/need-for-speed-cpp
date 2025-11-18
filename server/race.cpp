@@ -252,6 +252,8 @@ void Race::handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* brid
 }
 
 void Race::force_finish_race(const uint16_t& player_id) {
+    if (players_status[player_id].has_finished)
+        return;
     players_status[player_id].has_finished = true;
     race_results.emplace_back(player_id,
                               current_time + players_cars[player_id].get_penalization_time());
@@ -260,6 +262,8 @@ void Race::force_finish_race(const uint16_t& player_id) {
 
 void Race::force_lose_race(const uint16_t& player_id) {
     Car& car = players_cars[player_id];
+    if (players_status[player_id].has_finished)
+        return;
     players_status[player_id].has_finished = true;
     race_results.emplace_back(player_id, MAX_TIME + car.get_penalization_time());
     car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
