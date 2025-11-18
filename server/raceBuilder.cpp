@@ -50,13 +50,13 @@ std::string RaceBuilder::get_map_data(const std::string& city_name, uint8_t& cit
 
 float RaceBuilder::get_hint_angle(const std::string& rotation) {
     if (rotation == UP_ROTATION) {
-        return 0.0f;
-    } else if (rotation == DOWN_ROTATION) {
-        return 180.0f;
-    } else if (rotation == RIGHT_ROTATION) {
-        return 90.0f;
-    } else {
         return 270.0f;
+    } else if (rotation == DOWN_ROTATION) {
+        return 90.0f;
+    } else if (rotation == RIGHT_ROTATION) {
+        return 0.0f;
+    } else {
+        return 180.0f;
     }
 }
 
