@@ -21,7 +21,7 @@
 #define DOWN_ROTATION 270
 #define VERTICAL_ROTATION 0
 #define HORIZONTAL_ROTATION 90
-#define CITY_ASSETS_PATH "../client/assets/cities/"
+#define CITY_ASSETS_PATH "../client/resources/assets/cities/"
 #define ROAD_TYPE "road"
 #define CHECKPOINT_TYPE "checkpoint"
 #define START_TYPE "start"
