@@ -58,8 +58,6 @@ El editor puede:
     - zonas de finalización
     - hints e indicadores
 
-Permitir la edición libre del escenario, pudiendo incluso crear un mapa completamente nuevo diferente a los predefinidos.
-
 Toda la información configurada dentro del editor se exporta en un archivo YAML, que representa la carrera diseñada.
 Este archivo debe ser colocado en:
 
@@ -68,7 +66,7 @@ Este archivo debe ser colocado en:
 para que pueda ser posteriormente seleccionado y utilizado por el servidor al momento de iniciar una partida.
 
 ### Configuraciones
-El sistema cuenta con una arquitectura altamente configurable mediante archivos YAML, permitiendo ajustar múltiples parámetros sin necesidad de recompilar el proyecto:
+El sistema cuenta con una arquitectura configurable mediante archivos YAML, permitiendo ajustar múltiples parámetros sin necesidad de recompilar el proyecto:
 
 #### Definiciones de autos:
 Cada vehículo tiene su propio bloque de configuración dentro del YAML, donde se especifican parámetros como su tamaño y estadísticas base. Además, dentro del archivo se encuentran las constantes físicas utilizadas por el motor físico (fricción, velocidad base, límites de choque, factores de giro, etc.).
