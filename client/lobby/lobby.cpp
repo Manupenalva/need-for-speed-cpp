@@ -49,11 +49,11 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent):
     musicEffect->play();
 }
 
-Lobby::~Lobby() { 
-    if (musicEffect){
+Lobby::~Lobby() {
+    if (musicEffect) {
         musicEffect->stop();
     }
-    delete ui; 
+    delete ui;
 }
 
 void Lobby::menuScreen() {

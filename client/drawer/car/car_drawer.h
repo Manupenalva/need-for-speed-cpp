@@ -11,11 +11,15 @@
 
 class CarDrawer: public Drawer {
 private:
+    bool is_player = false;
+    bool is_client_car = false;
+
     CarState calculate_position(const CarState& car, const int iterations_ahead);
     void draw_car(const CarState& car, float screen_x, float screen_y);
 
     void draw_npcs(const RenderedState& rendered_state);
     void draw_clients_cars(const RenderedState& rendered_state);
+    void draw_border(const CarState& player_car, int screen_x, int screen_y);
 
 public:
     explicit CarDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager);

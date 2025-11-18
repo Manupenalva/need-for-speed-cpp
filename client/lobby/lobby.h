@@ -6,9 +6,9 @@
 #include <QListWidget>
 #include <QMainWindow>
 #include <QPushButton>
+#include <QSoundEffect>
 #include <QStackedWidget>
 #include <QTimer>
-#include <QSoundEffect>
 #include <string>
 
 #include "../../common/protocol.h"

@@ -28,6 +28,10 @@ void CarDrawer::draw_car(const CarState& car, float screen_x, float screen_y) {
     // Lógica para dibujar el coche
     Sprite car_sprite = texture_manager.get_car_sprite(car.car_type, car.angle);
 
+    if (is_player) {
+        draw_border(car, screen_x, screen_y);
+    }
+
     if (car.under_bridge) {
         car_sprite.texture.SetAlphaMod(UNDER_BRIDGE_OPACITY);  // Hacer el coche semitransparente
     }
@@ -42,6 +46,7 @@ void CarDrawer::draw_car(const CarState& car, float screen_x, float screen_y) {
 }
 
 void CarDrawer::draw_npcs(const RenderedState& rendered_state) {
+    is_player = false;
     for (const auto& npc: rendered_state.state.npcs) {
         CarState npc_car_state(npc);  // Convertir NpcState a CarState
         CarState predicted_npc = calculate_position(npc_car_state, rendered_state.it_ahead);
@@ -54,7 +59,10 @@ void CarDrawer::draw_npcs(const RenderedState& rendered_state) {
 }
 
 void CarDrawer::draw_clients_cars(const RenderedState& rendered_state) {
+    is_player = true;
     for (const auto& car: rendered_state.state.cars) {
+        is_client_car = (car.id == rendered_state.client_car.id);
+
         CarState predicted_car = calculate_position(car, rendered_state.it_ahead);
 
         // Ajusta en base al mapa
@@ -62,4 +70,19 @@ void CarDrawer::draw_clients_cars(const RenderedState& rendered_state) {
         float screen_y = predicted_car.y - rendered_state.map_sprite.src_rect.y;
         draw_car(predicted_car, screen_x, screen_y);
     }
+}
+
+void CarDrawer::draw_border(const CarState& player_car, int screen_x, int screen_y) {
+    int padding = 3;
+    SDL2pp::Rect border_rect(static_cast<int>(screen_x) - padding,
+                             static_cast<int>(screen_y) - padding,
+                             player_car.car_type + 2 * padding, player_car.car_type + 2 * padding);
+    SDL2pp::Color border_color;
+    if (is_client_car) {
+        border_color = SDL2pp::Color(0, 255, 0, 255);  // Verde para el coche del cliente
+    } else {
+        border_color = SDL2pp::Color(255, 0, 0, 255);  // Rojo para otros coches
+    }
+    renderer.SetDrawColor(border_color);
+    renderer.DrawRect(border_rect);
 }
