@@ -6,17 +6,16 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "car_sheet.h"
-#include "map_sheet.h"
-#include "race_sheet.h"
-#include "sprite.h"
-#include "upgradeScreen_sheet.h"
+#include "animations/burst_sheet.h"
+#include "animations/fire_sheet.h"
+#include "car/car_sheet.h"
+#include "countdown/countdown_sheet.h"
+#include "map/map_sheet.h"
+#include "minimap/minimap_sheet.h"
+#include "race/race_sheet.h"
+#include "screen/upgradeScreen_sheet.h"
 
-#define CAR_PATH "cars/Cars.png"
-#define PEOPLE_PATH "people/Mobile - Grand Theft Auto 4 - Miscellaneous - People.png"
-#define MAP_PATH "cities/"
-#define RACE_PATH "race/"
-#define UPGRADE_SCREEN_PATH "upgrade/Upgrade_Screen.png"
+#include "sprite.h"
 
 class TextureManager {
 private:
@@ -25,9 +24,13 @@ private:
     MapSheet map_sheet;
     RaceSheet race_sheet;
     UpgradeScreenSheet upgrade_screen_sheet;
+    FireSheet fire_sheet;
+    BurstSheet burst_sheet;
+    MinimapSheet minimap_sheet;
+    CountdownSheet countdown_sheet;
 
 public:
-    TextureManager(SDL2pp::Renderer& renderer, const std::string& assets_path);
+    explicit TextureManager(SDL2pp::Renderer& renderer);
 
     void load_resources();
 
@@ -43,6 +46,18 @@ public:
 
     // Metodo para obtener el sprite de la pantalla de mejoras
     Sprite get_upgrade_screen_sprite();
+
+    // Metodo para obtener el sprite de fuego
+    Sprite get_fire_sprite(int fire_type);
+
+    // Metodo para obtener el sprite de explosión
+    Sprite get_burst_sprite(int burst_type);
+
+    SDL2pp::Texture& get_minimap_texture();
+
+    void load_minimap_info(const MinimapInfo& info, const MapType map_type);
+
+    Sprite get_countdown_sprite(int countdown_type);
 };
 
 #endif

@@ -7,17 +7,23 @@ target_sources(taller_client
     sender.cpp
     window/windowSDL.cpp
     keyboard/keyboard_reader.cpp
-    graphics/car_sheet.cpp
-    graphics/map_sheet.cpp
+    graphics/car/car_sheet.cpp
+    graphics/map/map_sheet.cpp
     graphics/texture_manager.cpp
-    graphics/race_sheet.cpp
-    graphics/upgradeScreen_sheet.cpp
+    graphics/race/race_sheet.cpp
+    graphics/screen/upgradeScreen_sheet.cpp
+    graphics/base_sheet.cpp
+    graphics/minimap/minimap_sheet.cpp
     drawer/drawerSDL.cpp
-    drawer/car_drawer.cpp
-    drawer/map_drawer.cpp
-    drawer/arrow_drawer.cpp
-    drawer/checkpoint_drawer.cpp
-    drawer/upgradeScreen_drawer.cpp
+    drawer/car/car_drawer.cpp
+    drawer/map/map_drawer.cpp
+    drawer/race/arrow_drawer.cpp
+    drawer/race/checkpoint_drawer.cpp
+    drawer/screen/upgradeScreen_drawer.cpp
+    drawer/animations/animations_drawer.cpp
+    drawer/minimap/minimap_drawer.cpp
+    drawer/countdown/countdown_drawer.cpp
+    drawer/estadistics/estadistics_drawer.cpp
     lobby/lobby.cpp
     lobby/lobby.ui
     events/keyDown_handler.cpp
@@ -25,6 +31,8 @@ target_sources(taller_client
     events/quit_handler.cpp
     config/config_reader.cpp
     game_launcher.cpp
+    sounds_manager/sounds_manager.cpp
+    sounds_manager/sounds_eventsHandler.cpp
     
     PUBLIC
     # .h files
@@ -34,26 +42,40 @@ target_sources(taller_client
     window/windowSDL.h
     window/window.h
     keyboard/keyboard_reader.h
-    graphics/car_sheet.h
-    graphics/map_sheet.h
+    graphics/car/car_sheet.h
+    graphics/map/map_sheet.h
     graphics/texture_manager.h
-    graphics/race_sheet.h
-    graphics/upgradeScreen_sheet.h
+    graphics/race/race_sheet.h
+    graphics/screen/upgradeScreen_sheet.h
+    graphics/base_sheet.cpp
+    graphics/animations/fire_sheet.h
+    graphics/animations/burst_sheet.h
+    graphics/minimap/minimap_sheet.h
+    graphics/countdown/countdown_sheet.h
     events/event_handler.h
     events/keyDown_handler.h
     events/keyUp_handler.h
     events/eventDTO.h
     events/quit_handler.h
-    drawer/car_drawer.h
-    drawer/map_drawer.h
+    drawer/car/car_drawer.h
+    drawer/map/map_drawer.h
     drawer/drawerSDL.h
-    drawer/arrow_drawer.h
-    drawer/checkpoint_drawer.h
-    drawer/upgradeScreen_drawer.h
+    drawer/race/arrow_drawer.h
+    drawer/race/checkpoint_drawer.h
+    drawer/screen/upgradeScreen_drawer.h
+    drawer/animations/fire_drawer.h
+    drawer/animations/burst_drawer.h
+    drawer/animations/animations_drawer.h
+    drawer/minimap/minimap_drawer.h
+    drawer/minimap/mapInfoDTO.h
+    drawer/countdown/countdown_drawer.h
+    drawer/estadistics/estadistics_drawer.h
     lobby/lobby.h
     config/config_reader.h
     config/constants.h
     game_launcher.h
     drawer/drawer.h
     drawer/renderedState.h
+    sounds_manager/sounds_manager.h
+    sounds_manager/sounds_eventsHandler.h
     )

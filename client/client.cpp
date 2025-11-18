@@ -1,5 +1,7 @@
 #include "client.h"
 
+#include <iostream>
+
 Client::Client(Protocol& protocol, const int id):
         protocol(protocol),
         events_queue(),
@@ -7,12 +9,14 @@ Client::Client(Protocol& protocol, const int id):
         sender(protocol, events_queue),
         receiver(protocol, server_queue),
         window(TITTLE_CLIENT),
-        texture_manager(window.get_renderer(), PATH),
+        texture_manager(window.get_renderer()),
+        sounds_manager(),
+        sounds_events_handler(sounds_manager, id),
         drawer(window.get_renderer(), texture_manager, id),
         kb_reader(events_queue),
-        last_state(),
-        has_last_state(false),
-        is_in_race(true) {}
+        actual_state() {
+    init_game_handlers();
+}
 
 
 void Client::run() {
@@ -23,10 +27,12 @@ void Client::run() {
     try {
         // Variables de iteración
         uint32_t iterations_ahead = 0;
+        sounds_manager.play_music(MAIN_MUSIC);
 
         while (_keep_running) {
             // Procesar todos los mensajes entrantes y actualizar el estado interno
-            kb_reader.listen_to_keyboard(_keep_running, is_in_race);
+            kb_reader.listen_to_keyboard(_keep_running, actual_state.upgrades_interval,
+                                         actual_state.is_in_race);
 
             // Ejecutar una iteración lógica (actualizaciones locales / físicas)
             update_state_from_server();
@@ -56,7 +62,11 @@ void Client::stop() {
     _is_alive = false;
 }
 
-void Client::init_resources() { texture_manager.load_resources(); }
+void Client::init_resources() {
+    texture_manager.load_resources();
+    sounds_manager.load_music();
+    sounds_manager.load_effects();
+}
 
 void Client::clear_display() { window.clear(); }
 
@@ -65,32 +75,81 @@ void Client::update_state_from_server() {
     // enviada.
     ServerMessageDTO server_msg;
     while (server_queue.try_pop(server_msg)) {
-        if (server_msg.type == MsgType::STATE_UPDATE) {
-            last_state = server_msg;
-            has_last_state = true;
-        }
-        if (server_msg.type == MsgType::RACE_STARTED) {
-            is_in_race = true;
-        }
-        if (server_msg.type == MsgType::RACE_FINISHED) {
-            is_in_race = false;
+        auto handler_it = msg_handlers.find(server_msg.type);
+        if (handler_it != msg_handlers.end()) {
+            handler_it->second(server_msg);
         }
     }
 }
 
 void Client::update_animation_frames(int iterations_ahead) {
-    // Si tenemos un estado para dibujar y la carrera esta en curso, pedir al drawer que lo pinte
-    if (has_last_state && is_in_race) {
-        // Limpiar la pantalla antes de dibujar (solo cuando hay un nuevo estado)
+
+    if (actual_state.has_last_state && actual_state.is_in_race) {
+        // Dibuja el ultimo estado recibido del servidor mientras esta en carrera.
         clear_display();
-        drawer.update_game_state(last_state, iterations_ahead);
+        drawer.update_game_state(actual_state.message, iterations_ahead, map_id);
         window.present();
-        has_last_state = false;  // Ya se dibujó este estado
+
+        sounds_events_handler.process_message(actual_state.message);
+        actual_state.has_last_state = false;
     }
-    if (!is_in_race) {
+    if (!actual_state.is_in_race && actual_state.has_last_state) {
+        // Dibujar estadisticas
+        clear_display();
+        drawer.update_estadistics_screen(actual_state.message);
+        window.present();
+        actual_state.has_last_state = false;
+    }
+    if (!actual_state.is_in_race && actual_state.upgrades_interval) {
         // Mostrar pantalla de mejora de auto
         clear_display();
         drawer.show_upgrade_screen();
         window.present();
     }
+}
+
+void Client::init_game_handlers() {
+    auto handler_state = [this](const ServerMessageDTO& server_msg) {
+        actual_state.message = server_msg;
+        actual_state.has_last_state = true;
+    };
+    msg_handlers[MsgType::STATE_UPDATE] = handler_state;
+
+    msg_handlers[MsgType::RACE_POSITIONS] = handler_state;
+
+    msg_handlers[MsgType::ACCUMULATED_POSITIONS] = handler_state;
+
+    msg_handlers[MsgType::RACE_STARTED] = [this](const ServerMessageDTO& server_msg) {
+        actual_state.is_in_race = true;
+        actual_state.message = server_msg;
+    };
+
+    msg_handlers[MsgType::RACE_FINISHED] = [this](const ServerMessageDTO& server_msg) {
+        actual_state.is_in_race = false;
+        sounds_events_handler.final_game_sound();
+        actual_state.message = server_msg;
+    };
+
+    msg_handlers[MsgType::SEND_MAP_NUMBER] = [this](const ServerMessageDTO& server_msg) {
+        map_id = static_cast<MapType>(server_msg.map_number);
+    };
+
+    msg_handlers[MsgType::SEND_MINIMAP_INFO] = [this](const ServerMessageDTO& server_msg) {
+        texture_manager.load_minimap_info(server_msg.minimap_info, map_id);
+    };
+
+    msg_handlers[MsgType::INTERVAL_UPDATE] = [this](const ServerMessageDTO& server_msg) {
+        actual_state.upgrades_interval = true;
+        actual_state.message = server_msg;
+    };
+
+    msg_handlers[MsgType::INTERVAL_CLOSED] = [this](const ServerMessageDTO& server_msg) {
+        actual_state.upgrades_interval = false;
+        actual_state.message = server_msg;
+    };
+
+    msg_handlers[MsgType::GAME_END] = [this](const ServerMessageDTO& server_msg) {
+        actual_state.message = server_msg;
+        _keep_running = false;
+    };
 }
