@@ -14,7 +14,7 @@ user@host:~/tp-taller-g4$ ./installer.sh
 
 En una terminal, se debera correr el comando:
 <pre>
-user@host:~$ ./taller_server xxxx
+user@host:~$ ./NEED4SPEED-server xxxx
 </pre>
 Donde xxxx debera ser reemplazado por una serie de 4 numeros que representaran el puerto donde correra escuchara comunicaciones el servidor. Se recomienda 8080 como un puerto recomendado para recibir las comunicaciones.
 
@@ -22,11 +22,11 @@ Donde xxxx debera ser reemplazado por una serie de 4 numeros que representaran e
 
 En caso de que se quiera ejecutar localmente el juego, en otra terminal se deberá ejecutar el siguiente comando, utilizando en lugar de xxxx los 4 numeros de puerto establecidos en el servidor.
 <pre>
-user@host:~$ ./taller_client localhost xxxx
+user@host:~$ ./NEED4SPEED-client localhost xxxx
 </pre>
 Si se prefiere ejecutarlo por red, se deberá ejecutar de la siguiente manera
 <pre>
-user@host:~$ ./taller_client  &lt;ipv4 host&gt; xxxx
+user@host:~$ ./NEED4SPEED-client  &lt;ipv4 host&gt; xxxx
 </pre>
 
 ### Lobby
@@ -73,7 +73,7 @@ En la instalación del juego base contaras con mapas y carreras por defecto. Igu
 Su ejecución se realiza de la siguiente manera:
 
 <pre>
-user@host:~$ ./taller_editor
+user@host:~$ NEED4SPEED-editor
 </pre>
 
 El editor permitira cargar una carrera ya realizada o crear una nueva seleccionando mapa. Para editar una carrera, debemos elegir load yaml, y elegir el archivo .yaml correspondiente a esa carrera. En cambio, si queremos crear una nuvea seleccionamos select map y elegimos en que mapa queremos que se desarrolle. Entonces, se abrira la siguiente ventana, que nos permitira elegir el mapa donde elaboraremos el circuito.

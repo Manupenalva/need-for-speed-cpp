@@ -1,6 +1,3 @@
-# Trabajo Práctico Need for Speed
-## Grupo 4 - Cátedra Veiga
-
 
 # Manual del proyecto
 
