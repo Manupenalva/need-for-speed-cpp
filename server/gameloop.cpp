@@ -146,6 +146,9 @@ void Gameloop::handle_upgrades_phase(const int& race_index) {
 }
 
 void Gameloop::handle_countdown(int race_index) {
+    countdown_remaining = COUNTDOWN_TIME;
+    broadcast_players(race_index);
+    std::this_thread::sleep_for(std::chrono::seconds(5));
     GameLoopTimer timer(10);
     std::chrono::steady_clock::time_point countdown_start_time = std::chrono::steady_clock::now();
     uint32_t iterations_behind = 1;
