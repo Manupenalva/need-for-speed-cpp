@@ -158,7 +158,7 @@ ServerMessageDTO Race::get_broadcast_message(float frames) {
 
         CarState state(id, car_info.x, car_info.y, car_info.angle, car_info.speed, car_info.lap,
                        checkpoint_info, checkpoint_arrow, car_info.crashed, car_info.exploded,
-                       car_info.under_bridge, car_info.braking, car_info.car_type, car_info.health);
+                       car_info.under_bridge, car_info.braking, car_info.car_type, car_info.health, car_info.max_health);
 
         cars.push_back(state);
         num_cars++;

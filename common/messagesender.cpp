@@ -259,6 +259,7 @@ void MessageSender::append_car_state(const CarState& car) {
     append_bytes(&braking_byte, 1);
     append_uint16(car.car_type);
     append_uint16(car.health);
+    append_uint16(car.max_health);
 }
 
 void MessageSender::append_npc_state(const NpcState& npc) {

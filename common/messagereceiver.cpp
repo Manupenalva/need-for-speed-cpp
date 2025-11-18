@@ -165,6 +165,7 @@ CarState MessageReceiver::recv_car_state() {
     car.braking = (braking_byte != 0);
     car.car_type = obtain_uint16();
     car.health = obtain_uint16();
+    car.max_health = obtain_uint16();
     return car;
 }
 

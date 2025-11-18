@@ -23,6 +23,7 @@ struct CarState {
     bool braking = false;
     uint16_t car_type = 0;
     uint16_t health = 100;
+        uint16_t max_health = 100;
 
     // Constructor por defecto
     CarState() = default;
@@ -50,7 +51,7 @@ struct CarState {
     CarState(uint16_t id, float x, float y, float angle, float speed, uint16_t lap,
              const CheckpointInfo& checkpoint, const CheckpointArrow& checkpoint_arrow,
              bool crashed, bool exploded, bool under_bridge, bool braking, uint16_t car_type,
-             uint16_t health):
+             uint16_t health, uint16_t max_health):
             id(id),
             x(x),
             y(y),
@@ -64,7 +65,8 @@ struct CarState {
             under_bridge(under_bridge),
             braking(braking),
             car_type(car_type),
-            health(health) {}
+            health(health),
+            max_health(max_health) {}
 };
 
 // esto podría ir dentro de CarState para no repetir.
@@ -81,9 +83,10 @@ struct CarInfo {
     bool exploded;
     uint16_t car_type;
     uint16_t health;
+    uint16_t max_health;
 
     CarInfo(uint16_t id, float x, float y, float angle, float speed, uint16_t lap, bool crashed,
-            bool under_bridge, bool braking, bool exploded, uint16_t car_type, uint16_t health):
+            bool under_bridge, bool braking, bool exploded, uint16_t car_type, uint16_t health, uint16_t max_health):
             id(id),
             x(x),
             y(y),
@@ -95,9 +98,10 @@ struct CarInfo {
             braking(braking),
             exploded(exploded),
             car_type(car_type),
-            health(health) {}
+            health(health),
+            max_health(max_health) {}
 
-    CarInfo(uint16_t id, uint16_t car_type, uint16_t health):
+    CarInfo(uint16_t id, uint16_t car_type, uint16_t health, uint16_t max_health):
             id(id),
             x(0.0f),
             y(0.0f),
@@ -109,7 +113,8 @@ struct CarInfo {
             braking(false),
             exploded(false),
             car_type(car_type),
-            health(health) {}
+            health(health),
+            max_health(max_health) {}
 };
 
 struct CarInputState {

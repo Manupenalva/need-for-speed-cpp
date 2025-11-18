@@ -11,7 +11,7 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
          const int& car_type, std::shared_ptr<CarConstants> car_constants):
         input_state(),
         state({id, 0.0f, 0.0f, 0.0f, 0.0f, 0, false, false, false, false,
-               static_cast<uint16_t>(car_type), static_cast<uint16_t>(health)}),
+               static_cast<uint16_t>(car_type), static_cast<uint16_t>(health), static_cast<uint16_t>(health)}),
         bridge_layer(BridgeLayer::NONE),
         car_name(name),
         max_speed(max_speed),
@@ -32,6 +32,7 @@ void Car::add_to_world(b2WorldId world, Position start_position) {
     state.health = static_cast<uint16_t>(max_health);
     state.exploded = false;
     state.crashed = false;
+    state.max_health = static_cast<uint16_t>(max_health);
 
     bridge_layer = BridgeLayer::NONE;
 
@@ -200,6 +201,7 @@ void Car::maximize_stats() {
     mass = car_constants->car.MAX_MASS;
     drivability = car_constants->car.MAX_DRIVABILITY;
     physics->set_stats(max_speed, acceleration, mass, drivability);
+    state.max_health = static_cast<uint16_t>(max_health);
 }
 
 bool Car::exploded() { return state.exploded; }
