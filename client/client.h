@@ -1,6 +1,8 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include <unordered_map>
+
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
@@ -14,10 +16,18 @@
 #include "drawer/drawerSDL.h"
 #include "graphics/texture_manager.h"
 #include "keyboard/keyboard_reader.h"
+#include "sounds_manager/sounds_eventsHandler.h"
 #include "window/windowSDL.h"
 
 #include "receiver.h"
 #include "sender.h"
+
+struct ActualState {
+    ServerMessageDTO message = {};
+    bool has_last_state = false;
+    bool is_in_race = false;
+    bool upgrades_interval = false;
+};
 
 class Client: public Thread {
 private:
@@ -28,18 +38,22 @@ private:
     Receiver receiver;
     WindowSDL window;
     TextureManager texture_manager;
+    SoundsManager sounds_manager;
+    SoundsEventsHandler sounds_events_handler;
     DrawerSDL drawer;
     KeyboardReader kb_reader;
+    std::unordered_map<MsgType, std::function<void(const ServerMessageDTO&)>> msg_handlers;
+    MapType map_id;
 
     // Último estado recibido del servidor para dibujar
-    ServerMessageDTO last_state;
-    bool has_last_state;
-    bool is_in_race;
+    ActualState actual_state;
 
     void init_resources();
     void update_state_from_server();
     void clear_display();
     void update_animation_frames(int iterations_ahead);
+
+    void init_game_handlers();
 
 public:
     Client(Protocol& protocol, const int id);

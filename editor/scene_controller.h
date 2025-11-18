@@ -15,7 +15,10 @@ public:
     void handleDropEvent(const DragInfo& dragInfo, int x, int y);
     int countItemsOfType(const QString& type) const;
 
-    void countCheckpointsIds();
+    void placeHint(const DragInfo& info, const QPointF& hintPos, QGraphicsItem* checkpointItem);
+    void deleteHints(QGraphicsItem* checkpointItem);
+
+    void deleteItem(QGraphicsItem* item);
 
 private:
     QGraphicsScene* scene;

@@ -1,0 +1,82 @@
+city: Backgrounds - San Andreas
+celdWidth: 50
+celdHeight: 50
+start:
+  - x: 950
+    y: 1450
+    rotation: left
+  - x: 850
+    y: 1450
+    rotation: left
+  - x: 750
+    y: 1450
+    rotation: left
+  - x: 650
+    y: 1450
+    rotation: left
+  - x: 550
+    y: 1450
+    rotation: left
+  - x: 450
+    y: 1450
+    rotation: left
+  - x: 350
+    y: 1450
+    rotation: left
+  - x: 250
+    y: 1450
+    rotation: left
+finish:
+  - x: 2631
+    y: 1395
+    rotation: horizontal
+checkpoint:
+  - x: 1300
+    y: 1450
+    rotation: vertical
+    id: 1
+  - x: 1850
+    y: 1450
+    rotation: vertical
+    id: 2
+  - x: 1927
+    y: 1625
+    rotation: horizontal
+    id: 3
+  - x: 2101
+    y: 1791
+    rotation: vertical
+    id: 4
+  - x: 2556
+    y: 1791
+    rotation: vertical
+    id: 5
+  - x: 2632
+    y: 1548
+    rotation: horizontal
+    id: 6
+hint:
+  - x: 1050
+    y: 1450
+    rotation: right
+    id: 1
+  - x: 1600
+    y: 1450
+    rotation: right
+    id: 2
+  - x: 1925
+    y: 1462
+    rotation: down
+    id: 3
+  - x: 1933
+    y: 1789
+    rotation: right
+    id: 4
+  - x: 2400
+    y: 1794
+    rotation: right
+    id: 5
+  - x: 2635
+    y: 1792
+    rotation: up
+    id: 6

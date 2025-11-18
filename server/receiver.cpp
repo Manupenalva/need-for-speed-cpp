@@ -1,6 +1,7 @@
 #include "receiver.h"
 
 #include "events/actionmessage.h"
+#include "events/cheatmessage.h"
 #include "events/clienthandlermessage.h"
 #include "events/createlobbymessage.h"
 #include "events/getcatalogmessage.h"
@@ -56,6 +57,9 @@ void Receiver::run() {
                     break;
                 case MsgType::GET_CAR_CATALOG:
                     game_message = std::make_shared<GetCatalogMessage>(id);
+                    break;
+                case MsgType::CHEAT_CODE:
+                    game_message = std::make_shared<CheatMessage>(id, msg.cheat_code);
                     break;
                 default:
                     continue;

@@ -15,6 +15,7 @@ enum class MsgType : uint8_t {
     GET_CAR_CATALOG,
     SELECT_CAR,
     SET_READY,
+    CHEAT_CODE,
 
     // Servidor → Cliente
     GAME_START,
@@ -29,6 +30,10 @@ enum class MsgType : uint8_t {
     INTERVAL_UPDATE,
     SEND_CAR_CATALOG,
     SEND_MAP_NUMBER,
+    SEND_MINIMAP_INFO,
+    INTERVAL_CLOSED,
+    RACE_POSITIONS,
+    ACCUMULATED_POSITIONS,
 
     INVALID = 255
 

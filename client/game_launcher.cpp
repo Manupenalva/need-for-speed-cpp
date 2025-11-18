@@ -18,7 +18,8 @@ void GameLauncher::launchGame(int argc, char* argv[]) {
     app.exec();
 
     // Inicializar SDL
-    SDL2pp::SDL sdl(SDL_INIT_VIDEO);
+    SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    SDL2pp::SDLTTF sdl_ttf;
 
     Client client(protocol, id);
     client.run();

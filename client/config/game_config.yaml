@@ -1,6 +1,10 @@
 window:
-  width: 800
-  height: 600
+  width: 1720
+  height: 920
 
 map:
   id: 1
+  wide: 300
+
+music:
+  volume: 5

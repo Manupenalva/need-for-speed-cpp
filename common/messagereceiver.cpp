@@ -5,7 +5,7 @@
 
 #include <netinet/in.h>
 
-MessageReceiver::MessageReceiver(Socket& socket): socket(socket) {}
+MessageReceiver::MessageReceiver(ISocket& socket): socket(socket) {}
 
 ClientMessageDTO MessageReceiver::recv_client_message() {
     MsgType type;
@@ -22,6 +22,9 @@ ClientMessageDTO MessageReceiver::recv_client_message() {
             break;
         case MsgType::SELECT_CAR:
             client_msg.car_id = obtain_uint16();
+            break;
+        case MsgType::CHEAT_CODE:
+            client_msg.cheat_code = recv_cheat_code();
             break;
         default:
             break;
@@ -40,9 +43,6 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
         case MsgType::STATE_UPDATE:
             server_msg.state = recv_state_update();
             break;
-        // case MsgType::SEND_LOBBIES_INFO:
-        //     server_msg.lobbies = recv_lobbies_info();
-        // break;
         case MsgType::JOIN_RESULT:
             server_msg.joined = recv_join_result();
             break;
@@ -61,11 +61,31 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
         case MsgType::SEND_MAP_NUMBER:
             server_msg.map_number = obtain_byte();
             break;
+        case MsgType::SEND_MINIMAP_INFO:
+            server_msg.minimap_info = recv_minimap_info();
+            break;
+        case MsgType::RACE_POSITIONS:
+        case MsgType::ACCUMULATED_POSITIONS:
+            server_msg.positions = recv_positions();
+            break;
         default:
             break;
     }
 
     return server_msg;
+}
+
+std::vector<std::pair<uint16_t, float>> MessageReceiver::recv_positions() {
+    uint16_t positions_size = obtain_uint16();
+    std::vector<std::pair<uint16_t, float>> positions;
+    positions.resize(positions_size);
+
+    for (auto& pos: positions) {
+        pos.first = obtain_uint16();
+        pos.second = obtain_float();
+    }
+
+    return positions;
 }
 
 std::vector<LobbyInfo> MessageReceiver::recv_lobbies_info() {
@@ -77,9 +97,26 @@ std::vector<LobbyInfo> MessageReceiver::recv_lobbies_info() {
     return lobbies;
 }
 
+MinimapInfo MessageReceiver::recv_minimap_info() {
+    MinimapInfo minimap_info;
+    uint16_t num_checkpoints = obtain_uint16();
+    minimap_info.checkpoints.resize(num_checkpoints);
+
+    std::generate(minimap_info.checkpoints.begin(), minimap_info.checkpoints.end(),
+                  [this]() { return recv_checkpoint_info(); });
+
+    uint16_t num_arrows = obtain_uint16();
+    minimap_info.arrows.resize(num_arrows);
+
+    std::generate(minimap_info.arrows.begin(), minimap_info.arrows.end(),
+                  [this]() { return recv_checkpoint_arrow(); });
+
+    return minimap_info;
+}
 
 State MessageReceiver::recv_state_update() {
     State state;
+    state.countdown_time = static_cast<int>(obtain_uint16());
     state.frame = obtain_uint32();
     state.num_cars = obtain_uint16();
     state.cars.resize(state.num_cars);
@@ -120,12 +157,15 @@ CarState MessageReceiver::recv_car_state() {
     car.checkpoint_arrow = recv_checkpoint_arrow();
     uint8_t crashed_byte = obtain_byte();
     car.crashed = (crashed_byte != 0);
+    uint8_t exploded_byte = obtain_byte();
+    car.exploded = (exploded_byte != 0);
     uint8_t under_bridge_byte = obtain_byte();
     car.under_bridge = (under_bridge_byte != 0);
     uint8_t braking_byte = obtain_byte();
     car.braking = (braking_byte != 0);
     car.car_type = obtain_uint16();
     car.health = obtain_uint16();
+    car.max_health = obtain_uint16();
     return car;
 }
 
@@ -135,6 +175,8 @@ NpcState MessageReceiver::recv_npc_state() {
     npc.y = obtain_float();
     npc.angle = obtain_float();
     npc.car_type = obtain_uint16();
+    uint8_t under_bridge_byte = obtain_byte();
+    npc.under_bridge = (under_bridge_byte != 0);
     return npc;
 }
 
@@ -201,13 +243,18 @@ CarProperties MessageReceiver::recv_car_properties() {
 
 PlayerState MessageReceiver::recv_player_state() {
     PlayerState player_state;
-    player_state.player_id = obtain_byte();
+    player_state.player_id = obtain_uint16();
     player_state.ready = obtain_byte() != 0;
     player_state.previous_position = obtain_byte();
-    player_state.result_time = obtain_uint32();
-    player_state.next_penalization_time = obtain_uint32();
+    player_state.result_time = obtain_float();
+    player_state.next_penalization_time = obtain_float();
     player_state.car_properties = recv_car_properties();
     return player_state;
+}
+
+CheatCode MessageReceiver::recv_cheat_code() {
+    uint8_t cheat_code_byte = obtain_byte();
+    return static_cast<CheatCode>(cheat_code_byte);
 }
 
 uint32_t MessageReceiver::obtain_uint32() {
@@ -241,8 +288,3 @@ float MessageReceiver::obtain_float() {
     uint32_t n = obtain_uint32();
     return uint32_to_float(n);
 }
-
-// std::string MessageReceiver::obtain_lobby_name() {
-//     uint16_t name_size = obtain_uint16();
-//     return obtain_string(name_size);
-// }

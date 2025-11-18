@@ -17,6 +17,7 @@ class RaceStruct {
 private:
     std::list<std::shared_ptr<ClientHandler>> players;
     std::mutex mtx;
+    bool started;
 
     void reap();
 

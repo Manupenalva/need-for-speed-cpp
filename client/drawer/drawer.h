@@ -20,7 +20,7 @@ protected:
 
 public:
     virtual ~Drawer() = default;
-    virtual void draw(const RenderedState& rendered_state) = 0;
+    virtual void draw(RenderedState& rendered_state) = 0;
 };
 
 #endif

@@ -1,63 +1,95 @@
-1:
-  name: "Family car"
-  max_speed: 60
-  acceleration: 50
-  health: 50
-  mass: 40
-  drivability: 90
-  long: 32
-  width: 26
-2:
-  name: "Muscle car"
-  max_speed: 65
-  acceleration: 60
-  health: 40
-  mass: 20
-  drivability: 80
-  long: 42
-  width: 26
-3:
-  name: "Sports car"
-  max_speed: 70
-  acceleration: 80
-  health: 30
-  mass: 20
-  drivability: 50
-  long: 42
-  width: 26
-4:
-  name: "Electric car"
-  max_speed: 65
-  acceleration: 70
-  health: 40
-  mass: 20
-  drivability: 70
-  long: 42
-  width: 26
-5:
-  name: "All terrain"
-  max_speed: 60
-  acceleration: 50
-  health: 60
-  mass: 40
-  drivability: 100
-  long: 42
-  width: 31
-6:
-  name: "van"
-  max_speed: 60
-  acceleration: 60
-  health: 60
-  mass: 50
-  drivability: 90
-  long: 42
-  width: 26
-7:
-  name: "truck"
-  max_speed: 55
-  acceleration: 50
-  health: 100
-  mass: 80
-  drivability: 90
-  long: 53
-  width: 26
+cars:
+  1:
+    name: "Family car"
+    max_speed: 60
+    acceleration: 50
+    health: 50
+    mass: 40
+    drivability: 90
+    long: 32
+    width: 26
+
+  2:
+    name: "Muscle car"
+    max_speed: 65
+    acceleration: 60
+    health: 40
+    mass: 20
+    drivability: 80
+    long: 42
+    width: 26
+
+  3:
+    name: "Sports car"
+    max_speed: 70
+    acceleration: 80
+    health: 30
+    mass: 20
+    drivability: 50
+    long: 42
+    width: 26
+
+  4:
+    name: "Electric car"
+    max_speed: 65
+    acceleration: 70
+    health: 40
+    mass: 20
+    drivability: 70
+    long: 42
+    width: 26
+
+  5:
+    name: "All terrain"
+    max_speed: 60
+    acceleration: 50
+    health: 60
+    mass: 40
+    drivability: 100
+    long: 42
+    width: 31
+
+  6:
+    name: "van"
+    max_speed: 60
+    acceleration: 60
+    health: 60
+    mass: 50
+    drivability: 90
+    long: 42
+    width: 26
+
+  7:
+    name: "truck"
+    max_speed: 55
+    acceleration: 50
+    health: 100
+    mass: 80
+    drivability: 90
+    long: 53
+    width: 26
+
+constants:
+  car_constants:
+    MAX_SPEED: 100.0
+    MAX_ACCELERATION: 100.0
+    MAX_HEALTH: 200.0
+    MAX_MASS: 1000.0
+    MAX_DRIVABILITY: 100.0
+
+  physical_constants:
+    BASE_MAX_SPEED: 250.0
+    BASE_ACCELERATION: 500000.0
+    BASE_ANGLE_ROTATION: 4
+    BASE_FRICTION: 5.0
+    MIN_SPEED: 100.0
+    LIGHT_CRASH_DAMAGE: 1
+    MEDIUM_CRASH_DAMAGE: 3
+    HEAVY_CRASH_DAMAGE: 5
+    MEDIUM_CRASH_LIMIT: 900.0
+    HEAVY_CRASH_LIMIT: 1500.0
+    REVERSE_ACCELERATION_FACTOR: 0.5
+    REVERSE_SPEED_FACTOR: 0.25
+    MIN_GAME_SPEED: 5.0
+    NITRO_USE: 0.5
+    NITRO_ACCELERATION_FACTOR: 1.2

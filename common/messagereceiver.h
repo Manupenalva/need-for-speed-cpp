@@ -2,25 +2,28 @@
 #define MESSAGE_RECEIVER_H
 
 #include <string>
+#include <utility>
 #include <vector>
 
+#include "SocketInterface.h"
 #include "carState.h"
 #include "checkpointArrow.h"
 #include "checkpointInfo.h"
 #include "constants.h"
 #include "lobbyinfo.h"
 #include "messageDTOs.h"
+#include "minimapInfo.h"
 #include "npcState.h"
 #include "socket.h"
 
 class MessageReceiver {
 public:
-    explicit MessageReceiver(Socket& socket);
+    explicit MessageReceiver(ISocket& socket);
     ClientMessageDTO recv_client_message();
     ServerMessageDTO recv_server_message();
 
 private:
-    Socket& socket;
+    ISocket& socket;
 
     State recv_state_update();
     // cppcheck-suppress unusedPrivateFunction
@@ -38,6 +41,7 @@ private:
     CarProperties recv_car_properties();
     PlayerState recv_player_state();
     // std::string obtain_lobby_name();
+    std::vector<std::pair<uint16_t, float>> recv_positions();
 
     CarState recv_car_state();
     NpcState recv_npc_state();
@@ -46,5 +50,7 @@ private:
     LobbyInfo recv_lobby_info();
     std::vector<CarProperties> recv_car_catalog();
     IntervalState recv_interval_state();
+    CheatCode recv_cheat_code();
+    MinimapInfo recv_minimap_info();
 };
 #endif

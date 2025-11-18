@@ -1,6 +1,7 @@
 target_sources(taller_editor
     PRIVATE
     EditorGame.ui
+    resources.qrc
     cityselection.cpp
     editor_game.cpp
     mapcanvas.cpp
@@ -9,6 +10,11 @@ target_sources(taller_editor
     item_builder.cpp
     scene_controller.cpp
     yaml_config.cpp
+    actions/action_checkpoint.cpp
+    actions/action_start.cpp
+    actions/action_finish.cpp
+    actions/action_hint.cpp
+    actions/action_road.cpp
     PUBLIC
     # .h files
     cityselection.h
@@ -18,4 +24,11 @@ target_sources(taller_editor
     item_builder.h
     scene_controller.h
     yaml_config.h
+    actions/action_checkpoint.h
+    actions/action_start.h
+    actions/action_finish.h
+    actions/action_hint.h
+    actions/action_road.h
+    actions/action_result.h
+    actions/actions.h
     )

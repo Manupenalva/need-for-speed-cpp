@@ -7,9 +7,11 @@
 #include <ostream>
 #include <thread>
 
+#include "../common/constants.h"
 #include "../common/gameLoop_timer.h"
 #include "../libs/box2d/include/box2d/box2d.h"
 #include "events/actionmessage.h"
+#include "events/cheatmessage.h"
 #include "events/selectcarmessage.h"
 
 #include "carBuilder.h"
@@ -17,11 +19,20 @@
 #include "mapCollisionBuilder.h"
 #include "raceBuilder.h"
 #define TARGET_FPS 60
+#define TARGET_FPS_INTERVAL 30
+#define INTERVAL_WAIT_TIME 10        // segundos
+#define FRAME_INTERVAL_TO_CLOSE 300  // segundos
+#define POSITIONS_WAIT_TIME 10
 
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
         std::shared_ptr<RaceStruct> race_monitor):
-        user_commands_queue(user_commands_queue), race_monitor(race_monitor), races(), frames(0) {}
+        user_commands_queue(user_commands_queue),
+        race_monitor(race_monitor),
+        races(),
+        frames(0),
+        countdown_remaining(0),
+        car_constants(std::make_shared<CarConstants>()) {}
 
 void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action) {
     players_cars[player_id].update_input(action);
@@ -33,13 +44,48 @@ void Gameloop::upgrade_car_stats(const uint16_t& player_id, const uint8_t& actio
 
 void Gameloop::broadcast_players(const int& race_index) {
     ServerMessageDTO msg = races[race_index]->get_broadcast_message(frames);
-
+    msg.state.countdown_time = countdown_remaining;
     race_monitor->broadcast(msg);
+}
+
+void Gameloop::broadcast_positions(int race_index) {
+    ServerMessageDTO msg;
+    msg.type = MsgType::RACE_POSITIONS;
+    msg.positions = races[race_index]->get_race_results();
+    race_monitor->broadcast(msg);
+    std::this_thread::sleep_for(std::chrono::seconds(POSITIONS_WAIT_TIME));
+    msg.type = MsgType::ACCUMULATED_POSITIONS;
+    msg.positions = get_acumullated_times();
+    race_monitor->broadcast(msg);
+    std::this_thread::sleep_for(std::chrono::seconds(POSITIONS_WAIT_TIME));
 }
 
 void Gameloop::broadcast_event(const MsgType msg_type) {
     ServerMessageDTO msg;
     msg.type = msg_type;
+    race_monitor->broadcast(msg);
+}
+
+void Gameloop::broadcast_interval(const int& race_index) {
+    ServerMessageDTO msg = races[race_index]->get_interval_message();
+    race_monitor->broadcast(msg);
+}
+
+void Gameloop::broadcast_map_data(const uint8_t& city_code) {
+    ServerMessageDTO msg;
+    msg.type = MsgType::SEND_MAP_NUMBER;
+    msg.map_number = city_code;
+    race_monitor->broadcast(msg);
+}
+
+void Gameloop::broadcast_minimap_info(int race_index) {
+    ServerMessageDTO msg;
+    msg.type = MsgType::SEND_MINIMAP_INFO;
+
+    MinimapInfo minimap_info;
+    minimap_info.checkpoints = races[race_index]->get_checkpoints_info();
+    minimap_info.arrows = races[race_index]->get_checkpoints_arrows();
+    msg.minimap_info = minimap_info;
     race_monitor->broadcast(msg);
 }
 
@@ -52,7 +98,7 @@ void Gameloop::initialize_races() {
 }
 
 void Gameloop::receive_selected_cars() {
-    CarBuilder builder("../server/assets/cars_configs/cars_config.yaml");
+    CarBuilder builder("../server/assets/cars_configs/cars_config.yaml", car_constants);
     while (should_keep_running()) {
         std::shared_ptr<ClientHandlerMessage> base_msg;
 
@@ -73,42 +119,82 @@ void Gameloop::receive_selected_cars() {
                 return;
             }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 }
 
-void Gameloop::handle_upgrades_phase() {
-    std::this_thread::sleep_for(std::chrono::seconds(10));
-
-    std::shared_ptr<ClientHandlerMessage> base_msg;
-    while (user_commands_queue->try_pop(base_msg) && should_keep_running()) {
-        if (base_msg->get_msg_type() != MsgType::DRIVING_EVENT) {
-            continue;
-        }
-        std::shared_ptr<ActionMessage> msg = std::static_pointer_cast<ActionMessage>(base_msg);
-        for (const auto& action: msg->get_actions()) {
-            upgrade_car_stats(msg->get_client_id(), action);
-        }
-    }
-}
-
-void Gameloop::handle_race(const int& race_index) {
-    broadcast_event(MsgType::RACE_STARTED);
-
-    frames = 0;
+void Gameloop::handle_upgrades_phase(const int& race_index) {
     GameLoopTimer timer(TARGET_FPS);
+    int frames_interval = 0;
     uint32_t iterations_behind = 1;
-    races[race_index]->start_race();
-
-    while (!races[race_index]->is_finished() && should_keep_running()) {
+    while (should_keep_running() && frames_interval < FRAME_INTERVAL_TO_CLOSE) {
         std::shared_ptr<ClientHandlerMessage> base_msg;
-        while (user_commands_queue->try_pop(base_msg)) {
+        while (user_commands_queue->try_pop(base_msg) && should_keep_running()) {
             if (base_msg->get_msg_type() != MsgType::DRIVING_EVENT) {
                 continue;
             }
             std::shared_ptr<ActionMessage> msg = std::static_pointer_cast<ActionMessage>(base_msg);
             for (const auto& action: msg->get_actions()) {
-                update_car_input(msg->get_client_id(), action);
+                upgrade_car_stats(msg->get_client_id(), action);
+            }
+        }
+        broadcast_interval(race_index);
+        frames_interval++;
+        timer.sleep_and_calc_next_it(iterations_behind);
+    }
+
+    broadcast_event(MsgType::INTERVAL_CLOSED);
+}
+
+void Gameloop::handle_countdown(int race_index) {
+    countdown_remaining = COUNTDOWN_TIME;
+    broadcast_players(race_index);
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    GameLoopTimer timer(10);
+    std::chrono::steady_clock::time_point countdown_start_time = std::chrono::steady_clock::now();
+    uint32_t iterations_behind = 1;
+    while (should_keep_running()) {
+        auto transcurred = std::chrono::steady_clock::now() - countdown_start_time;
+        float passed = std::chrono::duration<float>(transcurred).count();
+
+        // segundos pendientes redondeando hacia arriba
+        countdown_remaining = COUNTDOWN_TIME - static_cast<int>(std::ceil(passed));
+        if (countdown_remaining <= 0) {
+            countdown_remaining = 0;
+            return;
+        }
+        broadcast_players(race_index);
+        frames++;
+        timer.sleep_and_calc_next_it(iterations_behind);
+    }
+}
+
+void Gameloop::handle_race(const int& race_index) {
+    if (race_index != 0) {
+        std::this_thread::sleep_for(std::chrono::seconds(INTERVAL_WAIT_TIME));
+    }
+    broadcast_event(MsgType::RACE_STARTED);
+    uint8_t city_code = races[race_index]->get_city_code();
+    broadcast_map_data(city_code);
+    broadcast_minimap_info(race_index);
+    frames = 0;
+    races[race_index]->start_race();
+    handle_countdown(race_index);
+    GameLoopTimer timer(TARGET_FPS);
+    uint32_t iterations_behind = 1;
+
+    while (!races[race_index]->is_finished() && should_keep_running()) {
+        std::shared_ptr<ClientHandlerMessage> base_msg;
+        while (user_commands_queue->try_pop(base_msg)) {
+            if (base_msg->get_msg_type() == MsgType::DRIVING_EVENT) {
+                std::shared_ptr<ActionMessage> msg =
+                        std::static_pointer_cast<ActionMessage>(base_msg);
+                for (const auto& action: msg->get_actions()) {
+                    update_car_input(msg->get_client_id(), action);
+                }
+            } else if (base_msg->get_msg_type() == MsgType::CHEAT_CODE) {
+                std::shared_ptr<CheatMessage> msg =
+                        std::static_pointer_cast<CheatMessage>(base_msg);
+                handle_cheat_code(msg->get_client_id(), msg->get_cheat_code(), race_index);
             }
         }
 
@@ -118,24 +204,54 @@ void Gameloop::handle_race(const int& race_index) {
 
         broadcast_players(race_index);
         frames++;
-
         timer.sleep_and_calc_next_it(iterations_behind);
     }
 
     broadcast_event(MsgType::RACE_FINISHED);
+    broadcast_positions(race_index);
+    if (race_index == static_cast<int>(races.size()) - 1)
+        return;
+    handle_upgrades_phase(race_index);
+}
 
-    handle_upgrades_phase();
+void Gameloop::handle_cheat_code(const uint16_t& player_id, const CheatCode& cheat_code,
+                                 int race_index) {
+    switch (cheat_code) {
+        case CheatCode::INFINITE_HEALTH:
+            players_cars[player_id].activate_infinite_health();
+            break;
+        case CheatCode::WIN_AUTOMATICALLY:
+            races[race_index]->force_finish_race(player_id);
+            break;
+        case CheatCode::LOSE_AUTOMATICALLY:
+            races[race_index]->force_lose_race(player_id);
+            break;
+        case CheatCode::MAX_STATS:
+            players_cars[player_id].maximize_stats();
+            break;
+        default:
+            break;
+    }
 }
 
 void Gameloop::run() {
     broadcast_event(MsgType::GAME_START);
     receive_selected_cars();
     initialize_races();
-    std::cout << "Arrancando la carrera" << std::endl;
     for (size_t i = 0; i < races.size(); i++) {
         handle_race(i);
         if (!should_keep_running())
             return;
     }
     broadcast_event(MsgType::GAME_END);
+}
+
+std::vector<std::pair<uint16_t, float>> Gameloop::get_acumullated_times() {
+    std::vector<std::pair<uint16_t, float>> times_vector;
+    for (const auto& [car, id]: players_cars) {
+        times_vector.emplace_back(car, players_cars[car].get_total_time());
+    }
+    std::sort(times_vector.begin(), times_vector.end(),
+              [](const auto& a, const auto& b) { return a.second < b.second; });
+    return times_vector;
 }

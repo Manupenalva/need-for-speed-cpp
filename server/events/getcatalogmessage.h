@@ -3,9 +3,10 @@
 
 #include "clienthandlermessage.h"
 
-class GetCatalogMessage : public ClientHandlerMessage {
+class GetCatalogMessage: public ClientHandlerMessage {
 public:
-    explicit GetCatalogMessage(int client_id) : ClientHandlerMessage(client_id, MsgType::GET_CAR_CATALOG) {}
+    explicit GetCatalogMessage(int client_id):
+            ClientHandlerMessage(client_id, MsgType::GET_CAR_CATALOG) {}
 };
 
 #endif
