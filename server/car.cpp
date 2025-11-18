@@ -28,9 +28,10 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
 void Car::add_to_world(b2WorldId world, Position start_position) {
     state.x = start_position.x;
     state.y = start_position.y;
-    state.angle = 0.0f;
+    state.angle = start_position.angle;
     state.health = static_cast<uint16_t>(max_health);
     state.exploded = false;
+    state.crashed = false;
 
     bridge_layer = BridgeLayer::NONE;
 
