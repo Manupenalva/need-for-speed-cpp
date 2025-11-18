@@ -8,6 +8,8 @@
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QTimer>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 #include <string>
 
 #include "../../common/protocol.h"
@@ -43,6 +45,8 @@ private:
 
     QStackedWidget* stack = nullptr;
     QTimer* timer = nullptr;
+    QMediaPlayer* musicPlayer = nullptr;
+    QAudioOutput* audioOutput = nullptr;
 
     bool host;
     int raceC;

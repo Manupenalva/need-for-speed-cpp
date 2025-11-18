@@ -41,9 +41,25 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent):
     setWindowTitle("Need for Speed 2D - Lobby");
     resize(600, 500);
     stack->setCurrentIndex(0);
+
+    audioOutput = new QAudioOutput(this);
+    musicPlayer = new QMediaPlayer(this);
+    musicPlayer->setAudioOutput(audioOutput);
+
+    QString musicPath = "../client/resources/sounds/Need For Speed Music.mp3";
+    musicPlayer->setSource(QUrl::fromLocalFile(musicPath));
+
+    audioOutput->setVolume(0.5);
+    musicPlayer->setLoops(QMediaPlayer::Infinite);
+    musicPlayer->play();
 }
 
-Lobby::~Lobby() { delete ui; }
+Lobby::~Lobby() { 
+    if (musicPlayer){
+        musicPlayer->stop();
+    }
+    delete ui; 
+}
 
 void Lobby::menuScreen() {
     stack->setCurrentIndex(0);
@@ -138,6 +154,7 @@ void Lobby::updateLobby() {
         msg.type = MsgType::SELECT_CAR;
         msg.car_id = chosenCar;
         protocol.send_client_message(msg);
+        musicPlayer->stop();
         this->close();
     }
 }
