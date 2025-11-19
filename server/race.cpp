@@ -7,6 +7,7 @@
 #include "../common/carState.h"
 #include "events/actionmessage.h"
 
+#include "carBuilder.h"
 #include "hint.h"
 #include "mapCollisionBuilder.h"
 
@@ -56,9 +57,10 @@ b2WorldId Race::start_race() {
         i++;
     }
 
+    CarBuilder builder("../server/assets/cars_configs/cars_config.yaml");
     std::transform(map_data.spawn_positions.begin(), map_data.spawn_positions.end(),
                    std::back_inserter(npcs), [&](const Position& spawn_position) {
-                       return std::make_unique<Npc>(spawn_position, corners, world);
+                       return builder.create_npc(spawn_position, corners, world);
                    });
 
     return world;
