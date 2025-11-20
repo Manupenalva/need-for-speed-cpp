@@ -143,7 +143,7 @@ void MessageSender::serialize_state(const State& state) {
     append_bytes(&type, CODE_BYTES);
     append_uint16(static_cast<uint16_t>(state.countdown_time));
     append_uint32(state.frame);
-    append_uint16(state.cars.size());
+    append_uint16(static_cast<uint16_t>(state.cars.size()));
 
     for (const auto& car: state.cars) {
         append_car_state(car);

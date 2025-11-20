@@ -67,7 +67,9 @@ void Receiver::run() {
 
             queue->push(game_message);
         } catch (const ClosedQueue& e) {
-            queue = lobby_queue;
+            if (queue == lobby_queue) {
+                return;
+            }
             continue;
         } catch (const std::exception& e) {
             stop();
@@ -81,7 +83,9 @@ void Receiver::set_queue(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMess
 }
 
 void Receiver::kill() {
-    stop();
+    if (should_keep_running()) {
+        stop();
+    }
     try {
         protocol.shutdown_receive();
     } catch (const std::exception&

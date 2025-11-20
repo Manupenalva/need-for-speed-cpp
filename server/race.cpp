@@ -123,6 +123,9 @@ void Race::update_state() {
 
 CheckpointInfo Race::get_next_checkpoint_info(const uint16_t car_id) {
     const PlayerRaceStatus& status = players_status[car_id];
+    if (status.has_finished) {
+        return {0, 0.0f, 0.0f, 0.0f, 0.0f, COMMON_CHECKPOINT};
+    }
     Position checkpoint = checkpoints[status.current_checkpoint_index];
     uint8_t type = COMMON_CHECKPOINT;
     if (status.current_checkpoint_index == checkpoints.size() - 1) {
@@ -139,6 +142,9 @@ CheckpointInfo Race::get_next_checkpoint_info(const uint16_t car_id) {
 
 CheckpointArrow Race::get_next_checkpoint_arrow(const uint16_t car_id) {
     const PlayerRaceStatus& status = players_status[car_id];
+    if (status.has_finished) {
+        return {0.0f, 0.0f, 0.0f};
+    }
     if (status.current_hint_index < hints.size()) {
         Hint hint = hints[status.current_hint_index];
         return {static_cast<float>(hint.position.x), static_cast<float>(hint.position.y),

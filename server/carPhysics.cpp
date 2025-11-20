@@ -47,7 +47,8 @@ void CarPhysics::accelerate() {
     if (speed >= phy_const.MIN_SPEED) {
         speedRatio = max_speed / speed;
     }
-    float health_factor = 0.5f + 0.5f * car_state.health / car_state.max_health; // Como maximo disminuye a la mitad
+    float health_factor = 0.5f + 0.5f * car_state.health /
+                                         car_state.max_health;  // Como maximo disminuye a la mitad
     // Aceleracion basada en la masa y velocidad actual
     float scaledAcceleration = (1.0f + speedRatio) * phy_const.BASE_ACCELERATION *
                                acceleration_factor * (1.0f + mass_factor) * health_factor;
