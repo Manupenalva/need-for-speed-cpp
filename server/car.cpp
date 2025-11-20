@@ -203,6 +203,7 @@ void Car::maximize_stats() {
     drivability = car_constants->car.MAX_DRIVABILITY;
     physics->set_stats(max_speed, acceleration, mass, drivability);
     state.max_health = static_cast<uint16_t>(max_health);
+    state.health = static_cast<uint16_t>(max_health);
 }
 
 bool Car::exploded() { return state.exploded; }
