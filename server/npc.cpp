@@ -11,8 +11,9 @@ struct RaycastContext {
     b2ShapeId selfShape;
 };
 
-Npc::Npc(const Position& position, std::vector<Corner>& corners, b2WorldId world):
-        state(position.x, position.y, 0.0f, 1, false),
+Npc::Npc(const Position& position, std::vector<Corner>& corners, b2WorldId world,
+         const float& car_long, const float& car_width, const int& car_type):
+        state(position.x, position.y, 0.0f, static_cast<uint16_t>(car_type), false),
         world(world),
         corners(corners),
         current_corner_id(0),
@@ -29,7 +30,7 @@ Npc::Npc(const Position& position, std::vector<Corner>& corners, b2WorldId world
     b2Body_EnableHitEvents(body, true);
 
     b2ShapeDef shapeDef = b2DefaultShapeDef();
-    b2Polygon box = b2MakeBox(16.0f, 13.0f);
+    b2Polygon box = b2MakeBox((car_long / 2.0f), (car_width / 2.0f));
     shape = b2CreatePolygonShape(body, &shapeDef, &box);
     b2Shape_EnableContactEvents(shape, true);
     b2Shape_EnableHitEvents(shape, true);

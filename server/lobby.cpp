@@ -87,10 +87,10 @@ void Lobby::add_player_to_race(int playerId, int raceId) {
     ServerMessageDTO response;
     response.type = MsgType::JOIN_RESULT;
     if (!result) {
-        response.joined = false;
+        response.result = false;
     } else {
         client->set_race_id(raceId);
-        response.joined = true;
+        response.result = true;
     }
     client->send_msg(response);
 }

@@ -4,7 +4,7 @@ Sender::Sender(Protocol& protocol, int id): protocol(protocol), id(id) { this->s
 
 void Sender::run() {
     send_client_id();
-    while (should_keep_running()) {
+    while (should_keep_running() && protocol.socket_alive()) {
 
         try {
             ServerMessageDTO msg = queue.pop();

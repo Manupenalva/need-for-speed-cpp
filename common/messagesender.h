@@ -32,7 +32,7 @@ private:
     void serialize_state(const State& state);
     void serialize_lobbies(const std::vector<LobbyInfo>& lobbies);
     void serialize_events(const std::vector<uint8_t>& events);
-    void serialize_join_result(bool joined);
+    void serialize_result(bool result, MsgType type);
     void serialize_lobby(const int lobby_id, MsgType type);
     void serialize_client_id(int id);
     void serialize_lobby_update(const LobbyInfo& lobby_info);
@@ -44,6 +44,7 @@ private:
     void serialize_minimap_info(const MinimapInfo& minimap_info);
     void serialize_race_positions(const std::vector<std::pair<uint16_t, float>>& positions);
     void serialize_accumulated_positions(const std::vector<std::pair<uint16_t, float>>& positions);
+    void serialize_username(const std::string& name);
 
     void append_car_state(const CarState& car);
     void append_npc_state(const NpcState& npc);

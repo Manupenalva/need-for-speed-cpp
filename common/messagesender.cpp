@@ -17,7 +17,8 @@ void MessageSender::send_message(const ServerMessageDTO& msg) {
         //     serialize_lobbies(msg.lobbies);
         //     break;
         case MsgType::JOIN_RESULT:
-            serialize_join_result(msg.joined);
+        case MsgType::NAME_RESULT:
+            serialize_result(msg.result, msg.type);
             break;
         case MsgType::SEND_CLIENT_ID:
             serialize_client_id(msg.id);
@@ -67,6 +68,9 @@ void MessageSender::send_message(const ClientMessageDTO& msg) {
             break;
         case MsgType::CHEAT_CODE:
             serialize_cheat_code(msg.cheat_code);
+            break;
+        case MsgType::SEND_NAME:
+            serialize_username(msg.name);
             break;
         default:
             buffer.resize(CODE_BYTES);
@@ -137,13 +141,13 @@ void MessageSender::serialize_lobby(const int lobby_id, MsgType type) {
 
 void MessageSender::serialize_state(const State& state) {
     buffer.resize(CODE_BYTES + COUNTDOWN_BYTES + 2 * LENGTH_BYTES + AMOUNT_BYTES +
-                  state.num_cars * CAR_STATE_BYTES + state.npcs.size() * NPC_STATE_BYTES);
+                  state.cars.size() * CAR_STATE_BYTES + state.npcs.size() * NPC_STATE_BYTES);
     offset = 0;
     MsgType type = MsgType::STATE_UPDATE;
     append_bytes(&type, CODE_BYTES);
     append_uint16(static_cast<uint16_t>(state.countdown_time));
     append_uint32(state.frame);
-    append_uint16(state.num_cars);
+    append_uint16(static_cast<uint16_t>(state.cars.size()));
 
     for (const auto& car: state.cars) {
         append_car_state(car);
@@ -190,6 +194,15 @@ void MessageSender::serialize_cheat_code(const CheatCode cheat_code) {
     append_bytes(&cheat_code_byte, 1);
 }
 
+void MessageSender::serialize_username(const std::string& name) {
+    buffer.resize(CODE_BYTES + LENGTH_BYTES + name.size());
+    offset = 0;
+    MsgType type = MsgType::SEND_NAME;
+    append_bytes(&type, CODE_BYTES);
+    append_uint16(static_cast<uint16_t>(name.size()));
+    append_bytes(name.data(), name.size());
+}
+
 // void MessageSender::serialize_lobbies(const std::vector<LobbyInfo>& lobbies) {
 
 //     offset = 0;
@@ -206,13 +219,12 @@ void MessageSender::serialize_cheat_code(const CheatCode cheat_code) {
 //     }
 // }
 
-void MessageSender::serialize_join_result(bool joined) {
-    buffer.resize(CODE_BYTES + 1);
+void MessageSender::serialize_result(bool result, MsgType type) {
+    buffer.resize(CODE_BYTES + BOOL_BYTES);
     offset = 0;
-    MsgType type = MsgType::JOIN_RESULT;
     append_bytes(&type, CODE_BYTES);
-    uint8_t joined_byte = joined ? 0x01 : 0x00;
-    append_bytes(&joined_byte, 1);
+    uint8_t result_byte = result ? 0x01 : 0x00;
+    append_bytes(&result_byte, 1);
 }
 
 void MessageSender::serialize_client_id(int id) {

@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <random>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -26,7 +27,8 @@ private:
     int previous_corner_id;
 
 public:
-    Npc(const Position& position, std::vector<Corner>& corners, b2WorldId world);
+    Npc(const Position& position, std::vector<Corner>& corners, b2WorldId world,
+        const float& npc_long, const float& npc_width, const int& car_type);
     void update_position();
     NpcState get_state() const;
 
