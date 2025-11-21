@@ -10,6 +10,7 @@
 #include "events/joinlobbymessage.h"
 #include "events/quitgamemessage.h"
 #include "events/selectcarmessage.h"
+#include "events/sendnamemessage.h"
 #include "events/setreadymessage.h"
 #include "events/startracemessage.h"
 
@@ -60,6 +61,9 @@ void Receiver::run() {
                     break;
                 case MsgType::CHEAT_CODE:
                     game_message = std::make_shared<CheatMessage>(id, msg.cheat_code);
+                    break;
+                case MsgType::SEND_NAME:
+                    game_message = std::make_shared<SendNameMessage>(id, msg.name);
                     break;
                 default:
                     continue;

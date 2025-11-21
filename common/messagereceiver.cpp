@@ -26,6 +26,9 @@ ClientMessageDTO MessageReceiver::recv_client_message() {
         case MsgType::CHEAT_CODE:
             client_msg.cheat_code = recv_cheat_code();
             break;
+        case MsgType::SEND_NAME:
+            client_msg.name = recv_username();
+            break;
         default:
             break;
     }
@@ -44,7 +47,8 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
             server_msg.state = recv_state_update();
             break;
         case MsgType::JOIN_RESULT:
-            server_msg.joined = recv_join_result();
+        case MsgType::NAME_RESULT:
+            server_msg.result = recv_result();
             break;
         case MsgType::SEND_CLIENT_ID:
             server_msg.id = static_cast<int>(obtain_uint16());
@@ -97,6 +101,11 @@ std::vector<LobbyInfo> MessageReceiver::recv_lobbies_info() {
     return lobbies;
 }
 
+std::string MessageReceiver::recv_username() {
+    uint16_t name_size = obtain_uint16();
+    return obtain_string(name_size);
+}
+
 MinimapInfo MessageReceiver::recv_minimap_info() {
     MinimapInfo minimap_info;
     uint16_t num_checkpoints = obtain_uint16();
@@ -131,7 +140,7 @@ State MessageReceiver::recv_state_update() {
     return state;
 }
 
-bool MessageReceiver::recv_join_result() {
+bool MessageReceiver::recv_result() {
     uint8_t result = obtain_byte();
     return result != 0;
 }

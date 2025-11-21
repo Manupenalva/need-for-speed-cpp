@@ -108,7 +108,7 @@ void Lobby::connectServer() {
         return;
     }
 
-    if (!response.joined) {
+    if (!response.result) {
         QMessageBox::warning(this, "Error",
                              "Could not join the game. It may be full or nonexistent.");
         return;

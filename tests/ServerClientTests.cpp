@@ -33,14 +33,14 @@ TEST_F(ProtocolTestServer, JoinResult) {
 
     ServerMessageDTO send_msg;
     send_msg.type = MsgType::JOIN_RESULT;
-    send_msg.joined = true;
+    send_msg.result = true;
 
     sender.send_message(send_msg);
 
     ServerMessageDTO recv_msg = receiver.recv_server_message();
 
     EXPECT_EQ(recv_msg.type, MsgType::JOIN_RESULT);
-    EXPECT_TRUE(recv_msg.joined);
+    EXPECT_TRUE(recv_msg.result);
 }
 
 TEST_F(ProtocolTestServer, ClientID) {
@@ -294,4 +294,18 @@ TEST_F(ProtocolTestServer, AccumulatedPositions) {
     EXPECT_EQ(recv_msg.type, MsgType::ACCUMULATED_POSITIONS);
     ASSERT_EQ(recv_msg.positions.size(), 3);
     EXPECT_TRUE(verify_positions(recv_msg.positions, send_msg.positions));
+}
+
+TEST_F(ProtocolTestServer, NameResult) {
+
+    ServerMessageDTO send_msg;
+    send_msg.type = MsgType::NAME_RESULT;
+    send_msg.result = true;
+
+    sender.send_message(send_msg);
+
+    ServerMessageDTO recv_msg = receiver.recv_server_message();
+
+    EXPECT_EQ(recv_msg.type, MsgType::NAME_RESULT);
+    EXPECT_TRUE(recv_msg.result);
 }
