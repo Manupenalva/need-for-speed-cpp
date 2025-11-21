@@ -56,7 +56,7 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
         }
         QString filePath = QString("../server/assets/race_configs/%1.yaml").arg(fileName);
         exportToYaml(filePath);
-        QMessageBox::information(this, "Map Saved", "Map saved successfully in:\n %1!").arg(filePath);
+        QMessageBox::information(this, "Map Saved", QString("Map saved successfully in:\n %1!").arg(filePath));
         QCoreApplication::quit();
     });
 
@@ -225,7 +225,9 @@ void MapCanvas::handleDelete(const QPoint& pos) {
     QRectF pickArea(scenePos.x() - GRID_SIZE / 2.0, scenePos.y() - GRID_SIZE / 2.0, GRID_SIZE,
                     GRID_SIZE);
     auto items = scene->items(pickArea);
-
+    if (items.isEmpty()) {
+        return;
+    }
     QGraphicsItem* item = items.first();
     if (!item->data(TYPE).isValid())
         return;
