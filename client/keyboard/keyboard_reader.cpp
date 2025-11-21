@@ -7,8 +7,7 @@ KeyboardReader::KeyboardReader(Queue<ClientMessageDTO>& queue): message_queue(qu
     handlers.push_back(std::make_unique<QuitEventHandler>(message_queue));
 }
 
-void KeyboardReader::listen_to_keyboard(std::atomic<bool>& running, const bool in_interval,
-                                        const bool in_race) {
+void KeyboardReader::listen_to_keyboard(bool& running, const bool in_interval, const bool in_race) {
     SDL_Event event;
     ClientMessageDTO msg;
     while (SDL_PollEvent(&event)) {

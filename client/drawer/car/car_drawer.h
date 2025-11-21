@@ -21,13 +21,17 @@ private:
     bool is_player = false;
     bool is_client_car = false;
 
-    CarState calculate_position(const CarState& car, const int iterations_ahead);
-    SDL2pp::Rect draw_car(const CarState& car, const CarScreenPos& screen_pos);
-
     void draw_npcs(const RenderedState& rendered_state);
     void draw_clients_cars(RenderedState& rendered_state);
-    void draw_border(const CarState& player_car, int screen_x, int screen_y);
+    SDL2pp::Rect draw_car(const CarState& car, const CarScreenPos& screen_pos);
+
+    CarState calculate_position(const CarState& car, const int iterations_ahead);
     CarScreenPos calculate_map_scale(const CarState& car, const SDL2pp::Rect& map_rect);
+
+    bool is_drawable(const SDL2pp::Rect& car_rect);
+    void appply_visual_effects(const CarState& car, const CarScreenPos& screen_pos,
+                               Sprite& car_sprite);
+    void draw_border(const CarState& player_car, int screen_x, int screen_y);
 
 public:
     explicit CarDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager);

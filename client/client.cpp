@@ -3,6 +3,7 @@
 #include <iostream>
 
 Client::Client(Protocol& protocol, const int id):
+        keep_running(true),
         protocol(protocol),
         events_queue(),
         server_queue(),
@@ -29,9 +30,9 @@ void Client::run() {
         uint32_t iterations_ahead = 0;
         sounds_manager.play_music(MAIN_MUSIC);
 
-        while (_keep_running) {
+        while (keep_running) {
             // Procesar todos los mensajes entrantes y actualizar el estado interno
-            kb_reader.listen_to_keyboard(_keep_running, actual_state.upgrades_interval,
+            kb_reader.listen_to_keyboard(keep_running, actual_state.upgrades_interval,
                                          actual_state.is_in_race);
 
             // Ejecutar una iteración lógica (actualizaciones locales / físicas)
@@ -51,15 +52,13 @@ void Client::run() {
 
 void Client::stop() {
     protocol.shutdown_receive();
-
     events_queue.close();
     server_queue.close();
     sender.stop();
     receiver.stop();
     sender.join();
     receiver.join();
-    _keep_running = false;
-    _is_alive = false;
+    keep_running = false;
 }
 
 void Client::init_resources() {
@@ -150,6 +149,6 @@ void Client::init_game_handlers() {
 
     msg_handlers[MsgType::GAME_END] = [this](const ServerMessageDTO& server_msg) {
         actual_state.message = server_msg;
-        _keep_running = false;
+        keep_running = false;
     };
 }
