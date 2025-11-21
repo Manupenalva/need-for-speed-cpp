@@ -1,9 +1,9 @@
-#ifndef ACTION_ROAD_H
-#define ACTION_ROAD_H
+#ifndef ACTION_START_LINE_H
+#define ACTION_START_LINE_H
 
 #include "actions.h"
 
-class ActionRoad: public Actions {
+class ActionStartLine: public Actions {
 public:
     ActionResult execute(SceneController& controller, const DragInfo& info, int x, int y) override;
 

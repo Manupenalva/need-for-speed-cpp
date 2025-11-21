@@ -198,7 +198,7 @@ void MapCanvas::importFromYaml(const QString& filePath) {
 }
 
 void MapCanvas::setActions() {
-    actions.emplace(QStringLiteral(ROAD_TYPE), std::make_unique<ActionRoad>());
+    actions.emplace(QStringLiteral(LINE_TYPE), std::make_unique<ActionStartLine>());
     actions.emplace(QStringLiteral(CHECKPOINT_TYPE), std::make_unique<ActionCheckpoint>());
     actions.emplace(QStringLiteral(START_TYPE), std::make_unique<ActionStart>());
     actions.emplace(QStringLiteral(FINISH_TYPE), std::make_unique<ActionFinish>());
