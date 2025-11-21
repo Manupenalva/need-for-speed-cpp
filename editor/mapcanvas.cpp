@@ -56,7 +56,7 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
         }
         QString filePath = QString("../server/assets/race_configs/%1.yaml").arg(fileName);
         exportToYaml(filePath);
-        QMessageBox::information(this, "Map Saved", "Map saved successfully!");
+        QMessageBox::information(this, "Map Saved", "Map saved successfully in:\n %1!").arg(filePath);
         QCoreApplication::quit();
     });
 
