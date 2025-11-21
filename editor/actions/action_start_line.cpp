@@ -1,7 +1,7 @@
 #include "action_start_line.h"
 
 ActionResult ActionStartLine::execute(SceneController& controller, const DragInfo& info, int x, int y) {
-    if (controller.countItemsOfType(LINE_TYPE) >= 1) {
+    if (controller.countItemsOfType(LINE_TYPE) >= MAX_START_LINE) {
         return ActionResult{false,
                             false,
                             {},
@@ -19,7 +19,7 @@ YAML::Node ActionStartLine::writeNode(const QGraphicsItem* item) const {
     node["x"] = static_cast<int>(pos.x());
     node["y"] = static_cast<int>(pos.y());
     int rotation = item->data(ROTATION).toInt();
-    if (rotation == HORIZONTAL_ROTATION) {
+    if (rotation == LINE_ROTATION) {
         node["rotation"] = "vertical";
     } else {
         node["rotation"] = "horizontal";
@@ -34,9 +34,7 @@ ItemRecord ActionStartLine::loadNode(const YAML::Node& node) const {
     if (node["rotation"]) {
         QString rotationStr = QString::fromStdString(node["rotation"].as<std::string>());
         if (rotationStr == "vertical")
-            rotationDeg = HORIZONTAL_ROTATION;
-        else
-            rotationDeg = VERTICAL_ROTATION;
+            rotationDeg = LINE_ROTATION;
     }
     return ItemRecord{DragInfo(LINE_TYPE, rotationDeg, QString{}, -1), QPoint(x, y)};
 }

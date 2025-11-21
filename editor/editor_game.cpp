@@ -57,10 +57,10 @@ void EditorGame::setUpTools() {
     rotateIcon(ui->toolStartRight, START_PATH_2, START_RIGHT);
     rotateIcon(ui->toolStartDown, START_PATH_1, START_DOWN);
     rotateIcon(ui->toolFinishHorizontal, FINISH_PATH, HORIZONTAL_ROTATION);
-    rotateIcon(ui->toolStartLineVertical, LINE_PATH, HORIZONTAL_ROTATION);
+    rotateIcon(ui->toolStartLineVertical, LINE_PATH, LINE_ROTATION);
 
     dragMovement(ui->toolStartLine, LINE_TYPE, LINE_PATH);
-    dragMovement(ui->toolStartLineVertical, LINE_TYPE, LINE_PATH, HORIZONTAL_ROTATION);
+    dragMovement(ui->toolStartLineVertical, LINE_TYPE, LINE_PATH, LINE_ROTATION);
     dragMovement(ui->toolCheckpointVertical, CHECKPOINT_TYPE, CHECKPOINT_PATH);
     dragMovement(ui->toolCheckpointHorizontal, CHECKPOINT_TYPE, CHECKPOINT_PATH,
                  HORIZONTAL_ROTATION);
