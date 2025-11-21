@@ -54,7 +54,7 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
             QMessageBox::warning(this, "Finish missing", "It is neccessary to be 1 finish line.");
             return;
         }
-        QString filePath = QString("../server/assets/race_configs/%1.yaml").arg(fileName);
+        QString filePath = QString("%1/%2.yaml").arg(SAVE_MAP, fileName);
         exportToYaml(filePath);
         QMessageBox::information(this, "Map Saved", QString("Map saved successfully in:\n %1!").arg(filePath));
         QCoreApplication::quit();
