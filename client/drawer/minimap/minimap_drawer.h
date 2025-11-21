@@ -24,11 +24,11 @@ private:
     bool car_behind;
 
     MapResources calculate_map_rects(const RenderedState& rendered_state,
-                                     const SDL2pp::Texture& tex);
+                                     const SDL2pp::Texture& tex, Scale scale_factors);
     void is_car_behind(const MapResources& map_info, const RenderedState& rendered_state,
                        SDL2pp::Texture& texture);
     void draw_map(const MapResources& map_info, SDL2pp::Texture& texture);
-    void draw_car(const MapResources& map_info, const CarState& client_car);
+    void draw_car(const MapResources& map_info, const CarState& client_car, Scale scale_factors);
     void draw_border(const MapResources& map_info);
 
 public:

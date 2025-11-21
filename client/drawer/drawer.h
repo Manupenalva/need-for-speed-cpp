@@ -10,6 +10,11 @@
 
 #include "renderedState.h"
 
+struct Scale {
+    float x;
+    float y;
+};
+
 class Drawer {
 protected:
     SDL2pp::Renderer& renderer;
@@ -17,6 +22,15 @@ protected:
 
     explicit Drawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager):
             renderer(renderer), texture_manager(texture_manager) {}
+
+    Scale get_window_scale_factor() {
+        int w, h;
+        SDL_GetRendererOutputSize(renderer.Get(), &w, &h);
+        ConfigReader& config = ConfigReader::get_instance();
+        float scale_x = static_cast<float>(w) / config.get_window_width();
+        float scale_y = static_cast<float>(h) / config.get_window_height();
+        return {scale_x, scale_y};
+    }
 
 public:
     virtual ~Drawer() = default;

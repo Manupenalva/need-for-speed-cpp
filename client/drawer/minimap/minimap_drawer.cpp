@@ -6,16 +6,17 @@ MinimapDrawer::MinimapDrawer(SDL2pp::Renderer& renderer, TextureManager& texture
 
 void MinimapDrawer::draw(RenderedState& rendered_state) {
     SDL2pp::Texture& tex = texture_manager.get_minimap_texture();
-    MapResources map_info = calculate_map_rects(rendered_state, tex);
+    Scale scale_factors = get_window_scale_factor();
+    MapResources map_info = calculate_map_rects(rendered_state, tex, scale_factors);
     is_car_behind(map_info, rendered_state, tex);
     draw_map(map_info, tex);
-    draw_car(map_info, rendered_state.client_car);
+    draw_car(map_info, rendered_state.client_car, scale_factors);
     draw_border(map_info);
     tex.SetAlphaMod(NORMAL_OPACITY);
 }
 
 MapResources MinimapDrawer::calculate_map_rects(const RenderedState& rendered_state,
-                                                const SDL2pp::Texture& tex) {
+                                                const SDL2pp::Texture& tex, Scale scale_factors) {
     ConfigReader& config = ConfigReader::get_instance();
 
     int half_w = HALF(tex.GetWidth());
@@ -37,7 +38,8 @@ MapResources MinimapDrawer::calculate_map_rects(const RenderedState& rendered_st
     SDL2pp::Rect src_rect(x, y, half_w, half_h);
 
     const int map_wide = config.get_map_wide();
-    SDL2pp::Rect dst_rect(MAP_MIN_X, MAP_MIN_Y, map_wide, map_wide);  // Minimapa cuadrado
+    SDL2pp::Rect dst_rect(MAP_MIN_X, MAP_MIN_Y, map_wide * scale_factors.x,
+                          map_wide * scale_factors.y);  // Minimapa cuadrado
 
     return {src_rect, dst_rect};
 }
@@ -58,7 +60,8 @@ void MinimapDrawer::draw_map(const MapResources& map_info, SDL2pp::Texture& text
     renderer.Copy(texture, map_info.src_rect, map_info.dst_rect);
 }
 
-void MinimapDrawer::draw_car(const MapResources& map_info, const CarState& client_car) {
+void MinimapDrawer::draw_car(const MapResources& map_info, const CarState& client_car,
+                             Scale scale_factors) {
     // Calcular posición del coche en el minimapa
     float scale_x = static_cast<float>(map_info.dst_rect.w) / map_info.src_rect.w;
     float scale_y = static_cast<float>(map_info.dst_rect.h) / map_info.src_rect.h;
@@ -69,7 +72,8 @@ void MinimapDrawer::draw_car(const MapResources& map_info, const CarState& clien
 
     SDL2pp::Rect car_dst_rect(car_minimap_x - car.src_rect.w / RESOURCE_DIVISOR,
                               car_minimap_y - car.src_rect.h / RESOURCE_DIVISOR,
-                              HALF(car.src_rect.w), HALF(car.src_rect.h));
+                              HALF(car.src_rect.w) * scale_factors.x,
+                              HALF(car.src_rect.h) * scale_factors.y);
 
     uint8_t prev_alpha = car.texture.GetAlphaMod();
     uint8_t alpha = car_behind ? BEHIND_MINIMAP_OPACITY : NORMAL_OPACITY;
