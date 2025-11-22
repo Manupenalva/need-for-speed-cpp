@@ -23,6 +23,7 @@
 #define INTERVAL_WAIT_TIME 10        // segundos
 #define FRAME_INTERVAL_TO_CLOSE 300  // segundos
 #define POSITIONS_WAIT_TIME 10
+#define POSITIONS_FPS 5
 
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
@@ -50,14 +51,31 @@ void Gameloop::broadcast_players(const int& race_index) {
 
 void Gameloop::broadcast_positions(int race_index) {
     ServerMessageDTO msg;
+    std::vector<ResultInfo> race_positions =
+            get_positions_message(races[race_index]->get_race_results());
+    std::vector<ResultInfo> accumulated_positions = get_acumullated_times();
+
+    GameLoopTimer timer(POSITIONS_FPS);
+    std::chrono::steady_clock::time_point pos_start_time = std::chrono::steady_clock::now();
+    uint32_t iterations_behind = 1;
+
     msg.type = MsgType::RACE_POSITIONS;
-    msg.positions = get_positions_message(races[race_index]->get_race_results());
-    race_monitor->broadcast(msg);
-    std::this_thread::sleep_for(std::chrono::seconds(POSITIONS_WAIT_TIME));
-    msg.type = MsgType::ACCUMULATED_POSITIONS;
-    msg.positions = get_acumullated_times();
-    race_monitor->broadcast(msg);
-    std::this_thread::sleep_for(std::chrono::seconds(POSITIONS_WAIT_TIME));
+    msg.positions = race_positions;
+    while (should_keep_running()) {
+        auto now = std::chrono::steady_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - pos_start_time);
+        if (elapsed.count() >= POSITIONS_WAIT_TIME) {
+            if (msg.type == MsgType::RACE_POSITIONS) {
+                msg.type = MsgType::ACCUMULATED_POSITIONS;
+                msg.positions = accumulated_positions;
+                pos_start_time = std::chrono::steady_clock::now();
+            } else {
+                return;
+            }
+        }
+        race_monitor->broadcast(msg);
+        timer.sleep_and_calc_next_it(iterations_behind);
+    }
 }
 
 void Gameloop::broadcast_event(const MsgType msg_type) {
