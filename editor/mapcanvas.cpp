@@ -47,7 +47,7 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
             return;
         }
         if (controller->countItemsOfType(START_TYPE) != MAX_PLAYERS) {
-            QMessageBox::warning(this, "Starts missing", "It is neccessary to be 8 starts points.");
+            QMessageBox::warning(this, "Cars missing", "It is neccessary to be 8 cars points.");
             return;
         }
         if (controller->countItemsOfType(FINISH_TYPE) != MAX_FINISH) {
@@ -56,7 +56,8 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
         }
         QString filePath = QString("%1/%2.yaml").arg(SAVE_MAP, fileName);
         exportToYaml(filePath);
-        QMessageBox::information(this, "Map Saved", QString("Map saved successfully in:\n %1!").arg(filePath));
+        QMessageBox::information(this, "Map Saved",
+                                 QString("Map saved successfully in:\n %1!").arg(filePath));
         QCoreApplication::quit();
     });
 

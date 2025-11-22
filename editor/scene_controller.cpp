@@ -1,5 +1,7 @@
 #include "scene_controller.h"
 
+#include <QHash>
+#include <QList>
 #include <algorithm>
 
 #include "editor_constants.h"
@@ -63,6 +65,7 @@ void SceneController::deleteHints(QGraphicsItem* checkpointItem) {
     for (auto* hint: hintToDelete) {
         deleteItem(hint);
     }
+    renumberCheckpoints();
 }
 
 void SceneController::deleteItem(QGraphicsItem* item) {
@@ -73,4 +76,48 @@ void SceneController::deleteItem(QGraphicsItem* item) {
     }
     scene->removeItem(item);
     delete item;
+}
+
+void SceneController::renumberCheckpoints() {
+    QList<QGraphicsItem*> checkpoints;
+    for (auto* item: scene->items()) {
+        const auto type = item->data(TYPE).toString();
+        if (type.contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
+            checkpoints.append(item);
+        }
+    }
+
+    if (checkpoints.isEmpty()) {
+        id = 0;
+        return;
+    }
+    std::sort(checkpoints.begin(), checkpoints.end(), [](QGraphicsItem* a, QGraphicsItem* b) {
+        return a->data(ID).toInt() < b->data(ID).toInt();
+    });
+
+    QHash<int, int> newCheckpoints;
+    int newId = 1;
+    for (auto* cp: checkpoints) {
+        int oldId = cp->data(ID).toInt();
+        newCheckpoints.insert(oldId, newId);
+        cp->setData(ID, newId);
+        for (auto* child: cp->childItems()) {
+            if (auto* text = dynamic_cast<QGraphicsSimpleTextItem*>(child)) {
+                text->setText(QString::number(newId));
+            }
+        }
+        ++newId;
+    }
+
+    id = newId - 1;
+
+    for (auto* item: scene->items()) {
+        const auto type = item->data(TYPE).toString();
+        if (type.contains(HINT_TYPE, Qt::CaseInsensitive)) {
+            int oldId = item->data(ID).toInt();
+            if (newCheckpoints.contains(oldId)) {
+                item->setData(ID, newCheckpoints.value(oldId));
+            }
+        }
+    }
 }

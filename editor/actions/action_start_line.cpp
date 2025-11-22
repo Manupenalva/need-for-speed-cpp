@@ -1,13 +1,17 @@
 #include "action_start_line.h"
 
-ActionResult ActionStartLine::execute(SceneController& controller, const DragInfo& info, int x, int y) {
+#include <string>
+
+ActionResult ActionStartLine::execute(SceneController& controller, const DragInfo& info, int x,
+                                      int y) {
     if (controller.countItemsOfType(LINE_TYPE) >= MAX_START_LINE) {
-        return ActionResult{false,
-                            false,
-                            {},
-                            QPointF{},
-                            "Limit reach",
-                            "There is a starting point in the map. Please remove to place a new one."};
+        return ActionResult{
+                false,
+                false,
+                {},
+                QPointF{},
+                "Limit reach",
+                "There is a starting point in the map. Please remove to place a new one."};
     }
     controller.handleDropEvent(info, x, y);
     return ActionResult{true, false, {}, QPointF{}};

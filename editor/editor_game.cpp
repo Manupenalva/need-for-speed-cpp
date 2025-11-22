@@ -41,7 +41,8 @@ void EditorGame::setUpNav() {
 }
 
 void EditorGame::setUpLoad() {
-    const auto path = QFileDialog::getOpenFileName(this, "Open YAML", SAVE_MAP, "YAML (*.yaml *.yml)");
+    const auto path =
+            QFileDialog::getOpenFileName(this, "Open YAML", SAVE_MAP, "YAML (*.yaml *.yml)");
     if (path.isEmpty())
         return;
     ui->mapCanvas->importFromYaml(path);
