@@ -38,9 +38,3 @@ else
 fi
 
 echo -e "${GREEN}Desinstalación completada.${NC}"
-echo "Se eliminaron:"
-echo "  /usr/bin/${NAME}-client"
-echo "  /usr/bin/${NAME}-server"
-echo "  /usr/bin/${NAME}-editor"
-echo "  /var/${NAME}"
-echo "  /etc/${NAME}"
