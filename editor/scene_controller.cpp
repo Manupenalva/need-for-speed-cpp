@@ -29,6 +29,8 @@ void SceneController::handleDropEvent(const DragInfo& dragInfo, int x, int y) {
     if (dragInfo.getType().contains(HINT_TYPE, Qt::CaseInsensitive)) {
         if (dragInfo.getId() > 0) {
             item->setData(ID, dragInfo.getId());
+            auto* label = new QGraphicsSimpleTextItem(QString::number(dragInfo.getId()), item);
+            label->setPos(5, -5);
         }
     }
     scene->addItem(item);
@@ -47,6 +49,8 @@ void SceneController::placeHint(const DragInfo& info, const QPointF& hintPos,
     QGraphicsPixmapItem* hint = itemBuilder.buildItem(info, QSize(GRID_SIZE, GRID_SIZE));
     hint->setPos(hintPos.x(), hintPos.y());
     hint->setData(ID, checkpointItem->data(ID).toInt());
+    auto* label = new QGraphicsSimpleTextItem(QString::number(checkpointItem->data(ID).toInt()), hint);
+    label->setPos(5, -5);
     scene->addItem(hint);
 }
 
@@ -117,6 +121,11 @@ void SceneController::renumberCheckpoints() {
             int oldId = item->data(ID).toInt();
             if (newCheckpoints.contains(oldId)) {
                 item->setData(ID, newCheckpoints.value(oldId));
+                for (auto* child: item->childItems()) {
+                    if (auto* text = dynamic_cast<QGraphicsSimpleTextItem*>(child)) {
+                        text->setText(QString::number(newId));
+                    }
+                }
             }
         }
     }

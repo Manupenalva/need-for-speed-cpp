@@ -94,12 +94,12 @@ void MapCanvas::loadCityMap(const QString& cityName) {
 void MapCanvas::dragEnterEvent(QDragEnterEvent* event) {
     if (selecting) {
         event->ignore();
-        QMessageBox::warning(this, "No checkpoint selecting",
-                             "You must click a checkpoint first o press ESC to cancel.");
         return;
     }
     if (event->mimeData()->hasFormat(DragInfo().mimeType())) {
         event->acceptProposedAction();
+    } else {
+        event->ignore();
     }
 }
 
@@ -112,8 +112,6 @@ void MapCanvas::dropEvent(QDropEvent* event) {
 
     if (selecting) {
         event->ignore();
-        QMessageBox::warning(this, "No checkpoint selecting",
-                             "You must click a checkpoint first o press ESC to cancel.");
         return;
     }
 
@@ -161,6 +159,9 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
         }
         if (event->type() == QEvent::DragEnter || event->type() == QEvent::DragMove) {
             QDragEnterEvent* dragEvent = static_cast<QDragEnterEvent*>(event);
+            if (selecting) {
+                return true;
+            }
             dragEnterEvent(dragEvent);
             return true;
         }
