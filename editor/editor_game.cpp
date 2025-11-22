@@ -41,7 +41,7 @@ void EditorGame::setUpNav() {
 }
 
 void EditorGame::setUpLoad() {
-    const auto path = QFileDialog::getOpenFileName(this, "Open YAML", ".", "YAML (*.yaml *.yml)");
+    const auto path = QFileDialog::getOpenFileName(this, "Open YAML", SAVE_MAP, "YAML (*.yaml *.yml)");
     if (path.isEmpty())
         return;
     ui->mapCanvas->importFromYaml(path);
@@ -57,10 +57,10 @@ void EditorGame::setUpTools() {
     rotateIcon(ui->toolStartRight, START_PATH_2, START_RIGHT);
     rotateIcon(ui->toolStartDown, START_PATH_1, START_DOWN);
     rotateIcon(ui->toolFinishHorizontal, FINISH_PATH, HORIZONTAL_ROTATION);
+    rotateIcon(ui->toolStartLineVertical, LINE_PATH, LINE_ROTATION);
 
-    dragMovement(ui->toolRoad, ROAD_TYPE, ROAD_PATH_1);
-    dragMovement(ui->toolRoad1, ROAD_TYPE, ROAD_PATH_2);
-    dragMovement(ui->toolRoad2, ROAD_TYPE, ROAD_PATH_3);
+    dragMovement(ui->toolStartLine, LINE_TYPE, LINE_PATH);
+    dragMovement(ui->toolStartLineVertical, LINE_TYPE, LINE_PATH, LINE_ROTATION);
     dragMovement(ui->toolCheckpointVertical, CHECKPOINT_TYPE, CHECKPOINT_PATH);
     dragMovement(ui->toolCheckpointHorizontal, CHECKPOINT_TYPE, CHECKPOINT_PATH,
                  HORIZONTAL_ROTATION);

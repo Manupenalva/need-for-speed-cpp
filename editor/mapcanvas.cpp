@@ -54,9 +54,9 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
             QMessageBox::warning(this, "Finish missing", "It is neccessary to be 1 finish line.");
             return;
         }
-        QString filePath = QString("../server/assets/race_configs/%1.yaml").arg(fileName);
+        QString filePath = QString("%1/%2.yaml").arg(SAVE_MAP, fileName);
         exportToYaml(filePath);
-        QMessageBox::information(this, "Map Saved", "Map saved successfully!");
+        QMessageBox::information(this, "Map Saved", QString("Map saved successfully in:\n %1!").arg(filePath));
         QCoreApplication::quit();
     });
 
@@ -198,7 +198,7 @@ void MapCanvas::importFromYaml(const QString& filePath) {
 }
 
 void MapCanvas::setActions() {
-    actions.emplace(QStringLiteral(ROAD_TYPE), std::make_unique<ActionRoad>());
+    actions.emplace(QStringLiteral(LINE_TYPE), std::make_unique<ActionStartLine>());
     actions.emplace(QStringLiteral(CHECKPOINT_TYPE), std::make_unique<ActionCheckpoint>());
     actions.emplace(QStringLiteral(START_TYPE), std::make_unique<ActionStart>());
     actions.emplace(QStringLiteral(FINISH_TYPE), std::make_unique<ActionFinish>());
@@ -225,7 +225,9 @@ void MapCanvas::handleDelete(const QPoint& pos) {
     QRectF pickArea(scenePos.x() - GRID_SIZE / 2.0, scenePos.y() - GRID_SIZE / 2.0, GRID_SIZE,
                     GRID_SIZE);
     auto items = scene->items(pickArea);
-
+    if (items.isEmpty()) {
+        return;
+    }
     QGraphicsItem* item = items.first();
     if (!item->data(TYPE).isValid())
         return;

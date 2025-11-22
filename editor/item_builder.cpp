@@ -35,8 +35,8 @@ QGraphicsPixmapItem* ItemBuilder::buildItem(const DragInfo& info, const QSize& s
 }
 
 QString ItemBuilder::getIcon(const QString& type) const {
-    if (type.contains(ROAD_TYPE, Qt::CaseInsensitive)) {
-        return ROAD_PATH_1;
+    if (type.contains(LINE_TYPE, Qt::CaseInsensitive)) {
+        return LINE_PATH;
     } else if (type.contains(CHECKPOINT_TYPE, Qt::CaseInsensitive)) {
         return CHECKPOINT_PATH;
     } else if (type.contains(START_TYPE, Qt::CaseInsensitive)) {

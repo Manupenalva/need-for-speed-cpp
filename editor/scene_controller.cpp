@@ -21,6 +21,8 @@ void SceneController::handleDropEvent(const DragInfo& dragInfo, int x, int y) {
             ++id;
             item->setData(ID, id);
         }
+        auto* label = new QGraphicsSimpleTextItem(QString::number(item->data(ID).toInt()), item);
+        label->setPos(5, -5);
     }
     if (dragInfo.getType().contains(HINT_TYPE, Qt::CaseInsensitive)) {
         if (dragInfo.getId() > 0) {
