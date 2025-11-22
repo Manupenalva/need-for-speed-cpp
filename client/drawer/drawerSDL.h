@@ -17,13 +17,13 @@
 #include "animations/fire_drawer.h"
 #include "car/car_drawer.h"
 #include "countdown/countdown_drawer.h"
-#include "estadistics/estadistics_drawer.h"
 #include "health/health_drawer.h"
 #include "map/map_drawer.h"
 #include "minimap/minimap_drawer.h"
 #include "race/arrow_drawer.h"
 #include "race/checkpoint_drawer.h"
 #include "screen/upgradeScreen_drawer.h"
+#include "statistics/statistics_drawer.h"
 
 #include "drawer.h"
 #include "renderedState.h"
@@ -35,7 +35,7 @@ private:
     TextureManager& texture_manager;
     std::vector<std::unique_ptr<Drawer>> drawers;
     UpgradeScreenDrawer upgrade_screen_drawer;
-    EstadisticsDrawer estadistics_drawer;
+    StatisticsDrawer statistics_drawer;
 
 public:
     explicit DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager, int client_id);
@@ -44,7 +44,7 @@ public:
     void update_game_state(const ServerMessageDTO& msg, int iterations_ahead, MapType map_id);
 
     // Actualiza la vista de la pantalla de estadísticas
-    void update_estadistics_screen(const ServerMessageDTO& msg);
+    void update_statistics_screen(const ServerMessageDTO& msg);
 
     // Muestra en pantalla la screen para mejorar el auto
     void show_upgrade_screen();

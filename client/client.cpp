@@ -95,7 +95,7 @@ void Client::update_animation_frames(int iterations_ahead) {
     if (!actual_state.is_in_race && actual_state.has_last_state) {
         // Dibujar estadisticas
         clear_display();
-        drawer.update_estadistics_screen(actual_state.message);
+        drawer.update_statistics_screen(actual_state.message);
         window.present();
         actual_state.has_last_state = false;
     }
