@@ -41,7 +41,7 @@ private:
     CarProperties recv_car_properties();
     PlayerState recv_player_state();
     // std::string obtain_lobby_name();
-    std::vector<std::pair<uint16_t, float>> recv_positions();
+    std::vector<ResultInfo> recv_positions();
     std::string recv_username();
 
     CarState recv_car_state();

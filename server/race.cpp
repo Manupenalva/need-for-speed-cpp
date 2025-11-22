@@ -74,7 +74,8 @@ void Race::update_state() {
             continue;
         if (car.exploded()) {
             status.has_finished = true;
-            race_results.emplace_back(id, MAX_TIME + car.get_penalization_time());
+            float pen_time = car.get_penalization_time();
+            race_results.emplace_back(id, MAX_TIME + pen_time, pen_time);
             car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
             continue;
         }
@@ -84,7 +85,8 @@ void Race::update_state() {
             status.current_checkpoint_index++;
             if (status.current_checkpoint_index >= checkpoints.size()) {
                 status.has_finished = true;
-                race_results.emplace_back(id, current_time + car.get_penalization_time());
+                float pen_time = car.get_penalization_time();
+                race_results.emplace_back(id, current_time + pen_time, pen_time);
                 car.finish_race(current_time, race_results.size() + 1);
             }
         }
@@ -211,7 +213,8 @@ ServerMessageDTO Race::get_interval_message() {
 void Race::finish_race() {
     for (auto& [id, status]: players_status) {
         if (!status.has_finished) {
-            race_results.emplace_back(id, MAX_TIME + players_cars[id].get_penalization_time());
+            float pen_time = players_cars[id].get_penalization_time();
+            race_results.emplace_back(id, MAX_TIME + pen_time, pen_time);
             players_cars[id].finish_race(MAX_TIME, MAX_PLAYERS_RACE);
             status.has_finished = true;
         }
@@ -264,8 +267,8 @@ void Race::force_finish_race(const uint16_t& player_id) {
     if (players_status[player_id].has_finished)
         return;
     players_status[player_id].has_finished = true;
-    race_results.emplace_back(player_id,
-                              current_time + players_cars[player_id].get_penalization_time());
+    float pen_time = players_cars[player_id].get_penalization_time();
+    race_results.emplace_back(player_id, current_time + pen_time, pen_time);
     players_cars[player_id].finish_race(current_time, race_results.size() + 1);
 }
 
@@ -274,7 +277,8 @@ void Race::force_lose_race(const uint16_t& player_id) {
     if (players_status[player_id].has_finished)
         return;
     players_status[player_id].has_finished = true;
-    race_results.emplace_back(player_id, MAX_TIME + car.get_penalization_time());
+    float pen_time = car.get_penalization_time();
+    race_results.emplace_back(player_id, MAX_TIME + pen_time, pen_time);
     car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
     car.explode();
 }
@@ -307,10 +311,10 @@ std::vector<CheckpointArrow> Race::get_checkpoints_arrows() {
     return arrows;
 }
 
-const std::vector<std::pair<uint16_t, float>> Race::get_race_results() {
-    std::vector<std::pair<uint16_t, float>> results = race_results;
+const std::vector<std::tuple<uint16_t, float, float>> Race::get_race_results() {
+    std::vector<std::tuple<uint16_t, float, float>> results = race_results;
     std::sort(results.begin(), results.end(),
-              [](const auto& a, const auto& b) { return a.second < b.second; });
+              [](const auto& a, const auto& b) { return std::get<1>(a) < std::get<1>(b); });
 
     return results;
 }

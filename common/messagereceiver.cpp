@@ -79,16 +79,18 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
     return server_msg;
 }
 
-std::vector<std::pair<uint16_t, float>> MessageReceiver::recv_positions() {
+std::vector<ResultInfo> MessageReceiver::recv_positions() {
     uint16_t positions_size = obtain_uint16();
-    std::vector<std::pair<uint16_t, float>> positions;
+    std::vector<ResultInfo> positions;
     positions.resize(positions_size);
 
     for (auto& pos: positions) {
-        pos.first = obtain_uint16();
-        pos.second = obtain_float();
+        pos.id = obtain_uint16();
+        pos.time = obtain_float();
+        pos.penalization_time = obtain_float();
+        uint16_t name_size = obtain_uint16();
+        pos.name = obtain_string(name_size);
     }
-
     return positions;
 }
 

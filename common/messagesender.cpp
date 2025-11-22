@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cstring>
+#include <numeric>
 #include <string>
 
 MessageSender::MessageSender(ISocket& socket): socket(socket), buffer(), offset(0) {}
@@ -39,10 +40,8 @@ void MessageSender::send_message(const ServerMessageDTO& msg) {
             serialize_minimap_info(msg.minimap_info);
             break;
         case MsgType::RACE_POSITIONS:
-            serialize_race_positions(msg.positions);
-            break;
         case MsgType::ACCUMULATED_POSITIONS:
-            serialize_accumulated_positions(msg.positions);
+            serialize_positions(msg.positions, msg.type);
             break;
         default:
             buffer.resize(CODE_BYTES);
@@ -89,20 +88,9 @@ void MessageSender::serialize_map_number(const uint8_t map_number) {
     append_bytes(&map_number, MAP_NUMBER_BYTES);
 }
 
-void MessageSender::serialize_race_positions(
-        const std::vector<std::pair<uint16_t, float>>& positions) {
-    buffer.resize(CODE_BYTES + LENGTH_BYTES + positions.size() * POSITION_BYTES);
+void MessageSender::serialize_positions(const std::vector<ResultInfo>& positions, MsgType type) {
+    buffer.resize(calculate_positions_size(positions));
     offset = 0;
-    MsgType type = MsgType::RACE_POSITIONS;
-    append_bytes(&type, CODE_BYTES);
-    append_positions(positions);
-}
-
-void MessageSender::serialize_accumulated_positions(
-        const std::vector<std::pair<uint16_t, float>>& positions) {
-    buffer.resize(CODE_BYTES + LENGTH_BYTES + positions.size() * POSITION_BYTES);
-    offset = 0;
-    MsgType type = MsgType::ACCUMULATED_POSITIONS;
     append_bytes(&type, CODE_BYTES);
     append_positions(positions);
 }
@@ -317,11 +305,14 @@ void MessageSender::append_player_state(const PlayerState& player_state) {
     append_car_properties(player_state.car_properties);
 }
 
-void MessageSender::append_positions(const std::vector<std::pair<uint16_t, float>>& positions) {
+void MessageSender::append_positions(const std::vector<ResultInfo>& positions) {
     append_uint16(static_cast<uint16_t>(positions.size()));
     for (const auto& pos: positions) {
-        append_uint16(pos.first);
-        append_float(pos.second);
+        append_uint16(pos.id);
+        append_float(pos.time);
+        append_float(pos.penalization_time);
+        append_uint16(static_cast<uint16_t>(pos.name.size()));
+        append_bytes(pos.name.data(), pos.name.size());
     }
 }
 
@@ -346,6 +337,15 @@ void MessageSender::append_uint16(uint16_t x) {
 void MessageSender::append_uint32(uint32_t x) {
     x = htonl(x);
     append_bytes(&x, AMOUNT_BYTES);
+}
+
+size_t MessageSender::calculate_positions_size(const std::vector<ResultInfo>& positions) {
+    size_t amount = CODE_BYTES + LENGTH_BYTES;
+    amount += std::accumulate(
+            positions.begin(), positions.end(), 0u, [](size_t sum, const ResultInfo& pos) {
+                return sum + 2 * TIME_BYTES + ID_BYTES + LENGTH_BYTES + pos.name.size();
+            });
+    return amount;
 }
 
 // size_t MessageSender::calculate_lobbies_size(const std::vector<LobbyInfo>& lobbies) {

@@ -73,8 +73,8 @@ void EstadisticsDrawer::draw_row(int pos, int y, const auto& entry, int rect_x) 
     int col_player_x = rect_x + RECT_W * PLAYER_COL_X_RATIO;
     int col_time_x = rect_x + RECT_W * TIME_COL_X_RATIO;
 
-    uint16_t player_id = entry.first;
-    float time_seconds = entry.second;
+    uint16_t player_id = entry.id;
+    float time_seconds = entry.time;
 
     std::string t = format_time(time_seconds);
 

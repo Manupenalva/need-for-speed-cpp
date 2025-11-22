@@ -38,6 +38,7 @@ private:
     float max_health;
 
     float current_penalization;
+    float total_penalization;
 
     b2WorldId curr_world;
     std::shared_ptr<CarConstants> car_constants;
@@ -66,6 +67,7 @@ public:
     bool exploded();
     float get_total_time() const;
     float get_penalization_time() const;
+    float get_total_penalization() const;
 
     Car(Car&& other) = default;
     Car& operator=(Car&& other) = default;
@@ -82,6 +84,7 @@ public:
             car_width(0),
             max_health(0),
             current_penalization(0),
+            total_penalization(0),
             curr_world() {}
 
 private:
@@ -89,7 +92,6 @@ private:
     Car& operator=(const Car& other) = delete;
     int get_last_position() const;
     float get_result_time() const;
-    float get_current_penalization() const;
     CarProperties get_properties() const;
 };
 

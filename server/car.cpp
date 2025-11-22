@@ -23,6 +23,7 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
         car_width(car_width),
         max_health(health),
         current_penalization(0.0f),
+        total_penalization(0.0f),
         curr_world(),
         car_constants(car_constants) {}
 
@@ -70,20 +71,25 @@ void Car::upgrade_stats(const uint8_t& action) {
     if (action == ACT_IMPROVE_SPEED) {
         max_speed += 5;
         current_penalization += 2.0f;
+        total_penalization += 2.0f;
     } else if (action == ACT_IMPROVE_ACCELERATION) {
         acceleration += 5;
         current_penalization += 2.0f;
+        total_penalization += 2.0f;
     } else if (action == ACT_IMPROVE_HEALTH) {
         max_health += 5;
         current_penalization += 2.0f;
+        total_penalization += 2.0f;
     } else if (action == ACT_IMPROVE_MASS) {
         if (mass > 5) {
             mass -= 5;
             current_penalization += 2.0f;
+            total_penalization += 2.0f;
         }
     } else if (action == ACT_IMPROVE_HANDLING) {
         drivability += 5;
         current_penalization += 2.0f;
+        total_penalization += 2.0f;
     }
 }
 
@@ -161,7 +167,7 @@ PlayerState Car::get_player_state() const {
                        true,
                        static_cast<uint8_t>(get_last_position()),
                        get_result_time(),
-                       get_current_penalization(),
+                       get_penalization_time(),
                        get_properties()};
 }
 
@@ -179,7 +185,7 @@ float Car::get_result_time() const {
     return race_times.back();
 }
 
-float Car::get_current_penalization() const { return current_penalization; }
+float Car::get_total_penalization() const { return total_penalization; }
 
 CarProperties Car::get_properties() const {
     return CarProperties{static_cast<uint8_t>(state.car_type), static_cast<uint16_t>(max_speed),

@@ -51,7 +51,7 @@ void Gameloop::broadcast_players(const int& race_index) {
 void Gameloop::broadcast_positions(int race_index) {
     ServerMessageDTO msg;
     msg.type = MsgType::RACE_POSITIONS;
-    msg.positions = races[race_index]->get_race_results();
+    msg.positions = get_positions_message(races[race_index]->get_race_results());
     race_monitor->broadcast(msg);
     std::this_thread::sleep_for(std::chrono::seconds(POSITIONS_WAIT_TIME));
     msg.type = MsgType::ACCUMULATED_POSITIONS;
@@ -246,12 +246,25 @@ void Gameloop::run() {
     broadcast_event(MsgType::GAME_END);
 }
 
-std::vector<std::pair<uint16_t, float>> Gameloop::get_acumullated_times() {
-    std::vector<std::pair<uint16_t, float>> times_vector;
-    for (const auto& [car, id]: players_cars) {
-        times_vector.emplace_back(car, players_cars[car].get_total_time());
+std::vector<ResultInfo> Gameloop::get_acumullated_times() {
+    std::vector<ResultInfo> times_vector;
+    for (const auto& [id, car]: players_cars) {
+        ResultInfo result = {id, car.get_total_time(), car.get_penalization_time(), "username"};
+        times_vector.emplace_back(result);
     }
     std::sort(times_vector.begin(), times_vector.end(),
-              [](const auto& a, const auto& b) { return a.second < b.second; });
+              [](const auto& a, const auto& b) { return a.time < b.time; });
     return times_vector;
+}
+
+std::vector<ResultInfo> Gameloop::get_positions_message(
+        const std::vector<std::tuple<uint16_t, float, float>>& positions) {
+    std::vector<ResultInfo> results;
+    results.reserve(positions.size());
+    std::transform(positions.begin(), positions.end(), std::back_inserter(results),
+                   [](const auto& tuple) {
+                       return ResultInfo{std::get<0>(tuple), std::get<1>(tuple), std::get<2>(tuple),
+                                         "username"};
+                   });
+    return results;
 }
