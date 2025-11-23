@@ -28,6 +28,9 @@ protected:
     }
 };
 
+bool float_equal(float a, float b, float eps = 0.01f) {
+    return std::fabs(a - b) < eps;
+}
 
 TEST_F(ProtocolTestServer, JoinResult) {
 
@@ -257,13 +260,15 @@ TEST_F(ProtocolTestServer, MinimapInfo) {
     EXPECT_TRUE(verify_minimap_info(recv_msg.minimap_info, minimap_info));
 }
 
-bool verify_positions(const std::vector<std::pair<uint16_t, float>>& pos1,
-                      const std::vector<std::pair<uint16_t, float>>& pos2) {
+bool verify_positions(const std::vector<ResultInfo>& pos1,
+                      const std::vector<ResultInfo>& pos2) {
     if (pos1.size() != pos2.size()) {
         return false;
     }
     for (size_t i = 0; i < pos1.size(); ++i) {
-        if (pos1[i].first != pos2[i].first || pos1[i].second != pos2[i].second) {
+        if (pos1[i].id != pos2[i].id || !float_equal(pos1[i].time, pos2[i].time) ||
+            !float_equal(pos1[i].penalization_time, pos2[i].penalization_time) ||
+            pos1[i].name != pos2[i].name) {
             return false;
         }
     }
@@ -271,10 +276,9 @@ bool verify_positions(const std::vector<std::pair<uint16_t, float>>& pos1,
 }
 
 TEST_F(ProtocolTestServer, RacePositions) {
-
     ServerMessageDTO send_msg;
     send_msg.type = MsgType::RACE_POSITIONS;
-    send_msg.positions = {{1, 120.5f}, {2, 130.0f}, {3, 110.75f}};
+    send_msg.positions = {{1, 120.5f, 45.0f, "juan"}, {2, 130.0f, 20.3f, "charlie"}, {3, 110.75f, 10.0f, "Peter"}};
     sender.send_message(send_msg);
 
     ServerMessageDTO recv_msg = receiver.recv_server_message();
@@ -287,7 +291,7 @@ TEST_F(ProtocolTestServer, AccumulatedPositions) {
 
     ServerMessageDTO send_msg;
     send_msg.type = MsgType::ACCUMULATED_POSITIONS;
-    send_msg.positions = {{1, 300.5f}, {2, 320.0f}, {3, 280.75f}};
+    send_msg.positions = {{1, 300.5f, 35.5f, "juan"}, {2, 320.0f, 32.3f, "lionel"}, {3, 280.75f, 45.0f, "andres"}};
     sender.send_message(send_msg);
 
     ServerMessageDTO recv_msg = receiver.recv_server_message();
