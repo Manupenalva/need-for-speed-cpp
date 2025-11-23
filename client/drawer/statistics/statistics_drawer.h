@@ -15,20 +15,17 @@
 #define POS_TEXT "POSICION"
 #define PLAYERS_TEXT "JUGADOR"
 #define TIME_TEXT "TIEMPO"
-#define PENALTY_TEXT "PENALIZACION"
+#define PENALIZATION_TEXT "PENALIZACION"
 
 #define TITLE_RACE "ESTADISTICAS DE CARRERA"
 #define TITLE_GAME "ESTADISTICAS DEL JUEGO"
-
-#define RECT_W_RATIO 0.4
-#define RECT_H_RATIO 0.6
 
 #define MINUTES 60
 
 #define TITLE_SIZE 32
 #define FONT_SIZE 24
 #define COLUMN_TITLE_SIZE 26
-#define ROW_HEIGHT 40
+#define ROW_HEIGHT 60
 
 #define TITLE_TEXT_Y_OFFSET 20
 #define COLUMN_TITLE_Y_OFFSET 80
@@ -44,14 +41,21 @@ struct Rect_dimensions {
 class StatisticsDrawer {
 private:
     SDL2pp::Renderer& renderer;
-    int scale = 0;
+    float scale_w = 1.0f;
+    float scale_h = 1.0f;
+    float scale = 1.0f;
 
-    std::vector<int> compute_column_x_positions(int rect_x, int rect_w, int col_count);
     void draw_text(const std::string& text, int x, int y, int size);
+    void draw_centered_text(const std::string& text, int col_index, Rect_dimensions rect, int y,
+                            int font_size);
+    int get_text_width(const std::string& text, int size);
+
     std::string format_time(float time);
     void draw_titles(const ServerMessageDTO& msg, Rect_dimensions rect);
     void draw_row(int pos, int y, const auto& entry, Rect_dimensions rect);
-    int get_text_width(const std::string& text, int size);
+
+    int scaled_font(int base_size);
+    int scaled_offset(int base_offset);
 
 public:
     explicit StatisticsDrawer(SDL2pp::Renderer& renderer);
