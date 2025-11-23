@@ -32,6 +32,7 @@ const std::map<MapType, std::string> MAP_PATHS = {
 #define START_LINE_PATH "../client/resources/assets/race/Salida.png"
 
 #define UPGRADE_SCREEN_PATH "../client/resources/assets/upgrade/Upgrade_Screen.png"
+#define STATISTICS_SCREEN_PATH "../client/resources/assets/screens/statistics_screen.png"
 
 #define PATH_BURST "../client/resources/assets/animations/explosion.png"
 #define PATH_FIRE "../client/resources/assets/animations/fuego.png"

@@ -11,7 +11,7 @@ target_sources(taller_client
     graphics/map/map_sheet.cpp
     graphics/texture_manager.cpp
     graphics/race/race_sheet.cpp
-    graphics/screen/upgradeScreen_sheet.cpp
+    graphics/screen/base_screen_sheet.cpp
     graphics/base_sheet.cpp
     graphics/minimap/minimap_sheet.cpp
     drawer/drawerSDL.cpp
@@ -47,7 +47,9 @@ target_sources(taller_client
     graphics/map/map_sheet.h
     graphics/texture_manager.h
     graphics/race/race_sheet.h
-    graphics/screen/upgradeScreen_sheet.h
+    graphics/screen/upgrade_screen_sheet.h
+    graphics/screen/statistics_screen_sheet.h
+    graphics/screen/base_screen_sheet.h
     graphics/base_sheet.cpp
     graphics/animations/fire_sheet.h
     graphics/animations/burst_sheet.h

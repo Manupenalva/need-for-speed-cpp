@@ -1,5 +1,5 @@
-#ifndef UPGRADE_SCREEN_SHEET_H
-#define UPGRADE_SCREEN_SHEET_H
+#ifndef BASE_SCREEN_SHEET_H
+#define BASE_SCREEN_SHEET_H
 
 #include <memory>
 #include <string>
@@ -10,13 +10,16 @@
 #include "../../config/constants.h"
 #include "../sprite.h"
 
-class UpgradeScreenSheet {
+class BaseScreenSheet {
 private:
     SDL2pp::Renderer& renderer;
     std::unique_ptr<SDL2pp::Texture> texture;
 
+protected:
+    std::string screen_path;
+
 public:
-    explicit UpgradeScreenSheet(SDL2pp::Renderer& renderer);
+    explicit BaseScreenSheet(SDL2pp::Renderer& renderer);
 
     void load_sprite();
 

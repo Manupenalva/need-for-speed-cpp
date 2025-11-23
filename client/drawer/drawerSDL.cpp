@@ -5,7 +5,7 @@ DrawerSDL::DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager
         renderer(renderer),
         texture_manager(texture_manager),
         upgrade_screen_drawer(renderer, texture_manager),
-        statistics_drawer(renderer) {
+        statistics_drawer(renderer, texture_manager) {
     drawers.push_back(std::make_unique<MapDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<ArrowDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<CheckpointDrawer>(renderer, texture_manager));
