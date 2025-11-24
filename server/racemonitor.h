@@ -5,6 +5,8 @@
 #include <list>
 #include <memory>
 #include <mutex>
+#include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -35,6 +37,8 @@ public:
     void broadcast(const ServerMessageDTO& msg);
 
     int size();
+
+    std::unordered_map<int, std::string> get_player_usernames();
 };
 
 #endif

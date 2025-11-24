@@ -8,7 +8,8 @@ ClientHandler::ClientHandler(const int id, Socket s,
         protocol(std::move(s)),
         sender(protocol, id),
         receiver(protocol, queue, id),
-        race_id(-1) {}
+        race_id(-1),
+        username("") {}
 
 // cppcheck-suppress passedByValue
 void ClientHandler::send_msg(const ServerMessageDTO msg) {
@@ -23,6 +24,10 @@ void ClientHandler::set_game_queue(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> new_queue) {
     receiver.set_queue(new_queue);
 }
+
+void ClientHandler::set_username(const std::string& username) { this->username = username; }
+
+std::string const ClientHandler::get_username() { return username; }
 
 void ClientHandler::set_race_id(int race_id) { this->race_id = race_id; }
 int ClientHandler::get_race_id() const { return race_id; }

@@ -2,6 +2,8 @@
 #define LOBBY_H
 
 #include <memory>
+#include <set>
+#include <string>
 #include <vector>
 
 #include "../common/constants.h"
@@ -31,6 +33,7 @@ private:
     MonitorClients& clients_monitor;
     MonitorGames games_monitor;
     std::vector<CarProperties> car_catalog;
+    std::set<std::string> usernames;
     int create_race();
     void add_player_to_race(int playerId, int raceId);
     void remove_player_from_race(int playerId);
@@ -41,5 +44,6 @@ private:
     void handle_join_race(const std::shared_ptr<ClientHandlerMessage>& msg, int client_id);
     void handle_lobby_update(int client_id);
     void handle_get_car_catalog(int client_id);
+    void handle_new_username(const std::shared_ptr<ClientHandlerMessage>& msg, int client_id);
 };
 #endif

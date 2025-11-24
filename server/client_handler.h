@@ -2,6 +2,7 @@
 #define CLIENT_HANDLER
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "../common/protocol.h"
@@ -28,6 +29,8 @@ public:
     int get_id() const { return id; }
 
     void set_race_id(int race_id);
+    void set_username(const std::string& username);
+    std::string const get_username();
     int get_race_id() const;
 
 private:
@@ -36,5 +39,6 @@ private:
     Sender sender;
     Receiver receiver;
     int race_id;
+    std::string username;
 };
 #endif
