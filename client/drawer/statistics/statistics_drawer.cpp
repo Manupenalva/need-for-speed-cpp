@@ -88,7 +88,7 @@ void StatisticsDrawer::draw_row(int pos, int y, const auto& entry, Rect_dimensio
 
     std::string player_name = entry.name;
     float penalization = entry.penalization_time;
-    float time_seconds = entry.time + penalization;
+    float time_seconds = entry.time;
 
     std::string t_s = format_time(time_seconds);
     std::string t_p = format_time(penalization);
