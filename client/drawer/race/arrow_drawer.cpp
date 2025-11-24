@@ -10,11 +10,14 @@ void ArrowDrawer::draw(RenderedState& rendered_state) {
 
     // Convertir las coordenadas del checkpoint arrow a coordenadas de pantalla
     SDL2pp::Rect map_rect = rendered_state.map_sprite.src_rect;
-    int screen_x = static_cast<int>(client_car.checkpoint_arrow.x) - map_rect.x;
-    int screen_y = static_cast<int>(client_car.checkpoint_arrow.y) - map_rect.y;
 
-    SDL2pp::Rect dst_rect(screen_x, screen_y, arrow_sprite.sprite.src_rect.w,
-                          arrow_sprite.sprite.src_rect.h);
+    Scale scale_factors = get_window_scale_factor();
+
+    int screen_x = (static_cast<int>(client_car.checkpoint_arrow.x) - map_rect.x) * scale_factors.x;
+    int screen_y = (static_cast<int>(client_car.checkpoint_arrow.y) - map_rect.y) * scale_factors.y;
+
+    SDL2pp::Rect dst_rect(screen_x, screen_y, arrow_sprite.sprite.src_rect.w * scale_factors.x,
+                          arrow_sprite.sprite.src_rect.h * scale_factors.y);
 
     renderer.Copy(arrow_sprite.sprite.texture, arrow_sprite.sprite.src_rect, dst_rect,
                   arrow_sprite.rotation);

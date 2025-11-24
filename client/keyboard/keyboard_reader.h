@@ -24,7 +24,7 @@ private:
 public:
     explicit KeyboardReader(Queue<ClientMessageDTO>& queue);
 
-    void listen_to_keyboard(std::atomic<bool>& running, const bool in_interval, const bool in_race);
+    void listen_to_keyboard(bool& running, const bool in_interval, const bool in_race);
 };
 
 #endif

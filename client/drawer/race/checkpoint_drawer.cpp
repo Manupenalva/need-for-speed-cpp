@@ -10,11 +10,14 @@ void CheckpointDrawer::draw(RenderedState& rendered_state) {
             client_car.checkpoint.type, client_car.checkpoint.angle);  // type 1 o 2
 
     SDL2pp::Rect map_rect = rendered_state.map_sprite.src_rect;
-    int screen_x = static_cast<int>(client_car.checkpoint.x) - map_rect.x;
-    int screen_y = static_cast<int>(client_car.checkpoint.y) - map_rect.y;
 
-    SDL2pp::Rect dst_rect(screen_x, screen_y, checkpoint_sprite.sprite.src_rect.w,
-                          checkpoint_sprite.sprite.src_rect.h);
+    Scale scale_factors = get_window_scale_factor();
+
+    int screen_x = (static_cast<int>(client_car.checkpoint.x) - map_rect.x) * scale_factors.x;
+    int screen_y = (static_cast<int>(client_car.checkpoint.y) - map_rect.y) * scale_factors.y;
+
+    SDL2pp::Rect dst_rect(screen_x, screen_y, checkpoint_sprite.sprite.src_rect.w * scale_factors.x,
+                          checkpoint_sprite.sprite.src_rect.h * scale_factors.y);
     renderer.Copy(checkpoint_sprite.sprite.texture, checkpoint_sprite.sprite.src_rect, dst_rect,
                   checkpoint_sprite.rotation);
 }

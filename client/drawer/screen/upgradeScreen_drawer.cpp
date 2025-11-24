@@ -7,10 +7,10 @@ UpgradeScreenDrawer::UpgradeScreenDrawer(SDL2pp::Renderer& renderer,
 void UpgradeScreenDrawer::draw() {
     Sprite upgrade_screen_sprite = texture_manager.get_upgrade_screen_sprite();
 
-    ConfigReader& config = ConfigReader::get_instance();
+    int w, h;
+    SDL_GetRendererOutputSize(renderer.Get(), &w, &h);
 
-    SDL2pp::Rect dst_rect(MAP_MIN_X, MAP_MIN_Y, config.get_window_width(),
-                          config.get_window_height());
+    SDL2pp::Rect dst_rect(MAP_MIN_X, MAP_MIN_Y, w, h);
 
     renderer.Copy(upgrade_screen_sprite.texture, upgrade_screen_sprite.src_rect, dst_rect);
 }
