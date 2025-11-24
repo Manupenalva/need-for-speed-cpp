@@ -27,7 +27,6 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
     view->setScene(scene);
     view->setFocusPolicy(Qt::StrongFocus);
     view->viewport()->setAcceptDrops(true);
-    view->setAcceptDrops(true);
     view->viewport()->installEventFilter(this);
     view->installEventFilter(this);
     controller = new SceneController(scene);
@@ -180,17 +179,8 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
             dropEvent(d);
             return true;
         }
-    } else if (obj == view && event->type() == QEvent::KeyPress) {
-        QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-        if (keyEvent->key() == Qt::Key_Plus) {
-            zoomIn();
-            return true;
-        }
-        if (keyEvent->key() == Qt::Key_Minus) {
-            zoomOut();
-            return true;
-        }
     }
+    
     return QWidget::eventFilter(obj, event);
 }
 
