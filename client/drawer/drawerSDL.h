@@ -33,6 +33,7 @@ private:
     int client_id;
     SDL2pp::Renderer& renderer;
     TextureManager& texture_manager;
+    TextDrawer text_drawer;
     std::vector<std::unique_ptr<Drawer>> drawers;
     UpgradeScreenDrawer upgrade_screen_drawer;
     StatisticsDrawer statistics_drawer;
@@ -47,7 +48,7 @@ public:
     void update_statistics_screen(const ServerMessageDTO& msg);
 
     // Muestra en pantalla la screen para mejorar el auto
-    void show_upgrade_screen();
+    void show_upgrade_screen(const ServerMessageDTO& msg);
 };
 
 #endif

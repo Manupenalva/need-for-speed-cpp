@@ -4,8 +4,9 @@ DrawerSDL::DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager
         client_id(client_id),
         renderer(renderer),
         texture_manager(texture_manager),
-        upgrade_screen_drawer(renderer, texture_manager),
-        statistics_drawer(renderer, texture_manager) {
+        text_drawer(renderer),
+        upgrade_screen_drawer(renderer, texture_manager, text_drawer, client_id),
+        statistics_drawer(renderer, texture_manager, text_drawer) {
     drawers.push_back(std::make_unique<MapDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<ArrowDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<CheckpointDrawer>(renderer, texture_manager));
@@ -41,7 +42,9 @@ void DrawerSDL::update_game_state(const ServerMessageDTO& msg, int iterations_ah
     }
 }
 
-void DrawerSDL::show_upgrade_screen() { upgrade_screen_drawer.draw(); }
+void DrawerSDL::show_upgrade_screen(const ServerMessageDTO& msg) {
+    upgrade_screen_drawer.draw(msg);
+}
 
 void DrawerSDL::update_statistics_screen(const ServerMessageDTO& msg) {
     statistics_drawer.draw(msg);

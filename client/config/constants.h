@@ -31,7 +31,7 @@ const std::map<MapType, std::string> MAP_PATHS = {
 #define CHECKPOINT_PATH "../client/resources/assets/race/Checkpoint.png"
 #define START_LINE_PATH "../client/resources/assets/race/Salida.png"
 
-#define UPGRADE_SCREEN_PATH "../client/resources/assets/upgrade/Upgrade_Screen.png"
+#define UPGRADE_SCREEN_PATH "../client/resources/assets/screens/upgrade_screen.png"
 #define STATISTICS_SCREEN_PATH "../client/resources/assets/screens/statistics_screen.png"
 
 #define PATH_BURST "../client/resources/assets/animations/explosion.png"
@@ -56,5 +56,14 @@ const std::map<EffectID, std::string> EFFECTS_PATH = {
 // Map constants
 #define MAP_MIN_X 0
 #define MAP_MIN_Y 0
+
+struct Rect_dimensions {
+    int x;
+    int y;
+    int w;
+    int h;
+};
+
+#define WHITE_COLOR() 255, 255, 255, 255
 
 #endif  // CONSTANTS_H_

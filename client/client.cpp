@@ -102,7 +102,7 @@ void Client::update_animation_frames(int iterations_ahead) {
     if (!actual_state.is_in_race && actual_state.upgrades_interval) {
         // Mostrar pantalla de mejora de auto
         clear_display();
-        drawer.show_upgrade_screen();
+        drawer.show_upgrade_screen(actual_state.message);
         window.present();
     }
 }

@@ -25,6 +25,8 @@ target_sources(taller_client
     drawer/countdown/countdown_drawer.cpp
     drawer/statistics/statistics_drawer.cpp
     drawer/health/health_drawer.cpp
+    drawer/text/font_manager/font_manager.cpp
+    drawer/text/text_drawer.cpp
     lobby/lobby.cpp
     lobby/lobby.ui
     events/keyDown_handler.cpp
@@ -74,6 +76,8 @@ target_sources(taller_client
     drawer/countdown/countdown_drawer.h
     drawer/statistics/statistics_drawer.h
     drawer/health/health_drawer.h
+    drawer/text/font_manager/font_manager.h
+    drawer/text/text_drawer.h
     lobby/lobby.h
     config/config_reader.h
     config/constants.h

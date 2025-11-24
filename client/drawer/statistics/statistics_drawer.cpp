@@ -1,7 +1,8 @@
 #include "statistics_drawer.h"
 
-StatisticsDrawer::StatisticsDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager):
-        renderer(renderer), texture_manager(texture_manager) {}
+StatisticsDrawer::StatisticsDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager,
+                                   TextDrawer& text_drawer):
+        renderer(renderer), texture_manager(texture_manager), text_drawer(text_drawer) {}
 
 void StatisticsDrawer::draw(const ServerMessageDTO& msg) {
     int w, h;
@@ -30,57 +31,24 @@ void StatisticsDrawer::draw(const ServerMessageDTO& msg) {
     }
 }
 
-void StatisticsDrawer::draw_text(const std::string& text, int x, int y, int size) {
-    SDL2pp::Font font(FONT_PATH, size);
-    SDL2pp::Color color(WHITE_COLOR());
-    SDL2pp::Surface surface = font.RenderText_Solid(text, color);
-    SDL2pp::Texture texture(renderer, surface);
-    renderer.Copy(texture, SDL2pp::NullOpt,
-                  SDL2pp::Rect(x, y, surface.GetWidth(), surface.GetHeight()));
-}
-
-void StatisticsDrawer::draw_centered_text(const std::string& text, int col_index,
-                                          Rect_dimensions rect, int y, int font_size) {
-    int col_w = HALF(rect.w / AMOUNT_OF_COLUMNS);
-    int col_x = rect.x + col_index * col_w;
-
-    int size = scaled_font(font_size);
-    int text_w = get_text_width(text, size);
-
-    int x = col_x + HALF(col_w - text_w);
-
-    draw_text(text, x, y, size);
-}
-
-int StatisticsDrawer::get_text_width(const std::string& text, int size) {
-    SDL2pp::Font font(FONT_PATH, size);
-    SDL2pp::Surface surface = font.RenderText_Solid(text, SDL2pp::Color(WHITE_COLOR()));
-    return surface.GetWidth();
-}
-
-std::string StatisticsDrawer::format_time(float time) {
-    int minutes = static_cast<int>(time) / MINUTES;
-    float seconds = time - (minutes * MINUTES);
-
-    char buffer[32];
-    snprintf(buffer, sizeof(buffer), "%02d:%06.3f", minutes, seconds);
-    return std::string(buffer);
-}
-
 void StatisticsDrawer::draw_titles(const ServerMessageDTO& msg, Rect_dimensions rect) {
     int title_y = rect.y + scaled_offset(TITLE_TEXT_Y_OFFSET);
     int col_y = rect.y + scaled_offset(COLUMN_TITLE_Y_OFFSET);
 
     std::string title = (msg.type == MsgType::RACE_POSITIONS) ? TITLE_RACE : TITLE_GAME;
 
-    int size = scaled_font(TITLE_SIZE);
-    int text_w = get_text_width(title, size);
-    draw_text(title, rect.x + HALF(rect.w - text_w), title_y, size);
+    int size = text_drawer.scaled_font(TITLE_SIZE, scale);
+    int text_w = text_drawer.get_text_width(title, size);
+    text_drawer.draw_text(title, rect.x + HALF(rect.w - text_w), title_y, size, FONT_PATH);
 
-    draw_centered_text(POS_TEXT, 0, rect, col_y, COLUMN_TITLE_SIZE);
-    draw_centered_text(PLAYERS_TEXT, 1, rect, col_y, COLUMN_TITLE_SIZE);
-    draw_centered_text(TIME_TEXT, 2, rect, col_y, COLUMN_TITLE_SIZE);
-    draw_centered_text(PENALIZATION_TEXT, 3, rect, col_y, COLUMN_TITLE_SIZE);
+    text_drawer.draw_centered_text(POS_TEXT, 0, rect, col_y, COLUMN_TITLE_SIZE, AMOUNT_OF_COLUMNS,
+                                   scale, FONT_PATH);
+    text_drawer.draw_centered_text(PLAYERS_TEXT, 1, rect, col_y, COLUMN_TITLE_SIZE,
+                                   AMOUNT_OF_COLUMNS, scale, FONT_PATH);
+    text_drawer.draw_centered_text(TIME_TEXT, 2, rect, col_y, COLUMN_TITLE_SIZE, AMOUNT_OF_COLUMNS,
+                                   scale, FONT_PATH);
+    text_drawer.draw_centered_text(PENALIZATION_TEXT, 3, rect, col_y, COLUMN_TITLE_SIZE,
+                                   AMOUNT_OF_COLUMNS, scale, FONT_PATH);
 }
 
 void StatisticsDrawer::draw_row(int pos, int y, const auto& entry, Rect_dimensions rect) {
@@ -90,13 +58,15 @@ void StatisticsDrawer::draw_row(int pos, int y, const auto& entry, Rect_dimensio
     float penalization = entry.penalization_time;
     float time_seconds = entry.time + penalization;
 
-    std::string t_s = format_time(time_seconds);
-    std::string t_p = format_time(penalization);
+    std::string t_s = text_drawer.format_time(time_seconds);
+    std::string t_p = text_drawer.format_time(penalization);
 
-    draw_centered_text(std::to_string(pos), 0, rect, y, FONT_SIZE);
-    draw_centered_text(player_name, 1, rect, y, FONT_SIZE);
-    draw_centered_text(t_s, 2, rect, y, FONT_SIZE);
-    draw_centered_text(t_p, 3, rect, y, FONT_SIZE);
+    text_drawer.draw_centered_text(std::to_string(pos), 0, rect, y, FONT_SIZE, AMOUNT_OF_COLUMNS,
+                                   scale, FONT_PATH);
+    text_drawer.draw_centered_text(player_name, 1, rect, y, FONT_SIZE, AMOUNT_OF_COLUMNS, scale,
+                                   FONT_PATH);
+    text_drawer.draw_centered_text(t_s, 2, rect, y, FONT_SIZE, AMOUNT_OF_COLUMNS, scale, FONT_PATH);
+    text_drawer.draw_centered_text(t_p, 3, rect, y, FONT_SIZE, AMOUNT_OF_COLUMNS, scale, FONT_PATH);
     draw_row_separator(y, rect);
 }
 
@@ -120,10 +90,6 @@ void StatisticsDrawer::draw_row_separator(int y, Rect_dimensions rect) {
     SDL2pp::Rect line_rect(rect.x + scaled_offset(ROW_X_OFFSET), y - scaled_offset(ROW_Y_OFFSET),
                            HALF(rect.w) - scaled_offset(ROW_W_OFFSET), scaled_offset(ROW_H_OFFSET));
     renderer.FillRect(line_rect);
-}
-
-int StatisticsDrawer::scaled_font(int base_size) {
-    return std::max(MIN_FONT_SIZE, static_cast<int>(base_size * scale));
 }
 
 int StatisticsDrawer::scaled_offset(int base_offset) {
