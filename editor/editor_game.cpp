@@ -8,6 +8,9 @@
 #include <QPropertyAnimation>
 #include <QToolButton>
 #include <QTransform>
+#include <QShortcut>
+#include <QKeySequence>
+#include <QMessageBox>
 
 #include "cityselection.h"
 #include "drag_info.h"
@@ -20,6 +23,13 @@ EditorGame::EditorGame(QWidget* parent): QMainWindow(parent), ui(new Ui::EditorG
 
     setUpNav();
     setUpTools();
+
+    auto* esc = new QShortcut(QKeySequence(Qt::Key_Escape), this);
+    connect(esc, &QShortcut::activated, this, [this](){
+        if(ui->mapCanvas){
+            ui->mapCanvas->cancelSelecting();
+        }
+    });
 
     if (ui->citySelection) {
         connect(ui->citySelection, &CitySelection::citySelected, this,
@@ -81,7 +91,12 @@ void EditorGame::dragMovement(QToolButton* btn, const QString& type, const QStri
                               int rotDeg) {
     if (!btn)
         return;
-    QObject::connect(btn, &QToolButton::pressed, btn, [=] {
+    QObject::connect(btn, &QToolButton::pressed, this, [this, btn, type, iconPath, rotDeg] {
+        if (ui->mapCanvas && ui->mapCanvas->isSelecting()){
+            QMessageBox::information(this, "Select checkpoint",
+                                 "You must select a checkpoint first. ESC to exit.");
+            return;
+        }
         DragInfo d(type, rotDeg, iconPath);
         auto* mime = new QMimeData;
         mime->setData(d.mimeType(), d.pack());

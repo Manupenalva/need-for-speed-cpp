@@ -29,6 +29,8 @@ public:
     void loadCityMap(const QString& cityName);
     void exportToYaml(const QString& filePath);
     void importFromYaml(const QString& filePath);
+    bool isSelecting() const;
+    void cancelSelecting();
 
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -42,6 +44,8 @@ private:
     QString currentCityName;
 
     QPushButton* saveButton;
+    QPushButton* zoomInButton;
+    QPushButton* zoomOutButton;
 
     std::map<QString, std::unique_ptr<Actions>> actions;
     void setActions();

@@ -25,19 +25,25 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
     view->setRenderHint(QPainter::Antialiasing);
     view->setDragMode(QGraphicsView::ScrollHandDrag);
     view->setScene(scene);
+    view->setFocusPolicy(Qt::StrongFocus);
+    view->viewport()->setAcceptDrops(true);
+    view->setAcceptDrops(true);
     view->viewport()->installEventFilter(this);
     view->installEventFilter(this);
     controller = new SceneController(scene);
     setActions();
 
-    view->setAcceptDrops(false);
-    setAcceptDrops(true);
-
     layout->addWidget(view);
 
     saveButton = new QPushButton("Save Map", this);
-    layout->addWidget(saveButton);
-    layout->setAlignment(saveButton, Qt::AlignCenter);
+    zoomInButton = new QPushButton("Zoom in", this);
+    zoomOutButton = new QPushButton("Zoom Out", this);
+
+    auto* buttons = new QHBoxLayout();
+    buttons->addWidget(saveButton);
+    buttons->addWidget(zoomInButton);
+    buttons->addWidget(zoomOutButton);
+    layout->addLayout(buttons);
 
     connect(saveButton, &QPushButton::clicked, this, [this]() {
         bool ok;
@@ -61,6 +67,13 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
         QCoreApplication::quit();
     });
 
+    connect(zoomInButton, &QPushButton::clicked, this, [this]() {
+        zoomIn();
+    });
+
+     connect(zoomOutButton, &QPushButton::clicked, this, [this]() {
+        zoomOut();
+    });
 
     setLayout(layout);
 
@@ -159,9 +172,6 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
         }
         if (event->type() == QEvent::DragEnter || event->type() == QEvent::DragMove) {
             QDragEnterEvent* dragEvent = static_cast<QDragEnterEvent*>(event);
-            if (selecting) {
-                return true;
-            }
             dragEnterEvent(dragEvent);
             return true;
         }
@@ -170,21 +180,15 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
             dropEvent(d);
             return true;
         }
-    } else if (obj == view) {
-        if (event->type() == QEvent::KeyPress) {
-            QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-            if (selecting && keyEvent->key() == Qt::Key_Escape) {
-                selecting = false;
-                return true;
-            }
-            if (keyEvent->key() == Qt::Key_Plus) {
-                zoomIn();
-                return true;
-            }
-            if (keyEvent->key() == Qt::Key_Minus) {
-                zoomOut();
-                return true;
-            }
+    } else if (obj == view && event->type() == QEvent::KeyPress) {
+        QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+        if (keyEvent->key() == Qt::Key_Plus) {
+            zoomIn();
+            return true;
+        }
+        if (keyEvent->key() == Qt::Key_Minus) {
+            zoomOut();
+            return true;
         }
     }
     return QWidget::eventFilter(obj, event);
@@ -209,8 +213,9 @@ void MapCanvas::setActions() {
 
 void MapCanvas::handleSelectingHint(const QPoint& pos) {
     QPointF scenePos = view->mapToScene(pos);
-    QRectF pickArea(scenePos.x() - GRID_SIZE / 2.0, scenePos.y() - GRID_SIZE / 2.0, GRID_SIZE,
-                    GRID_SIZE);
+    int x = static_cast<int>(scenePos.x() / GRID_SIZE) * GRID_SIZE;
+    int y = static_cast<int>(scenePos.y() / GRID_SIZE) * GRID_SIZE;
+    QRectF pickArea(x, y, GRID_SIZE, GRID_SIZE);
     auto items = scene->items(pickArea);
     for (auto* i: items) {
         auto t = i->data(TYPE).toString();
@@ -224,16 +229,20 @@ void MapCanvas::handleSelectingHint(const QPoint& pos) {
 
 void MapCanvas::handleDelete(const QPoint& pos) {
     QPointF scenePos = view->mapToScene(pos);
-    QRectF pickArea(scenePos.x() - GRID_SIZE / 2.0, scenePos.y() - GRID_SIZE / 2.0, GRID_SIZE,
-                    GRID_SIZE);
-    auto items = scene->items(pickArea);
-    if (items.isEmpty()) {
-        return;
+    int x = static_cast<int>(scenePos.x() / GRID_SIZE) * GRID_SIZE;
+    int y = static_cast<int>(scenePos.y() / GRID_SIZE) * GRID_SIZE;
+    QRectF pickArea(x, y, GRID_SIZE, GRID_SIZE);
+    auto items = scene->items(pickArea);   
+    for (auto* i: items) {
+        QGraphicsItem* item = i;
+        while (item && !item->data(TYPE).isValid()) {
+            item = item->parentItem();
+        }
+        if (item && item->data(TYPE).isValid()) {
+            controller->deleteItem(item); 
+            return;
+        }
     }
-    QGraphicsItem* item = items.first();
-    if (!item->data(TYPE).isValid())
-        return;
-    controller->deleteItem(item);
 }
 
 void MapCanvas::zoomIn() {
@@ -259,3 +268,12 @@ void MapCanvas::zoomOut() {
         currentZoom = newZoom;
     }
 }
+
+bool MapCanvas::isSelecting() const {
+    return selecting;
+}
+
+void MapCanvas::cancelSelecting() {
+    selecting = false;
+}
+
