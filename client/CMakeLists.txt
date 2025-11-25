@@ -19,6 +19,7 @@ target_sources(taller_client
     drawer/map/map_drawer.cpp
     drawer/race/arrow_drawer.cpp
     drawer/race/checkpoint_drawer.cpp
+    drawer/race/remaining_time_drawer.cpp
     drawer/screen/upgradeScreen_drawer.cpp
     drawer/animations/animations_drawer.cpp
     drawer/minimap/minimap_drawer.cpp
@@ -67,6 +68,7 @@ target_sources(taller_client
     drawer/drawerSDL.h
     drawer/race/arrow_drawer.h
     drawer/race/checkpoint_drawer.h
+    drawer/race/remaining_time_drawer.h
     drawer/screen/upgradeScreen_drawer.h
     drawer/animations/fire_drawer.h
     drawer/animations/burst_drawer.h

@@ -69,4 +69,7 @@ struct Rect_dimensions {
 #define MAX_VALUE_ATRIBUTE 100.0f
 #define MIN_VALUE_ATRIBUTE 1.0f
 
+#define SHADOW_OFFSET 2
+
+
 #endif  // CONSTANTS_H_

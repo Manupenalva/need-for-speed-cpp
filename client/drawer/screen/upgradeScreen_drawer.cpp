@@ -45,9 +45,8 @@ void UpgradeScreenDrawer::draw_upgrade_ui(const ServerMessageDTO& msg, Rect_dime
     int title_x = rect.x + HALF(rect.w - title_w);
     int title_y = rect.y + rect.h * TITLE_TOP_MARGIN;
 
-    text_drawer.draw_text(title, title_x + TITLE_SHADOW_OFFSET, title_y + TITLE_SHADOW_OFFSET,
-                          title_size, FONT_PATH,
-                          SDL2pp::Color(0, 0, 0, 150));  // Dibuja sombra de título
+    text_drawer.draw_text(title, title_x + SHADOW_OFFSET, title_y + SHADOW_OFFSET, title_size,
+                          FONT_PATH, SDL2pp::Color(0, 0, 0, 150));  // Dibuja sombra de título
 
     text_drawer.draw_text(title, title_x, title_y, title_size, FONT_PATH,
                           SDL2pp::Color(WHITE_COLOR(255)));  // Dibuja título principal

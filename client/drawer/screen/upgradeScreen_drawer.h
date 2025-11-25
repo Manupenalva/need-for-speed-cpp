@@ -34,7 +34,6 @@ const std::array<std::pair<std::string, int>, 5> ATRIBUTTES = {{
 #define UI_HEIGHT_SCALE 0.8f
 
 #define TITLE_TOP_MARGIN 0.05f
-#define TITLE_SHADOW_OFFSET 2
 
 #define ATRIBUTES_TOP_MARGIN 0.10f
 #define LINE_HEIGHT_FACTOR 0.12f
