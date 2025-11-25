@@ -33,7 +33,8 @@ Gameloop::Gameloop(
         races(),
         frames(0),
         countdown_remaining(0),
-        car_constants(std::make_shared<CarConstants>()) {}
+        car_constants(std::make_shared<CarConstants>()),
+        player_usernames(race_monitor->get_player_usernames()) {}
 
 void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action) {
     players_cars[player_id].update_input(action);
@@ -267,7 +268,9 @@ void Gameloop::run() {
 std::vector<ResultInfo> Gameloop::get_acumullated_times() {
     std::vector<ResultInfo> times_vector;
     for (const auto& [id, car]: players_cars) {
-        ResultInfo result = {id, car.get_total_time(), car.get_penalization_time(), "username"};
+        // ResultInfo result(id, car.get_total_time(), car.get_total_penalization(),
+        //                   player_usernames[id]);
+        ResultInfo result(id, car.get_total_time(), car.get_total_penalization(), "username");
         times_vector.emplace_back(result);
     }
     std::sort(times_vector.begin(), times_vector.end(),
@@ -281,8 +284,11 @@ std::vector<ResultInfo> Gameloop::get_positions_message(
     results.reserve(positions.size());
     std::transform(positions.begin(), positions.end(), std::back_inserter(results),
                    [](const auto& tuple) {
-                       return ResultInfo{std::get<0>(tuple), std::get<1>(tuple), std::get<2>(tuple),
-                                         "username"};
+                       return ResultInfo(std::get<0>(tuple), std::get<1>(tuple), std::get<2>(tuple),
+                                         "username");
                    });
+    // for (auto& result: results) {
+    //     result.name = player_usernames[result.id];
+    // }
     return results;
 }

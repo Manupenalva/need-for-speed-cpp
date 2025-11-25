@@ -45,7 +45,7 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent):
     musicEffect = new QSoundEffect(this);
     musicEffect->setSource(QUrl::fromLocalFile("../client/resources/sounds/need_for_speed.wav"));
     musicEffect->setLoopCount(QSoundEffect::Infinite);
-    musicEffect->setVolume(0.5f);
+    musicEffect->setVolume(0.2f);
     musicEffect->play();
 }
 
@@ -64,9 +64,17 @@ void Lobby::menuScreen() {
     timer->stop();
 }
 
-void Lobby::showConnectScreen() { stack->setCurrentIndex(1); }
+void Lobby::showConnectScreen() {
+    if (!sendUsername()) {
+        return;
+    }
+    stack->setCurrentIndex(1);
+}
 
 void Lobby::createGame() {
+    if (!sendUsername()) {
+        return;
+    }
     ClientMessageDTO msg;
     msg.type = MsgType::CREATE_RACE;
     protocol.send_client_message(msg);
@@ -198,4 +206,28 @@ void Lobby::confirmCar() {
     }
     chosenCar = static_cast<uint16_t>(item->data(Qt::UserRole).toInt());
     stack->setCurrentIndex(3);
+}
+
+bool Lobby::sendUsername() {
+    QString username = ui->playerNameLineEdit->text().trimmed();
+
+    if (username.isEmpty()) {
+        QMessageBox::warning(this, "Error", "You must insert a username");
+        return false;
+    }
+
+    ClientMessageDTO msg;
+    msg.type = MsgType::SEND_NAME;
+    msg.name = username.toStdString();
+    protocol.send_client_message(msg);
+
+    ServerMessageDTO response = protocol.recv_server_message();
+    if (response.type == MsgType::NAME_RESULT) {
+        if (response.result) {
+            return true;
+        }
+        QMessageBox::warning(this, "Error", "This username already exists");
+        return false;
+    }
+    return false;
 }

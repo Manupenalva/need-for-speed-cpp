@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <memory>
+#include <string>
 #include <tuple>
 #include <unordered_map>
 #include <utility>
@@ -32,6 +33,7 @@ private:
     uint32_t frames;
     int countdown_remaining;
     std::shared_ptr<CarConstants> car_constants;
+    std::unordered_map<int, std::string> player_usernames;
 
 public:
     Gameloop(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,

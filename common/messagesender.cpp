@@ -129,7 +129,8 @@ void MessageSender::serialize_lobby(const int lobby_id, MsgType type) {
 
 void MessageSender::serialize_state(const State& state) {
     buffer.resize(CODE_BYTES + COUNTDOWN_BYTES + 2 * LENGTH_BYTES + AMOUNT_BYTES +
-                  state.cars.size() * CAR_STATE_BYTES + state.npcs.size() * NPC_STATE_BYTES);
+                  state.cars.size() * CAR_STATE_BYTES + state.npcs.size() * NPC_STATE_BYTES +
+                  TIME_BYTES);
     offset = 0;
     MsgType type = MsgType::STATE_UPDATE;
     append_bytes(&type, CODE_BYTES);
@@ -145,6 +146,7 @@ void MessageSender::serialize_state(const State& state) {
     for (const auto& npc: state.npcs) {
         append_npc_state(npc);
     }
+    append_float(state.remaining_time);
 }
 void MessageSender::serialize_lobby_update(const LobbyInfo& lobby_info) {
     buffer.resize(LOBBY_BYTES);

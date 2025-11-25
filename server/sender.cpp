@@ -1,5 +1,7 @@
 #include "sender.h"
 
+#include <utility>
+
 Sender::Sender(Protocol& protocol, int id): protocol(protocol), id(id) { this->start(); }
 
 void Sender::run() {
@@ -26,8 +28,8 @@ void Sender::kill() {
     queue.close();
 }
 
-// cppcheck-suppress passedByValue
-void Sender::push_queue(const ServerMessageDTO msg) { queue.try_push(msg); }
+
+void Sender::push_queue(ServerMessageDTO msg) { queue.try_push(std::move(msg)); }
 
 Sender::~Sender() {
     kill();

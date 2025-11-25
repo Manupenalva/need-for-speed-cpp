@@ -179,6 +179,7 @@ TEST_F(ProtocolTestServer, StateUpdate) {
     state.cars = {car1, car2};
     NpcState npc1{130.0f, 65.0f, 50.0f, 1, true};
     state.npcs = {npc1};
+    state.remaining_time = 150.0f;
     send_msg.state = state;
 
     sender.send_message(send_msg);
@@ -194,6 +195,7 @@ TEST_F(ProtocolTestServer, StateUpdate) {
     EXPECT_TRUE(verify_car_state(recv_msg.state.cars[1], car2));
     ASSERT_EQ(recv_msg.state.npcs.size(), 1);
     EXPECT_TRUE(verify_npc_state(recv_msg.state.npcs[0], npc1));
+    EXPECT_TRUE(float_equal(recv_msg.state.remaining_time, 150.0f));
 }
 
 TEST_F(ProtocolTestServer, CodeMessages) {
