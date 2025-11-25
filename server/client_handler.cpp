@@ -9,12 +9,11 @@ ClientHandler::ClientHandler(const int id, Socket s,
         sender(protocol, id),
         receiver(protocol, queue, id),
         race_id(-1),
-        username("") {}
+        username(std::string("user ") + std::to_string(id)) {}
 
-// cppcheck-suppress passedByValue
-void ClientHandler::send_msg(const ServerMessageDTO msg) {
+void ClientHandler::send_msg(ServerMessageDTO msg) {
     try {
-        sender.push_queue(msg);
+        sender.push_queue(std::move(msg));
     } catch (const ClosedQueue& e) {
         return;
     }
