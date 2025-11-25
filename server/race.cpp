@@ -319,3 +319,9 @@ const std::vector<std::tuple<uint16_t, float, float>> Race::get_race_results() {
 
     return results;
 }
+
+Race::~Race() {
+    if (b2World_IsValid(world)) {
+        b2DestroyWorld(world);
+    }
+}

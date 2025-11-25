@@ -57,6 +57,8 @@ public:
     std::vector<CheckpointInfo> get_checkpoints_info();
     std::vector<CheckpointArrow> get_checkpoints_arrows();
 
+    ~Race();
+
 private:
     void handle_sensors();
     void handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* bridge, Car* car);
