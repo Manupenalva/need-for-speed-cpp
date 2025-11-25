@@ -64,6 +64,9 @@ struct Rect_dimensions {
     int h;
 };
 
-#define WHITE_COLOR() 255, 255, 255, 255
+#define WHITE_COLOR(x) 255, 255, 255, (x)
+
+#define MAX_VALUE_ATRIBUTE 100.0f
+#define MIN_VALUE_ATRIBUTE 1.0f
 
 #endif  // CONSTANTS_H_

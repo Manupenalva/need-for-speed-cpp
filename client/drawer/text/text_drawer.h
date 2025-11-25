@@ -21,7 +21,8 @@ private:
 public:
     explicit TextDrawer(SDL2pp::Renderer& renderer);
 
-    void draw_text(const std::string& text, int x, int y, int size, const std::string& font_path);
+    void draw_text(const std::string& text, int x, int y, int size, const std::string& font_path,
+                   SDL2pp::Color color = SDL2pp::Color(WHITE_COLOR(255)));
     void draw_centered_text(const std::string& text, int col_index, Rect_dimensions rect, int y,
                             int font_size, int amount_cols, float scale,
                             const std::string& font_path);

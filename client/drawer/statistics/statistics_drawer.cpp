@@ -86,7 +86,7 @@ void StatisticsDrawer::paint_first_places(int pos, int y, Rect_dimensions rect) 
 }
 
 void StatisticsDrawer::draw_row_separator(int y, Rect_dimensions rect) {
-    renderer.SetDrawColor(WHITE_COLOR());
+    renderer.SetDrawColor(WHITE_COLOR(255));
     SDL2pp::Rect line_rect(rect.x + scaled_offset(ROW_X_OFFSET), y - scaled_offset(ROW_Y_OFFSET),
                            HALF(rect.w) - scaled_offset(ROW_W_OFFSET), scaled_offset(ROW_H_OFFSET));
     renderer.FillRect(line_rect);

@@ -3,9 +3,8 @@
 TextDrawer::TextDrawer(SDL2pp::Renderer& renderer): renderer(renderer), font_manager() {}
 
 void TextDrawer::draw_text(const std::string& text, int x, int y, int size,
-                           const std::string& font_path) {
+                           const std::string& font_path, SDL2pp::Color color) {
     SDL2pp::Font& font = font_manager.get_font({size, font_path});
-    SDL2pp::Color color(WHITE_COLOR());
     SDL2pp::Surface surface = font.RenderText_Solid(text, color);
     SDL2pp::Texture texture(renderer, surface);
     renderer.Copy(texture, SDL2pp::NullOpt,
@@ -28,7 +27,7 @@ void TextDrawer::draw_centered_text(const std::string& text, int col_index, Rect
 
 int TextDrawer::get_text_width(const std::string& text, int size) {
     SDL2pp::Font font(FONT_PATH, size);
-    SDL2pp::Surface surface = font.RenderText_Solid(text, SDL2pp::Color(WHITE_COLOR()));
+    SDL2pp::Surface surface = font.RenderText_Solid(text, SDL2pp::Color(WHITE_COLOR(255)));
     return surface.GetWidth();
 }
 
