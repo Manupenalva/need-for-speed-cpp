@@ -117,16 +117,19 @@ void SceneController::renumberCheckpoints() {
 
     for (auto* item: scene->items()) {
         const auto type = item->data(TYPE).toString();
-        if (type.contains(HINT_TYPE, Qt::CaseInsensitive)) {
-            int oldId = item->data(ID).toInt();
-            if (newCheckpoints.contains(oldId)) {
-                item->setData(ID, newCheckpoints.value(oldId));
-                for (auto* child: item->childItems()) {
-                    if (auto* text = dynamic_cast<QGraphicsSimpleTextItem*>(child)) {
-                        text->setText(QString::number(newId));
-                    }
-                }
+        if (!type.contains(HINT_TYPE, Qt::CaseInsensitive)) {
+            continue;
+        }
+        int oldId = item->data(ID).toInt();
+        if (!newCheckpoints.contains(oldId)) {
+            continue;
+        }
+        item->setData(ID, newCheckpoints.value(oldId));
+        for (auto* child: item->childItems()) {
+            if (auto* text = dynamic_cast<QGraphicsSimpleTextItem*>(child)) {
+                text->setText(QString::number(newId));
             }
         }
     }
 }
+

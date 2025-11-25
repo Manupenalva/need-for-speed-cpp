@@ -18,6 +18,7 @@
 
 EditorGame::EditorGame(QWidget* parent): QMainWindow(parent), ui(new Ui::EditorGame) {
     ui->setupUi(this);
+    toolsConstants();
 
     setUpNav();
     setUpTools();

@@ -36,5 +36,6 @@
 #define MAX_START_LINE 1
 #define LINE_ROTATION 90
 #define SAVE_MAP "../server/assets/race_configs"
+#define MIN_CHECKPOINTS 2
 
 #endif

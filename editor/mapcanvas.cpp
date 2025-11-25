@@ -17,6 +17,7 @@
 #include <QVBoxLayout>
 
 #include "yaml_config.h"
+#include "verificator.h"
 
 MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -51,12 +52,11 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
         if (!ok || fileName.isEmpty()) {
             return;
         }
-        if (controller->countItemsOfType(START_TYPE) != MAX_PLAYERS) {
-            QMessageBox::warning(this, "Cars missing", "It is neccessary to be 8 cars points.");
-            return;
-        }
-        if (controller->countItemsOfType(FINISH_TYPE) != MAX_FINISH) {
-            QMessageBox::warning(this, "Finish missing", "It is neccessary to be 1 finish line.");
+        QString errorTitle;
+        QString errorMessage;
+        Verificator verificator(*controller, *scene);
+        if (!verificator.validate(errorTitle, errorMessage)) {
+            QMessageBox::warning(this, errorTitle, errorMessage);
             return;
         }
         QString filePath = QString("%1/%2.yaml").arg(SAVE_MAP, fileName);
