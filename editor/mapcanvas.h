@@ -13,8 +13,8 @@
 #include "./actions/action_checkpoint.h"
 #include "./actions/action_finish.h"
 #include "./actions/action_hint.h"
-#include "./actions/action_start_line.h"
 #include "./actions/action_start.h"
+#include "./actions/action_start_line.h"
 #include "./actions/actions.h"
 
 #include "drag_info.h"
@@ -29,6 +29,8 @@ public:
     void loadCityMap(const QString& cityName);
     void exportToYaml(const QString& filePath);
     void importFromYaml(const QString& filePath);
+    bool isSelecting() const;
+    void cancelSelecting();
 
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -42,6 +44,8 @@ private:
     QString currentCityName;
 
     QPushButton* saveButton;
+    QPushButton* zoomInButton;
+    QPushButton* zoomOutButton;
 
     std::map<QString, std::unique_ptr<Actions>> actions;
     void setActions();

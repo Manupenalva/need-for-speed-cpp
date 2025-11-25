@@ -72,7 +72,7 @@ bool YamlConfig::load(const QString& path) {
     try {
         QFile yamlFile(path);
         if (!yamlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            qWarning("No se pudo abrir el archivo YAML: %s", path.toStdString().c_str());
+            qWarning("Cannot open this file YAML: %s", path.toStdString().c_str());
             return false;
         }
 
@@ -90,7 +90,7 @@ bool YamlConfig::load(const QString& path) {
         addElements(config, HINT_TYPE);
         return true;
     } catch (const YAML::Exception& e) {
-        qWarning("Error al leer el YAML: %s", e.what());
+        qWarning("Error reading YAML: %s", e.what());
         return false;
     }
 }

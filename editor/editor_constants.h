@@ -34,7 +34,8 @@
 #define ZOOM_SCALE 0.1
 #define INITIAL_ZOOM 1.0
 #define MAX_START_LINE 1
-#define LINE_ROTATION 180
+#define LINE_ROTATION 90
 #define SAVE_MAP "../server/assets/race_configs"
+#define MIN_CHECKPOINTS 2
 
 #endif
