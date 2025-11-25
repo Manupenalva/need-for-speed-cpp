@@ -10,6 +10,7 @@
 #include "events/joinlobbymessage.h"
 #include "events/quitgamemessage.h"
 #include "events/selectcarmessage.h"
+#include "events/sendnamemessage.h"
 #include "events/setreadymessage.h"
 #include "events/startracemessage.h"
 
@@ -61,13 +62,18 @@ void Receiver::run() {
                 case MsgType::CHEAT_CODE:
                     game_message = std::make_shared<CheatMessage>(id, msg.cheat_code);
                     break;
+                case MsgType::SEND_NAME:
+                    game_message = std::make_shared<SendNameMessage>(id, msg.name);
+                    break;
                 default:
                     continue;
             }
 
             queue->push(game_message);
         } catch (const ClosedQueue& e) {
-            queue = lobby_queue;
+            if (queue == lobby_queue) {
+                return;
+            }
             continue;
         } catch (const std::exception& e) {
             stop();
@@ -81,7 +87,9 @@ void Receiver::set_queue(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMess
 }
 
 void Receiver::kill() {
-    stop();
+    if (should_keep_running()) {
+        stop();
+    }
     try {
         protocol.shutdown_receive();
     } catch (const std::exception&

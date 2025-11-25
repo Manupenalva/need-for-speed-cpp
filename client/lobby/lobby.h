@@ -49,6 +49,7 @@ private:
     bool host;
     int raceC;
     uint16_t chosenCar = 0;
+    bool sendUsername();
 };
 
 #endif

@@ -13,7 +13,7 @@ struct EventDTO {
     ClientMessageDTO& msg;
     const bool in_interval;
     const bool in_race;
-    std::atomic<bool>& keep_running;
+    bool& keep_running;
 };
 
 #endif

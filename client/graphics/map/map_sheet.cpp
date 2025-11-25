@@ -30,8 +30,8 @@ SDL2pp::Rect MapSheet::get_map_section_rect(SDL2pp::Texture& texture, int sectio
                                             int section_y) {
 
     ConfigReader& config = ConfigReader::get_instance();
-    const int view_width = config.get_window_width();    // Ancho de la vista del juego
-    const int view_height = config.get_window_height();  // Alto de la vista del juego
+    const int view_width = config.get_window_width();    // Ancho predeterminado del mapa
+    const int view_height = config.get_window_height();  // Alto predeterminado del mapa
     const int map_width = texture.GetWidth();
     const int map_height = texture.GetHeight();
 

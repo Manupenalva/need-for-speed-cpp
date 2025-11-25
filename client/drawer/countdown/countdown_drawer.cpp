@@ -9,15 +9,18 @@ void CountdownDrawer::draw(RenderedState& rendered_state) {
         return;
     }
 
-
     Sprite countdown_sprite =
             texture_manager.get_countdown_sprite(rendered_state.state.countdown_time - 1);
 
     ConfigReader& config = ConfigReader::get_instance();
+    Scale scale_factors = get_window_scale_factor();
 
-    SDL2pp::Rect dst_rect(HALF(config.get_window_width() - countdown_sprite.src_rect.w * 2),
-                          HALF(config.get_window_height() - countdown_sprite.src_rect.h * 2),
-                          countdown_sprite.src_rect.w * 2, countdown_sprite.src_rect.h * 2);
+
+    SDL2pp::Rect dst_rect(
+            HALF(config.get_window_width() - countdown_sprite.src_rect.w * 2) * scale_factors.x,
+            HALF(config.get_window_height() - countdown_sprite.src_rect.h * 2) * scale_factors.y,
+            countdown_sprite.src_rect.w * 2 * scale_factors.x,
+            countdown_sprite.src_rect.h * 2 * scale_factors.y);
 
     renderer.Copy(countdown_sprite.texture, countdown_sprite.src_rect, dst_rect);
 }

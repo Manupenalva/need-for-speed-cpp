@@ -11,6 +11,7 @@
 #include "lobbyinfo.h"
 #include "minimapInfo.h"
 #include "msgType.h"
+#include "resultInfo.h"
 #include "state.h"
 
 // Mensaje que manda el cliente al servidor
@@ -20,13 +21,15 @@ struct ClientMessageDTO {
     uint16_t lobby_id;
     uint16_t car_id;
     CheatCode cheat_code;
+    std::string name;
 
     ClientMessageDTO():
             type(MsgType::INVALID),
             events(),
             lobby_id(-1),
             car_id(0),
-            cheat_code(CheatCode::INVALID_CHEAT) {}
+            cheat_code(CheatCode::INVALID_CHEAT),
+            name("") {}
 };
 
 
@@ -36,20 +39,20 @@ struct ServerMessageDTO {
     State state;
     std::string message;
     LobbyInfo lobby_info;
-    bool joined = false;
+    bool result = false;
     int id;
     uint8_t map_number;
     std::vector<CarProperties> car_catalog;
     IntervalState interval_state;
     MinimapInfo minimap_info;
-    std::vector<std::pair<uint16_t, float>> positions;
+    std::vector<ResultInfo> positions;
 
     ServerMessageDTO():
             type(MsgType::INVALID),
             state(),
             message(""),
             lobby_info(),
-            joined(false),
+            result(false),
             id(0),
             map_number(0),
             car_catalog(),

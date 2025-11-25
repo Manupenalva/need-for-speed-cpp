@@ -11,7 +11,7 @@ target_sources(taller_client
     graphics/map/map_sheet.cpp
     graphics/texture_manager.cpp
     graphics/race/race_sheet.cpp
-    graphics/screen/upgradeScreen_sheet.cpp
+    graphics/screen/base_screen_sheet.cpp
     graphics/base_sheet.cpp
     graphics/minimap/minimap_sheet.cpp
     drawer/drawerSDL.cpp
@@ -19,12 +19,15 @@ target_sources(taller_client
     drawer/map/map_drawer.cpp
     drawer/race/arrow_drawer.cpp
     drawer/race/checkpoint_drawer.cpp
+    drawer/race/remaining_time_drawer.cpp
     drawer/screen/upgradeScreen_drawer.cpp
     drawer/animations/animations_drawer.cpp
     drawer/minimap/minimap_drawer.cpp
     drawer/countdown/countdown_drawer.cpp
-    drawer/estadistics/estadistics_drawer.cpp
+    drawer/statistics/statistics_drawer.cpp
     drawer/health/health_drawer.cpp
+    drawer/text/font_manager/font_manager.cpp
+    drawer/text/text_drawer.cpp
     lobby/lobby.cpp
     lobby/lobby.ui
     events/keyDown_handler.cpp
@@ -47,7 +50,9 @@ target_sources(taller_client
     graphics/map/map_sheet.h
     graphics/texture_manager.h
     graphics/race/race_sheet.h
-    graphics/screen/upgradeScreen_sheet.h
+    graphics/screen/upgrade_screen_sheet.h
+    graphics/screen/statistics_screen_sheet.h
+    graphics/screen/base_screen_sheet.h
     graphics/base_sheet.cpp
     graphics/animations/fire_sheet.h
     graphics/animations/burst_sheet.h
@@ -63,6 +68,7 @@ target_sources(taller_client
     drawer/drawerSDL.h
     drawer/race/arrow_drawer.h
     drawer/race/checkpoint_drawer.h
+    drawer/race/remaining_time_drawer.h
     drawer/screen/upgradeScreen_drawer.h
     drawer/animations/fire_drawer.h
     drawer/animations/burst_drawer.h
@@ -70,8 +76,10 @@ target_sources(taller_client
     drawer/minimap/minimap_drawer.h
     drawer/minimap/mapInfoDTO.h
     drawer/countdown/countdown_drawer.h
-    drawer/estadistics/estadistics_drawer.h
+    drawer/statistics/statistics_drawer.h
     drawer/health/health_drawer.h
+    drawer/text/font_manager/font_manager.h
+    drawer/text/text_drawer.h
     lobby/lobby.h
     config/config_reader.h
     config/constants.h

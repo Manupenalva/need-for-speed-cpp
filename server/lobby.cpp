@@ -4,12 +4,14 @@
 #include <utility>
 
 #include "events/joinlobbymessage.h"
+#include "events/sendnamemessage.h"
 
 Lobby::Lobby(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> lobbyQueue,
              MonitorClients& clientsMonitor):
         lobby_queue(std::move(lobbyQueue)),
         clients_monitor(clientsMonitor),
-        car_catalog(CarBuilder("../server/assets/cars_configs/cars_config.yaml").get_catalog()) {}
+        car_catalog(CarBuilder("../server/assets/cars_configs/cars_config.yaml").get_catalog()),
+        usernames() {}
 
 void Lobby::run() {
     std::shared_ptr<ClientHandlerMessage> msg;
@@ -36,6 +38,28 @@ void Lobby::handle_create_race(int client_id) {
     ServerMessageDTO response;
     response.type = MsgType::SEND_CLIENT_ID;
     response.id = race_id;
+    client->send_msg(response);
+}
+
+void Lobby::handle_new_username(const std::shared_ptr<ClientHandlerMessage>& msg, int client_id) {
+    const auto* nameMsg = dynamic_cast<const SendNameMessage*>(msg.get());
+    if (!nameMsg) {
+        return;
+    }
+    std::string username = nameMsg->get_name();
+    auto client = clients_monitor.get_client(client_id);
+    if (!client) {
+        return;
+    }
+    ServerMessageDTO response;
+    response.type = MsgType::NAME_RESULT;
+    if (usernames.find(username) != usernames.end()) {
+        response.result = false;
+    } else {
+        usernames.insert(username);
+        client->set_username(username);
+        response.result = true;
+    }
     client->send_msg(response);
 }
 
@@ -87,10 +111,10 @@ void Lobby::add_player_to_race(int playerId, int raceId) {
     ServerMessageDTO response;
     response.type = MsgType::JOIN_RESULT;
     if (!result) {
-        response.joined = false;
+        response.result = false;
     } else {
         client->set_race_id(raceId);
-        response.joined = true;
+        response.result = true;
     }
     client->send_msg(response);
 }
@@ -153,6 +177,9 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
         case MsgType::GET_CAR_CATALOG: {
             handle_get_car_catalog(client_id);
             break;
+        }
+        case MsgType::SEND_NAME: {
+            handle_new_username(msg, client_id);
         }
         default: {
         }

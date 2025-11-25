@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-CarBuilder::CarBuilder(const std::string& path) {
+CarBuilder::CarBuilder(const std::string& path): random_seed(std::random_device{}()) {
     try {
         cars_data = YAML::LoadFile(path);
     } catch (const std::exception& e) {
@@ -12,7 +12,7 @@ CarBuilder::CarBuilder(const std::string& path) {
 }
 
 CarBuilder::CarBuilder(const std::string& path, std::shared_ptr<CarConstants> constants):
-        car_constants(constants) {
+        car_constants(constants), random_seed(std::random_device{}()) {
     try {
         cars_data = YAML::LoadFile(path);
         load_constants();
@@ -33,7 +33,8 @@ Car CarBuilder::create_car(const int& id, const int& car_type) {
         YAML::Node cars_specs = cars_data["cars"];
         int selected_car_type = car_type;
         if (car_type <= 0 || car_type > static_cast<int>(cars_specs.size())) {
-            selected_car_type = 1 + (std::rand() % (cars_specs.size()));
+            std::uniform_int_distribution<int> numbers_distribution(1, cars_specs.size());
+            selected_car_type = numbers_distribution(random_seed);
         }
 
         YAML::Node car_parameters = cars_specs[selected_car_type];
@@ -49,6 +50,30 @@ Car CarBuilder::create_car(const int& id, const int& car_type) {
 
         return Car(id, name, max_speed, acceleration, health, mass, drivability, car_long,
                    car_width, selected_car_type, car_constants);
+    } catch (const std::exception& e) {
+        std::cerr << "Error building the car: " << e.what() << std::endl;
+        throw;
+    }
+}
+
+std::unique_ptr<Npc> CarBuilder::create_npc(const Position& position, std::vector<Corner>& corners,
+                                            b2WorldId world) {
+    try {
+        if (!cars_data) {
+            throw std::runtime_error("Invalid YAML archive");
+        }
+        YAML::Node cars_specs = cars_data["cars"];
+
+        std::uniform_int_distribution<int> numbers_distribution(1, cars_specs.size());
+        int selected_car_type = numbers_distribution(random_seed);
+
+        YAML::Node car_parameters = cars_specs[selected_car_type];
+
+        float car_long = car_parameters["long"].as<float>();
+        float car_width = car_parameters["width"].as<float>();
+
+        return std::make_unique<Npc>(position, corners, world, car_long, car_width,
+                                     selected_car_type);
     } catch (const std::exception& e) {
         std::cerr << "Error building the car: " << e.what() << std::endl;
         throw;

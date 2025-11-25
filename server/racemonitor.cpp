@@ -54,3 +54,13 @@ int RaceStruct::size() {
 void RaceStruct::reap() {
     players.remove_if([](auto& c) { return c->is_dead(); });
 }
+
+std::unordered_map<int, std::string> RaceStruct::get_player_usernames() {
+    std::lock_guard<std::mutex> lock(mtx);
+    reap();
+    std::unordered_map<int, std::string> usernames;
+    for (const auto& client: players) {
+        usernames[client->get_id()] = client->get_username();
+    }
+    return usernames;
+}

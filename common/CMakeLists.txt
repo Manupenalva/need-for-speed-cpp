@@ -32,4 +32,5 @@ target_sources(taller_common
         intervalState.h
         playerState.h
         minimapInfo.h
+        resultInfo.h
     )

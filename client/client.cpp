@@ -3,6 +3,7 @@
 #include <iostream>
 
 Client::Client(Protocol& protocol, const int id):
+        keep_running(true),
         protocol(protocol),
         events_queue(),
         server_queue(),
@@ -29,9 +30,9 @@ void Client::run() {
         uint32_t iterations_ahead = 0;
         sounds_manager.play_music(MAIN_MUSIC);
 
-        while (_keep_running) {
+        while (keep_running) {
             // Procesar todos los mensajes entrantes y actualizar el estado interno
-            kb_reader.listen_to_keyboard(_keep_running, actual_state.upgrades_interval,
+            kb_reader.listen_to_keyboard(keep_running, actual_state.upgrades_interval,
                                          actual_state.is_in_race);
 
             // Ejecutar una iteración lógica (actualizaciones locales / físicas)
@@ -51,15 +52,13 @@ void Client::run() {
 
 void Client::stop() {
     protocol.shutdown_receive();
-
     events_queue.close();
     server_queue.close();
     sender.stop();
     receiver.stop();
     sender.join();
     receiver.join();
-    _keep_running = false;
-    _is_alive = false;
+    keep_running = false;
 }
 
 void Client::init_resources() {
@@ -96,14 +95,14 @@ void Client::update_animation_frames(int iterations_ahead) {
     if (!actual_state.is_in_race && actual_state.has_last_state) {
         // Dibujar estadisticas
         clear_display();
-        drawer.update_estadistics_screen(actual_state.message);
+        drawer.update_statistics_screen(actual_state.message);
         window.present();
         actual_state.has_last_state = false;
     }
     if (!actual_state.is_in_race && actual_state.upgrades_interval) {
         // Mostrar pantalla de mejora de auto
         clear_display();
-        drawer.show_upgrade_screen();
+        drawer.show_upgrade_screen(actual_state.message);
         window.present();
     }
 }
@@ -150,6 +149,6 @@ void Client::init_game_handlers() {
 
     msg_handlers[MsgType::GAME_END] = [this](const ServerMessageDTO& server_msg) {
         actual_state.message = server_msg;
-        _keep_running = false;
+        keep_running = false;
     };
 }

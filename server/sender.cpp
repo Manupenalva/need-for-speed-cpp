@@ -1,10 +1,12 @@
 #include "sender.h"
 
+#include <utility>
+
 Sender::Sender(Protocol& protocol, int id): protocol(protocol), id(id) { this->start(); }
 
 void Sender::run() {
     send_client_id();
-    while (should_keep_running()) {
+    while (should_keep_running() && protocol.socket_alive()) {
 
         try {
             ServerMessageDTO msg = queue.pop();
@@ -26,8 +28,8 @@ void Sender::kill() {
     queue.close();
 }
 
-// cppcheck-suppress passedByValue
-void Sender::push_queue(const ServerMessageDTO msg) { queue.try_push(msg); }
+
+void Sender::push_queue(ServerMessageDTO msg) { queue.try_push(std::move(msg)); }
 
 Sender::~Sender() {
     kill();

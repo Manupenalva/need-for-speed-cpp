@@ -10,6 +10,36 @@ void CarDrawer::draw(RenderedState& rendered_state) {
     draw_npcs(rendered_state);
 }
 
+void CarDrawer::draw_npcs(const RenderedState& rendered_state) {
+    is_player = false;
+    for (const auto& npc: rendered_state.state.npcs) {
+        CarState npc_car_state(npc);  // Convertir NpcState a CarState
+        CarState predicted_npc = calculate_position(npc_car_state, rendered_state.it_ahead);
+
+        CarScreenPos screen_pos =
+                calculate_map_scale(predicted_npc, rendered_state.map_sprite.src_rect);
+
+        draw_car(predicted_npc, screen_pos);
+    }
+}
+
+void CarDrawer::draw_clients_cars(RenderedState& rendered_state) {
+    is_player = true;
+    for (const auto& car: rendered_state.state.cars) {
+        is_client_car = (car.id == rendered_state.client_car.id);
+
+        CarState predicted_car = calculate_position(car, rendered_state.it_ahead);
+
+        CarScreenPos screen_pos =
+                calculate_map_scale(predicted_car, rendered_state.map_sprite.src_rect);
+
+        SDL2pp::Rect dst_rect = draw_car(predicted_car, screen_pos);
+        if (is_client_car) {
+            rendered_state.client_car_screen_rect = dst_rect;
+        }
+    }
+}
+
 CarState CarDrawer::calculate_position(const CarState& car, const int iterations_ahead) {
     CarState predicted_car = car;
 
@@ -24,56 +54,52 @@ CarState CarDrawer::calculate_position(const CarState& car, const int iterations
     return predicted_car;
 }
 
-SDL2pp::Rect CarDrawer::draw_car(const CarState& car, float screen_x, float screen_y) {
+CarScreenPos CarDrawer::calculate_map_scale(const CarState& car, const SDL2pp::Rect& map_rect) {
+    Scale scale_factors = get_window_scale_factor();
+
+    // Ajusta en base al mapa
+    float screen_x = (car.x - map_rect.x) * scale_factors.x;
+    float screen_y = (car.y - map_rect.y) * scale_factors.y;
+    return {screen_x, screen_y, scale_factors.x, scale_factors.y};
+}
+
+SDL2pp::Rect CarDrawer::draw_car(const CarState& car, const CarScreenPos& screen_pos) {
     // Lógica para dibujar el coche
     Sprite car_sprite = texture_manager.get_car_sprite(car.car_type, car.angle);
 
-    if (is_player) {
-        draw_border(car, screen_x, screen_y);
+    SDL2pp::Rect dst_rect(static_cast<int>(screen_pos.x), static_cast<int>(screen_pos.y),
+                          car_sprite.src_rect.w * screen_pos.scale_x,
+                          car_sprite.src_rect.h * screen_pos.scale_y);
+
+
+    if (!is_drawable(dst_rect)) {
+        return dst_rect;  // No dibujar si está fuera del área de la pantalla
     }
 
-    if (car.under_bridge) {
-        car_sprite.texture.SetAlphaMod(UNDER_BRIDGE_OPACITY);  // Hacer el coche semitransparente
-    }
+    appply_visual_effects(car, screen_pos, car_sprite);
 
-    SDL2pp::Rect dst_rect(static_cast<int>(screen_x), static_cast<int>(screen_y),
-                          car_sprite.src_rect.w, car_sprite.src_rect.h);
     renderer.Copy(car_sprite.texture, car_sprite.src_rect, dst_rect);
-
-    if (car.under_bridge) {
-        car_sprite.texture.SetAlphaMod(NORMAL_OPACITY);  // Restaurar opacidad completa
-    }
+    car_sprite.texture.SetAlphaMod(NORMAL_OPACITY);  // Restaurar opacidad completa
 
     return dst_rect;
 }
 
-void CarDrawer::draw_npcs(const RenderedState& rendered_state) {
-    is_player = false;
-    for (const auto& npc: rendered_state.state.npcs) {
-        CarState npc_car_state(npc);  // Convertir NpcState a CarState
-        CarState predicted_npc = calculate_position(npc_car_state, rendered_state.it_ahead);
+bool CarDrawer::is_drawable(const SDL2pp::Rect& car_rect) {
+    int w, h;
+    SDL_GetRendererOutputSize(renderer.Get(), &w, &h);
+    SDL2pp::Rect screen_rect(0, 0, w, h);
 
-        // Ajusta en base al mapa
-        float screen_x = predicted_npc.x - rendered_state.map_sprite.src_rect.x;
-        float screen_y = predicted_npc.y - rendered_state.map_sprite.src_rect.y;
-        draw_car(predicted_npc, screen_x, screen_y);
-    }
+    return SDL_HasIntersection(&car_rect, &screen_rect);
 }
 
-void CarDrawer::draw_clients_cars(RenderedState& rendered_state) {
-    is_player = true;
-    for (const auto& car: rendered_state.state.cars) {
-        is_client_car = (car.id == rendered_state.client_car.id);
+void CarDrawer::appply_visual_effects(const CarState& car, const CarScreenPos& screen_pos,
+                                      Sprite& car_sprite) {
+    if (is_player) {
+        draw_border(car, screen_pos.x, screen_pos.y);
+    }
 
-        CarState predicted_car = calculate_position(car, rendered_state.it_ahead);
-
-        // Ajusta en base al mapa
-        float screen_x = predicted_car.x - rendered_state.map_sprite.src_rect.x;
-        float screen_y = predicted_car.y - rendered_state.map_sprite.src_rect.y;
-        SDL2pp::Rect dst_rect = draw_car(predicted_car, screen_x, screen_y);
-        if (is_client_car) {
-            rendered_state.client_car_screen_rect = dst_rect;
-        }
+    if (car.under_bridge) {
+        car_sprite.texture.SetAlphaMod(UNDER_BRIDGE_OPACITY);  // Hacer el coche semitransparente
     }
 }
 

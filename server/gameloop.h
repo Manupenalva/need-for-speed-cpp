@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <cstdint>
 #include <memory>
+#include <string>
+#include <tuple>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -31,6 +33,7 @@ private:
     uint32_t frames;
     int countdown_remaining;
     std::shared_ptr<CarConstants> car_constants;
+    std::unordered_map<int, std::string> player_usernames;
 
 public:
     Gameloop(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
@@ -53,7 +56,9 @@ private:
     void broadcast_minimap_info(int race_index);
     void broadcast_positions(int race_index);
     void handle_countdown(int race_index);
-    std::vector<std::pair<uint16_t, float>> get_acumullated_times();
+    std::vector<ResultInfo> get_acumullated_times();
+    std::vector<ResultInfo> get_positions_message(
+            const std::vector<std::tuple<uint16_t, float, float>>& positions);
 
     Gameloop(const Gameloop& other) = delete;
     Gameloop& operator=(const Gameloop& other) = delete;
