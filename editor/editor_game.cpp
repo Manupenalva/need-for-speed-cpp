@@ -3,13 +3,13 @@
 #include <QDrag>
 #include <QFileDialog>
 #include <QGraphicsDropShadowEffect>
+#include <QKeySequence>
+#include <QMessageBox>
 #include <QMimeData>
 #include <QPixmap>
 #include <QPropertyAnimation>
-#include <QTransform>
 #include <QShortcut>
-#include <QKeySequence>
-#include <QMessageBox>
+#include <QTransform>
 
 #include "cityselection.h"
 #include "drag_info.h"
@@ -24,8 +24,8 @@ EditorGame::EditorGame(QWidget* parent): QMainWindow(parent), ui(new Ui::EditorG
     setUpTools();
 
     auto* esc = new QShortcut(QKeySequence(Qt::Key_Escape), this);
-    connect(esc, &QShortcut::activated, this, [this](){
-        if(ui->mapCanvas){
+    connect(esc, &QShortcut::activated, this, [this]() {
+        if (ui->mapCanvas) {
             ui->mapCanvas->cancelSelecting();
         }
     });
@@ -59,7 +59,7 @@ void EditorGame::setUpLoad() {
 }
 
 void EditorGame::setUpTools() {
-    for (const auto& t : tools) {
+    for (const auto& t: tools) {
         rotateIcon(t.btn, t.iconPath, t.rotation);
         dragMovement(t.btn, t.type, t.iconPath, t.rotation);
     }
@@ -70,9 +70,9 @@ void EditorGame::dragMovement(QToolButton* btn, const QString& type, const QStri
     if (!btn)
         return;
     QObject::connect(btn, &QToolButton::pressed, this, [this, btn, type, iconPath, rotDeg] {
-        if (ui->mapCanvas && ui->mapCanvas->isSelecting()){
+        if (ui->mapCanvas && ui->mapCanvas->isSelecting()) {
             QMessageBox::information(this, "Select checkpoint",
-                                 "You must select a checkpoint first. ESC to exit.");
+                                     "You must select a checkpoint first. ESC to exit.");
             return;
         }
         DragInfo d(type, rotDeg, iconPath);
@@ -103,26 +103,25 @@ void EditorGame::rotateIcon(QToolButton* btn, const QString& iconPath, int rotDe
     btn->setIconSize(QSize(48, 48));
 }
 
-void EditorGame::toolsConstants(){
+void EditorGame::toolsConstants() {
     tools = {
-        {ui->toolStartLine, LINE_TYPE, LINE_PATH, 0},
-        {ui->toolStartLineVertical, LINE_TYPE, LINE_PATH, LINE_ROTATION},
+            {ui->toolStartLine, LINE_TYPE, LINE_PATH, 0},
+            {ui->toolStartLineVertical, LINE_TYPE, LINE_PATH, LINE_ROTATION},
 
-        {ui->toolCheckpointVertical, CHECKPOINT_TYPE, CHECKPOINT_PATH, 0},
-        {ui->toolCheckpointHorizontal, CHECKPOINT_TYPE, CHECKPOINT_PATH, HORIZONTAL_ROTATION},
+            {ui->toolCheckpointVertical, CHECKPOINT_TYPE, CHECKPOINT_PATH, 0},
+            {ui->toolCheckpointHorizontal, CHECKPOINT_TYPE, CHECKPOINT_PATH, HORIZONTAL_ROTATION},
 
-        {ui->toolStartUp, START_TYPE, START_PATH_1, 0},
-        {ui->toolStartLeft, START_TYPE, START_PATH_2, START_LEFT},
-        {ui->toolStartDown, START_TYPE, START_PATH_1, START_DOWN},
-        {ui->toolStartRight, START_TYPE, START_PATH_2, START_RIGHT},
+            {ui->toolStartUp, START_TYPE, START_PATH_1, 0},
+            {ui->toolStartLeft, START_TYPE, START_PATH_2, START_LEFT},
+            {ui->toolStartDown, START_TYPE, START_PATH_1, START_DOWN},
+            {ui->toolStartRight, START_TYPE, START_PATH_2, START_RIGHT},
 
-        {ui->toolFinish, FINISH_TYPE, FINISH_PATH, 0},
-        {ui->toolFinishHorizontal, FINISH_TYPE, FINISH_PATH, HORIZONTAL_ROTATION},
+            {ui->toolFinish, FINISH_TYPE, FINISH_PATH, 0},
+            {ui->toolFinishHorizontal, FINISH_TYPE, FINISH_PATH, HORIZONTAL_ROTATION},
 
-        {ui->toolHintLeft, HINT_TYPE, HINT_PATH, 0},
-        {ui->toolHintDown, HINT_TYPE, HINT_PATH, DOWN_ROTATION},
-        {ui->toolHintUp, HINT_TYPE, HINT_PATH, UP_ROTATION},
-        {ui->toolHintRight, HINT_TYPE, HINT_PATH, RIGHT_ROTATION},
+            {ui->toolHintLeft, HINT_TYPE, HINT_PATH, 0},
+            {ui->toolHintDown, HINT_TYPE, HINT_PATH, DOWN_ROTATION},
+            {ui->toolHintUp, HINT_TYPE, HINT_PATH, UP_ROTATION},
+            {ui->toolHintRight, HINT_TYPE, HINT_PATH, RIGHT_ROTATION},
     };
 }
-

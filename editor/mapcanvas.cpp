@@ -16,8 +16,8 @@
 #include <QRectF>
 #include <QVBoxLayout>
 
-#include "yaml_config.h"
 #include "verificator.h"
+#include "yaml_config.h"
 
 MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -66,13 +66,9 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
         QCoreApplication::quit();
     });
 
-    connect(zoomInButton, &QPushButton::clicked, this, [this]() {
-        zoomIn();
-    });
+    connect(zoomInButton, &QPushButton::clicked, this, [this]() { zoomIn(); });
 
-     connect(zoomOutButton, &QPushButton::clicked, this, [this]() {
-        zoomOut();
-    });
+    connect(zoomOutButton, &QPushButton::clicked, this, [this]() { zoomOut(); });
 
     setLayout(layout);
 
@@ -180,7 +176,7 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
             return true;
         }
     }
-    
+
     return QWidget::eventFilter(obj, event);
 }
 
@@ -222,14 +218,14 @@ void MapCanvas::handleDelete(const QPoint& pos) {
     int x = static_cast<int>(scenePos.x() / GRID_SIZE) * GRID_SIZE;
     int y = static_cast<int>(scenePos.y() / GRID_SIZE) * GRID_SIZE;
     QRectF pickArea(x, y, GRID_SIZE, GRID_SIZE);
-    auto items = scene->items(pickArea);   
+    auto items = scene->items(pickArea);
     for (auto* i: items) {
         QGraphicsItem* item = i;
         while (item && !item->data(TYPE).isValid()) {
             item = item->parentItem();
         }
         if (item && item->data(TYPE).isValid()) {
-            controller->deleteItem(item); 
+            controller->deleteItem(item);
             return;
         }
     }
@@ -259,11 +255,6 @@ void MapCanvas::zoomOut() {
     }
 }
 
-bool MapCanvas::isSelecting() const {
-    return selecting;
-}
+bool MapCanvas::isSelecting() const { return selecting; }
 
-void MapCanvas::cancelSelecting() {
-    selecting = false;
-}
-
+void MapCanvas::cancelSelecting() { selecting = false; }

@@ -49,7 +49,8 @@ void SceneController::placeHint(const DragInfo& info, const QPointF& hintPos,
     QGraphicsPixmapItem* hint = itemBuilder.buildItem(info, QSize(GRID_SIZE, GRID_SIZE));
     hint->setPos(hintPos.x(), hintPos.y());
     hint->setData(ID, checkpointItem->data(ID).toInt());
-    auto* label = new QGraphicsSimpleTextItem(QString::number(checkpointItem->data(ID).toInt()), hint);
+    auto* label =
+            new QGraphicsSimpleTextItem(QString::number(checkpointItem->data(ID).toInt()), hint);
     label->setPos(5, -5);
     scene->addItem(hint);
 }
@@ -132,4 +133,3 @@ void SceneController::renumberCheckpoints() {
         }
     }
 }
-

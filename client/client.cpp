@@ -31,6 +31,10 @@ void Client::run() {
         sounds_manager.play_music(MAIN_MUSIC);
 
         while (keep_running) {
+            if (!receiver.is_alive() || !sender.is_alive()) {
+                break;  // En caso de que alguno de los hilos falle, salir del loop
+            }
+
             // Procesar todos los mensajes entrantes y actualizar el estado interno
             kb_reader.listen_to_keyboard(keep_running, actual_state.upgrades_interval,
                                          actual_state.is_in_race);
