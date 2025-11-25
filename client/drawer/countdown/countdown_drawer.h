@@ -4,7 +4,7 @@
 #include "../../config/config_reader.h"
 #include "../drawer.h"
 
-#define MAX_NUMBER 10
+#define MAX_NUMBER 9
 
 class CountdownDrawer: public Drawer {
 public:

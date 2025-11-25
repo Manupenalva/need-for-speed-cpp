@@ -22,8 +22,10 @@
 #include "minimap/minimap_drawer.h"
 #include "race/arrow_drawer.h"
 #include "race/checkpoint_drawer.h"
+#include "race/remaining_time_drawer.h"
 #include "screen/upgradeScreen_drawer.h"
 #include "statistics/statistics_drawer.h"
+#include "text/text_drawer.h"
 
 #include "drawer.h"
 #include "renderedState.h"
