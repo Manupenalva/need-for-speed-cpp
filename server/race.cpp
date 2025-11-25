@@ -183,6 +183,7 @@ ServerMessageDTO Race::get_broadcast_message(float frames) {
     game_state.num_cars = num_cars;
     game_state.cars = cars;
     game_state.npcs = npcs_state;
+    game_state.remaining_time = MAX_TIME - current_time;
 
     msg.type = MsgType::STATE_UPDATE;
     msg.state = game_state;

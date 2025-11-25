@@ -12,7 +12,8 @@ struct State {
     uint16_t num_cars;
     std::vector<CarState> cars;
     std::vector<NpcState> npcs;
-    State(): countdown_time(0), frame(0), num_cars(0), cars(), npcs() {}
+    float remaining_time;
+    State(): countdown_time(0), frame(0), num_cars(0), cars(), npcs(), remaining_time(0.0f) {}
 };
 
 #endif

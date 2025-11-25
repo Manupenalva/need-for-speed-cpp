@@ -138,6 +138,7 @@ State MessageReceiver::recv_state_update() {
     state.npcs.resize(num_npcs);
 
     std::generate(state.npcs.begin(), state.npcs.end(), [this]() { return recv_npc_state(); });
+    state.remaining_time = obtain_float();
 
     return state;
 }
