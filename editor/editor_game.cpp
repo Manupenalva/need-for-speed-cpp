@@ -6,7 +6,6 @@
 #include <QMimeData>
 #include <QPixmap>
 #include <QPropertyAnimation>
-#include <QToolButton>
 #include <QTransform>
 #include <QShortcut>
 #include <QKeySequence>
@@ -14,7 +13,6 @@
 
 #include "cityselection.h"
 #include "drag_info.h"
-#include "editor_constants.h"
 #include "mapcanvas.h"
 #include "ui_EditorGame.h"
 
@@ -60,31 +58,10 @@ void EditorGame::setUpLoad() {
 }
 
 void EditorGame::setUpTools() {
-    rotateIcon(ui->toolHintDown, HINT_PATH, DOWN_ROTATION);
-    rotateIcon(ui->toolHintUp, HINT_PATH, UP_ROTATION);
-    rotateIcon(ui->toolHintRight, HINT_PATH, RIGHT_ROTATION);
-    rotateIcon(ui->toolCheckpointHorizontal, CHECKPOINT_PATH, HORIZONTAL_ROTATION);
-    rotateIcon(ui->toolStartLeft, START_PATH_2, START_LEFT);
-    rotateIcon(ui->toolStartRight, START_PATH_2, START_RIGHT);
-    rotateIcon(ui->toolStartDown, START_PATH_1, START_DOWN);
-    rotateIcon(ui->toolFinishHorizontal, FINISH_PATH, HORIZONTAL_ROTATION);
-    rotateIcon(ui->toolStartLineVertical, LINE_PATH, LINE_ROTATION);
-
-    dragMovement(ui->toolStartLine, LINE_TYPE, LINE_PATH);
-    dragMovement(ui->toolStartLineVertical, LINE_TYPE, LINE_PATH, LINE_ROTATION);
-    dragMovement(ui->toolCheckpointVertical, CHECKPOINT_TYPE, CHECKPOINT_PATH);
-    dragMovement(ui->toolCheckpointHorizontal, CHECKPOINT_TYPE, CHECKPOINT_PATH,
-                 HORIZONTAL_ROTATION);
-    dragMovement(ui->toolStartUp, START_TYPE, START_PATH_1);
-    dragMovement(ui->toolStartLeft, START_TYPE, START_PATH_2, START_LEFT);
-    dragMovement(ui->toolStartDown, START_TYPE, START_PATH_1, START_DOWN);
-    dragMovement(ui->toolStartRight, START_TYPE, START_PATH_2, START_RIGHT);
-    dragMovement(ui->toolFinish, FINISH_TYPE, FINISH_PATH);
-    dragMovement(ui->toolFinishHorizontal, FINISH_TYPE, FINISH_PATH, HORIZONTAL_ROTATION);
-    dragMovement(ui->toolHintLeft, HINT_TYPE, HINT_PATH);
-    dragMovement(ui->toolHintDown, HINT_TYPE, HINT_PATH, DOWN_ROTATION);
-    dragMovement(ui->toolHintUp, HINT_TYPE, HINT_PATH, UP_ROTATION);
-    dragMovement(ui->toolHintRight, HINT_TYPE, HINT_PATH, RIGHT_ROTATION);
+    for (const auto& t : tools) {
+        rotateIcon(t.btn, t.iconPath, t.rotation);
+        dragMovement(t.btn, t.type, t.iconPath, t.rotation);
+    }
 }
 
 void EditorGame::dragMovement(QToolButton* btn, const QString& type, const QString& iconPath,
@@ -100,8 +77,8 @@ void EditorGame::dragMovement(QToolButton* btn, const QString& type, const QStri
         DragInfo d(type, rotDeg, iconPath);
         auto* mime = new QMimeData;
         mime->setData(d.mimeType(), d.pack());
-        auto* drag = new QDrag(btn);
-        drag->setMimeData(mime);
+        QDrag drag(btn);
+        drag.setMimeData(mime);
 
         QPixmap px(iconPath);
         if (!px.isNull() && rotDeg) {
@@ -109,8 +86,8 @@ void EditorGame::dragMovement(QToolButton* btn, const QString& type, const QStri
             t.rotate(rotDeg);
             px = px.transformed(t, Qt::SmoothTransformation);
         }
-        drag->setPixmap(px.scaled(50, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        drag->exec(Qt::CopyAction);
+        drag.setPixmap(px.scaled(50, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        drag.exec(Qt::CopyAction);
     });
 }
 
@@ -124,3 +101,27 @@ void EditorGame::rotateIcon(QToolButton* btn, const QString& iconPath, int rotDe
     btn->setIcon(base);
     btn->setIconSize(QSize(48, 48));
 }
+
+void EditorGame::toolsConstants(){
+    tools = {
+        {ui->toolStartLine, LINE_TYPE, LINE_PATH, 0},
+        {ui->toolStartLineVertical, LINE_TYPE, LINE_PATH, LINE_ROTATION},
+
+        {ui->toolCheckpointVertical, CHECKPOINT_TYPE, CHECKPOINT_PATH, 0},
+        {ui->toolCheckpointHorizontal, CHECKPOINT_TYPE, CHECKPOINT_PATH, HORIZONTAL_ROTATION},
+
+        {ui->toolStartUp, START_TYPE, START_PATH_1, 0},
+        {ui->toolStartLeft, START_TYPE, START_PATH_2, START_LEFT},
+        {ui->toolStartDown, START_TYPE, START_PATH_1, START_DOWN},
+        {ui->toolStartRight, START_TYPE, START_PATH_2, START_RIGHT},
+
+        {ui->toolFinish, FINISH_TYPE, FINISH_PATH, 0},
+        {ui->toolFinishHorizontal, FINISH_TYPE, FINISH_PATH, HORIZONTAL_ROTATION},
+
+        {ui->toolHintLeft, HINT_TYPE, HINT_PATH, 0},
+        {ui->toolHintDown, HINT_TYPE, HINT_PATH, DOWN_ROTATION},
+        {ui->toolHintUp, HINT_TYPE, HINT_PATH, UP_ROTATION},
+        {ui->toolHintRight, HINT_TYPE, HINT_PATH, RIGHT_ROTATION},
+    };
+}
+
