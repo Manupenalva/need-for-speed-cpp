@@ -69,7 +69,8 @@ float RaceBuilder::get_checkpoint_angle(const std::string& rotation) {
 }
 
 std::unique_ptr<Race> RaceBuilder::create_race(const std::string& path,
-                                               std::unordered_map<uint16_t, Car>& players_cars) {
+                                               std::unordered_map<uint16_t, Car>& players_cars,
+                                               const std::shared_ptr<ConfigConstants>& configs) {
     try {
         YAML::Node race_data = open_file(path);
         if (!race_data) {
@@ -118,7 +119,8 @@ std::unique_ptr<Race> RaceBuilder::create_race(const std::string& path,
         }
 
         return std::make_unique<Race>(players_cars, celd_width, celd_height, start_positions,
-                                      finish, checkpoints, hints, map_collitions_path, city_code);
+                                      finish, checkpoints, hints, map_collitions_path, city_code,
+                                      configs->race_duration);
 
     } catch (const std::exception& e) {
         std::cerr << "Error building the race: " << e.what() << std::endl;

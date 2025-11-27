@@ -21,6 +21,7 @@ target_sources(taller_server
         monitorGames.cpp
         carBuilder.cpp
         npc.cpp
+        configLoader.cpp
     PUBLIC
         sender.h
         receiver.h
@@ -45,5 +46,7 @@ target_sources(taller_server
         npc.h
         bridge.h
         carConstants.h
+        configLoader.h
+        configConstants.h
         ${EVENTS_SRC}
     )

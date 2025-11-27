@@ -1,0 +1,14 @@
+times:
+  countdown: 10
+  race_duration: 600
+  positions: 10
+  interval_iters: 300
+  interval_wait_time: 10
+
+
+rates:
+  game_rate: 60
+  positions_rate: 5
+  interval_rate: 30
+
+race_amount: 2

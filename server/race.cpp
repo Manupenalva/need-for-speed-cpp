@@ -11,12 +11,12 @@
 #include "hint.h"
 #include "mapCollisionBuilder.h"
 
-#define MAX_TIME 600.0f
 
 Race::Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_width,
            const float& celd_height, const std::vector<Position>& start_positions,
            const Position& finish, const std::vector<Position>& checkpoints,
-           const std::vector<Hint>& hints, const std::string& map_path, uint8_t city_code):
+           const std::vector<Hint>& hints, const std::string& map_path, uint8_t city_code,
+           float max_time):
         players_cars(players_cars),
         players_status(),
         celd_width(celd_width),
@@ -29,7 +29,8 @@ Race::Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_wi
         map_collisions_path(map_path),
         current_time(0.0f),
         world(),
-        city_code(city_code) {
+        city_code(city_code),
+        max_time(max_time) {
     this->checkpoints.push_back(finish);
 }
 
@@ -75,8 +76,8 @@ void Race::update_state() {
         if (car.exploded()) {
             status.has_finished = true;
             float pen_time = car.get_penalization_time();
-            race_results.emplace_back(id, MAX_TIME + pen_time, pen_time);
-            car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
+            race_results.emplace_back(id, max_time + pen_time, pen_time);
+            car.finish_race(max_time, MAX_PLAYERS_RACE);
             continue;
         }
 
@@ -107,7 +108,7 @@ void Race::update_state() {
     float timeStep = 1.0f / 60.0f;
     b2World_Step(world, timeStep, 3);
     current_time += timeStep;
-    if (current_time > MAX_TIME) {
+    if (current_time > max_time) {
         finish_race();
     }
 
@@ -183,7 +184,7 @@ ServerMessageDTO Race::get_broadcast_message(float frames) {
     game_state.num_cars = num_cars;
     game_state.cars = cars;
     game_state.npcs = npcs_state;
-    game_state.remaining_time = MAX_TIME - current_time;
+    game_state.remaining_time = max_time - current_time;
 
     msg.type = MsgType::STATE_UPDATE;
     msg.state = game_state;
@@ -215,15 +216,15 @@ void Race::finish_race() {
     for (auto& [id, status]: players_status) {
         if (!status.has_finished) {
             float pen_time = players_cars[id].get_penalization_time();
-            race_results.emplace_back(id, MAX_TIME + pen_time, pen_time);
-            players_cars[id].finish_race(MAX_TIME, MAX_PLAYERS_RACE);
+            race_results.emplace_back(id, max_time + pen_time, pen_time);
+            players_cars[id].finish_race(max_time, MAX_PLAYERS_RACE);
             status.has_finished = true;
         }
     }
 }
 
 bool Race::is_finished() {
-    if (current_time >= MAX_TIME) {
+    if (current_time >= max_time) {
         return true;
     }
 
@@ -279,8 +280,8 @@ void Race::force_lose_race(const uint16_t& player_id) {
         return;
     players_status[player_id].has_finished = true;
     float pen_time = car.get_penalization_time();
-    race_results.emplace_back(player_id, MAX_TIME + pen_time, pen_time);
-    car.finish_race(MAX_TIME, MAX_PLAYERS_RACE);
+    race_results.emplace_back(player_id, max_time + pen_time, pen_time);
+    car.finish_race(max_time, MAX_PLAYERS_RACE);
     car.explode();
 }
 
