@@ -20,6 +20,7 @@
 
 #include "car.h"
 #include "carConstants.h"
+#include "configConstants.h"
 #include "race.h"
 #include "racemonitor.h"
 
@@ -34,10 +35,12 @@ private:
     int countdown_remaining;
     std::shared_ptr<CarConstants> car_constants;
     std::unordered_map<int, std::string> player_usernames;
+    std::shared_ptr<ConfigConstants> configs;
 
 public:
     Gameloop(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
-             std::shared_ptr<RaceStruct> race_monitor);
+             std::shared_ptr<RaceStruct> race_monitor,
+             std::shared_ptr<ConfigConstants> config_constants);
     void run() override;
 
 private:

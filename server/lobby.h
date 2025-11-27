@@ -13,6 +13,7 @@
 #include "events/clienthandlermessage.h"
 
 #include "carBuilder.h"
+#include "configLoader.h"
 #include "gameSession.h"
 #include "monitorClients.h"
 #include "monitorGames.h"
@@ -34,6 +35,7 @@ private:
     MonitorGames games_monitor;
     std::vector<CarProperties> car_catalog;
     std::set<std::string> usernames;
+    std::shared_ptr<ConfigConstants> config;
     int create_race();
     void add_player_to_race(int playerId, int raceId);
     void remove_player_from_race(int playerId);

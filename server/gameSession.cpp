@@ -2,11 +2,12 @@
 
 #include <iostream>
 
-GameSession::GameSession(const int& id, std::shared_ptr<RaceStruct> race):
+GameSession::GameSession(const int& id, std::shared_ptr<RaceStruct> race,
+                         std::shared_ptr<ConfigConstants> config_constants):
         race(race),
         game_id(id),
         user_commands_queue(std::make_shared<Queue<std::shared_ptr<ClientHandlerMessage>>>()),
-        gameloop(user_commands_queue, race) {
+        gameloop(user_commands_queue, race, std::move(config_constants)) {
     race->set_game_queue(user_commands_queue);
     gameloop.start();
 }

@@ -18,23 +18,19 @@
 #include "carPhysics.h"
 #include "mapCollisionBuilder.h"
 #include "raceBuilder.h"
-#define TARGET_FPS 60
-#define TARGET_FPS_INTERVAL 30
-#define INTERVAL_WAIT_TIME 10        // segundos
-#define FRAME_INTERVAL_TO_CLOSE 300  // segundos
-#define POSITIONS_WAIT_TIME 10
-#define POSITIONS_FPS 5
 
 Gameloop::Gameloop(
         std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> user_commands_queue,
-        std::shared_ptr<RaceStruct> race_monitor):
+        std::shared_ptr<RaceStruct> race_monitor,
+        std::shared_ptr<ConfigConstants> config_constants):
         user_commands_queue(user_commands_queue),
         race_monitor(race_monitor),
         races(),
         frames(0),
         countdown_remaining(0),
         car_constants(std::make_shared<CarConstants>()),
-        player_usernames(race_monitor->get_player_usernames()) {}
+        player_usernames(race_monitor->get_player_usernames()),
+        configs(config_constants) {}
 
 void Gameloop::update_car_input(const uint16_t& player_id, const uint8_t& action) {
     players_cars[player_id].update_input(action);
@@ -56,7 +52,7 @@ void Gameloop::broadcast_positions(int race_index) {
             get_positions_message(races[race_index]->get_race_results());
     std::vector<ResultInfo> accumulated_positions = get_acumullated_times();
 
-    GameLoopTimer timer(POSITIONS_FPS);
+    GameLoopTimer timer(configs->positions_rate);
     std::chrono::steady_clock::time_point pos_start_time = std::chrono::steady_clock::now();
     uint32_t iterations_behind = 1;
 
@@ -65,7 +61,7 @@ void Gameloop::broadcast_positions(int race_index) {
     while (should_keep_running()) {
         auto now = std::chrono::steady_clock::now();
         auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - pos_start_time);
-        if (elapsed.count() >= POSITIONS_WAIT_TIME) {
+        if (elapsed.count() >= configs->positions_wait_time) {
             if (msg.type == MsgType::RACE_POSITIONS) {
                 msg.type = MsgType::ACCUMULATED_POSITIONS;
                 msg.positions = accumulated_positions;
@@ -109,9 +105,14 @@ void Gameloop::broadcast_minimap_info(int race_index) {
 }
 
 void Gameloop::initialize_races() {
+    int race_amount = 0;
     for (const auto& entry: std::filesystem::directory_iterator("../server/assets/race_configs")) {
+        if (race_amount == configs->race_amount) {
+            return;
+        }
         if (entry.is_regular_file() && entry.path().extension() == ".yaml") {
-            races.push_back(RaceBuilder::create_race(entry.path(), players_cars));
+            races.push_back(RaceBuilder::create_race(entry.path(), players_cars, configs));
+            race_amount++;
         }
     }
 }
@@ -142,10 +143,10 @@ void Gameloop::receive_selected_cars() {
 }
 
 void Gameloop::handle_upgrades_phase(const int& race_index) {
-    GameLoopTimer timer(TARGET_FPS);
+    GameLoopTimer timer(configs->interval_rate);
     int frames_interval = 0;
     uint32_t iterations_behind = 1;
-    while (should_keep_running() && frames_interval < FRAME_INTERVAL_TO_CLOSE) {
+    while (should_keep_running() && frames_interval < configs->interval_iters) {
         std::shared_ptr<ClientHandlerMessage> base_msg;
         while (user_commands_queue->try_pop(base_msg) && should_keep_running()) {
             if (base_msg->get_msg_type() != MsgType::DRIVING_EVENT) {
@@ -189,7 +190,7 @@ void Gameloop::handle_countdown(int race_index) {
 
 void Gameloop::handle_race(const int& race_index) {
     if (race_index != 0) {
-        std::this_thread::sleep_for(std::chrono::seconds(INTERVAL_WAIT_TIME));
+        std::this_thread::sleep_for(std::chrono::seconds(configs->interval_wait_time));
     }
     broadcast_event(MsgType::RACE_STARTED);
     uint8_t city_code = races[race_index]->get_city_code();
@@ -198,7 +199,7 @@ void Gameloop::handle_race(const int& race_index) {
     frames = 0;
     races[race_index]->start_race();
     handle_countdown(race_index);
-    GameLoopTimer timer(TARGET_FPS);
+    GameLoopTimer timer(configs->game_rate);
     uint32_t iterations_behind = 1;
 
     while (!races[race_index]->is_finished() && should_keep_running()) {

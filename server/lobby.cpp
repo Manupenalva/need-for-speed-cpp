@@ -11,7 +11,8 @@ Lobby::Lobby(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> lobby
         lobby_queue(std::move(lobbyQueue)),
         clients_monitor(clientsMonitor),
         car_catalog(CarBuilder("../server/assets/cars_configs/cars_config.yaml").get_catalog()),
-        usernames() {}
+        usernames(),
+        config(ConfigLoader("../server/assets/game_configs/game_config.yaml").load_constants()) {}
 
 void Lobby::run() {
     std::shared_ptr<ClientHandlerMessage> msg;
@@ -139,8 +140,8 @@ void Lobby::start_race(int playerId) {
     if (race_id == -1) {
         return;
     }
-    auto session = std::make_shared<GameSession>(
-            race_id, games_monitor.get_race(race_id));  // Evito que se llame al destructor
+    auto session = std::make_shared<GameSession>(race_id, games_monitor.get_race(race_id),
+                                                 config);  // Evito que se llame al destructor
     active_games.push_back(session);
 }
 

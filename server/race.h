@@ -37,12 +37,14 @@ private:
     b2WorldId world;
     std::vector<std::tuple<uint16_t, float, float>> race_results;
     uint8_t city_code;
+    float max_time;
 
 public:
     Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_width,
          const float& celd_height, const std::vector<Position>& start_positions,
          const Position& finish, const std::vector<Position>& checkpoints,
-         const std::vector<Hint>& hints, const std::string& map_path, const uint8_t city_code);
+         const std::vector<Hint>& hints, const std::string& map_path, const uint8_t city_code,
+         float max_time);
     b2WorldId start_race();
     void update_state();
     bool is_finished();
