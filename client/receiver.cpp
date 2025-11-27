@@ -5,7 +5,7 @@ Receiver::Receiver(Protocol& protocol, Queue<ServerMessageDTO>& server_queue):
 
 void Receiver::run() {
     try {
-        while (_keep_running) {
+        while (_keep_running && protocol.socket_alive()) {
             ServerMessageDTO msg = protocol.recv_server_message();
             server_queue.push(msg);
         }

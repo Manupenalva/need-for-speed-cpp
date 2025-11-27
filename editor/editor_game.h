@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QToolButton>
+#include <vector>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
