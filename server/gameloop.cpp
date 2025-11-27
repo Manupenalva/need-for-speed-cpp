@@ -268,9 +268,8 @@ void Gameloop::run() {
 std::vector<ResultInfo> Gameloop::get_acumullated_times() {
     std::vector<ResultInfo> times_vector;
     for (const auto& [id, car]: players_cars) {
-        // ResultInfo result(id, car.get_total_time(), car.get_total_penalization(),
-        //                   player_usernames[id]);
-        ResultInfo result(id, car.get_total_time(), car.get_total_penalization(), "username");
+        ResultInfo result(id, car.get_total_time(), car.get_total_penalization(),
+                          player_usernames[id]);
         times_vector.emplace_back(result);
     }
     std::sort(times_vector.begin(), times_vector.end(),
@@ -287,8 +286,8 @@ std::vector<ResultInfo> Gameloop::get_positions_message(
                        return ResultInfo(std::get<0>(tuple), std::get<1>(tuple), std::get<2>(tuple),
                                          "username");
                    });
-    // for (auto& result: results) {
-    //     result.name = player_usernames[result.id];
-    // }
+    for (auto& result: results) {
+        result.name = player_usernames[result.id];
+    }
     return results;
 }
