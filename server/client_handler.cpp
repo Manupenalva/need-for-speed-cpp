@@ -32,3 +32,7 @@ void ClientHandler::set_race_id(int race_id) { this->race_id = race_id; }
 int ClientHandler::get_race_id() const { return race_id; }
 
 bool ClientHandler::is_dead() { return !receiver.is_alive() || !sender.is_alive(); }
+
+ClientHandler::~ClientHandler() {
+    sender.kill();
+}

@@ -19,6 +19,7 @@ class ClientHandler {
 public:
     ClientHandler(const int id, Socket s,
                   std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> queue);
+    ~ClientHandler();
 
     void send_msg(ServerMessageDTO msg);
 

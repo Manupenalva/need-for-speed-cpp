@@ -13,7 +13,6 @@ class Sender: public Thread {
 private:
     Protocol& protocol;
     Queue<ServerMessageDTO> queue;
-    void kill();
     int id;
 
     void send_client_id();
@@ -22,6 +21,7 @@ public:
     explicit Sender(Protocol& protocol, int id);
     void run() override;
     void push_queue(ServerMessageDTO msg);
+    void kill();
 
     ~Sender() override;
 };
