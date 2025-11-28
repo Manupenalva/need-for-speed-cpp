@@ -62,6 +62,7 @@ public:
 private:
     void handle_sensors();
     void handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* bridge, Car* car);
+    void correct_bridge_interactions(b2ShapeId sensor_shape, const Bridge* bridge, Car* car);
 
     Race(const Race& other) = delete;
     Race& operator=(const Race& other) = delete;

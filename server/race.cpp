@@ -47,6 +47,7 @@ b2WorldId Race::start_race() {
         b2Shape_SetUserData(bridge.sensor2_up, &bridge);
         b2Shape_SetUserData(bridge.sensor1_down, &bridge);
         b2Shape_SetUserData(bridge.sensor2_down, &bridge);
+        b2Shape_SetUserData(bridge.bridge_area, &bridge);
     }
 
     corners = map_data.corners;
@@ -250,6 +251,17 @@ void Race::handle_sensors() {
 
         handle_bridge_interactions(sensor_shape, bridge, car);
     }
+
+    for (int i = 0; i < events.endCount; i++) {
+        b2ShapeId sensor_shape = events.endEvents[i].sensorShapeId;
+        const Bridge* bridge = static_cast<Bridge*>(b2Shape_GetUserData(sensor_shape));
+
+        b2ShapeId other_shape = events.endEvents[i].visitorShapeId;
+        b2BodyId other_body = b2Shape_GetBody(other_shape);
+        Car* car = static_cast<Car*>(b2Body_GetUserData(other_body));
+
+        correct_bridge_interactions(sensor_shape, bridge, car);
+    }
 }
 
 void Race::handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* bridge, Car* car) {
@@ -263,6 +275,13 @@ void Race::handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* brid
                sensor_shape.index1 == bridge->sensor2_down.index1) {
         car->interact_with_bridge(BridgeLayer::BOTTOM);
     }
+}
+
+void Race::correct_bridge_interactions(b2ShapeId sensor_shape, const Bridge* bridge, Car* car) {
+    if (!bridge || !car || sensor_shape.index1 != bridge->bridge_area.index1)
+        return;
+
+    car->interact_with_bridge(BridgeLayer::NONE);
 }
 
 void Race::force_finish_race(const uint16_t& player_id) {
