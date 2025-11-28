@@ -12,15 +12,17 @@ GameLauncher::GameLauncher(const char* hostname, const char* servname):
 void GameLauncher::launchGame(int argc, char* argv[]) {
     QApplication app(argc, argv);
     // Crear y mostrar la ventana de Lobby (Qt)
-    Lobby lobby(protocol);
+    Lobby lobby(protocol, started);
     lobby.show();
 
     app.exec();
 
-    // Inicializar SDL
-    SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-    SDL2pp::SDLTTF sdl_ttf;
+    if (started) {
+        // Inicializar SDL
+        SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+        SDL2pp::SDLTTF sdl_ttf;
 
-    Client client(protocol, id);
-    client.run();
+        Client client(protocol, id);
+        client.run();
+    }
 }

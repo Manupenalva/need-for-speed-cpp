@@ -6,8 +6,8 @@
 
 #include "ui_lobby.h"
 
-Lobby::Lobby(Protocol& protocol, QWidget* parent):
-        QMainWindow(parent), ui(new Ui::Lobby), protocol(protocol) {
+Lobby::Lobby(Protocol& protocol, bool& started, QWidget* parent):
+        QMainWindow(parent), ui(new Ui::Lobby), protocol(protocol), started(started) {
 
     ui->setupUi(this);
 
@@ -153,6 +153,7 @@ void Lobby::updateLobby() {
         ui->startButton->setEnabled(host && count >= 2);
     } else if (response.type == MsgType::GAME_START) {
         timer->stop();
+        started = true;
         ClientMessageDTO msg;
         msg.type = MsgType::SELECT_CAR;
         msg.car_id = chosenCar;
