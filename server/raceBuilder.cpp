@@ -48,6 +48,18 @@ std::string RaceBuilder::get_map_data(const std::string& city_name, uint8_t& cit
     }
 }
 
+float RaceBuilder::get_start_angle(const std::string& rotation) {
+    if (rotation == UP_ROTATION) {
+        return 90.0f;
+    } else if (rotation == DOWN_ROTATION) {
+        return 270.0f;
+    } else if (rotation == RIGHT_ROTATION) {
+        return 180.0f;
+    } else {
+        return 0.0f;
+    }
+}
+
 float RaceBuilder::get_hint_angle(const std::string& rotation) {
     if (rotation == UP_ROTATION) {
         return 270.0f;
@@ -95,7 +107,7 @@ std::unique_ptr<Race> RaceBuilder::create_race(const std::string& path,
             int x = position["x"].as<int>();
             int y = position["y"].as<int>();
             std::string rotation = position["rotation"].as<std::string>();
-            start_positions.push_back({x, y, get_hint_angle(rotation)});
+            start_positions.push_back({x, y, get_start_angle(rotation)});
         }
 
         std::vector<Position> checkpoints;

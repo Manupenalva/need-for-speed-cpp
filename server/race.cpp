@@ -132,7 +132,8 @@ CheckpointInfo Race::get_next_checkpoint_info(const uint16_t car_id) {
     }
     Position checkpoint = checkpoints[status.current_checkpoint_index];
     uint8_t type = COMMON_CHECKPOINT;
-    if (status.current_checkpoint_index == checkpoints.size() - 1) {
+    if ((status.current_checkpoint_index == checkpoints.size() - 1) ||
+        (status.current_checkpoint_index == 0)) {
         type = SPECIAL_CHECKPOINT;
     }
 
