@@ -16,7 +16,6 @@
 
 #include "car.h"
 #include "corner.h"
-#include "hint.h"
 #include "npc.h"
 #include "playerRaceStatus.h"
 

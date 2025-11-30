@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "hint.h"
 #include "mapCollisionBuilder.h"
 
 

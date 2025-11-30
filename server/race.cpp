@@ -8,7 +8,6 @@
 #include "events/actionmessage.h"
 
 #include "carBuilder.h"
-#include "hint.h"
 #include "mapCollisionBuilder.h"
 
 
