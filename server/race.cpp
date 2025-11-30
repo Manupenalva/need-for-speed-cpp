@@ -15,8 +15,8 @@
 Race::Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_width,
            const float& celd_height, const std::vector<Position>& start_positions,
            const Position& finish, const std::vector<Position>& checkpoints,
-           const std::vector<Hint>& hints, const std::string& map_path, uint8_t city_code,
-           float max_time):
+           std::unordered_map<int, std::vector<Position>>& hints, const std::string& map_path,
+           uint8_t city_code, float max_time):
         players_cars(players_cars),
         players_status(),
         celd_width(celd_width),
@@ -85,6 +85,7 @@ void Race::update_state() {
         Position next_checkpoint = checkpoints[status.current_checkpoint_index];
         if (car.reached_checkpoint(next_checkpoint, celd_width, celd_height)) {
             status.current_checkpoint_index++;
+            status.current_hint_index = 0;
             if (status.current_checkpoint_index >= checkpoints.size()) {
                 status.has_finished = true;
                 float pen_time = car.get_penalization_time();
@@ -92,10 +93,10 @@ void Race::update_state() {
                 car.finish_race(current_time, race_results.size() + 1);
             }
         }
-        if (status.current_hint_index < hints.size()) {
-            Hint next_hint = hints[status.current_hint_index];
-            if (car.reached_checkpoint(next_hint.position, celd_width, celd_height)) {
-                if ((status.current_hint_index + 1) < hints.size())
+        if (status.current_hint_index < hints[status.current_checkpoint_index].size()) {
+            Position next_hint = hints[status.current_checkpoint_index][status.current_hint_index];
+            if (car.reached_checkpoint(next_hint, celd_width, celd_height)) {
+                if ((status.current_hint_index + 1) < hints[status.current_checkpoint_index].size())
                     status.current_hint_index++;
             }
         }
@@ -150,10 +151,10 @@ CheckpointArrow Race::get_next_checkpoint_arrow(const uint16_t car_id) {
     if (status.has_finished) {
         return {0.0f, 0.0f, 0.0f};
     }
-    if (status.current_hint_index < hints.size()) {
-        Hint hint = hints[status.current_hint_index];
-        return {static_cast<float>(hint.position.x), static_cast<float>(hint.position.y),
-                hint.position.angle};
+    if (status.current_hint_index < hints[status.current_checkpoint_index].size()) {
+        Position hint_position = hints[status.current_checkpoint_index][status.current_hint_index];
+        return {static_cast<float>(hint_position.x), static_cast<float>(hint_position.y),
+                hint_position.angle};
     }
     return {0.0f, 0.0f, 0.0f};
 }
@@ -325,11 +326,16 @@ std::vector<CheckpointInfo> Race::get_checkpoints_info() {
 
 std::vector<CheckpointArrow> Race::get_checkpoints_arrows() {
     std::vector<CheckpointArrow> arrows;
-    arrows.reserve(hints.size());
-    std::transform(hints.begin(), hints.end(), std::back_inserter(arrows), [](const Hint& hint) {
-        return CheckpointArrow{static_cast<float>(hint.position.x),
-                               static_cast<float>(hint.position.y), hint.position.angle};
-    });
+
+    for (const auto& checkpoint_arrows: hints) {
+        const auto& checkpoint_hints = checkpoint_arrows.second;
+        std::transform(checkpoint_hints.begin(), checkpoint_hints.end(), std::back_inserter(arrows),
+                       [](const Position& hint) {
+                           return CheckpointArrow{static_cast<float>(hint.x),
+                                                  static_cast<float>(hint.y), hint.angle};
+                       });
+    }
+
     return arrows;
 }
 

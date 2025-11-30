@@ -125,16 +125,17 @@ std::unique_ptr<Race> RaceBuilder::create_race(const std::string& path,
             checkpoints.push_back({x, y, get_checkpoint_angle(rotation)});
         }
 
-        std::vector<Hint> hints;
+        std::unordered_map<int, std::vector<Position>> hints;
         for (const auto& hint: race_data["hint"]) {
             int x = hint["x"].as<int>();
             int y = hint["y"].as<int>();
             std::string rotation = hint["rotation"].as<std::string>();
             float angle = get_hint_angle(rotation);
+
             int checkpoint_id = hint["id"].as<int>();
             Position pos = {x, y, angle};
-            Hint hint_info = {pos, checkpoint_id};
-            hints.push_back(hint_info);
+
+            hints[checkpoint_id].push_back(pos);
         }
 
         return std::make_unique<Race>(players_cars, celd_width, celd_height, start_positions,
