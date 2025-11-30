@@ -5,11 +5,11 @@
 #include <QLineEdit>
 #include <QListWidget>
 #include <QMainWindow>
+#include <QPixmap>
 #include <QPushButton>
 #include <QSoundEffect>
 #include <QStackedWidget>
 #include <QTimer>
-#include <QPixmap>
 #include <string>
 #include <vector>
 

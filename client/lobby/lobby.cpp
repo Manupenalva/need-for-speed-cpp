@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QVBoxLayout>
+#include <utility>
 
 #include "ui_lobby.h"
 
@@ -181,11 +182,11 @@ void Lobby::showCatalog() {
         uiCar gcar;
         gcar.id = static_cast<int>(car.car_id);
         gcar.info = QString("Max speed: %1\nAcceleration: %2\nHealth: %3\nMass: %4\nControl: %5")
-                        .arg(car.max_speed)
-                        .arg(car.acceleration)
-                        .arg(car.max_health)
-                        .arg(car.mass)
-                        .arg(car.control);
+                            .arg(car.max_speed)
+                            .arg(car.acceleration)
+                            .arg(car.max_health)
+                            .arg(car.mass)
+                            .arg(car.control);
         cars.push_back(std::move(gcar));
     }
 
@@ -235,12 +236,8 @@ void Lobby::updateCarCarousel() {
     QString img = QString("../client/resources/assets/lobby/car%1.png").arg(car.id);
 
     QPixmap pix(img);
-    QPixmap scaled = pix.scaled(
-        ui->carImageLabel->width(),
-        ui->carImageLabel->height(),
-        Qt::KeepAspectRatio,
-        Qt::SmoothTransformation
-    );
+    QPixmap scaled = pix.scaled(ui->carImageLabel->width(), ui->carImageLabel->height(),
+                                Qt::KeepAspectRatio, Qt::SmoothTransformation);
     ui->carImageLabel->setPixmap(scaled);
 }
 
@@ -250,7 +247,7 @@ void Lobby::nextCar() {
 }
 
 void Lobby::prevCar() {
-    currentIndex = ((currentIndex - 1) + static_cast<int>(cars.size())) % static_cast<int>(cars.size());
+    currentIndex =
+            ((currentIndex - 1) + static_cast<int>(cars.size())) % static_cast<int>(cars.size());
     updateCarCarousel();
 }
-
