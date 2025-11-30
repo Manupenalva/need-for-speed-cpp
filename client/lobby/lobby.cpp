@@ -14,8 +14,6 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent):
     stack = ui->stackedWidget;
     timer = new QTimer(this);
 
-    ui->carListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-
     ui->startButton->setEnabled(false);
 
     connect(ui->createGameButton, &QPushButton::clicked, this, &Lobby::createGame);
@@ -27,20 +25,17 @@ Lobby::Lobby(Protocol& protocol, QWidget* parent):
     connect(ui->backStartButton, &QPushButton::clicked, this, &Lobby::menuScreen);
 
     connect(ui->startButton, &QPushButton::clicked, this, &Lobby::startGame);
-    connect(ui->carListWidget, &QListWidget::currentRowChanged, this, [this](int row) {
-        if (row < 0) {
-            ui->carPreviewLabel->setText("Select a car to see details");
-            return;
-        }
-        auto* it = ui->carListWidget->item(row);
-        ui->carPreviewLabel->setText(it ? it->toolTip() : "");
-    });
+    connect(ui->nextCarButton, &QPushButton::clicked, this, &Lobby::nextCar);
+    connect(ui->prevCarButton, &QPushButton::clicked, this, &Lobby::prevCar);
+
     connect(ui->confirmButton, &QPushButton::clicked, this, &Lobby::confirmCar);
     connect(timer, &QTimer::timeout, this, &Lobby::updateLobby);
 
     setWindowTitle("Need for Speed 2D - Lobby");
     resize(600, 500);
     stack->setCurrentIndex(0);
+
+    ui->carImageLabel->setScaledContents(true);
 
     musicEffect = new QSoundEffect(this);
     musicEffect->setSource(QUrl::fromLocalFile("../client/resources/sounds/need_for_speed.wav"));
@@ -150,7 +145,7 @@ void Lobby::updateLobby() {
         int count = static_cast<int>(lobbyInfo.player_amount);
         int max = static_cast<int>(lobbyInfo.max_players);
         ui->playersLabel->setText(QString("Players: %1 / %2").arg(count).arg(max));
-        ui->startButton->setEnabled(host && count >= 2);
+        ui->startButton->setEnabled(host);
     } else if (response.type == MsgType::GAME_START) {
         timer->stop();
         ClientMessageDTO msg;
@@ -179,32 +174,30 @@ void Lobby::showCatalog() {
         return;
     }
 
-    ui->carListWidget->clear();
+    cars.clear();
+    currentIndex = 0;
 
     for (const auto& car: resp.car_catalog) {
-        auto* item = new QListWidgetItem(QString("Car %1").arg(car.car_id));
-        item->setData(Qt::UserRole, static_cast<int>(car.car_id));
-        item->setToolTip(
-                QString("Max speed: %1\nAcceleration: %2\nHealth: %3\nMass: %4\nControl: %5")
+        uiCar gcar;
+        gcar.id = static_cast<int>(car.car_id);
+        gcar.info = QString("Max speed: %1\nAcceleration: %2\nHealth: %3\nMass: %4\nControl: %5")
                         .arg(car.max_speed)
                         .arg(car.acceleration)
                         .arg(car.max_health)
                         .arg(car.mass)
-                        .arg(car.control));
-        ui->carListWidget->addItem(item);
+                        .arg(car.control);
+        cars.push_back(std::move(gcar));
     }
 
-    if (ui->carListWidget->count() > 0)
-        ui->carListWidget->setCurrentRow(0);
+    updateCarCarousel();
 }
 
 void Lobby::confirmCar() {
-    auto* item = ui->carListWidget->currentItem();
-    if (!item) {
+    if (cars.empty()) {
         QMessageBox::information(this, "Select car", "Please choose a car.");
         return;
     }
-    chosenCar = static_cast<uint16_t>(item->data(Qt::UserRole).toInt());
+    chosenCar = cars[currentIndex].id;
     stack->setCurrentIndex(3);
 }
 
@@ -231,3 +224,33 @@ bool Lobby::sendUsername() {
     }
     return false;
 }
+
+void Lobby::updateCarCarousel() {
+    if (currentIndex < 0 || currentIndex >= static_cast<int>(cars.size())) {
+        currentIndex = 0;
+    }
+    uiCar& car = cars[currentIndex];
+    ui->carInfoLabel->setText(car.info);
+
+    QString img = QString("../client/resources/assets/lobby/car%1.png").arg(car.id);
+
+    QPixmap pix(img);
+    QPixmap scaled = pix.scaled(
+        ui->carImageLabel->width(),
+        ui->carImageLabel->height(),
+        Qt::KeepAspectRatio,
+        Qt::SmoothTransformation
+    );
+    ui->carImageLabel->setPixmap(scaled);
+}
+
+void Lobby::nextCar() {
+    currentIndex = (currentIndex + 1) % static_cast<int>(cars.size());
+    updateCarCarousel();
+}
+
+void Lobby::prevCar() {
+    currentIndex = ((currentIndex - 1) + static_cast<int>(cars.size())) % static_cast<int>(cars.size());
+    updateCarCarousel();
+}
+
