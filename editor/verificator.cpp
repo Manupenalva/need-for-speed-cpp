@@ -60,8 +60,5 @@ bool Verificator::checkCheckpoint(QString& errorTitle, QString& errorMessage) co
         errorMessage = "It is neccessary to be, al least, 2 checkpoints.";
         return false;
     }
-    // if (!checkCheckpointsHints(errorTitle, errorMessage)){
-    //     return false;
-    // }
     return true;
 }

@@ -5,11 +5,13 @@
 #include <QLineEdit>
 #include <QListWidget>
 #include <QMainWindow>
+#include <QPixmap>
 #include <QPushButton>
 #include <QSoundEffect>
 #include <QStackedWidget>
 #include <QTimer>
 #include <string>
+#include <vector>
 
 #include "../../common/protocol.h"
 
@@ -18,6 +20,11 @@ namespace Ui {
 class Lobby;
 }
 QT_END_NAMESPACE
+
+struct uiCar {
+    uint16_t id;
+    QString info;
+};
 
 class Lobby: public QMainWindow {
     Q_OBJECT
@@ -49,7 +56,13 @@ private:
     bool host;
     int raceC;
     uint16_t chosenCar = 0;
+    std::vector<uiCar> cars;
+    int currentIndex = 0;
+
     bool sendUsername();
+    void updateCarCarousel();
+    void nextCar();
+    void prevCar();
 };
 
 #endif
