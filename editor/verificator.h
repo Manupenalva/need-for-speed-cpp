@@ -21,7 +21,6 @@ private:
     bool checkLine(QString& errorTitle, QString& errorMessage) const;
 
     bool checkCheckpoint(QString& errorTitle, QString& errorMessage) const;
-    // bool checkCheckpointsHints(QString& errorTitle, QString& errorMessage) const;
 };
 
 #endif
