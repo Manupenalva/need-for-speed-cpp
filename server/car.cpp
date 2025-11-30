@@ -124,11 +124,11 @@ void Car::update_position() {
 void Car::handle_hits() { physics->handle_hits(); }
 
 void Car::interact_with_bridge(BridgeLayer sensor_layer) {
-    if (bridge_layer == BridgeLayer::NONE) {
+    if (sensor_layer == BridgeLayer::NONE) {
         bridge_layer = sensor_layer;
-    } else if (bridge_layer == sensor_layer) {
-        bridge_layer = BridgeLayer::NONE;
-    } else {
+    } else if (bridge_layer == BridgeLayer::NONE) {
+        bridge_layer = sensor_layer;
+    } else if (bridge_layer != sensor_layer) {
         physics->handle_crash_with_bridge();
     }
 }

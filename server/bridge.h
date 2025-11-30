@@ -10,6 +10,7 @@ struct Bridge {
     b2ShapeId sensor2_up;
     b2ShapeId sensor1_down;
     b2ShapeId sensor2_down;
+    b2ShapeId bridge_area;
 };
 
 #endif

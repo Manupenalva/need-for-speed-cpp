@@ -107,7 +107,7 @@ MapData MapCollisionBuilder::initialize_map_buildings(const std::string& path, b
                 for (const auto& object: layer["objects"]) {
 
                     int bridge_id = object["type"].as<int>();
-                    std::string side = object["name"].as<std::string>();
+                    std::string type = object["name"].as<std::string>();
 
                     float x = object["x"].as<float>() - 25.0f;
                     float y = object["y"].as<float>() - 25.0f;
@@ -116,14 +116,16 @@ MapData MapCollisionBuilder::initialize_map_buildings(const std::string& path, b
 
                     b2ShapeId sensor = create_body(true, x, y, width, height, world);
 
-                    if (side == "up 1")
+                    if (type == "up 1")
                         bridges[bridge_id].sensor1_up = sensor;
-                    else if (side == "up 2")
+                    else if (type == "up 2")
                         bridges[bridge_id].sensor2_up = sensor;
-                    else if (side == "down 1")
+                    else if (type == "down 1")
                         bridges[bridge_id].sensor1_down = sensor;
-                    else if (side == "down 2")
+                    else if (type == "down 2")
                         bridges[bridge_id].sensor2_down = sensor;
+                    else if (type == "bridge area")
+                        bridges[bridge_id].bridge_area = sensor;
                 }
             }
 

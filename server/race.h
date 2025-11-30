@@ -16,7 +16,6 @@
 
 #include "car.h"
 #include "corner.h"
-#include "hint.h"
 #include "npc.h"
 #include "playerRaceStatus.h"
 
@@ -31,7 +30,7 @@ private:
     std::vector<Bridge> bridges;
     std::vector<Position> start_positions;
     std::vector<Position> checkpoints;
-    std::vector<Hint> hints;
+    std::unordered_map<int, std::vector<Position>> hints;
     std::string map_collisions_path;
     float current_time;
     b2WorldId world;
@@ -43,8 +42,8 @@ public:
     Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_width,
          const float& celd_height, const std::vector<Position>& start_positions,
          const Position& finish, const std::vector<Position>& checkpoints,
-         const std::vector<Hint>& hints, const std::string& map_path, const uint8_t city_code,
-         float max_time);
+         std::unordered_map<int, std::vector<Position>>& hints, const std::string& map_path,
+         uint8_t city_code, float max_time);
     b2WorldId start_race();
     void update_state();
     bool is_finished();
@@ -64,6 +63,7 @@ public:
 private:
     void handle_sensors();
     void handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* bridge, Car* car);
+    void correct_bridge_interactions(b2ShapeId sensor_shape, const Bridge* bridge, Car* car);
 
     Race(const Race& other) = delete;
     Race& operator=(const Race& other) = delete;

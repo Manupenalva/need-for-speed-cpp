@@ -8,15 +8,14 @@
 #include "events/actionmessage.h"
 
 #include "carBuilder.h"
-#include "hint.h"
 #include "mapCollisionBuilder.h"
 
 
 Race::Race(std::unordered_map<uint16_t, Car>& players_cars, const float& celd_width,
            const float& celd_height, const std::vector<Position>& start_positions,
            const Position& finish, const std::vector<Position>& checkpoints,
-           const std::vector<Hint>& hints, const std::string& map_path, uint8_t city_code,
-           float max_time):
+           std::unordered_map<int, std::vector<Position>>& hints, const std::string& map_path,
+           uint8_t city_code, float max_time):
         players_cars(players_cars),
         players_status(),
         celd_width(celd_width),
@@ -47,6 +46,7 @@ b2WorldId Race::start_race() {
         b2Shape_SetUserData(bridge.sensor2_up, &bridge);
         b2Shape_SetUserData(bridge.sensor1_down, &bridge);
         b2Shape_SetUserData(bridge.sensor2_down, &bridge);
+        b2Shape_SetUserData(bridge.bridge_area, &bridge);
     }
 
     corners = map_data.corners;
@@ -84,6 +84,7 @@ void Race::update_state() {
         Position next_checkpoint = checkpoints[status.current_checkpoint_index];
         if (car.reached_checkpoint(next_checkpoint, celd_width, celd_height)) {
             status.current_checkpoint_index++;
+            status.current_hint_index = 0;
             if (status.current_checkpoint_index >= checkpoints.size()) {
                 status.has_finished = true;
                 float pen_time = car.get_penalization_time();
@@ -91,10 +92,10 @@ void Race::update_state() {
                 car.finish_race(current_time, race_results.size() + 1);
             }
         }
-        if (status.current_hint_index < hints.size()) {
-            Hint next_hint = hints[status.current_hint_index];
-            if (car.reached_checkpoint(next_hint.position, celd_width, celd_height)) {
-                if ((status.current_hint_index + 1) < hints.size())
+        if (status.current_hint_index < hints[status.current_checkpoint_index].size()) {
+            Position next_hint = hints[status.current_checkpoint_index][status.current_hint_index];
+            if (car.reached_checkpoint(next_hint, celd_width, celd_height)) {
+                if ((status.current_hint_index + 1) < hints[status.current_checkpoint_index].size())
                     status.current_hint_index++;
             }
         }
@@ -131,7 +132,8 @@ CheckpointInfo Race::get_next_checkpoint_info(const uint16_t car_id) {
     }
     Position checkpoint = checkpoints[status.current_checkpoint_index];
     uint8_t type = COMMON_CHECKPOINT;
-    if (status.current_checkpoint_index == checkpoints.size() - 1) {
+    if ((status.current_checkpoint_index == checkpoints.size() - 1) ||
+        (status.current_checkpoint_index == 0)) {
         type = SPECIAL_CHECKPOINT;
     }
 
@@ -148,10 +150,10 @@ CheckpointArrow Race::get_next_checkpoint_arrow(const uint16_t car_id) {
     if (status.has_finished) {
         return {0.0f, 0.0f, 0.0f};
     }
-    if (status.current_hint_index < hints.size()) {
-        Hint hint = hints[status.current_hint_index];
-        return {static_cast<float>(hint.position.x), static_cast<float>(hint.position.y),
-                hint.position.angle};
+    if (status.current_hint_index < hints[status.current_checkpoint_index].size()) {
+        Position hint_position = hints[status.current_checkpoint_index][status.current_hint_index];
+        return {static_cast<float>(hint_position.x), static_cast<float>(hint_position.y),
+                hint_position.angle};
     }
     return {0.0f, 0.0f, 0.0f};
 }
@@ -250,6 +252,17 @@ void Race::handle_sensors() {
 
         handle_bridge_interactions(sensor_shape, bridge, car);
     }
+
+    for (int i = 0; i < events.endCount; i++) {
+        b2ShapeId sensor_shape = events.endEvents[i].sensorShapeId;
+        const Bridge* bridge = static_cast<Bridge*>(b2Shape_GetUserData(sensor_shape));
+
+        b2ShapeId other_shape = events.endEvents[i].visitorShapeId;
+        b2BodyId other_body = b2Shape_GetBody(other_shape);
+        Car* car = static_cast<Car*>(b2Body_GetUserData(other_body));
+
+        correct_bridge_interactions(sensor_shape, bridge, car);
+    }
 }
 
 void Race::handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* bridge, Car* car) {
@@ -263,6 +276,13 @@ void Race::handle_bridge_interactions(b2ShapeId sensor_shape, const Bridge* brid
                sensor_shape.index1 == bridge->sensor2_down.index1) {
         car->interact_with_bridge(BridgeLayer::BOTTOM);
     }
+}
+
+void Race::correct_bridge_interactions(b2ShapeId sensor_shape, const Bridge* bridge, Car* car) {
+    if (!bridge || !car || sensor_shape.index1 != bridge->bridge_area.index1)
+        return;
+
+    car->interact_with_bridge(BridgeLayer::NONE);
 }
 
 void Race::force_finish_race(const uint16_t& player_id) {
@@ -305,11 +325,16 @@ std::vector<CheckpointInfo> Race::get_checkpoints_info() {
 
 std::vector<CheckpointArrow> Race::get_checkpoints_arrows() {
     std::vector<CheckpointArrow> arrows;
-    arrows.reserve(hints.size());
-    std::transform(hints.begin(), hints.end(), std::back_inserter(arrows), [](const Hint& hint) {
-        return CheckpointArrow{static_cast<float>(hint.position.x),
-                               static_cast<float>(hint.position.y), hint.position.angle};
-    });
+
+    for (const auto& checkpoint_arrows: hints) {
+        const auto& checkpoint_hints = checkpoint_arrows.second;
+        std::transform(checkpoint_hints.begin(), checkpoint_hints.end(), std::back_inserter(arrows),
+                       [](const Position& hint) {
+                           return CheckpointArrow{static_cast<float>(hint.x),
+                                                  static_cast<float>(hint.y), hint.angle};
+                       });
+    }
+
     return arrows;
 }
 

@@ -1,0 +1,86 @@
+city: Backgrounds - Vice City
+celdWidth: 50
+celdHeight: 50
+line:
+  - x: 3986
+    y: 2306
+    rotation: horizontal
+start:
+  - x: 4012
+    y: 2250
+    rotation: down
+  - x: 3966
+    y: 2200
+    rotation: down
+  - x: 4015
+    y: 2150
+    rotation: down
+  - x: 3965
+    y: 2100
+    rotation: down
+  - x: 4012
+    y: 2050
+    rotation: down
+  - x: 3966
+    y: 2000
+    rotation: down
+  - x: 4008
+    y: 1948
+    rotation: down
+  - x: 3976
+    y: 1897
+    rotation: down
+finish:
+  - x: 1750
+    y: 2700
+    rotation: vertical
+checkpoint:
+  - x: 3876
+    y: 2385
+    rotation: vertical
+    id: 1
+  - x: 3525
+    y: 2382
+    rotation: vertical
+    id: 2
+  - x: 3450
+    y: 2500
+    rotation: horizontal
+    id: 3
+  - x: 3250
+    y: 2600
+    rotation: horizontal
+    id: 4
+  - x: 3050
+    y: 2700
+    rotation: vertical
+    id: 5
+  - x: 2548
+    y: 2700
+    rotation: vertical
+    id: 6
+  - x: 2050
+    y: 2700
+    rotation: vertical
+    id: 7
+hint:
+  - x: 3985
+    y: 2386
+    rotation: left
+    id: 1
+  - x: 3448
+    y: 2398
+    rotation: down
+    id: 3
+  - x: 3250
+    y: 2700
+    rotation: left
+    id: 5
+  - x: 2800
+    y: 2700
+    rotation: left
+    id: 6
+  - x: 2300
+    y: 2700
+    rotation: left
+    id: 7
