@@ -1,6 +1,7 @@
 #ifndef CAR_H
 #define CAR_H
 
+#include <algorithm>
 #include <cstdint>
 #include <memory>
 #include <string>

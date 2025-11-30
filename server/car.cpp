@@ -69,25 +69,40 @@ void Car::update_input(const uint8_t& action) {
 
 void Car::upgrade_stats(const uint8_t& action) {
     if (action == ACT_IMPROVE_SPEED) {
-        max_speed += 5;
+        if (max_speed == car_constants->car.MAX_SPEED) {
+            return;
+        }
+        max_speed += std::min(5.0f, car_constants->car.MAX_SPEED - max_speed);
         current_penalization += 2.0f;
         total_penalization += 2.0f;
     } else if (action == ACT_IMPROVE_ACCELERATION) {
-        acceleration += 5;
+        if (acceleration == car_constants->car.MAX_ACCELERATION) {
+            return;
+        }
+        acceleration += std::min(5.0f, car_constants->car.MAX_ACCELERATION - acceleration);
         current_penalization += 2.0f;
         total_penalization += 2.0f;
     } else if (action == ACT_IMPROVE_HEALTH) {
-        max_health += 5;
+        if (max_health == car_constants->car.MAX_HEALTH) {
+            return;
+        }
+        max_health += std::min(5.0f, car_constants->car.MAX_HEALTH - max_health);
         current_penalization += 2.0f;
         total_penalization += 2.0f;
     } else if (action == ACT_IMPROVE_MASS) {
-        if (mass > 5) {
-            mass -= 5;
+        if (mass == car_constants->car.MAX_MASS) {
+            return;
+        }
+        if (mass > 5.0f) {
+            mass -= std::min(5.0f, mass - 5.0f);
             current_penalization += 2.0f;
             total_penalization += 2.0f;
         }
     } else if (action == ACT_IMPROVE_HANDLING) {
-        drivability += 5;
+        if (drivability == car_constants->car.MAX_DRIVABILITY) {
+            return;
+        }
+        drivability += std::min(5.0f, car_constants->car.MAX_DRIVABILITY - drivability);
         current_penalization += 2.0f;
         total_penalization += 2.0f;
     }
