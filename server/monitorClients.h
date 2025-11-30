@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <memory>
 #include <mutex>
+#include <set>
+#include <string>
 #include <unordered_map>
 
 #include "client_handler.h"
@@ -11,6 +13,7 @@
 class MonitorClients {
 private:
     std::unordered_map<int, std::shared_ptr<ClientHandler>> clients;
+    std::set<std::string> client_names;
     std::mutex mtx;
 
 public:
@@ -21,6 +24,8 @@ public:
     void remove_if_dead();
 
     std::shared_ptr<ClientHandler> get_client(int id);
+
+    bool change_username(int id, const std::string& new_username);
 
     void clear();
 };

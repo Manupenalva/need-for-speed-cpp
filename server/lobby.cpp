@@ -11,7 +11,6 @@ Lobby::Lobby(std::shared_ptr<Queue<std::shared_ptr<ClientHandlerMessage>>> lobby
         lobby_queue(std::move(lobbyQueue)),
         clients_monitor(clientsMonitor),
         car_catalog(CarBuilder("../server/assets/cars_configs/cars_config.yaml").get_catalog()),
-        usernames(),
         config(ConfigLoader("../server/assets/game_configs/game_config.yaml").load_constants()) {}
 
 void Lobby::run() {
@@ -48,19 +47,14 @@ void Lobby::handle_new_username(const std::shared_ptr<ClientHandlerMessage>& msg
         return;
     }
     std::string username = nameMsg->get_name();
+    bool result = clients_monitor.change_username(client_id, username);
     auto client = clients_monitor.get_client(client_id);
     if (!client) {
         return;
     }
     ServerMessageDTO response;
     response.type = MsgType::NAME_RESULT;
-    if (usernames.find(username) != usernames.end()) {
-        response.result = false;
-    } else {
-        usernames.insert(username);
-        client->set_username(username);
-        response.result = true;
-    }
+    response.result = result;
     client->send_msg(response);
 }
 
