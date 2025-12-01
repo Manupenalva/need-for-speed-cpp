@@ -30,7 +30,7 @@ class Lobby: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit Lobby(Protocol& protocol, QWidget* parent = nullptr);
+    explicit Lobby(Protocol& protocol, bool& started, QWidget* parent = nullptr);
     ~Lobby();
 
     // cppcheck-suppress unknownMacro
@@ -48,6 +48,7 @@ private slots:
 private:
     Ui::Lobby* ui;
     Protocol& protocol;
+    bool& started;
 
     QStackedWidget* stack = nullptr;
     QTimer* timer = nullptr;

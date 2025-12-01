@@ -18,6 +18,7 @@
 #include "car/car_drawer.h"
 #include "countdown/countdown_drawer.h"
 #include "health/health_drawer.h"
+#include "map/bridges_drawer.h"
 #include "map/map_drawer.h"
 #include "minimap/minimap_drawer.h"
 #include "race/arrow_drawer.h"

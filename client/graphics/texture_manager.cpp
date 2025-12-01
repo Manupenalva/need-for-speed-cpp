@@ -65,3 +65,7 @@ Sprite TextureManager::get_upgrade_screen_sprite() {
 Sprite TextureManager::get_statistics_screen_sprite() {
     return statistics_screen_sheet.get_screen_sprite();
 }
+
+std::vector<Sprite> TextureManager::get_bridge_sprites(MapType map_type) {
+    return map_sheet.get_bridge_sprites(map_type);
+}

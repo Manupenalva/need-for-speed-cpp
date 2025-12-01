@@ -14,12 +14,15 @@
 #include "../../config/constants.h"
 #include "../sprite.h"
 
+#include "bridges_sheet.h"
+
 class MapSheet {
 private:
     // Cargara los mapas completos y get_map_sprite se encargara de devolver la sección correcta que
     // nos interesa en base a la posicion del auto.
     SDL2pp::Renderer& renderer;
     std::unordered_map<MapType, std::unique_ptr<SDL2pp::Texture>> map_textures;
+    BridgesSheet bridges_sheet;
 
     SDL2pp::Rect get_map_section_rect(SDL2pp::Texture& texture, int section_x, int section_y);
 
@@ -29,6 +32,8 @@ public:
     void load_sprites();
 
     Sprite get_map_sprite(MapType map_type, int section_x, int section_y);
+
+    std::vector<Sprite> get_bridge_sprites(MapType map_type);
 };
 
 #endif

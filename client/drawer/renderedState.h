@@ -9,6 +9,7 @@ struct RenderedState {
     int it_ahead;
     CarState client_car;
     Sprite map_sprite;
+    MapType map_type;
     State state;
     SDL2pp::Rect client_car_screen_rect = SDL2pp::Rect(0, 0, 0, 0);
 };

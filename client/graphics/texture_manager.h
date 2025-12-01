@@ -2,6 +2,7 @@
 #define TEXTURE_MANAGER_H
 
 #include <string>
+#include <vector>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
@@ -63,6 +64,9 @@ public:
 
     // Metodo para obtener el sprite de la pantalla de estadísticas
     Sprite get_statistics_screen_sprite();
+
+    // Metodo para obtener los sprites de los puentes
+    std::vector<Sprite> get_bridge_sprites(MapType map_type);
 };
 
 #endif
