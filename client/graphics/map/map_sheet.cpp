@@ -1,6 +1,7 @@
 #include "map_sheet.h"
 
-MapSheet::MapSheet(SDL2pp::Renderer& renderer): renderer(renderer), map_textures() {}
+MapSheet::MapSheet(SDL2pp::Renderer& renderer):
+        renderer(renderer), map_textures(), bridges_sheet(renderer) {}
 
 void MapSheet::load_sprites() {
     // Cargar texturas de mapas
@@ -49,4 +50,14 @@ SDL2pp::Rect MapSheet::get_map_section_rect(SDL2pp::Texture& texture, int sectio
         top = map_height - view_height;
 
     return SDL2pp::Rect(left, top, view_width, view_height);
+}
+
+std::vector<Sprite> MapSheet::get_bridge_sprites(MapType map_type) {
+    auto it = map_textures.find(map_type);
+    if (it == map_textures.end()) {
+        throw std::runtime_error("Map type not found in textures.");
+    }
+
+    SDL2pp::Texture& texture = *(it->second);
+    return bridges_sheet.get_bridges(texture, map_type);
 }

@@ -20,6 +20,7 @@ class CarDrawer: public Drawer {
 private:
     bool is_player = false;
     bool is_client_car = false;
+    bool is_second_drawer = false;
 
     void draw_npcs(const RenderedState& rendered_state);
     void draw_clients_cars(RenderedState& rendered_state);
@@ -37,6 +38,8 @@ public:
     explicit CarDrawer(SDL2pp::Renderer& renderer, TextureManager& texture_manager);
 
     void draw(RenderedState& rendered_state) override;
+
+    void set_second_drawer(bool second);
 };
 
 #endif

@@ -75,8 +75,10 @@ SDL2pp::Rect CarDrawer::draw_car(const CarState& car, const CarScreenPos& screen
     if (!is_drawable(dst_rect)) {
         return dst_rect;  // No dibujar si está fuera del área de la pantalla
     }
-
-    appply_visual_effects(car, screen_pos, car_sprite);
+    if (is_second_drawer) {
+        appply_visual_effects(car, screen_pos,
+                              car_sprite);  // Solo aplica los efectos cuando es el segundo drawer
+    }
 
     renderer.Copy(car_sprite.texture, car_sprite.src_rect, dst_rect);
     car_sprite.texture.SetAlphaMod(NORMAL_OPACITY);  // Restaurar opacidad completa
@@ -117,3 +119,5 @@ void CarDrawer::draw_border(const CarState& player_car, int screen_x, int screen
     renderer.SetDrawColor(border_color);
     renderer.DrawRect(border_rect);
 }
+
+void CarDrawer::set_second_drawer(bool second) { is_second_drawer = second; }

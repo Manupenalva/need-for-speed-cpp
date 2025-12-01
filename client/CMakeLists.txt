@@ -9,6 +9,7 @@ target_sources(taller_client
     keyboard/keyboard_reader.cpp
     graphics/car/car_sheet.cpp
     graphics/map/map_sheet.cpp
+    graphics/map/bridges_sheet.cpp
     graphics/texture_manager.cpp
     graphics/race/race_sheet.cpp
     graphics/screen/base_screen_sheet.cpp
@@ -17,6 +18,7 @@ target_sources(taller_client
     drawer/drawerSDL.cpp
     drawer/car/car_drawer.cpp
     drawer/map/map_drawer.cpp
+    drawer/map/bridges_drawer.cpp
     drawer/race/arrow_drawer.cpp
     drawer/race/checkpoint_drawer.cpp
     drawer/race/remaining_time_drawer.cpp
@@ -48,6 +50,7 @@ target_sources(taller_client
     keyboard/keyboard_reader.h
     graphics/car/car_sheet.h
     graphics/map/map_sheet.h
+    graphics/map/bridges_sheet.h
     graphics/texture_manager.h
     graphics/race/race_sheet.h
     graphics/screen/upgrade_screen_sheet.h
@@ -65,6 +68,7 @@ target_sources(taller_client
     events/quit_handler.h
     drawer/car/car_drawer.h
     drawer/map/map_drawer.h
+    drawer/map/bridges_drawer.h
     drawer/drawerSDL.h
     drawer/race/arrow_drawer.h
     drawer/race/checkpoint_drawer.h
