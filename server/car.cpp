@@ -5,6 +5,8 @@
 
 #include "../common/constants.h"
 
+#define MAX_BRAKE_COUNTER 7
+
 Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
          const float& acceleration, const float& health, const float& mass,
          const float& drivability, const float& car_long, const float& car_width,
@@ -25,7 +27,8 @@ Car::Car(const uint16_t& id, const std::string& name, const float& max_speed,
         current_penalization(0.0f),
         total_penalization(0.0f),
         curr_world(),
-        car_constants(car_constants) {}
+        car_constants(car_constants),
+        brake_counter(0) {}
 
 void Car::add_to_world(b2WorldId world, Position start_position) {
     state.x = start_position.x;
@@ -115,6 +118,16 @@ void Car::update_physics() {
     }
     if (input_state.braking) {
         physics->deaccelerate();
+        if (state.braking == true) {
+            if (brake_counter < MAX_BRAKE_COUNTER) {
+                brake_counter++;
+                state.braking = false;
+            } else {
+                state.braking = true;
+            }
+        }
+    } else {
+        brake_counter = 0;
     }
     if (input_state.turning_left) {
         physics->turn_left();

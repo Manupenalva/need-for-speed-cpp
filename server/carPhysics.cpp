@@ -52,7 +52,7 @@ void CarPhysics::accelerate() {
     // Aceleracion basada en la masa y velocidad actual
     float scaledAcceleration = (1.0f + speedRatio) * phy_const.BASE_ACCELERATION *
                                acceleration_factor * (1.0f + mass_factor) * health_factor;
-    if (speed < max_speed) {
+    if (speed < max_speed * health_factor) {
         b2Body_ApplyForceToCenter(
                 body, {direction.x * scaledAcceleration, direction.y * scaledAcceleration}, true);
     }

@@ -44,6 +44,8 @@ private:
     b2WorldId curr_world;
     std::shared_ptr<CarConstants> car_constants;
 
+    uint32_t brake_counter;
+
 public:
     Car(const uint16_t& id, const std::string& name, const float& max_speed,
         const float& acceleration, const float& health, const float& mass, const float& drivability,
@@ -86,7 +88,8 @@ public:
             max_health(0),
             current_penalization(0),
             total_penalization(0),
-            curr_world() {}
+            curr_world(),
+            brake_counter(0) {}
 
 private:
     Car(const Car& other) = delete;
