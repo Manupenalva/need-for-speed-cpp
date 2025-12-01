@@ -467,7 +467,7 @@ layers:
     width: 96.0003
     x: 458
     y: 472.667
-  - height: 139.333666666667
+  - height: 139.334
     id: 59
     name: ''
     rotation: 0
@@ -475,7 +475,7 @@ layers:
     visible: true
     width: 102.667
     x: 456
-    y: 889.333333333333
+    y: 889.333
   - height: 130.666
     id: 60
     name: ''
@@ -1949,7 +1949,7 @@ layers:
     rotation: 0
     type: ''
     visible: true
-    width: 51.3329666666668
+    width: 51.333
     x: 1524.67
     y: 2500
   - height: 101.335
@@ -1985,26 +1985,17 @@ layers:
     rotation: 0
     type: ''
     visible: true
-    width: 100.666266666667
+    width: 100.666
     x: 1476
     y: 2794
-  - height: 25.335
-    id: 239
-    name: ''
-    rotation: 0
-    type: ''
-    visible: true
-    width: 26.6663
-    x: 1514.67
-    y: 2963.33
   - height: 25.335
     id: 240
     name: ''
     rotation: 0
     type: ''
     visible: true
-    width: 26.6663
-    x: 1429.33
+    width: 147.666
+    x: 1390.33
     y: 2963.33
   - height: 110.668
     id: 241
@@ -2021,8 +2012,8 @@ layers:
     rotation: 0
     type: ''
     visible: true
-    width: 70.6662666666667
-    x: 1685.33333333333
+    width: 70.6663
+    x: 1685.33
     y: 2816.67
   - height: 20.0013
     id: 243
@@ -5624,6 +5615,15 @@ layers:
     width: 13.3353
     x: 3917.33
     y: 2780.33
+  - height: 28.6683666666663
+    id: 941
+    name: ''
+    rotation: 0
+    type: ''
+    visible: true
+    width: 166
+    x: 1685.33333333333
+    y: 2437.99915
   opacity: 1
   type: objectgroup
   visible: true
@@ -7620,8 +7620,8 @@ layers:
     type: ''
     visible: true
     width: 0
-    x: 1920
-    y: 2504
+    x: 2164
+    y: 2520
   opacity: 1
   type: objectgroup
   visible: true
@@ -7711,8 +7711,8 @@ layers:
     visible: true
     width: 297.166
     x: 216.333
-    y: 1250.16666666667
-  - height: 11.6666333333335
+    y: 1250.17
+  - height: 11.6666
     id: 910
     name: down 2
     rotation: 0
@@ -7782,9 +7782,9 @@ layers:
     type: '5'
     visible: true
     width: 12.6667
-    x: 229.500333333333
+    x: 229.5
     y: 780.167
-  - height: 103.833666666667
+  - height: 103.834
     id: 918
     name: up 2
     rotation: 0
@@ -7793,7 +7793,7 @@ layers:
     width: 12.6667
     x: 521.167
     y: 780.917
-  - height: 11.6666333333334
+  - height: 11.6666
     id: 919
     name: down 1
     rotation: 0
@@ -7801,8 +7801,8 @@ layers:
     visible: true
     width: 265.833
     x: 247
-    y: 782.166333333333
-  - height: 11.6666333333334
+    y: 782.166
+  - height: 11.6666
     id: 920
     name: down 2
     rotation: 0
@@ -7810,7 +7810,7 @@ layers:
     visible: true
     width: 268.166
     x: 246.167
-    y: 870.999666666667
+    y: 871
   - height: 244
     id: 921
     name: down 1
@@ -7826,16 +7826,16 @@ layers:
     rotation: 0
     type: '6'
     visible: true
-    width: 12.0000666666665
-    x: 1669.99666666667
-    y: 2598.66666666667
+    width: 12.0001
+    x: 1670
+    y: 2598.67
   - height: 12
     id: 924
     name: up 1
     rotation: 0
     type: '6'
     visible: true
-    width: 99.3336666666667
+    width: 99.3337
     x: 1581.89
     y: 2848.86
   - height: 12
@@ -7883,76 +7883,76 @@ layers:
     width: 12.0003
     x: 3918.67
     y: 2661.25
-  - height: 105.666633333333
+  - height: 105.667
     id: 934
     name: bridge area
     rotation: 0
     type: '2'
     visible: true
-    width: 349.665666666667
-    x: 190.167166666667
-    y: 1450.83335
-  - height: 78.3336666666667
+    width: 349.666
+    x: 190.167
+    y: 1450.83
+  - height: 78.3337
     id: 935
     name: bridge area
     rotation: 0
     type: '3'
     visible: true
-    width: 340.999333333333
-    x: 193.833666666667
-    y: 1248.49983333333
-  - height: 74.3336999999999
+    width: 340.999
+    x: 193.834
+    y: 1248.5
+  - height: 74.3337
     id: 936
     name: bridge area
     rotation: 0
     type: '4'
     visible: true
     width: 304.499
-    x: 227.5005
-    y: 1033.33315
+    x: 227.5
+    y: 1033.33
   - height: 107.667
     id: 937
     name: bridge area
     rotation: 0
     type: '0'
     visible: true
-    width: 350.332666666667
+    width: 350.333
     x: 205.167
-    y: 2367.1665
-  - height: 109.000333333333
+    y: 2367.17
+  - height: 109
     id: 938
     name: bridge area
     rotation: 0
     type: '5'
     visible: true
-    width: 312.999333333333
-    x: 225.833666666667
-    y: 777.833166666667
+    width: 312.999
+    x: 225.834
+    y: 777.833
   - height: 145.667
     id: 939
     name: bridge area
     rotation: 0
     type: '1'
     visible: true
-    width: 105.666333333334
-    x: 3828.16683333333
-    y: 2644.83316666667
-  - height: 284.333666666666
+    width: 105.666
+    x: 3828.17
+    y: 2644.83
+  - height: 284.334
     id: 940
     name: bridge area
     rotation: 0
     type: '6'
     visible: true
     width: 105.666
-    x: 1579.167
-    y: 2581.83316666667
+    x: 1579.17
+    y: 2581.83
   opacity: 1
   type: objectgroup
   visible: true
   x: 0
   y: 0
 nextlayerid: 9
-nextobjectid: 941
+nextobjectid: 942
 orientation: orthogonal
 properties:
 - name: bridges_amount

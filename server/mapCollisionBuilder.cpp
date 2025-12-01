@@ -86,7 +86,6 @@ MapData MapCollisionBuilder::initialize_map_buildings(const std::string& path, b
                         properties["value"].as<int>();  // cppcheck-suppress useStlAlgorithm
             }
         }
-        std::cout << bridges_amount << std::endl;
 
         std::vector<Bridge> bridges(bridges_amount);
         MapData map_data;
