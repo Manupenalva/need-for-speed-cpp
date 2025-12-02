@@ -38,7 +38,7 @@ user@host:~$ ./NEED4SPEED-client  &lt;ipv4 host&gt; xxxx
 </pre>
 
 ### Lobby
-Una vez lanzado el cliente, contarás con las siguientes posibilidades: Crear una partida o unirte a una de ellas.
+Una vez lanzado el cliente, contarás con las siguientes posibilidades: Crear una partida o unirte a una de ellas. Para ambas opciones deberás elegir un nombre de usuario que no este siendo utilizado por otro jugador.
 
 En caso de crear una partida, recibirás un id de partida, recordalo, deberá ser el que compartas con la persona que quieras jugar. Igualmente aparecera en la parte inferior del lobby
 
