@@ -10,4 +10,5 @@
 ## [Documentacion Tecnica](docs/DocumentacionTecnica.md)
 ## [Manual del Proyecto](docs/ManualProyecto.md)
 ## [Manual del Usuario](docs/ManualUsuario.md)
-## [Video de presentacion](docs/Video%20presentacion.mp4)
+## Video de Presentación
+[![Video de presentacion](https://img.youtube.com/vi/9mOYQU9uj8Q/hqdefault.jpg)](https://www.youtube.com/watch?v=9mOYQU9uj8Q)

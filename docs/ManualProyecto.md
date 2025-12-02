@@ -30,8 +30,14 @@ Durante el proceso de implementación del trabajo práctico, se buscó que cada 
 3. Funcionamiento de carrera con checkpoints y hints junto con colisiones
 4. Asignación de diversos autos segun la elección del jugador y fase de mejoras
 5. Implementación de posiciones, NPCs y fisicas de puentes
+6. Corrección de errores y mejoras de jugabilidad
+
+### Decisión de puentes
+El mapeo de los puentes, a la hora de saber que proporción de un auto se encuentra debajo de uno de ellos a la hora de ser dibujado se realiza completamente por parte del cliente, que cuenta con los datos dentro de un yaml. El servidor no envía esta información, sino que solamente se encarga de manejar las colisiones teniendo en cuenta si se encuentra arriba o por debajo del mismo y solamente envia el estado de sobre un puente o debajo de un puente con un booleano
 
 ## Analisis del trabajo
 Al día de la fecha de la primera entrega obligatoria, se llegó con todos los requisitos presentes en el enunciado. Sin embargo, hubieron ciertos aspectos problemáticos, como la implementación de los NPCs, donde hubo una puesta en común con los correctores y nos inclinamos a mapear las esquinas de los mapas para asignarles un recorrido. Por otro lado, las fisicas de los puentes no son totalmente exactas, lo que dificulta el paso de los autos, sobre todo los mas grandes
 
 Si bien, se logró implementar todos los requerimientos, la distribucion del trabajo a lo largo de las semanas resultó disparejo, ya que gran parte del trabajo fue realizado durante las ultimas dos semanas, requiriendo de mucho tiempo.
+
+En la segunda entrega y final, se llego bien con el tiempo para pulir las funcionalidades y brindarle mayor jugabilidad y estética al juego. Por otro lado, se realizaron algunas correcciones que fueron indicadas por los correctores, como memory leaks o errores de core segmentado.
