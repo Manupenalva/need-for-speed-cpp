@@ -5,7 +5,6 @@
 #include "../events/clienthandlermessage.h"
 #include "../events/createlobbymessage.h"
 #include "../events/getcatalogmessage.h"
-#include "../events/getlobbiesmessage.h"
 #include "../events/getlobbyupdatemessage.h"
 #include "../events/joinlobbymessage.h"
 #include "../events/quitgamemessage.h"
@@ -40,9 +39,6 @@ void Receiver::run() {
                     break;
                 case MsgType::CREATE_RACE:
                     game_message = std::make_shared<CreateLobbyMessage>(id);
-                    break;
-                case MsgType::GET_LOBBIES:
-                    game_message = std::make_shared<GetLobbiesMessage>(id);
                     break;
                 case MsgType::START_RACE:
                     game_message = std::make_shared<StartRaceMessage>(id);

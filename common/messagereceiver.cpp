@@ -94,15 +94,6 @@ std::vector<ResultInfo> MessageReceiver::recv_positions() {
     return positions;
 }
 
-std::vector<LobbyInfo> MessageReceiver::recv_lobbies_info() {
-    uint16_t num_lobbies = obtain_uint16();
-    std::vector<LobbyInfo> lobbies(num_lobbies);
-
-    std::generate(lobbies.begin(), lobbies.end(), [this]() { return recv_lobby_info(); });
-
-    return lobbies;
-}
-
 std::string MessageReceiver::recv_username() {
     uint16_t name_size = obtain_uint16();
     return obtain_string(name_size);

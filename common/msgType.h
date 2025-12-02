@@ -9,7 +9,6 @@ enum class MsgType : uint8_t {
     JOIN_RACE,
     CREATE_RACE,
     EXIT_RACE,
-    GET_LOBBIES,
     START_RACE,
     GET_LOBBY_UPDATE,
     GET_CAR_CATALOG,

@@ -161,10 +161,6 @@ void Lobby::manage_msg(std::shared_ptr<ClientHandlerMessage> msg) {
             start_race(client_id);
             break;
         }
-        case MsgType::GET_LOBBIES: {
-            // send_lobbies_info(client_id);
-            break;
-        }
         case MsgType::GET_LOBBY_UPDATE: {
             handle_lobby_update(client_id);
             break;

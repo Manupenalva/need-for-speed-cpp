@@ -53,7 +53,6 @@ private:
     void append_player_state(const PlayerState& player_state);
     void append_positions(const std::vector<ResultInfo>& positions);
 
-    size_t calculate_lobbies_size(const std::vector<LobbyInfo>& lobbies);
     size_t calculate_positions_size(const std::vector<ResultInfo>& positions);
 
     void append_bytes(const void* data, size_t size);
