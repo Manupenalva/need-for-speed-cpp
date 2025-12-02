@@ -73,8 +73,8 @@ constants:
   car_constants:
     MAX_SPEED: 100.0
     MAX_ACCELERATION: 100.0
-    MAX_HEALTH: 200.0
-    MAX_MASS: 1000.0
+    MAX_HEALTH: 100.0
+    MAX_MASS: 100.0
     MAX_DRIVABILITY: 100.0
 
   physical_constants:

@@ -14,7 +14,7 @@
 #include "../drawer.h"
 #include "../text/text_drawer.h"
 
-#define ATRIBUTE_MESSAGE "Cada atributo puede ser mejorado una sola vez por ronda"
+#define ATRIBUTE_MESSAGE "Mejorar tus atributos conlleva penalizaciones"
 #define TITLE_SIZE 32
 #define ATRIBUTE_SIZE 26
 #define PENALTY_SIZE 22
