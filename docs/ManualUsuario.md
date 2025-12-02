@@ -8,6 +8,14 @@ user@host:~/tp-taller-g4$ chmod +x installer.sh
 user@host:~/tp-taller-g4$ ./installer.sh
 </pre>
 
+## Desintalación 
+Para la desintalación del juego es muy similar a cómo se instala.
+
+<pre>
+user@host:~/tp-taller-g4$ chmod +x uninstaller.sh
+user@host:~/tp-taller-g4$ ./uninstaller.sh
+</pre>
+
 ## Instrucciones de Juego
 
 ### Ejecución del servidor
@@ -82,15 +90,17 @@ El editor permitira cargar una carrera ya realizada o crear una nueva selecciona
 
 ![editor](images/editor.png)
 
-En esta pantalla, mediante el arrastre de los elementos de la barra izquierda, podremos establecer los puntos de respawn, los checkpoints y sus hints. En caso de querer borrar un elemento, se deberá hacer click derecho sobre él.
-Cada uno de los hints (flechas de indicacion) que se quieran establecer deberán asociarse a una de las lineas de checkpoint previamente establecida, haciendo click sobre ellas, una vez ubicada la pista.
+En esta pantalla, mediante el arrastre de los elementos de la barra izquierda, podremos establecer los puntos de respawn, los checkpoints y sus hints. En caso de querer borrar un elemento, se deberá hacer `click derecho` sobre él.
+Cada uno de los hints (flechas de indicacion) que se quieran establecer deberán asociarse a una de las lineas de checkpoint previamente establecida, haciendo `click izquierdo` sobre ellas, una vez ubicada la pista. En caso de querer cancelar la elección del hint, aprentar `ESC`.
+Además, se ofrece un grilla de guía para ubicar mejor los elementos. En caso de querer moverlos con seleccionar el elemento en grilla, podes moverlo a donde quiera. Por último, para poder hacer `ZOOM` del mapa, hay dos botones `ZOOM IN` y `ZOOM OUT`.
 
 El editor te pedirá obligatoriamente lo siguiente:
 - 8 puntos iniciales para los autos
-- Linea de meta
-- Linea inicial
+- 1 Linea de meta
+- 1 Linea inicial
+- Minimo 2 checkpoints
 
-Una vez finalizado, guardamos el mapa y lo llevamos a la carpeta server/assets/race_configs (Carpeta establecida por defecto para el guardado de los archivos .yaml de carreras)
+Una vez finalizado, guardamos el mapa y lo llevamos a la carpeta server/assets/race_configs (Carpeta establecida por defecto para el guardado de los archivos .yaml de carreras). Al querer editar un mapa ya existente, automáticamente se abrirá ese directorio (carpeta donde están todos los mapas) y seleccionarás el mapa deseado.
 
 
 
