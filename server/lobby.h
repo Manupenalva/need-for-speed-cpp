@@ -10,12 +10,12 @@
 #include "../common/queue.h"
 #include "../common/thread.h"
 #include "events/clienthandlermessage.h"
+#include "monitors/monitorClients.h"
+#include "monitors/monitorGames.h"
+#include "race_logic/carBuilder.h"
 
-#include "carBuilder.h"
 #include "configLoader.h"
 #include "gameSession.h"
-#include "monitorClients.h"
-#include "monitorGames.h"
 
 class Lobby: public Thread {
 

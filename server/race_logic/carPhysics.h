@@ -1,8 +1,8 @@
 #ifndef CARPHYSICS_H
 #define CARPHYSICS_H
 
-#include "../common/carState.h"
-#include "../libs/box2d/include/box2d/box2d.h"
+#include "../../common/carState.h"
+#include "../../libs/box2d/include/box2d/box2d.h"
 
 #include "carConstants.h"
 

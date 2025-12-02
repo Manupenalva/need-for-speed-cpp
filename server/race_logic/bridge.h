@@ -1,7 +1,7 @@
 #ifndef BRIDGE_H
 #define BRIDGE_H
 
-#include "../libs/box2d/include/box2d/box2d.h"
+#include "../../libs/box2d/include/box2d/box2d.h"
 
 enum BridgeLayer { NONE, TOP, BOTTOM };
 

@@ -4,14 +4,14 @@
 #include <memory>
 #include <string>
 
-#include "../common/queue.h"
-#include "../common/socket.h"
-#include "../common/thread.h"
-#include "events/clienthandlermessage.h"
+#include "../../common/queue.h"
+#include "../../common/socket.h"
+#include "../../common/thread.h"
+#include "../events/clienthandlermessage.h"
+#include "../monitors/monitorClients.h"
+#include "../monitors/monitorGames.h"
 
 #include "client_handler.h"
-#include "monitorClients.h"
-#include "monitorGames.h"
 #include "receiver.h"
 
 class Acceptor: public Thread {

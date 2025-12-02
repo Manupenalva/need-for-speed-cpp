@@ -12,17 +12,17 @@
 
 #include <box2d/box2d.h>
 
-#include "../common/carState.h"
-#include "../common/cheatcodes.h"
-#include "../common/queue.h"
-#include "../common/thread.h"
-#include "events/clienthandlermessage.h"
+#include "../../common/carState.h"
+#include "../../common/cheatcodes.h"
+#include "../../common/queue.h"
+#include "../../common/thread.h"
+#include "../events/clienthandlermessage.h"
+#include "../monitors/racemonitor.h"
 
 #include "car.h"
 #include "carConstants.h"
 #include "configConstants.h"
 #include "race.h"
-#include "racemonitor.h"
 
 
 class Gameloop: public Thread {

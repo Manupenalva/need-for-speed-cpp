@@ -5,7 +5,8 @@
 #include <memory>
 #include <string>
 
-#include "acceptor.h"
+#include "comm_threads/acceptor.h"
+
 #include "gameSession.h"
 #include "lobby.h"
 

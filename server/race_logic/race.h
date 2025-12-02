@@ -9,10 +9,10 @@
 #include <utility>
 #include <vector>
 
-#include "../common/carState.h"
-#include "../common/messageDTOs.h"
-#include "../common/resultInfo.h"
-#include "../libs/box2d/include/box2d/box2d.h"
+#include "../../common/carState.h"
+#include "../../common/messageDTOs.h"
+#include "../../common/resultInfo.h"
+#include "../../libs/box2d/include/box2d/box2d.h"
 
 #include "car.h"
 #include "corner.h"

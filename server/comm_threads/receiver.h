@@ -4,12 +4,12 @@
 #include <memory>
 #include <utility>
 
-#include "../common/constants.h"
-#include "../common/protocol.h"
-#include "../common/queue.h"
-#include "../common/socket.h"
-#include "../common/thread.h"
-#include "events/clienthandlermessage.h"
+#include "../../common/constants.h"
+#include "../../common/protocol.h"
+#include "../../common/queue.h"
+#include "../../common/socket.h"
+#include "../../common/thread.h"
+#include "../events/clienthandlermessage.h"
 
 class Receiver: public Thread {
 private:

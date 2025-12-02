@@ -7,9 +7,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "../common/messageDTOs.h"
+#include "../../common/messageDTOs.h"
+#include "../comm_threads/client_handler.h"
 
-#include "client_handler.h"
 #include "racemonitor.h"
 
 class MonitorGames {

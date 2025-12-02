@@ -9,7 +9,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include "../common/carProperties.h"
+#include "../../common/carProperties.h"
 
 #include "car.h"
 #include "carConstants.h"

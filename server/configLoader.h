@@ -10,11 +10,10 @@
 #include <yaml-cpp/yaml.h>
 
 #include "../common/carProperties.h"
-
-#include "car.h"
-#include "carConstants.h"
-#include "configConstants.h"
-#include "npc.h"
+#include "race_logic/car.h"
+#include "race_logic/carConstants.h"
+#include "race_logic/configConstants.h"
+#include "race_logic/npc.h"
 
 
 class ConfigLoader {

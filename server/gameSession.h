@@ -4,9 +4,9 @@
 #include <memory>
 #include <utility>
 
-#include "configConstants.h"
-#include "gameloop.h"
-#include "monitorGames.h"
+#include "monitors/monitorGames.h"
+#include "race_logic/configConstants.h"
+#include "race_logic/gameloop.h"
 
 class GameSession {
 private:

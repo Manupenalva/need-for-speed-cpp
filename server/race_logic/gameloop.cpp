@@ -7,12 +7,12 @@
 #include <ostream>
 #include <thread>
 
-#include "../common/constants.h"
-#include "../common/gameLoop_timer.h"
-#include "../libs/box2d/include/box2d/box2d.h"
-#include "events/actionmessage.h"
-#include "events/cheatmessage.h"
-#include "events/selectcarmessage.h"
+#include "../../common/constants.h"
+#include "../../common/gameLoop_timer.h"
+#include "../../libs/box2d/include/box2d/box2d.h"
+#include "../events/actionmessage.h"
+#include "../events/cheatmessage.h"
+#include "../events/selectcarmessage.h"
 
 #include "carBuilder.h"
 #include "carPhysics.h"

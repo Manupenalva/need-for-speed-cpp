@@ -10,9 +10,9 @@
 
 #include <box2d/box2d.h>
 
-#include "../common/carProperties.h"
-#include "../common/carState.h"
-#include "../common/playerState.h"
+#include "../../common/carProperties.h"
+#include "../../common/carState.h"
+#include "../../common/playerState.h"
 
 #include "bridge.h"
 #include "carConstants.h"

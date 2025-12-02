@@ -10,9 +10,8 @@
 #include <utility>
 #include <vector>
 
-#include "../common/constants.h"
-
-#include "client_handler.h"
+#include "../../common/constants.h"
+#include "../comm_threads/client_handler.h"
 
 
 class RaceStruct {
