@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>586</width>
-    <height>422</height>
+    <height>521</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@ QStackedWidget#stackedWidget {
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="pageMenu">
        <layout class="QVBoxLayout" name="verticalLayout_menu">
@@ -61,6 +61,42 @@ QStackedWidget#stackedWidget {
            </size>
           </property>
          </spacer>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="playerNameLineEdit">
+          <property name="styleSheet">
+           <string notr="true">    font: 600 14pt &quot;Ubuntu Sans&quot;;
+    color: white;
+    background-color: rgba(0, 0, 0, 190);
+    border: 2px solid rgba(255, 60, 80, 220);
+    border-radius: 18px;
+    padding: 6px 14px;
+    selection-background-color: rgb(255, 60, 80);
+    selection-color: black;
+
+
+QLineEdit#playerNameLineEdit:hover {
+    background-color: rgba(255, 60, 80, 40);
+    border: 2px solid rgb(255, 60, 80);
+}
+
+QLineEdit#playerNameLineEdit:focus {
+    background-color: rgba(255, 60, 80, 60);
+    border: 2px solid rgb(255, 60, 80);
+}
+
+placeholder {
+    color: rgba(255, 255, 255, 150);
+}
+</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="placeholderText">
+           <string>Enter Your Name</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QPushButton" name="createGameButton">
@@ -268,44 +304,124 @@ QPushButton#backConnectButton:pressed {
          </widget>
         </item>
         <item>
-         <widget class="QListWidget" name="carListWidget">
-          <property name="styleSheet">
-           <string notr="true">QListWidget#carListWidget {
-    background-color: rgba(0, 0, 0, 180);
+         <layout class="QHBoxLayout" name="horizontalLayout_carousel">
+          <item>
+           <widget class="QPushButton" name="prevCarButton">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton#prevCarButton {
+    font: 800 14pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);
+    background-color: rgba(0, 0, 0, 190);
     border: 2px solid rgba(255, 60, 80, 220);
-    border-radius: 12px;
-    padding: 6px;
-    color: rgb(230, 230, 230);
-    font: 600 11pt &quot;Ubuntu Sans&quot;;
+    border-radius: 20px;
+    padding: 4px 10px;
 }
 
-QListWidget#carListWidget::item {
-    padding: 6px;
+QPushButton#prevCarButton:hover {
+    background-color: rgba(255, 60, 80, 50);
 }
 
-QListWidget#carListWidget::item:selected {
-    background-color: rgba(255, 60, 80, 160);
-    color: white;
-}
-
-QListWidget#carListWidget::item:focus {
-    outline: none;
+QPushButton#prevCarButton:pressed {
+    background-color: rgb(255, 60, 80);
+    color: black;
 }
 </string>
-          </property>
-         </widget>
+            </property>
+            <property name="text">
+             <string>&lt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="carImageLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>256</width>
+              <height>256</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>256</width>
+              <height>256</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel#carImageLabel {
+    background-color: rgba(0, 0, 0, 200);
+    border: 2px solid rgba(255, 60, 80, 220);
+    border-radius: 12px;
+    padding: 4px 8px;
+}
+</string>
+            </property>
+            <property name="text">
+             <string>Loading car...</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="nextCarButton">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton#nextCarButton {
+    font: 800 14pt &quot;Ubuntu Sans&quot;;
+    color: rgb(255, 60, 80);
+    background-color: rgba(0, 0, 0, 190);
+    border: 2px solid rgba(255, 60, 80, 220);
+    border-radius: 20px;
+    padding: 4px 10px;
+}
+
+QPushButton#nextCarButton:hover {
+    background-color: rgba(255, 60, 80, 50);
+}
+
+QPushButton#nextCarButton:pressed {
+    background-color: rgb(255, 60, 80);
+    color: black;
+}
+</string>
+            </property>
+            <property name="text">
+             <string>&gt;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QLabel" name="carPreviewLabel">
+         <widget class="QLabel" name="carInfoLabel">
           <property name="styleSheet">
-           <string notr="true">QLabel#carPreviewLabel {
+           <string notr="true">QLabel#carInfoLabel {
     background-color: rgba(0, 0, 0, 200);
     border: 2px solid rgba(255, 60, 80, 220);
     border-radius: 12px;
     padding: 8px 12px;
     color: rgb(230, 230, 230);
     font: 500 10pt &quot;Ubuntu Sans&quot;;
-}</string>
+    }
+</string>
           </property>
           <property name="text">
            <string>Select a car to see details</string>

@@ -14,6 +14,7 @@ class GameLauncher {
 private:
     Protocol protocol;
     uint16_t id;
+    bool started = false;
 
 public:
     GameLauncher(const char* hostname, const char* servname);

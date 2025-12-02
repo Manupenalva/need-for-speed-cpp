@@ -5,11 +5,13 @@
 #include <QLineEdit>
 #include <QListWidget>
 #include <QMainWindow>
+#include <QPixmap>
 #include <QPushButton>
 #include <QSoundEffect>
 #include <QStackedWidget>
 #include <QTimer>
 #include <string>
+#include <vector>
 
 #include "../../common/protocol.h"
 
@@ -19,11 +21,16 @@ class Lobby;
 }
 QT_END_NAMESPACE
 
+struct uiCar {
+    uint16_t id;
+    QString info;
+};
+
 class Lobby: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit Lobby(Protocol& protocol, QWidget* parent = nullptr);
+    explicit Lobby(Protocol& protocol, bool& started, QWidget* parent = nullptr);
     ~Lobby();
 
     // cppcheck-suppress unknownMacro
@@ -41,6 +48,7 @@ private slots:
 private:
     Ui::Lobby* ui;
     Protocol& protocol;
+    bool& started;
 
     QStackedWidget* stack = nullptr;
     QTimer* timer = nullptr;
@@ -49,6 +57,13 @@ private:
     bool host;
     int raceC;
     uint16_t chosenCar = 0;
+    std::vector<uiCar> cars;
+    int currentIndex = 0;
+
+    bool sendUsername();
+    void updateCarCarousel();
+    void nextCar();
+    void prevCar();
 };
 
 #endif

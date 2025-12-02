@@ -14,7 +14,8 @@ target_sources(taller_editor
     actions/action_start.cpp
     actions/action_finish.cpp
     actions/action_hint.cpp
-    actions/action_road.cpp
+    actions/action_start_line.cpp
+    verificator.cpp
     PUBLIC
     # .h files
     cityselection.h
@@ -28,7 +29,8 @@ target_sources(taller_editor
     actions/action_start.h
     actions/action_finish.h
     actions/action_hint.h
-    actions/action_road.h
+    actions/action_start_line.h
     actions/action_result.h
     actions/actions.h
+    verificator.h
     )

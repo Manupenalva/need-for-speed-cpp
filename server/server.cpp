@@ -14,6 +14,15 @@ Server::Server(const std::string& servname):
 void Server::start() {
     acceptor.start();
     lobby.start();
+
+    while (true) {
+        char c;
+        c = getchar();
+        if (c == 'q') {
+            break;
+        }
+    }
+    shutdown();
 }
 
 void Server::shutdown() {

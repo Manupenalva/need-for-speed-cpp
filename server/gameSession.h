@@ -2,9 +2,11 @@
 #define GAMESESSION_H
 
 #include <memory>
+#include <utility>
 
-#include "gameloop.h"
-#include "monitorGames.h"
+#include "monitors/monitorGames.h"
+#include "race_logic/configConstants.h"
+#include "race_logic/gameloop.h"
 
 class GameSession {
 private:
@@ -14,7 +16,8 @@ private:
     Gameloop gameloop;
 
 public:
-    GameSession(const int& id, std::shared_ptr<RaceStruct> race);
+    GameSession(const int& id, std::shared_ptr<RaceStruct> race,
+                std::shared_ptr<ConfigConstants> config);
     void stop();
     ~GameSession();
     int get_id() const;

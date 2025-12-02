@@ -4,17 +4,26 @@ DrawerSDL::DrawerSDL(SDL2pp::Renderer& renderer, TextureManager& texture_manager
         client_id(client_id),
         renderer(renderer),
         texture_manager(texture_manager),
-        upgrade_screen_drawer(renderer, texture_manager),
-        estadistics_drawer(renderer) {
+        text_drawer(renderer),
+        upgrade_screen_drawer(renderer, texture_manager, text_drawer, client_id),
+        statistics_drawer(renderer, texture_manager, text_drawer) {
     drawers.push_back(std::make_unique<MapDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<ArrowDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<CheckpointDrawer>(renderer, texture_manager));
-    drawers.push_back(std::make_unique<CarDrawer>(renderer, texture_manager));
+    drawers.push_back(
+            std::make_unique<CarDrawer>(renderer, texture_manager));  // Primer drawer de autos
     drawers.push_back(std::make_unique<FireDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<BurstDrawer>(renderer, texture_manager));
+    drawers.push_back(std::make_unique<BridgesDrawer>(renderer, texture_manager));
+
+    auto second_car_drawer = std::make_unique<CarDrawer>(renderer, texture_manager);
+    second_car_drawer->set_second_drawer(true);
+    drawers.push_back(std::move(second_car_drawer));  // Segundo drawer de autos
+
     drawers.push_back(std::make_unique<MinimapDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<CountdownDrawer>(renderer, texture_manager));
     drawers.push_back(std::make_unique<HealthDrawer>(renderer, texture_manager));
+    drawers.push_back(std::make_unique<RemainingTimeDrawer>(renderer, texture_manager));
 }
 
 void DrawerSDL::update_game_state(const ServerMessageDTO& msg, int iterations_ahead,
@@ -33,7 +42,7 @@ void DrawerSDL::update_game_state(const ServerMessageDTO& msg, int iterations_ah
     // Obtener el sprite del mapa centrado en el auto del cliente
     Sprite map_sprite = texture_manager.get_map_sprite(map_id, client_car.x, client_car.y);
 
-    RenderedState rendered_state{iterations_ahead, client_car, map_sprite, state};
+    RenderedState rendered_state{iterations_ahead, client_car, map_sprite, map_id, state};
 
 
     for (const auto& drawer: drawers) {
@@ -41,8 +50,10 @@ void DrawerSDL::update_game_state(const ServerMessageDTO& msg, int iterations_ah
     }
 }
 
-void DrawerSDL::show_upgrade_screen() { upgrade_screen_drawer.draw(); }
+void DrawerSDL::show_upgrade_screen(const ServerMessageDTO& msg) {
+    upgrade_screen_drawer.draw(msg);
+}
 
-void DrawerSDL::update_estadistics_screen(const ServerMessageDTO& msg) {
-    estadistics_drawer.draw(msg);
+void DrawerSDL::update_statistics_screen(const ServerMessageDTO& msg) {
+    statistics_drawer.draw(msg);
 }

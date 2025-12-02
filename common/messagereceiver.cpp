@@ -26,6 +26,9 @@ ClientMessageDTO MessageReceiver::recv_client_message() {
         case MsgType::CHEAT_CODE:
             client_msg.cheat_code = recv_cheat_code();
             break;
+        case MsgType::SEND_NAME:
+            client_msg.name = recv_username();
+            break;
         default:
             break;
     }
@@ -44,7 +47,8 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
             server_msg.state = recv_state_update();
             break;
         case MsgType::JOIN_RESULT:
-            server_msg.joined = recv_join_result();
+        case MsgType::NAME_RESULT:
+            server_msg.result = recv_result();
             break;
         case MsgType::SEND_CLIENT_ID:
             server_msg.id = static_cast<int>(obtain_uint16());
@@ -75,26 +79,24 @@ ServerMessageDTO MessageReceiver::recv_server_message() {
     return server_msg;
 }
 
-std::vector<std::pair<uint16_t, float>> MessageReceiver::recv_positions() {
+std::vector<ResultInfo> MessageReceiver::recv_positions() {
     uint16_t positions_size = obtain_uint16();
-    std::vector<std::pair<uint16_t, float>> positions;
+    std::vector<ResultInfo> positions;
     positions.resize(positions_size);
 
     for (auto& pos: positions) {
-        pos.first = obtain_uint16();
-        pos.second = obtain_float();
+        pos.id = obtain_uint16();
+        pos.time = obtain_float();
+        pos.penalization_time = obtain_float();
+        uint16_t name_size = obtain_uint16();
+        pos.name = obtain_string(name_size);
     }
-
     return positions;
 }
 
-std::vector<LobbyInfo> MessageReceiver::recv_lobbies_info() {
-    uint16_t num_lobbies = obtain_uint16();
-    std::vector<LobbyInfo> lobbies(num_lobbies);
-
-    std::generate(lobbies.begin(), lobbies.end(), [this]() { return recv_lobby_info(); });
-
-    return lobbies;
+std::string MessageReceiver::recv_username() {
+    uint16_t name_size = obtain_uint16();
+    return obtain_string(name_size);
 }
 
 MinimapInfo MessageReceiver::recv_minimap_info() {
@@ -127,11 +129,12 @@ State MessageReceiver::recv_state_update() {
     state.npcs.resize(num_npcs);
 
     std::generate(state.npcs.begin(), state.npcs.end(), [this]() { return recv_npc_state(); });
+    state.remaining_time = obtain_float();
 
     return state;
 }
 
-bool MessageReceiver::recv_join_result() {
+bool MessageReceiver::recv_result() {
     uint8_t result = obtain_byte();
     return result != 0;
 }

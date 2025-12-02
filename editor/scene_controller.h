@@ -21,6 +21,8 @@ public:
     void deleteItem(QGraphicsItem* item);
 
 private:
+    void renumberCheckpoints();
+
     QGraphicsScene* scene;
     ItemBuilder itemBuilder;
     int id = 0;

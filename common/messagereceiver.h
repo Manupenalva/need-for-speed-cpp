@@ -26,22 +26,19 @@ private:
     ISocket& socket;
 
     State recv_state_update();
-    // cppcheck-suppress unusedPrivateFunction
-    std::vector<LobbyInfo> recv_lobbies_info();
     std::vector<uint8_t> recv_driving_events();
-    bool recv_join_result();
+    bool recv_result();
 
     uint32_t obtain_uint32();
     uint16_t obtain_uint16();
     uint8_t obtain_byte();
-    // cppcheck-suppress unusedPrivateFunction
     std::string obtain_string(uint16_t size);
     float uint32_to_float(uint32_t n);
     float obtain_float();
     CarProperties recv_car_properties();
     PlayerState recv_player_state();
-    // std::string obtain_lobby_name();
-    std::vector<std::pair<uint16_t, float>> recv_positions();
+    std::vector<ResultInfo> recv_positions();
+    std::string recv_username();
 
     CarState recv_car_state();
     NpcState recv_npc_state();

@@ -11,7 +11,6 @@
 #include "../common/protocol.h"
 #include "../common/queue.h"
 #include "../common/socket.h"
-#include "../common/thread.h"
 #include "config/constants.h"
 #include "drawer/drawerSDL.h"
 #include "graphics/texture_manager.h"
@@ -29,8 +28,9 @@ struct ActualState {
     bool upgrades_interval = false;
 };
 
-class Client: public Thread {
+class Client {
 private:
+    bool keep_running;
     Protocol& protocol;
     Queue<ClientMessageDTO> events_queue;
     Queue<ServerMessageDTO> server_queue;
@@ -58,8 +58,8 @@ private:
 public:
     Client(Protocol& protocol, const int id);
 
-    void run() override;
-    void stop() override;
+    void run();
+    void stop();
 };
 
 #endif

@@ -49,10 +49,15 @@ void AnimationsDrawer::update_instances(const RenderedState& rendered_state) {
 
             Sprite fire_sprite = get_sprite_function(texture_manager, instance.current_frame);
 
-            int screen_x = static_cast<int>(instance.x) - rendered_state.map_sprite.src_rect.x;
-            int screen_y = static_cast<int>(instance.y) - rendered_state.map_sprite.src_rect.y;
+            Scale scale_factors = get_window_scale_factor();
 
-            SDL2pp::Rect dst_rect(screen_x, screen_y, X_DIM, Y_DIM);
+            int screen_x = (static_cast<int>(instance.x) - rendered_state.map_sprite.src_rect.x) *
+                           scale_factors.x;
+            int screen_y = (static_cast<int>(instance.y) - rendered_state.map_sprite.src_rect.y) *
+                           scale_factors.y;
+
+            SDL2pp::Rect dst_rect(screen_x, screen_y, X_DIM * scale_factors.x,
+                                  Y_DIM * scale_factors.y);
 
             renderer.Copy(fire_sprite.texture, fire_sprite.src_rect, dst_rect);
         }

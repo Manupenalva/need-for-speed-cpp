@@ -28,19 +28,20 @@ protected:
     }
 };
 
+bool float_equal(float a, float b, float eps = 0.01f) { return std::fabs(a - b) < eps; }
 
 TEST_F(ProtocolTestServer, JoinResult) {
 
     ServerMessageDTO send_msg;
     send_msg.type = MsgType::JOIN_RESULT;
-    send_msg.joined = true;
+    send_msg.result = true;
 
     sender.send_message(send_msg);
 
     ServerMessageDTO recv_msg = receiver.recv_server_message();
 
     EXPECT_EQ(recv_msg.type, MsgType::JOIN_RESULT);
-    EXPECT_TRUE(recv_msg.joined);
+    EXPECT_TRUE(recv_msg.result);
 }
 
 TEST_F(ProtocolTestServer, ClientID) {
@@ -178,6 +179,7 @@ TEST_F(ProtocolTestServer, StateUpdate) {
     state.cars = {car1, car2};
     NpcState npc1{130.0f, 65.0f, 50.0f, 1, true};
     state.npcs = {npc1};
+    state.remaining_time = 150.0f;
     send_msg.state = state;
 
     sender.send_message(send_msg);
@@ -193,6 +195,7 @@ TEST_F(ProtocolTestServer, StateUpdate) {
     EXPECT_TRUE(verify_car_state(recv_msg.state.cars[1], car2));
     ASSERT_EQ(recv_msg.state.npcs.size(), 1);
     EXPECT_TRUE(verify_npc_state(recv_msg.state.npcs[0], npc1));
+    EXPECT_TRUE(float_equal(recv_msg.state.remaining_time, 150.0f));
 }
 
 TEST_F(ProtocolTestServer, CodeMessages) {
@@ -257,13 +260,14 @@ TEST_F(ProtocolTestServer, MinimapInfo) {
     EXPECT_TRUE(verify_minimap_info(recv_msg.minimap_info, minimap_info));
 }
 
-bool verify_positions(const std::vector<std::pair<uint16_t, float>>& pos1,
-                      const std::vector<std::pair<uint16_t, float>>& pos2) {
+bool verify_positions(const std::vector<ResultInfo>& pos1, const std::vector<ResultInfo>& pos2) {
     if (pos1.size() != pos2.size()) {
         return false;
     }
     for (size_t i = 0; i < pos1.size(); ++i) {
-        if (pos1[i].first != pos2[i].first || pos1[i].second != pos2[i].second) {
+        if (pos1[i].id != pos2[i].id || !float_equal(pos1[i].time, pos2[i].time) ||
+            !float_equal(pos1[i].penalization_time, pos2[i].penalization_time) ||
+            pos1[i].name != pos2[i].name) {
             return false;
         }
     }
@@ -271,10 +275,11 @@ bool verify_positions(const std::vector<std::pair<uint16_t, float>>& pos1,
 }
 
 TEST_F(ProtocolTestServer, RacePositions) {
-
     ServerMessageDTO send_msg;
     send_msg.type = MsgType::RACE_POSITIONS;
-    send_msg.positions = {{1, 120.5f}, {2, 130.0f}, {3, 110.75f}};
+    send_msg.positions = {{1, 120.5f, 45.0f, "juan"},
+                          {2, 130.0f, 20.3f, "charlie"},
+                          {3, 110.75f, 10.0f, "Peter"}};
     sender.send_message(send_msg);
 
     ServerMessageDTO recv_msg = receiver.recv_server_message();
@@ -287,11 +292,27 @@ TEST_F(ProtocolTestServer, AccumulatedPositions) {
 
     ServerMessageDTO send_msg;
     send_msg.type = MsgType::ACCUMULATED_POSITIONS;
-    send_msg.positions = {{1, 300.5f}, {2, 320.0f}, {3, 280.75f}};
+    send_msg.positions = {{1, 300.5f, 35.5f, "juan"},
+                          {2, 320.0f, 32.3f, "lionel"},
+                          {3, 280.75f, 45.0f, "andres"}};
     sender.send_message(send_msg);
 
     ServerMessageDTO recv_msg = receiver.recv_server_message();
     EXPECT_EQ(recv_msg.type, MsgType::ACCUMULATED_POSITIONS);
     ASSERT_EQ(recv_msg.positions.size(), 3);
     EXPECT_TRUE(verify_positions(recv_msg.positions, send_msg.positions));
+}
+
+TEST_F(ProtocolTestServer, NameResult) {
+
+    ServerMessageDTO send_msg;
+    send_msg.type = MsgType::NAME_RESULT;
+    send_msg.result = true;
+
+    sender.send_message(send_msg);
+
+    ServerMessageDTO recv_msg = receiver.recv_server_message();
+
+    EXPECT_EQ(recv_msg.type, MsgType::NAME_RESULT);
+    EXPECT_TRUE(recv_msg.result);
 }

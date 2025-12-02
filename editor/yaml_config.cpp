@@ -20,9 +20,9 @@ bool YamlConfig::save(const QGraphicsScene* scene, const QString& city, int grid
         out << YAML::Key << "celdWidth" << YAML::Value << gridSize;
         out << YAML::Key << "celdHeight" << YAML::Value << gridSize;
 
+        writeElements(out, scene, LINE_TYPE);
         writeElements(out, scene, START_TYPE);
         writeElements(out, scene, FINISH_TYPE);
-        writeElements(out, scene, ROAD_TYPE);
         writeElements(out, scene, CHECKPOINT_TYPE);
         writeElements(out, scene, HINT_TYPE);
 
@@ -72,7 +72,7 @@ bool YamlConfig::load(const QString& path) {
     try {
         QFile yamlFile(path);
         if (!yamlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            qWarning("No se pudo abrir el archivo YAML: %s", path.toStdString().c_str());
+            qWarning("Cannot open this file YAML: %s", path.toStdString().c_str());
             return false;
         }
 
@@ -83,14 +83,14 @@ bool YamlConfig::load(const QString& path) {
 
         selectedCity = QString::fromStdString(config["city"].as<std::string>());
         items.clear();
+        addElements(config, LINE_TYPE);
         addElements(config, START_TYPE);
         addElements(config, FINISH_TYPE);
-        addElements(config, ROAD_TYPE);
         addElements(config, CHECKPOINT_TYPE);
         addElements(config, HINT_TYPE);
         return true;
     } catch (const YAML::Exception& e) {
-        qWarning("Error al leer el YAML: %s", e.what());
+        qWarning("Error reading YAML: %s", e.what());
         return false;
     }
 }
@@ -117,7 +117,7 @@ QString YamlConfig::getCity() { return selectedCity; }
 std::vector<ItemRecord> YamlConfig::getItems() { return items; }
 
 void YamlConfig::setActions() {
-    actions.emplace(QStringLiteral(ROAD_TYPE), std::make_unique<ActionRoad>());
+    actions.emplace(QStringLiteral(LINE_TYPE), std::make_unique<ActionStartLine>());
     actions.emplace(QStringLiteral(CHECKPOINT_TYPE), std::make_unique<ActionCheckpoint>());
     actions.emplace(QStringLiteral(START_TYPE), std::make_unique<ActionStart>());
     actions.emplace(QStringLiteral(FINISH_TYPE), std::make_unique<ActionFinish>());

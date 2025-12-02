@@ -107,6 +107,7 @@ sudo cp -r "${APP_DIR}/client/config/." "${BASE_ETC}/client/"
 
 sudo mkdir -p "${BASE_ETC}/server/assets"
 sudo cp -r "${APP_DIR}/server/assets/." "${BASE_ETC}/server/assets/"
+sudo chown -R $USER:$USER "${APP_DIR}/server/assets/race_configs"
 
 
 create_wrapper() {

@@ -62,9 +62,8 @@ TEST_F(ProtocolTestClient, DrivingEvent) {
 
 TEST_F(ProtocolTestClient, CodeMessages) {
     std::vector<MsgType> msg_types = {MsgType::CREATE_RACE,      MsgType::EXIT_RACE,
-                                      MsgType::GET_LOBBIES,      MsgType::START_RACE,
-                                      MsgType::GET_LOBBY_UPDATE, MsgType::GET_CAR_CATALOG,
-                                      MsgType::SET_READY};
+                                      MsgType::START_RACE,       MsgType::GET_LOBBY_UPDATE, 
+                                      MsgType::GET_CAR_CATALOG,  MsgType::SET_READY};
     for (const auto& msg_type: msg_types) {
         ClientMessageDTO send_msg;
         send_msg.type = msg_type;
@@ -87,4 +86,18 @@ TEST_F(ProtocolTestClient, CheatCode) {
 
     EXPECT_EQ(recv_msg.type, MsgType::CHEAT_CODE);
     EXPECT_EQ(recv_msg.cheat_code, CheatCode::INFINITE_HEALTH);
+}
+
+TEST_F(ProtocolTestClient, SendName) {
+
+    ClientMessageDTO send_msg;
+    send_msg.type = MsgType::SEND_NAME;
+    send_msg.name = "PlayerOne";
+
+    sender.send_message(send_msg);
+
+    ClientMessageDTO recv_msg = receiver.recv_client_message();
+
+    EXPECT_EQ(recv_msg.type, MsgType::SEND_NAME);
+    EXPECT_EQ(recv_msg.name, "PlayerOne");
 }

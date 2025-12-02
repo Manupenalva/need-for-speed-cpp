@@ -16,6 +16,7 @@
 #include <QRectF>
 #include <QVBoxLayout>
 
+#include "verificator.h"
 #include "yaml_config.h"
 
 MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
@@ -25,19 +26,24 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
     view->setRenderHint(QPainter::Antialiasing);
     view->setDragMode(QGraphicsView::ScrollHandDrag);
     view->setScene(scene);
+    view->setFocusPolicy(Qt::StrongFocus);
+    view->viewport()->setAcceptDrops(true);
     view->viewport()->installEventFilter(this);
     view->installEventFilter(this);
     controller = new SceneController(scene);
     setActions();
 
-    view->setAcceptDrops(false);
-    setAcceptDrops(true);
-
     layout->addWidget(view);
 
     saveButton = new QPushButton("Save Map", this);
-    layout->addWidget(saveButton);
-    layout->setAlignment(saveButton, Qt::AlignCenter);
+    zoomInButton = new QPushButton("Zoom in", this);
+    zoomOutButton = new QPushButton("Zoom Out", this);
+
+    auto* buttons = new QHBoxLayout();
+    buttons->addWidget(saveButton);
+    buttons->addWidget(zoomInButton);
+    buttons->addWidget(zoomOutButton);
+    layout->addLayout(buttons);
 
     connect(saveButton, &QPushButton::clicked, this, [this]() {
         bool ok;
@@ -46,20 +52,23 @@ MapCanvas::MapCanvas(QWidget* parent): QWidget(parent) {
         if (!ok || fileName.isEmpty()) {
             return;
         }
-        if (controller->countItemsOfType(START_TYPE) != MAX_PLAYERS) {
-            QMessageBox::warning(this, "Starts missing", "It is neccessary to be 8 starts points.");
+        QString errorTitle;
+        QString errorMessage;
+        Verificator verificator(*controller, *scene);
+        if (!verificator.validate(errorTitle, errorMessage)) {
+            QMessageBox::warning(this, errorTitle, errorMessage);
             return;
         }
-        if (controller->countItemsOfType(FINISH_TYPE) != MAX_FINISH) {
-            QMessageBox::warning(this, "Finish missing", "It is neccessary to be 1 finish line.");
-            return;
-        }
-        QString filePath = QString("../server/assets/race_configs/%1.yaml").arg(fileName);
+        QString filePath = QString("%1/%2.yaml").arg(SAVE_MAP, fileName);
         exportToYaml(filePath);
-        QMessageBox::information(this, "Map Saved", "Map saved successfully!");
+        QMessageBox::information(this, "Map Saved",
+                                 QString("Map saved successfully in:\n %1!").arg(filePath));
         QCoreApplication::quit();
     });
 
+    connect(zoomInButton, &QPushButton::clicked, this, [this]() { zoomIn(); });
+
+    connect(zoomOutButton, &QPushButton::clicked, this, [this]() { zoomOut(); });
 
     setLayout(layout);
 
@@ -93,12 +102,12 @@ void MapCanvas::loadCityMap(const QString& cityName) {
 void MapCanvas::dragEnterEvent(QDragEnterEvent* event) {
     if (selecting) {
         event->ignore();
-        QMessageBox::warning(this, "No checkpoint selecting",
-                             "You must click a checkpoint first o press ESC to cancel.");
         return;
     }
     if (event->mimeData()->hasFormat(DragInfo().mimeType())) {
         event->acceptProposedAction();
+    } else {
+        event->ignore();
     }
 }
 
@@ -111,8 +120,6 @@ void MapCanvas::dropEvent(QDropEvent* event) {
 
     if (selecting) {
         event->ignore();
-        QMessageBox::warning(this, "No checkpoint selecting",
-                             "You must click a checkpoint first o press ESC to cancel.");
         return;
     }
 
@@ -168,23 +175,8 @@ bool MapCanvas::eventFilter(QObject* obj, QEvent* event) {
             dropEvent(d);
             return true;
         }
-    } else if (obj == view) {
-        if (event->type() == QEvent::KeyPress) {
-            QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-            if (selecting && keyEvent->key() == Qt::Key_Escape) {
-                selecting = false;
-                return true;
-            }
-            if (keyEvent->key() == Qt::Key_Plus) {
-                zoomIn();
-                return true;
-            }
-            if (keyEvent->key() == Qt::Key_Minus) {
-                zoomOut();
-                return true;
-            }
-        }
     }
+
     return QWidget::eventFilter(obj, event);
 }
 
@@ -198,7 +190,7 @@ void MapCanvas::importFromYaml(const QString& filePath) {
 }
 
 void MapCanvas::setActions() {
-    actions.emplace(QStringLiteral(ROAD_TYPE), std::make_unique<ActionRoad>());
+    actions.emplace(QStringLiteral(LINE_TYPE), std::make_unique<ActionStartLine>());
     actions.emplace(QStringLiteral(CHECKPOINT_TYPE), std::make_unique<ActionCheckpoint>());
     actions.emplace(QStringLiteral(START_TYPE), std::make_unique<ActionStart>());
     actions.emplace(QStringLiteral(FINISH_TYPE), std::make_unique<ActionFinish>());
@@ -207,8 +199,9 @@ void MapCanvas::setActions() {
 
 void MapCanvas::handleSelectingHint(const QPoint& pos) {
     QPointF scenePos = view->mapToScene(pos);
-    QRectF pickArea(scenePos.x() - GRID_SIZE / 2.0, scenePos.y() - GRID_SIZE / 2.0, GRID_SIZE,
-                    GRID_SIZE);
+    int x = static_cast<int>(scenePos.x() / GRID_SIZE) * GRID_SIZE;
+    int y = static_cast<int>(scenePos.y() / GRID_SIZE) * GRID_SIZE;
+    QRectF pickArea(x, y, GRID_SIZE, GRID_SIZE);
     auto items = scene->items(pickArea);
     for (auto* i: items) {
         auto t = i->data(TYPE).toString();
@@ -222,14 +215,20 @@ void MapCanvas::handleSelectingHint(const QPoint& pos) {
 
 void MapCanvas::handleDelete(const QPoint& pos) {
     QPointF scenePos = view->mapToScene(pos);
-    QRectF pickArea(scenePos.x() - GRID_SIZE / 2.0, scenePos.y() - GRID_SIZE / 2.0, GRID_SIZE,
-                    GRID_SIZE);
+    int x = static_cast<int>(scenePos.x() / GRID_SIZE) * GRID_SIZE;
+    int y = static_cast<int>(scenePos.y() / GRID_SIZE) * GRID_SIZE;
+    QRectF pickArea(x, y, GRID_SIZE, GRID_SIZE);
     auto items = scene->items(pickArea);
-
-    QGraphicsItem* item = items.first();
-    if (!item->data(TYPE).isValid())
-        return;
-    controller->deleteItem(item);
+    for (auto* i: items) {
+        QGraphicsItem* item = i;
+        while (item && !item->data(TYPE).isValid()) {
+            item = item->parentItem();
+        }
+        if (item && item->data(TYPE).isValid()) {
+            controller->deleteItem(item);
+            return;
+        }
+    }
 }
 
 void MapCanvas::zoomIn() {
@@ -255,3 +254,7 @@ void MapCanvas::zoomOut() {
         currentZoom = newZoom;
     }
 }
+
+bool MapCanvas::isSelecting() const { return selecting; }
+
+void MapCanvas::cancelSelecting() { selecting = false; }

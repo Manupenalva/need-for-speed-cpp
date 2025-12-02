@@ -12,9 +12,7 @@
 #define FINISH_PATH "../editor/imgs/finish.png"
 #define START_PATH_1 "../editor/imgs/start.png"
 #define START_PATH_2 "../editor/imgs/start2.png"
-#define ROAD_PATH_1 "../editor/imgs/road.png"
-#define ROAD_PATH_2 "../editor/imgs/road1.png"
-#define ROAD_PATH_3 "../editor/imgs/road2.png"
+#define LINE_PATH "../editor/imgs/startline.png"
 #define LEFT_ROTATION 0
 #define UP_ROTATION 90
 #define RIGHT_ROTATION 180
@@ -22,7 +20,7 @@
 #define VERTICAL_ROTATION 0
 #define HORIZONTAL_ROTATION 90
 #define CITY_ASSETS_PATH "../client/resources/assets/cities/"
-#define ROAD_TYPE "road"
+#define LINE_TYPE "line"
 #define CHECKPOINT_TYPE "checkpoint"
 #define START_TYPE "start"
 #define FINISH_TYPE "finish"
@@ -35,5 +33,9 @@
 #define MAX_ZOOM 3.0
 #define ZOOM_SCALE 0.1
 #define INITIAL_ZOOM 1.0
+#define MAX_START_LINE 1
+#define LINE_ROTATION 90
+#define SAVE_MAP "../server/assets/race_configs"
+#define MIN_CHECKPOINTS 2
 
 #endif

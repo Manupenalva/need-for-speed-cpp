@@ -1,49 +1,28 @@
 file(GLOB EVENTS_SRC "events/*.h")
+file(GLOB MONITORS_SRC "monitors/*.h")
+file(GLOB MONITORS_SRC_CPP "monitors/*.cpp")
+file(GLOB COMM_THREADS_SRC "comm_threads/*.h")
+file(GLOB COMM_THREADS_SRC_CPP "comm_threads/*.cpp")
+file(GLOB RACE_LOGIC_SRC "race_logic/*.h")
+file(GLOB RACE_LOGIC_SRC_CPP "race_logic/*.cpp")
 
 target_sources(taller_server
     PRIVATE
         server_main.cpp
-        client_handler.cpp
-        acceptor.cpp
-        receiver.cpp
-        sender.cpp
-        gameloop.cpp
+        configLoader.cpp
         gameSession.cpp
-        server.cpp
-        carPhysics.cpp
         lobby.cpp
-        mapCollisionBuilder.cpp
-        car.cpp
-        race.cpp
-        raceBuilder.cpp
-        monitorClients.cpp
-        racemonitor.cpp
-        monitorGames.cpp
-        carBuilder.cpp
-        npc.cpp
+        server.cpp
+        ${MONITORS_SRC_CPP}
+        ${COMM_THREADS_SRC_CPP}
+        ${RACE_LOGIC_SRC_CPP}
     PUBLIC
-        sender.h
-        receiver.h
-        monitorClients.h
-        client_handler.h
-        acceptor.h
-        gameloop.h
-        gameSession.h
-        monitorGames.h
         server.h
-        carPhysics.h
+        configLoader.h
+        gameSession.h
         lobby.h
-        racemonitor.h
-        mapCollisionBuilder.h
-        car.h
-        race.h
-        raceBuilder.h
-        playerRaceStatus.h
-        hint.h
-        carBuilder.h
-        corner.h
-        npc.h
-        bridge.h
-        carConstants.h
+        ${MONITORS_SRC}
+        ${COMM_THREADS_SRC}
         ${EVENTS_SRC}
+        ${RACE_LOGIC_SRC}
     )
