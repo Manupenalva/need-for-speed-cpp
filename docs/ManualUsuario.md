@@ -83,10 +83,12 @@ El editor permitira cargar una carrera ya realizada o crear una nueva selecciona
 ![editor](images/editor.png)
 
 En esta pantalla, mediante el arrastre de los elementos de la barra izquierda, podremos establecer los puntos de respawn, los checkpoints y sus hints. En caso de querer borrar un elemento, se deberá hacer click derecho sobre él.
+Cada uno de los hints (flechas de indicacion) que se quieran establecer deberán asociarse a una de las lineas de checkpoint previamente establecida, haciendo click sobre ellas, una vez ubicada la pista.
 
 El editor te pedirá obligatoriamente lo siguiente:
 - 8 puntos iniciales para los autos
 - Linea de meta
+- Linea inicial
 
 Una vez finalizado, guardamos el mapa y lo llevamos a la carpeta server/assets/race_configs (Carpeta establecida por defecto para el guardado de los archivos .yaml de carreras)
 
